@@ -3,9 +3,9 @@ Type: Package
 Title: Perform differential expression analysis on multi-sample single cell datasets using linear mixed models
 Version: 0.0.1
 Date: 2021-04-01
-Author: Gabriel E. Hoffman
+Author: Gabriel E. Hoffman <gabriel.hoffman@mssm.edu>
 Maintainer: Gabriel E. Hoffman <gabriel.hoffman@mssm.edu>
-Description: Perform differential expression analysis on multi-sample single cell datasets using linear mixed models
+Description: Dreamlet performs differential expression analysis on multi-sample single cell datasets using linear mixed models.
 VignetteBuilder: knitr
 License: GPL (>= 2)
 BugReports: https://github.com/GabrielHoffman/dreamlet/issues
@@ -14,12 +14,10 @@ Suggests:
     knitr,
     pander,
     rmarkdown,
-    edgeR,
     RUnit,
     BiocGenerics
 biocViews: RNASeq,
     GeneExpression,
-    GeneSetEnrichment,
     DifferentialExpression,
     BatchEffect,
     QualityControl,
@@ -29,18 +27,17 @@ biocViews: RNASeq,
     Transcriptomics,
     Normalization,
     Preprocessing,
-    Microarray,
-    ImmunoOncology,
     Software
 Depends:
     R (>= 4.0.0),
-    Biobase,
     methods
 Imports:
-    variancePartition (>=1.21.4),
+    variancePartition (>= 1.21.3),
     limma, 
     edgeR,
     SingleCellExperiment,
-    utils,
+    SummarizedExperiment,
+    BiocParallel,
+    lme4,
     stats
 RoxygenNote: 7.1.1
