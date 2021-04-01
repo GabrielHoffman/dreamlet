@@ -2,9 +2,9 @@
 # April 1, 2021
 #
 # deamlet uses linear mixed models in dream to perform differential expression in single cell data
-
+  
 # depends on limma, edgeR, variancePartition
-dreamlet = function(snObj, form){
+dreamlet = function(snObj, formula){
 
 	# for each cell type
 	fitList = lapply( assays(snObj), function(cellType){
