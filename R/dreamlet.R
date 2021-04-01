@@ -4,10 +4,22 @@
 # deamlet uses linear mixed models in dream to perform differential expression in single cell data
   
 # depends on limma, edgeR, variancePartition
-dreamlet = function(snObj, formula){
+
+#' Differential expression for each assay
+#'
+#' Perform differential expression for each assay using linear mixed models
+#'
+#' @param sceObj SingleCellExperiment object 
+#' @param formula regression formula for differential expression analysis
+#'
+#' @import SingleCellExperiment variancePartition
+#'
+#' @export
+#'
+dreamlet = function( sceObj, formula){
 
 	# for each cell type
-	fitList = lapply( assays(snObj), function(cellType){
+	fitList = lapply( assays(sceObj), function(cellType){
 		
 		# get data for this cell type
 		geneExpr = assay(snObj, cellType)

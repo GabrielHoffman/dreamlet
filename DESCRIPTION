@@ -40,6 +40,7 @@ Imports:
     variancePartition (>=1.21.4),
     limma, 
     edgeR,
+    SingleCellExperiment,
     utils,
     stats
 RoxygenNote: 7.1.1
