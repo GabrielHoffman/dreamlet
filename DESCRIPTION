@@ -3,11 +3,12 @@ Type: Package
 Title: Perform differential expression analysis on multi-sample single cell datasets using linear mixed models
 Version: 0.0.1
 Date: 2021-04-01
-Author: Gabriel E. Hoffman <gabriel.hoffman@mssm.edu>
-Maintainer: Gabriel E. Hoffman <gabriel.hoffman@mssm.edu>
+Authors@R: c(person("Gabriel", "Hoffman", role = c("aut", "cre"), email = "gabriel.hoffman@mssm.edu"))
+Maintainer: Gabriel Hoffman <gabriel.hoffman@mssm.edu>
 Description: Dreamlet performs differential expression analysis on multi-sample single cell datasets using linear mixed models.
 VignetteBuilder: knitr
 License: GPL (>= 2)
+URL: https://github.com/GabrielHoffman/dreamlet
 BugReports: https://github.com/GabrielHoffman/dreamlet/issues
 Suggests:
     BiocStyle,
