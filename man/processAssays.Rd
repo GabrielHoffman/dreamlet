@@ -8,6 +8,7 @@ processAssays(
   sceObj,
   formula,
   min.cells = 10,
+  isCounts = TRUE,
   normalize.method = "TMM",
   BPPARAM = bpparam(),
   ...
@@ -19,6 +20,8 @@ processAssays(
 \item{formula}{regression formula for differential expression analysis}
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
+
+\item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 

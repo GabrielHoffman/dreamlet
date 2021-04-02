@@ -1,3 +1,10 @@
+April 2,
+	handle contrasts L if missing
+	should dreamletProcessedData be a SingleCellExperiment?
+	graceful printing of each object
+	show voom plots
+	how should residual covariance be weighted?
+
 
 March 30, 2021
 	dreamlet: dream for single cell analysis
