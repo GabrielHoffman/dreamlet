@@ -41,7 +41,8 @@
 #' @name dreamletProcessedData-class
 #' @rdname dreamletProcessedData-class
 #' @exportClass dreamletProcessedData
-setClass("dreamletProcessedData", representation("list"))
+setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'))
+	# representation("list", data="data.frame"))
 
 
 
@@ -56,7 +57,9 @@ setClass("dreamletProcessedData", representation("list"))
 #' @param y matrix of counts or log2 CPM
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
+#' @param n.cells array of cell count for each sample
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
+#' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
@@ -70,16 +73,16 @@ setClass("dreamletProcessedData", representation("list"))
 #' @importFrom stats model.matrix
 #'
 #' @export
-processOneAssay = function( y, formula, data, min.cells = 10, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# nCells = extract from y
 
 	# samples to include of they have enough observed cells
-	include = nCells >= min.cells
+	include = n.cells >= min.cells
 	y = y[,include] 
 
 	# per sample weights based on cell counts in sceObj
-	w = nCells[include] #weights by cell types
+	w = n.cells[include] #weights by cell types
 
 	# convert vector of sample weights to full matrix
 	# each gene is weighted the same
@@ -110,9 +113,12 @@ processOneAssay = function( y, formula, data, min.cells = 10, normalize.method =
 		trend = FALSE
 	}else{
 
+		# only include genes that show variation
+		include = apply(y, 1, var) > 0
+
 		# if data is already log2 CPM
 		# create EList object storing gene expression and sample weights
-		geneExpr = new("EList", list(E=y, weights = weights))
+		geneExpr = new("EList", list(E=y[include,], weights = weights[include,]))
 
 		# since precision weights are not used, use the trend in the eBayes step
 		trend = TRUE
@@ -131,14 +137,15 @@ processOneAssay = function( y, formula, data, min.cells = 10, normalize.method =
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
+#' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
-#' @import BiocParallel SingleCellExperiment  SummarizedExperiment
+#' @import BiocParallel SingleCellExperiment SummarizedExperiment
 #'
 #' @export
-processAssays = function( sceObj, formula, min.cells = 10, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -148,17 +155,17 @@ processAssays = function( sceObj, formula, min.cells = 10, normalize.method = 'T
 	data = as.data.frame(colData(sceObj))
 
 	# for each assay
-	resList = lapply( assays(sceObj), function(k){
+	resList = lapply( names(assays(sceObj)), function(k){
 
 		y = assay(sceObj, k)
+		n.cells = metadata(sceObj)$n_cells[k,colnames(y)]
 
 		# processing counts with voom or log2 CPM
-		processOneAssay(y, formula, data, min.cells, normalize.method, BPPARAM=BPPARAM,...)
+		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
 	})
+	names(resList) = names(assays(sceObj))
 
-	names(resList) = names(sceObj)
-
-	new("dreamletProcessedData", resList)
+	new("dreamletProcessedData", resList, data=data)
 }
 
 
@@ -171,6 +178,7 @@ processAssays = function( sceObj, formula, min.cells = 10, normalize.method = 'T
 #' @param formula regression formula for differential expression analysis
 #' @param L contrast matrix specifying a linear combination of fixed effects to test
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
+#' @param isCounts logical, indicating if data is raw counts
 #' @param robust logical, use eBayes method that is robust to outlier genes
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param BPPARAM parameters for parallel evaluation
@@ -181,7 +189,7 @@ processAssays = function( sceObj, formula, min.cells = 10, normalize.method = 'T
 #'
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data, L, min.cells = 10, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	standardGeneric("dreamlet")
 })
@@ -193,7 +201,7 @@ setGeneric("dreamlet",
 # @rdname dreamlet
 # @aliases dreamlet,SingleCellExperiment-method
 setMethod("dreamlet", "SingleCellExperiment",
-	function( x, formula, data, L, min.cells = 10, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# checks
 	# stopifnot( is(x, 'SingleCellExperiment'))
@@ -203,35 +211,37 @@ setMethod("dreamlet", "SingleCellExperiment",
 	data = as.data.frame(colData(x))
 
 	# for each assay
-	resList = lapply( assays(x), function(k){
+	resList = lapply( names(assays(x)), function(k){
 		
 		# get data from assay k
 		y = assay(x, k)
+		n.cells = metadata(x)$n_cells[k,colnames(y)]
 
 		# processing counts with voom or log2 CPM
-		res = processOneAssay(y, formula, data, min.cells, normalize.method, BPPARAM=BPPARAM,...)
+		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
 
-		# fit linear mixed model for each gene
-		fit = dream( res$geneExpr, formula, data, L=L, BPPARAM=BPPARAM,...)
+		# fit linear (mixed) model for each gene
+		# only include samples from data that are retained in res$geneExpr
+		# TODO include L now
+		fit = dream( res$geneExpr, formula, data[colnames(res$geneExpr),], BPPARAM=BPPARAM,...)
 
 		# borrow information across genes with the Empircal Bayes step
 		fit = eBayes(fit, robust=robust, trend=res$trend)
 
-		list(fit = fit, data = res$geneExpr)
+		list(fit = fit, data = res)
 	})
-
 	# name each result by the assay name
-	names(resList) = assays(x)
+	names(resList) = names(assays(x))
 
 	# create list of all fit objects
 	fitList = lapply(resList, function(obj) obj$fit)
-	names(fitList) = assays(x)
+	names(fitList) = names(assays(x))
 
 	# create list of all data objects
 	dataList = lapply(resList, function(obj) obj$data)
-	names(dataList) = assays(x)
+	names(dataList) = names(assays(x))
 
-	list(fit = fitList, data = new("dreamletProcessedData", dataList) )
+	list(fit = fitList, data = new("dreamletProcessedData", dataList, data=data) )
 })
 
 
@@ -243,7 +253,7 @@ setMethod("dreamlet", "SingleCellExperiment",
 # @rdname dreamlet
 # @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data, L, min.cells = 10, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -257,19 +267,37 @@ setMethod("dreamlet", "dreamletProcessedData",
 	# for each assay
 	resList = lapply( x, function( procData ){
 
+		# get names of samples to extract from metadata
+		ids = colnames(procData$geneExpr)
+
 		# fit linear mixed model for each gene
-		fit = dream( procData, formula, data, L=L, BPPARAM=BPPARAM,...)
+		# TODO add , L=L
+		fit = dream( procData$geneExpr, formula, data[ids,], BPPARAM=BPPARAM,...)
 
 		# borrow information across genes with the Empircal Bayes step
-		fit = eBayes(fit, robust=robust, trend=procData$trend)
-
-		list(fit=fit)
+		eBayes(fit, robust=robust, trend=procData$trend)
 	})
-
 	# name each result by the assay name
 	names(resList) = names(x)
 
 	resList
+})
+
+
+
+
+setGeneric("colData",
+	function(x,...){		
+	standardGeneric("colData")
+})
+
+
+
+
+#' @import SummarizedExperiment
+setMethod("colData", "dreamletProcessedData",
+	function(x,...){
+		x@data
 })
 
 
@@ -304,14 +332,22 @@ setMethod("fitVarPart", "dreamletProcessedData",
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
 	stopifnot( is(formula, 'formula'))
-	stopifnot( is(data, 'data.frame'))
+	
+	# extract metadata shared across assays
+	if( missing(data) ){
+		data = as.data.frame(colData(x))
+	}
 
 	# for each assay
 	resList = lapply( x, function( procData ){
 
-		fitExtractVarPartModel( procData, form, data, BPPARAM = bpparam(), ... )
-	})
+		# get names of samples to extract from metadata
+		ids = colnames(procData$geneExpr)
 
+		# fit linear mixed model for each gene
+		# TODO add , L=L
+		fitExtractVarPartModel( procData$geneExpr, formula, data[ids,], BPPARAM=BPPARAM,...)
+	})
 	# name each result by the assay name
 	names(resList) = names(x)
 

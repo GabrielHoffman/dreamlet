@@ -10,6 +10,7 @@ dreamlet(
   data,
   L,
   min.cells = 10,
+  isCounts = TRUE,
   robust = FALSE,
   normalize.method = "TMM",
   BPPARAM = bpparam(),
@@ -24,6 +25,8 @@ dreamlet(
 \item{L}{contrast matrix specifying a linear combination of fixed effects to test}
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
+
+\item{isCounts}{logical, indicating if data is raw counts}
 
 \item{robust}{logical, use eBayes method that is robust to outlier genes}
 
