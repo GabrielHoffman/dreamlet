@@ -123,6 +123,7 @@
   <span class='va'>data</span>,
   <span class='va'>L</span>,
   min.cells <span class='op'>=</span> <span class='fl'>10</span>,
+  isCounts <span class='op'>=</span> <span class='cn'>TRUE</span>,
   robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
   normalize.method <span class='op'>=</span> <span class='st'>"TMM"</span>,
   BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>,
@@ -147,6 +148,10 @@
     <tr>
       <th>min.cells</th>
       <td><p>minimum number of observed cells for a sample to be included in the analysis</p></td>
+    </tr>
+    <tr>
+      <th>isCounts</th>
+      <td><p>logical, indicating if data is raw counts</p></td>
     </tr>
     <tr>
       <th>robust</th>
