@@ -30,6 +30,7 @@
 
 # processAssay() needs to take nCells as arguments
 
+# should dreamletProcessedData store a SingleCellExperiment?
 
 
 
@@ -41,6 +42,9 @@
 #' @rdname dreamletProcessedData-class
 #' @exportClass dreamletProcessedData
 setClass("dreamletProcessedData", representation("list"))
+
+
+
 
 
 
@@ -263,7 +267,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 	})
 
 	# name each result by the assay name
-	names(resList) = assays(x)
+	names(resList) = names(x)
 
 	resList
 })
@@ -309,7 +313,7 @@ setMethod("fitVarPart", "dreamletProcessedData",
 	})
 
 	# name each result by the assay name
-	names(resList) = assays(x)
+	names(resList) = names(x)
 
 	resList
 })
