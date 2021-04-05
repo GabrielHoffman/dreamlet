@@ -286,11 +286,10 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 
 
-#' @export
-setGeneric("colData",
-	function(x,...){		
-	standardGeneric("colData")
-})
+# setGeneric("colData",
+# 	function(x,...){		
+# 	standardGeneric("colData")
+# })
 
 
 
