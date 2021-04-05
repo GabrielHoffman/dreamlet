@@ -286,6 +286,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 
 
+#' @export
 setGeneric("colData",
 	function(x,...){		
 	standardGeneric("colData")
@@ -295,6 +296,7 @@ setGeneric("colData",
 
 
 #' @import SummarizedExperiment
+#' @export
 setMethod("colData", "dreamletProcessedData",
 	function(x,...){
 		x@data
