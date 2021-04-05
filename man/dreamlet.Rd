@@ -2,9 +2,37 @@
 % Please edit documentation in R/dreamlet.R
 \name{dreamlet}
 \alias{dreamlet}
+\alias{dreamlet,SingleCellExperiment-method}
+\alias{dreamlet,dreamletProcessedData-method}
 \title{Differential expression for each assay}
 \usage{
 dreamlet(
+  x,
+  formula,
+  data,
+  L,
+  min.cells = 10,
+  isCounts = TRUE,
+  robust = FALSE,
+  normalize.method = "TMM",
+  BPPARAM = bpparam(),
+  ...
+)
+
+\S4method{dreamlet}{SingleCellExperiment}(
+  x,
+  formula,
+  data,
+  L,
+  min.cells = 10,
+  isCounts = TRUE,
+  robust = FALSE,
+  normalize.method = "TMM",
+  BPPARAM = bpparam(),
+  ...
+)
+
+\S4method{dreamlet}{dreamletProcessedData}(
   x,
   formula,
   data,
@@ -21,6 +49,8 @@ dreamlet(
 \item{x}{SingleCellExperiment or dreamletProcessedData object}
 
 \item{formula}{regression formula for differential expression analysis}
+
+\item{data}{metadata used in regression formula}
 
 \item{L}{contrast matrix specifying a linear combination of fixed effects to test}
 
