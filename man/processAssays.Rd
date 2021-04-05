@@ -28,8 +28,6 @@ processAssays(
 \item{BPPARAM}{parameters for parallel evaluation}
 
 \item{...}{other arguments passed to \code{dream}}
-
-\item{data}{metadata used in regression formula}
 }
 \description{
 For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells

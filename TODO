@@ -1,3 +1,6 @@
+
+Authors@R: c(person("Gabriel", "Hoffman", role = c("aut", "cre"), email = "gabriel.hoffman@mssm.edu"))
+
 April 2,
 	handle contrasts L if missing
 	should dreamletProcessedData be a SingleCellExperiment?

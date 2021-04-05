@@ -66,11 +66,12 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 #'
 #' @import BiocParallel 
 #' @import limma 
-#' @import variancePartition
+#' @importFrom variancePartition voomWithDreamWeights
 #' @importFrom edgeR calcNormFactors filterByExpr DGEList 
 #' @importFrom lme4 subbars  
 #' @importFrom methods is new
-#' @importFrom stats model.matrix
+#' @importFrom stats model.matrix var
+#' @importFrom SummarizedExperiment as.data.frame colData assays
 #'
 #' @export
 processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
@@ -135,14 +136,15 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #'
 #' @param sceObj SingleCellExperiment object 
 #' @param formula regression formula for differential expression analysis
-#' @param data metadata used in regression formula
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
-#' @import BiocParallel SingleCellExperiment SummarizedExperiment
+#' @import BiocParallel  
+#' @importFrom SummarizedExperiment as.data.frame colData assays assay
+#' @importFrom S4Vectors metadata
 #'
 #' @export
 processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
@@ -176,6 +178,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 #'
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
+#' @param data metadata used in regression formula
 #' @param L contrast matrix specifying a linear combination of fixed effects to test
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
@@ -184,8 +187,8 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
-#' @import BiocParallel SingleCellExperiment 
-#' @import SummarizedExperiment
+#' @import BiocParallel  
+#' @importFrom SummarizedExperiment as.data.frame colData assays
 #'
 #' @export
 setGeneric("dreamlet", 
@@ -197,9 +200,11 @@ setGeneric("dreamlet",
 
 
 
+#' @importFrom SummarizedExperiment as.data.frame colData assays assay
+#' @importFrom variancePartition dream eBayes
 #' @export
-# @rdname dreamlet
-# @aliases dreamlet,SingleCellExperiment-method
+#' @rdname dreamlet
+#' @aliases dreamlet,SingleCellExperiment-method
 setMethod("dreamlet", "SingleCellExperiment",
 	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
@@ -249,9 +254,10 @@ setMethod("dreamlet", "SingleCellExperiment",
 
 
 
+#' @importFrom SummarizedExperiment as.data.frame colData assays
 #' @export
-# @rdname dreamlet
-# @aliases dreamlet,dreamletProcessedData-method
+#' @rdname dreamlet
+#' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
 	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
@@ -292,10 +298,12 @@ setMethod("dreamlet", "dreamletProcessedData",
 # })
 
 
-
-
-#' @import SummarizedExperiment
-#' @export
+#' Extract colData from dreamletProcessedData
+#' 
+#' Extract colData from dreamletProcessedData
+#' @param x A dreamletProcessedData object
+#' @param ... other arguments
+# @export
 setMethod("colData", "dreamletProcessedData",
 	function(x,...){
 		x@data
@@ -309,11 +317,11 @@ setMethod("colData", "dreamletProcessedData",
 #'
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
+#' @param data metadata used in regression formula
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
 #' @import BiocParallel  
-#' @import SummarizedExperiment
 #'
 #' @export
 setGeneric("fitVarPart", 
@@ -326,7 +334,10 @@ setGeneric("fitVarPart",
 
 
 #' @importFrom variancePartition fitExtractVarPartModel
+#' @importFrom SummarizedExperiment as.data.frame colData assays
 #' @export
+#' @rdname fitVarPart
+#' @aliases fitVarPart,dreamletProcessedData-method
 setMethod("fitVarPart", "dreamletProcessedData",
 	function( x, formula, data, BPPARAM = bpparam(),...){
 
