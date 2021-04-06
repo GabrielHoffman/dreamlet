@@ -1,7 +1,7 @@
 # Gabriel Hoffman
 # April 1, 2021
 #
-# deamlet uses linear mixed models in dream to perform differential expression in single cell data
+# dreamlet uses linear mixed models in dream to perform differential expression in single cell data
   
 # depends on limma, edgeR, variancePartition
 
@@ -117,17 +117,25 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 
 		# since the sample weights are already in y, don't need to 
 		# explicitly consider them here.
-		geneExpr = voomWithDreamWeights( y, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE)
+		geneExpr = voomWithDreamWeights( y, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
 
 		# voom dots and curves are saved here
-		# geneExpr$voom.line
-		# geneExpr$voom.xy
+		voom_curve = list( 	voom.line 	= geneExpr$voom.line,
+							voom.xy 	= geneExpr$voom.xy)
 
 		trend = FALSE
-	}else{
 
-		# only include genes that show variation
-		include = apply(y, 1, var) > 0
+		result = list(	geneExpr 	= geneExpr, 
+						trend 		= trend, 
+						voom_curve 	= voom_curve)
+
+	}else{
+	 	
+		# only include genes that show variation,
+		# and have at least 5 nonzero values
+	 	include = apply(y, 1, function(x)
+	 		(var(x) > 0) & (sum(x!=0) > 5)
+	 		) 
 
 		# if data is already log2 CPM
 		# create EList object storing gene expression and sample weights
@@ -135,9 +143,12 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 
 		# since precision weights are not used, use the trend in the eBayes step
 		trend = TRUE
+
+		result = list(	geneExpr 	= geneExpr, 
+						trend 		= trend)
 	}
 
-	list(geneExpr = geneExpr, trend=trend)
+	result 
 }
 
 
@@ -170,8 +181,6 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 
 	# for each assay
 	resList = lapply( assayNames(sceObj), function(k){
-
-		message(k)
 
 		y = assay(sceObj, k)
 		n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
@@ -320,7 +329,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fit = dream( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,...)
+		fit = dream( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,..., quiet=TRUE)
 
 		# if model is degenerate
 		if( ! any(is.na(fit$sigma)) ){
@@ -409,7 +418,7 @@ setMethod("fitVarPart", "dreamletProcessedData",
 
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fitExtractVarPartModel( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,...)
+		fitExtractVarPartModel( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,...,quiet=TRUE)
 	})
 	# name each result by the assay name
 	names(resList) = names(x)

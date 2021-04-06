@@ -40,6 +40,8 @@ Imports:
     SingleCellExperiment,
     BiocParallel,
     S4Vectors,
+    cowplot,
+    ggplot2,
     lme4,
     stats
 RoxygenNote: 7.1.1
