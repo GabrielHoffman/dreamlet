@@ -16,7 +16,6 @@ Suggests:
     pander,
     rmarkdown,
     RUnit,
-    SingleCellExperiment,
     BiocGenerics
 biocViews: RNASeq,
     GeneExpression,
@@ -38,6 +37,7 @@ Imports:
     limma, 
     edgeR,
     SummarizedExperiment,
+    SingleCellExperiment,
     BiocParallel,
     S4Vectors,
     lme4,

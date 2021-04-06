@@ -86,7 +86,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		return(NULL)
 	}
 
-	y = y[,include] 
+	y = y[,include,drop=FALSE] 
 
 	# per sample weights based on cell counts in sceObj
 	w = n.cells[include] #weights by cell types
@@ -100,6 +100,9 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# Get count data and normalize
     	y = suppressMessages(DGEList(y, remove.zeros = TRUE))
     	y = calcNormFactors(y, method = normalize.method )
+
+    	# drop any constant terms from the formula
+		formula = removeConstantTerms(formula, data)
 
 		# get samples with enough cells
 		# filter genes
@@ -125,7 +128,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 
 		# if data is already log2 CPM
 		# create EList object storing gene expression and sample weights
-		geneExpr = new("EList", list(E=y[include,], weights = weights[include,]))
+		geneExpr = new("EList", list(E=y[include,,drop=FALSE], weights = weights[include,,drop=FALSE]))
 
 		# since precision weights are not used, use the trend in the eBayes step
 		trend = TRUE
@@ -149,7 +152,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param ... other arguments passed to \code{dream}
 #'
 #' @import BiocParallel  
-#' @importFrom SummarizedExperiment as.data.frame colData assays assay
+#' @importFrom SummarizedExperiment as.data.frame colData assays assay assayNames
 #' @importFrom S4Vectors metadata
 #'
 #' @export
@@ -163,7 +166,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 	data = as.data.frame(colData(sceObj))
 
 	# for each assay
-	resList = lapply( names(assays(sceObj)), function(k){
+	resList = lapply( assayNames(sceObj), function(k){
 
 		y = assay(sceObj, k)
 		n.cells = metadata(sceObj)$n_cells[k,colnames(y)]
@@ -171,7 +174,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 		# processing counts with voom or log2 CPM
 		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
 	})
-	names(resList) = names(assays(sceObj))
+	names(resList) = assayNames(sceObj)
 
 	new("dreamletProcessedData", resList, data=data)
 }
@@ -206,8 +209,10 @@ setGeneric("dreamlet",
 
 
 
-#' @importFrom SummarizedExperiment as.data.frame colData assays assay
-#' @importFrom variancePartition dream eBayes
+#' @importFrom SummarizedExperiment as.data.frame colData assays assay assayNames
+#' @importFrom variancePartition dream eBayes isRunableFormula
+#' @import limma
+#' @import SingleCellExperiment
 #' @export
 #' @rdname dreamlet
 #' @aliases dreamlet,SingleCellExperiment-method
@@ -222,7 +227,7 @@ setMethod("dreamlet", "SingleCellExperiment",
 	data = as.data.frame(colData(x))
 
 	# for each assay
-	resList = lapply( names(assays(x)), function(k){
+	resList = lapply( assayNames(x), function(k){
 
 		message("\rAssay: ", k)
 		
@@ -233,37 +238,47 @@ setMethod("dreamlet", "SingleCellExperiment",
 		# processing counts with voom or log2 CPM
 		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
 
+		# initialze fit in case dream is not run
+		fit = NULL
+
 		# if samples are retained after filtering
 		if( ! is.null(res) ){
 
-			# fit linear (mixed) model for each gene
-			# only include samples from data that are retained in res$geneExpr
-			# TODO include L now
-			fit = dream( res$geneExpr, formula, data[colnames(res$geneExpr),], BPPARAM=BPPARAM, quiet=TRUE,...)
+			data_sub = data[colnames(res$geneExpr),]
 
-			# if model is degenerate
-			if( ! any(is.na(fit$sigma)) ){
-				# borrow information across genes with the Empircal Bayes step
-				fit = eBayes(fit, robust=robust, trend=res$trend)
-			}else{	
-				fit = NULL
+			# drop any constant terms from the formula
+			form_mod = removeConstantTerms(formula, data_sub)
+
+			# if model is full rank
+			if( isRunableFormula(res$geneExpr$E, form_mod, data_sub) ){
+	
+				# fit linear (mixed) model for each gene
+				# only include samples from data that are retained in res$geneExpr
+				# TODO include L now
+				fit = dream( res$geneExpr, form_mod, data_sub, BPPARAM=BPPARAM, quiet=TRUE,...)
+
+				# if model is degenerate
+				if( ! any(is.na(fit$sigma)) ){
+					# borrow information across genes with the Empircal Bayes step
+					fit = eBayes(fit, robust=robust, trend=res$trend)
+				}else{
+					fit = NULL
+				}
 			}
-		}else{
-			fit = NULL
 		}
 
 		list(fit = fit, data = res)
 	})
 	# name each result by the assay name
-	names(resList) = names(assays(x))
+	names(resList) = assayNames(x)
 
 	# create list of all fit objects
 	fitList = lapply(resList, function(obj) obj$fit)
-	names(fitList) = names(assays(x))
+	names(fitList) = assayNames(x)
 
 	# create list of all data objects
 	dataList = lapply(resList, function(obj) obj$data)
-	names(dataList) = names(assays(x))
+	names(dataList) = assayNames(x)
 
 	list(fit = fitList, data = new("dreamletProcessedData", dataList, data=data) )
 })
@@ -295,9 +310,12 @@ setMethod("dreamlet", "dreamletProcessedData",
 		# get names of samples to extract from metadata
 		ids = colnames(procData$geneExpr)
 
+		# drop any constant terms from the formula
+		form_mod = removeConstantTerms(formula, data[ids,])
+
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fit = dream( procData$geneExpr, formula, data[ids,], BPPARAM=BPPARAM,...)
+		fit = dream( procData$geneExpr, form_mod, data[ids,], BPPARAM=BPPARAM,...)
 
 		# if model is degenerate
 		if( ! any(is.na(fit$sigma)) ){
@@ -381,9 +399,12 @@ setMethod("fitVarPart", "dreamletProcessedData",
 		# get names of samples to extract from metadata
 		ids = colnames(procData$geneExpr)
 
+		# drop any constant terms from the formula
+		form_mod = removeConstantTerms(formula, data[ids,])
+
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fitExtractVarPartModel( procData$geneExpr, formula, data[ids,], BPPARAM=BPPARAM,...)
+		fitExtractVarPartModel( procData$geneExpr, form_mod, data[ids,], BPPARAM=BPPARAM,...)
 	})
 	# name each result by the assay name
 	names(resList) = names(x)
