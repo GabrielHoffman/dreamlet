@@ -86,7 +86,9 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		return(NULL)
 	}
 
+	# subset expression and data
 	y = y[,include,drop=FALSE] 
+	data = data[include,,drop=FALSE]
 
 	# per sample weights based on cell counts in sceObj
 	w = n.cells[include] #weights by cell types
@@ -107,10 +109,11 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# get samples with enough cells
 		# filter genes
 		design = model.matrix( subbars(formula), data)
-		y = filterByExpr(y, design)
+		keep = filterByExpr(y, design)
 
 		# create EList object storing gene expression and sample weights
-		y = new("EList", list(E=y, weights = weights))
+		y = new("EList", list(	E 		= y[keep,],
+		 						weights = weights[keep,,drop=FALSE]))
 
 		# since the sample weights are already in y, don't need to 
 		# explicitly consider them here.
@@ -168,8 +171,10 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 	# for each assay
 	resList = lapply( assayNames(sceObj), function(k){
 
+		message(k)
+
 		y = assay(sceObj, k)
-		n.cells = metadata(sceObj)$n_cells[k,colnames(y)]
+		n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
 
 		# processing counts with voom or log2 CPM
 		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
@@ -233,7 +238,7 @@ setMethod("dreamlet", "SingleCellExperiment",
 		
 		# get data from assay k
 		y = assay(x, k)
-		n.cells = metadata(x)$n_cells[k,colnames(y)]
+		n.cells = metadata(x)$n_cells[k,colnames(y),drop=FALSE]
 
 		# processing counts with voom or log2 CPM
 		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
@@ -244,7 +249,7 @@ setMethod("dreamlet", "SingleCellExperiment",
 		# if samples are retained after filtering
 		if( ! is.null(res) ){
 
-			data_sub = data[colnames(res$geneExpr),]
+			data_sub = data[colnames(res$geneExpr),,drop=FALSE]
 
 			# drop any constant terms from the formula
 			form_mod = removeConstantTerms(formula, data_sub)
@@ -311,11 +316,11 @@ setMethod("dreamlet", "dreamletProcessedData",
 		ids = colnames(procData$geneExpr)
 
 		# drop any constant terms from the formula
-		form_mod = removeConstantTerms(formula, data[ids,])
+		form_mod = removeConstantTerms(formula, data[ids,,drop=FALSE])
 
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fit = dream( procData$geneExpr, form_mod, data[ids,], BPPARAM=BPPARAM,...)
+		fit = dream( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,...)
 
 		# if model is degenerate
 		if( ! any(is.na(fit$sigma)) ){
@@ -400,11 +405,11 @@ setMethod("fitVarPart", "dreamletProcessedData",
 		ids = colnames(procData$geneExpr)
 
 		# drop any constant terms from the formula
-		form_mod = removeConstantTerms(formula, data[ids,])
+		form_mod = removeConstantTerms(formula, data[ids,,drop=FALSE])
 
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fitExtractVarPartModel( procData$geneExpr, form_mod, data[ids,], BPPARAM=BPPARAM,...)
+		fitExtractVarPartModel( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,...)
 	})
 	# name each result by the assay name
 	names(resList) = names(x)
