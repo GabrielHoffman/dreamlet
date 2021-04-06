@@ -1,0 +1,105 @@
+---
+title: "Dreamlet analysis of single cell pseudo-bulk data"
+subtitle: ''
+author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
+date: "Run on `r Sys.time()`"
+documentclass: article
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+<!---
+
+cd /Users/gabrielhoffman/workspace/repos/variancePartition/vignettes
+
+rmarkdown::render("dreamlet.Rmd")
+
+--->
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning=FALSE,
+  message=FALSE,
+  error = FALSE,
+  tidy = FALSE,
+  dev = c("png", "pdf"),
+  cache = TRUE)
+```
+
+```{r preprocess.data}
+
+library(dreamlet)
+library(muscat)
+library(ExperimentHub)
+library(cowplot)
+
+eh <- ExperimentHub()
+# query(eh, "Kang")
+
+(sce <- eh[["EH2259"]])
+
+sce <- sce[rowSums(counts(sce) > 0) > 0, ]
+
+library(scater)
+qc <- perCellQCMetrics(sce)
+
+# remove cells with few or many detected genes
+ol <- isOutlier(metric = qc$detected, nmads = 2, log = TRUE)
+sce <- sce[, !ol]
+
+sce <- sce[rowSums(counts(sce) > 1) >= 10, ]
+sce <- computeLibraryFactors(sce)
+sce <- logNormCounts(sce)
+```
+
+```{r aggregate}
+sce$id <- paste0(sce$stim, sce$ind)
+(sce <- prepSCE(sce, 
+    kid = "cell", # subpopulation assignments
+    gid = "stim",  # group IDs (ctrl/stim)
+    sid = "id",   # sample IDs (ctrl/stim.1234)
+    drop = TRUE)) 
+
+
+pb <- aggregateData(sce,
+    assay = "counts", fun = "sum",
+    by = c("cluster_id", "sample_id"))
+
+# one sheet per subpopulation
+assayNames(pb)
+```
+
+## dreamlet code
+```{r dreamlet}
+
+# Normalize and apply voom
+res.proc = processAssays( pb, ~ group_id)
+
+plotVoom( res.proc)
+```
+
+```{r test, eval=FALSE}
+# res <- pbDS(pb, verbose = FALSE)
+
+res.dl = dreamlet( res.proc, ~ group_id)
+
+
+res.dl = dreamlet( pb, ~ group_id)
+```
+
+res = processOneAssay( assay(pb, 1), ~ group_id)
+
+
+# devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
+
+
+
+
+
+
+
