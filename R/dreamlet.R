@@ -79,7 +79,13 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 	# nCells = extract from y
 
 	# samples to include of they have enough observed cells
-	include = n.cells >= min.cells
+	include = (n.cells >= min.cells)
+
+	# if no samples are retained
+	if( sum(include) == 0){
+		return(NULL)
+	}
+
 	y = y[,include] 
 
 	# per sample weights based on cell counts in sceObj
@@ -217,6 +223,8 @@ setMethod("dreamlet", "SingleCellExperiment",
 
 	# for each assay
 	resList = lapply( names(assays(x)), function(k){
+
+		message("\rAssay: ", k)
 		
 		# get data from assay k
 		y = assay(x, k)
@@ -225,13 +233,24 @@ setMethod("dreamlet", "SingleCellExperiment",
 		# processing counts with voom or log2 CPM
 		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
 
-		# fit linear (mixed) model for each gene
-		# only include samples from data that are retained in res$geneExpr
-		# TODO include L now
-		fit = dream( res$geneExpr, formula, data[colnames(res$geneExpr),], BPPARAM=BPPARAM,...)
+		# if samples are retained after filtering
+		if( ! is.null(res) ){
 
-		# borrow information across genes with the Empircal Bayes step
-		fit = eBayes(fit, robust=robust, trend=res$trend)
+			# fit linear (mixed) model for each gene
+			# only include samples from data that are retained in res$geneExpr
+			# TODO include L now
+			fit = dream( res$geneExpr, formula, data[colnames(res$geneExpr),], BPPARAM=BPPARAM, quiet=TRUE,...)
+
+			# if model is degenerate
+			if( ! any(is.na(fit$sigma)) ){
+				# borrow information across genes with the Empircal Bayes step
+				fit = eBayes(fit, robust=robust, trend=res$trend)
+			}else{	
+				fit = NULL
+			}
+		}else{
+			fit = NULL
+		}
 
 		list(fit = fit, data = res)
 	})
@@ -280,8 +299,14 @@ setMethod("dreamlet", "dreamletProcessedData",
 		# TODO add , L=L
 		fit = dream( procData$geneExpr, formula, data[ids,], BPPARAM=BPPARAM,...)
 
-		# borrow information across genes with the Empircal Bayes step
-		eBayes(fit, robust=robust, trend=procData$trend)
+		# if model is degenerate
+		if( ! any(is.na(fit$sigma)) ){
+			# borrow information across genes with the Empircal Bayes step
+			fit = eBayes(fit, robust=robust, trend=procData$trend)
+		}else{	
+			fit = NULL
+		}
+		fit
 	})
 	# name each result by the assay name
 	names(resList) = names(x)
