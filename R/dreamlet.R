@@ -278,7 +278,7 @@ setMethod("dreamlet", "SingleCellExperiment",
 					keep = which(fit$rdf >= 1)
 
 					# borrow information across genes with the Empircal Bayes step
-					fit = eBayes(fit[keep,], robust=robust, trend=procData$trend)
+					fit = eBayes(fit[keep,], robust=robust, trend=res$trend)
 				}else{
 					fit = NULL
 				}
