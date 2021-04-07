@@ -273,8 +273,12 @@ setMethod("dreamlet", "SingleCellExperiment",
 
 				# if model is degenerate
 				if( ! any(is.na(fit$sigma)) ){
+					# keep genes with residual degrees of freedom > 1
+					# this prevents failures later
+					keep = which(fit$rdf >= 1)
+
 					# borrow information across genes with the Empircal Bayes step
-					fit = eBayes(fit, robust=robust, trend=res$trend)
+					fit = eBayes(fit[keep,], robust=robust, trend=procData$trend)
 				}else{
 					fit = NULL
 				}
@@ -333,8 +337,13 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		# if model is degenerate
 		if( ! any(is.na(fit$sigma)) ){
+
+			# keep genes with residual degrees of freedom > 1
+			# this prevents failures later
+			keep = which(fit$rdf >= 1)
+
 			# borrow information across genes with the Empircal Bayes step
-			fit = eBayes(fit, robust=robust, trend=procData$trend)
+			fit = eBayes(fit[keep,], robust=robust, trend=procData$trend)
 		}else{	
 			fit = NULL
 		}
