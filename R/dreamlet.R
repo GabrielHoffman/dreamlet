@@ -285,9 +285,14 @@ setMethod("dreamlet", "SingleCellExperiment",
 
 				# if model is degenerate
 				if( ! any(is.na(fit$sigma)) ){
-					# keep genes with residual degrees of freedom > 1
-					# this prevents failures later
-					keep = which(fit$rdf >= 1)
+					
+					if( !is.null(fit$rdf)){
+						# keep genes with residual degrees of freedom > 1
+						# this prevents failures later
+						keep = which(fit$rdf >= 1)
+
+						fit = fit[keep,]
+					}
 
 					# borrow information across genes with the Empircal Bayes step
 					fit = eBayes(fit[keep,], robust=robust, trend=res$trend)
@@ -339,23 +344,30 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		# get names of samples to extract from metadata
 		ids = colnames(procData$geneExpr)
+		data_sub = droplevels(data[ids,,drop=FALSE])
 
 		# drop any constant terms from the formula
-		form_mod = removeConstantTerms(formula, data[ids,,drop=FALSE])
+		form_mod = removeConstantTerms(formula, data_sub)
 
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fit = dream( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,..., quiet=TRUE)
+		fit = dream( procData$geneExpr, form_mod, data_sub, BPPARAM=BPPARAM,..., quiet=TRUE)
+
+		browser()
 
 		# if model is degenerate
 		if( ! any(is.na(fit$sigma)) ){
 
-			# keep genes with residual degrees of freedom > 1
-			# this prevents failures later
-			keep = which(fit$rdf >= 1)
+			if( !is.null(fit$rdf)){
+				# keep genes with residual degrees of freedom > 1
+				# this prevents failures later
+				keep = which(fit$rdf >= 1)
+
+				fit = fit[keep,]
+			}
 
 			# borrow information across genes with the Empircal Bayes step
-			fit = eBayes(fit[keep,], robust=robust, trend=procData$trend)
+			fit = eBayes(fit, robust=robust, trend=procData$trend)
 		}else{	
 			fit = NULL
 		}
@@ -433,13 +445,14 @@ setMethod("fitVarPart", "dreamletProcessedData",
 
 		# get names of samples to extract from metadata
 		ids = colnames(procData$geneExpr)
+		data_sub = droplevels(data[ids,,drop=FALSE])
 
 		# drop any constant terms from the formula
-		form_mod = removeConstantTerms(formula, data[ids,,drop=FALSE])
+		form_mod = removeConstantTerms(formula, data_sub)
 
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fitExtractVarPartModel( procData$geneExpr, form_mod, data[ids,,drop=FALSE], BPPARAM=BPPARAM,...,quiet=TRUE)
+		fitExtractVarPartModel( procData$geneExpr, form_mod, data_sub, BPPARAM=BPPARAM,...,quiet=TRUE)
 	})
 	# name each result by the assay name
 	names(resList) = names(x)

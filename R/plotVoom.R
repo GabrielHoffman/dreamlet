@@ -33,6 +33,12 @@ plotVoom = function( x, ncol=3){
 	xlim = range(df_range$range.x.)
 	ylim = range(df_range$range.y.)
 
+	# xlab = vc$voom.xy$xlab
+	# ylab = vc$voom.xy$ylab
+
+	xlab = bquote(log[2](counts + 0.5))
+	ylab = bquote(sqrt(standard~deviation))
+
 	# make list of plots
 	figList = lapply( names(x), function(id){
 
@@ -41,7 +47,7 @@ plotVoom = function( x, ncol=3){
 		df = with(vc$voom.xy, data.frame(x,y))
 		df_curve = with(vc$voom.line, data.frame(x,y))
 
-		ggplot(df, aes(x, y)) + geom_point(size=0.1) + geom_line(data=df_curve, aes(x,y), color="red") + theme_classic() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + xlab(vc$voom.xy$xlab) + ylab(vc$voom.xy$ylab) + ggtitle(id) + xlim(xlim) + ylim(ylim)
+		ggplot(df, aes(x, y)) + geom_point(size=0.1) + geom_line(data=df_curve, aes(x,y), color="red") + theme_classic() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + xlab(xlab) + ylab(ylab) + ggtitle(id) + xlim(xlim) + ylim(ylim)
 	})
 
 	plot_grid(plotlist = figList, ncols=ncol, align="hv", axis='tblr')
