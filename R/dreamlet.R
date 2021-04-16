@@ -227,7 +227,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 #'
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	standardGeneric("dreamlet")
 })
@@ -243,7 +243,7 @@ setGeneric("dreamlet",
 #' @rdname dreamlet
 #' @aliases dreamlet,SingleCellExperiment-method
 setMethod("dreamlet", "SingleCellExperiment",
-	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# checks
 	# stopifnot( is(x, 'SingleCellExperiment'))
@@ -328,7 +328,7 @@ setMethod("dreamlet", "SingleCellExperiment",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data, L, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -344,31 +344,48 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		# get names of samples to extract from metadata
 		ids = colnames(procData$geneExpr)
+
+		# if include is not missing, keep the intersection
+		if( ! is.null(include) ){
+			ids = intersect(ids, include)
+			procData$geneExpr = procData$geneExpr[,ids]
+		}
 		data_sub = droplevels(data[ids,,drop=FALSE])
 
 		# drop any constant terms from the formula
 		form_mod = removeConstantTerms(formula, data_sub)
-
-		# fit linear mixed model for each gene
-		# TODO add , L=L
-		fit = dream( procData$geneExpr, form_mod, data_sub, BPPARAM=BPPARAM,..., quiet=TRUE)
-
-		browser()
-
-		# if model is degenerate
-		if( ! any(is.na(fit$sigma)) ){
-
-			if( !is.null(fit$rdf)){
-				# keep genes with residual degrees of freedom > 1
-				# this prevents failures later
-				keep = which(fit$rdf >= 1)
-
-				fit = fit[keep,]
+			
+		if( !is.null(form_mod) ){
+			# construct contrasts based on design matrix for this datset
+			if( ! is.null(L.list) ){
+				L = lapply(L.list, function(coeffs){
+					getContrast(procData$geneExpr, form_mod, data_sub, coeffs)
+				})
+				L = do.call(cbind, L)
+			}else{
+				L = NULL
 			}
 
-			# borrow information across genes with the Empircal Bayes step
-			fit = eBayes(fit, robust=robust, trend=procData$trend)
-		}else{	
+			# fit linear (mixed) model for each gene
+			fit = dream( procData$geneExpr, form_mod, data_sub, L = L, BPPARAM=BPPARAM,..., quiet=TRUE)
+
+			# if model is degenerate
+			if( ! any(is.na(fit$sigma)) ){
+
+				if( !is.null(fit$rdf)){
+					# keep genes with residual degrees of freedom > 1
+					# this prevents failures later
+					keep = which(fit$rdf >= 1)
+
+					fit = fit[keep,]
+				}
+
+				# borrow information across genes with the Empircal Bayes step
+				fit = eBayes(fit, robust=robust, trend=procData$trend)
+			}else{	
+				fit = NULL
+			}
+		}else{
 			fit = NULL
 		}
 		fit
@@ -378,6 +395,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 	resList
 })
+
 
 
 

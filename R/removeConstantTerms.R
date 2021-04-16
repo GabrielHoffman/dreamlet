@@ -18,7 +18,12 @@ removeConstantTerms = function( formula, data){
 	stopifnot(is(data, "data.frame"))
 
 	# create design matrix
-	design = model.matrix( subbars(formula), droplevels(data))
+	design = tryCatch( {			
+		model.matrix( subbars(formula), droplevels(data))
+			}, 
+		error = function(e) NULL)
+
+	if( is.null(design) ) return(design)
 
 	# which columns have zero variance
 	isZero = apply(design, 2, var) == 0
@@ -39,5 +44,4 @@ removeConstantTerms = function( formula, data){
 	# update formula to drop exclude terms
 	update(formula, form_exclude)
 }
-
 
