@@ -45,6 +45,17 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 	# representation("list", data="data.frame"))
 
 
+# extract table of cell counts from 'int_colData'
+# of pseudobulks as returned by 'aggregateData'
+#' @importFrom S4Vectors metadata
+#' @importFrom SingleCellExperiment int_colData
+.n_cells <- function(x) {
+    y <- int_colData(x)$n_cells
+    if (is.null(y)) return(NULL)
+    if (length(metadata(x)$agg_pars$by) == 2)
+        y <- as.matrix(data.frame(y, check.names = FALSE))
+    return(as.table(y))
+}
 
 
 
@@ -88,7 +99,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 
 	# subset expression and data
 	y = y[,include,drop=FALSE] 
-	data = data[include,,drop=FALSE]
+	data = droplevels(data[include,,drop=FALSE])
 
 	# per sample weights based on cell counts in sceObj
 	w = n.cells[include] #weights by cell types
@@ -183,7 +194,8 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 	resList = lapply( assayNames(sceObj), function(k){
 
 		y = assay(sceObj, k)
-		n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
+		# n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
+		n.cells = .n_cells(sceObj)[k,colnames(y),drop=FALSE]
 
 		# processing counts with voom or log2 CPM
 		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
