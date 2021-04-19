@@ -44,6 +44,26 @@
 setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'))
 	# representation("list", data="data.frame"))
 
+setMethod("show", "dreamletProcessedData",
+	function(object){
+		print(object)
+	}
+)
+
+setMethod("print", "dreamletProcessedData",
+	function(x,...){
+		cat('class: dreamletProcessedData\n')
+		cat('assays: (', length(x), ')', assayNames(x))
+
+		df_count = lapply(x, function(obj) dim(obj$geneExpr))
+		df_count = do.call(rbind, df_count)
+
+		cat('\nSamples\n min:', min(df_count[,2]), '\n max:', max(df_count[,2]))
+		cat('\nGenes\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n\n')
+	}
+)
+
+
 
 # extract table of cell counts from 'int_colData'
 # of pseudobulks as returned by 'aggregateData'
@@ -130,16 +150,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# explicitly consider them here.
 		geneExpr = voomWithDreamWeights( y, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
 
-		# voom dots and curves are saved here
-		voom_curve = list( 	voom.line 	= geneExpr$voom.line,
-							voom.xy 	= geneExpr$voom.xy)
-
-		trend = FALSE
-
 		result = list(	geneExpr 	= geneExpr, 
-						trend 		= trend, 
-						voom_curve 	= voom_curve)
-
+						trend 		= trend) 
 	}else{
 	 	
 		# only include genes that show variation,
@@ -152,15 +164,17 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# create EList object storing gene expression and sample weights
 		geneExpr = new("EList", list(E=y[include,,drop=FALSE], weights = weights[include,,drop=FALSE]))
 
-		# since precision weights are not used, use the trend in the eBayes step
-		trend = TRUE
 
 		result = list(	geneExpr 	= geneExpr, 
-						trend 		= trend)
+						isCounts 		= isCounts)
 	}
 
 	result 
 }
+
+
+# since precision weights are not used, use the trend in the eBayes step
+# trend = TRUE
 
 
 
@@ -366,11 +380,14 @@ setMethod("dreamlet", "dreamletProcessedData",
 				L = NULL
 			}
 
-			# fit linear (mixed) model for each gene
-			fit = dream( procData$geneExpr, form_mod, data_sub, L = L, BPPARAM=BPPARAM,..., quiet=TRUE)
+			fit = tryCatch( {
+				# fit linear (mixed) model for each gene			
+				dream( procData$geneExpr, form_mod, data_sub, L = L, BPPARAM=BPPARAM,..., quiet=TRUE)
+				}, 
+				error = function(e) NULL)
 
 			# if model is degenerate
-			if( ! any(is.na(fit$sigma)) ){
+			if( !is.null(fit) && ! any(is.na(fit$sigma)) ){
 
 				if( !is.null(fit$rdf)){
 					# keep genes with residual degrees of freedom > 1
