@@ -150,8 +150,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# explicitly consider them here.
 		geneExpr = voomWithDreamWeights( y, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
 
-		result = list(	geneExpr 	= geneExpr, 
-						trend 		= trend) 
+		result = list(	geneExpr = geneExpr, 
+						isCounts = isCounts) 
 	}else{
 	 	
 		# only include genes that show variation,
@@ -165,8 +165,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		geneExpr = new("EList", list(E=y[include,,drop=FALSE], weights = weights[include,,drop=FALSE]))
 
 
-		result = list(	geneExpr 	= geneExpr, 
-						isCounts 		= isCounts)
+		result = list(	geneExpr = geneExpr, 
+						isCounts = isCounts)
 	}
 
 	result 
