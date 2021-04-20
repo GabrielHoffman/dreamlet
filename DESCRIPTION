@@ -39,6 +39,7 @@ Imports:
     edgeR,
     SummarizedExperiment,
     SingleCellExperiment,
+    zenith,
     BiocParallel,
     S4Vectors,
     ggrepel,
