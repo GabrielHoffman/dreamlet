@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -117,7 +117,10 @@
     <p>Perform Variance Partition analysis  for each assay</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fitVarPart</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>formula</span>, <span class='va'>data</span>, BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>fitVarPart</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>formula</span>, <span class='va'>data</span>, BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S4 method for dreamletProcessedData</span>
+<span class='fu'>fitVarPart</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>formula</span>, <span class='va'>data</span>, BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,6 +132,10 @@
     <tr>
       <th>formula</th>
       <td><p>regression formula for differential expression analysis</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>metadata used in regression formula</p></td>
     </tr>
     <tr>
       <th>BPPARAM</th>

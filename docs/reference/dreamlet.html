@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -121,7 +121,21 @@
   <span class='va'>x</span>,
   <span class='va'>formula</span>,
   <span class='va'>data</span>,
-  <span class='va'>L</span>,
+  L.list <span class='op'>=</span> <span class='cn'>NULL</span>,
+  min.cells <span class='op'>=</span> <span class='fl'>10</span>,
+  isCounts <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  normalize.method <span class='op'>=</span> <span class='st'>"TMM"</span>,
+  BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S4 method for dreamletProcessedData</span>
+<span class='fu'>dreamlet</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>formula</span>,
+  <span class='va'>data</span>,
+  L.list <span class='op'>=</span> <span class='cn'>NULL</span>,
   min.cells <span class='op'>=</span> <span class='fl'>10</span>,
   isCounts <span class='op'>=</span> <span class='cn'>TRUE</span>,
   robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -142,8 +156,12 @@
       <td><p>regression formula for differential expression analysis</p></td>
     </tr>
     <tr>
-      <th>L</th>
-      <td><p>contrast matrix specifying a linear combination of fixed effects to test</p></td>
+      <th>data</th>
+      <td><p>metadata used in regression formula</p></td>
+    </tr>
+    <tr>
+      <th>L.list</th>
+      <td><p>list of contrasts specifying linear combinations of fixed effects to tests</p></td>
     </tr>
     <tr>
       <th>min.cells</th>
