@@ -52,8 +52,18 @@ setMethod("show", "dreamletProcessedData",
 
 setMethod("print", "dreamletProcessedData",
 	function(x,...){
+
 		cat('class: dreamletProcessedData\n')
-		cat('assays: (', length(x), ')', assayNames(x))
+		cat('assays(', length(x), '): ', sep='')
+
+		if( length(x) < 4 ){
+			txt = paste(names(x), collapse=' ')
+		}else{
+			txt = paste(paste(head(names(x), 2), collapse=' '),
+				'...',
+				paste(tail(names(x), 2), collapse=' '))
+		}
+		cat(txt)
 
 		df_count = lapply(x, function(obj) dim(obj$geneExpr))
 		df_count = do.call(rbind, df_count)
@@ -62,6 +72,35 @@ setMethod("print", "dreamletProcessedData",
 		cat('\nGenes\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n\n')
 	}
 )
+
+# setGeneric("colData",
+# 	function(x,...){		
+# 	standardGeneric("colData")
+# })
+
+
+#' Extract colData from dreamletProcessedData
+#' 
+#' Extract colData from dreamletProcessedData
+#' @param x A dreamletProcessedData object
+#' @param ... other arguments
+# @export
+setMethod("colData", "dreamletProcessedData",
+	function(x,...){
+		x@data
+})
+
+subsetSamples = function(x, ids){
+
+	for(i in seq_len(length(x)) ){
+
+		x$geneExpr = x$geneExpr[,ids]
+	}
+
+	x
+}
+
+
 
 
 
@@ -249,88 +288,88 @@ setGeneric("dreamlet",
 
 
 
-#' @importFrom SummarizedExperiment as.data.frame colData assays assay assayNames
-#' @importFrom variancePartition dream eBayes isRunableFormula
-#' @import limma
-#' @import SingleCellExperiment
-#' @export
-#' @rdname dreamlet
-#' @aliases dreamlet,SingleCellExperiment-method
-setMethod("dreamlet", "SingleCellExperiment",
-	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+# #' @importFrom SummarizedExperiment as.data.frame colData assays assay assayNames
+# #' @importFrom variancePartition dream eBayes isRunableFormula
+# #' @import limma
+# #' @import SingleCellExperiment
+# #' @export
+# #' @rdname dreamlet
+# #' @aliases dreamlet,SingleCellExperiment-method
+# setMethod("dreamlet", "SingleCellExperiment",
+# 	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
-	# checks
-	# stopifnot( is(x, 'SingleCellExperiment'))
-	stopifnot( is(formula, 'formula'))
+# 	# checks
+# 	# stopifnot( is(x, 'SingleCellExperiment'))
+# 	stopifnot( is(formula, 'formula'))
 
-	# extract metadata shared across assays
-	data = as.data.frame(colData(x))
+# 	# extract metadata shared across assays
+# 	data = as.data.frame(colData(x))
 
-	# for each assay
-	resList = lapply( assayNames(x), function(k){
+# 	# for each assay
+# 	resList = lapply( assayNames(x), function(k){
 
-		message("\rAssay: ", k)
+# 		message("\rAssay: ", k)
 		
-		# get data from assay k
-		y = assay(x, k)
-		n.cells = metadata(x)$n_cells[k,colnames(y),drop=FALSE]
+# 		# get data from assay k
+# 		y = assay(x, k)
+# 		n.cells = metadata(x)$n_cells[k,colnames(y),drop=FALSE]
 
-		# processing counts with voom or log2 CPM
-		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
+# 		# processing counts with voom or log2 CPM
+# 		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
 
-		# initialze fit in case dream is not run
-		fit = NULL
+# 		# initialze fit in case dream is not run
+# 		fit = NULL
 
-		# if samples are retained after filtering
-		if( ! is.null(res) ){
+# 		# if samples are retained after filtering
+# 		if( ! is.null(res) ){
 
-			data_sub = data[colnames(res$geneExpr),,drop=FALSE]
+# 			data_sub = data[colnames(res$geneExpr),,drop=FALSE]
 
-			# drop any constant terms from the formula
-			form_mod = removeConstantTerms(formula, data_sub)
+# 			# drop any constant terms from the formula
+# 			form_mod = removeConstantTerms(formula, data_sub)
 
-			# if model is full rank
-			if( isRunableFormula(res$geneExpr$E, form_mod, data_sub) ){
+# 			# if model is full rank
+# 			if( isRunableFormula(res$geneExpr$E, form_mod, data_sub) ){
 	
-				# fit linear (mixed) model for each gene
-				# only include samples from data that are retained in res$geneExpr
-				# TODO include L now
-				fit = dream( res$geneExpr, form_mod, data_sub, BPPARAM=BPPARAM, quiet=TRUE,...)
+# 				# fit linear (mixed) model for each gene
+# 				# only include samples from data that are retained in res$geneExpr
+# 				# TODO include L now
+# 				fit = dream( res$geneExpr, form_mod, data_sub, BPPARAM=BPPARAM, quiet=TRUE,...)
 
-				# if model is degenerate
-				if( ! any(is.na(fit$sigma)) ){
+# 				# if model is degenerate
+# 				if( ! any(is.na(fit$sigma)) ){
 					
-					if( !is.null(fit$rdf)){
-						# keep genes with residual degrees of freedom > 1
-						# this prevents failures later
-						keep = which(fit$rdf >= 1)
+# 					if( !is.null(fit$rdf)){
+# 						# keep genes with residual degrees of freedom > 1
+# 						# this prevents failures later
+# 						keep = which(fit$rdf >= 1)
 
-						fit = fit[keep,]
-					}
+# 						fit = fit[keep,]
+# 					}
 
-					# borrow information across genes with the Empircal Bayes step
-					fit = eBayes(fit[keep,], robust=robust, trend=res$trend)
-				}else{
-					fit = NULL
-				}
-			}
-		}
+# 					# borrow information across genes with the Empircal Bayes step
+# 					fit = eBayes(fit[keep,], robust=robust, trend=res$trend)
+# 				}else{
+# 					fit = NULL
+# 				}
+# 			}
+# 		}
 
-		list(fit = fit, data = res)
-	})
-	# name each result by the assay name
-	names(resList) = assayNames(x)
+# 		list(fit = fit, data = res)
+# 	})
+# 	# name each result by the assay name
+# 	names(resList) = assayNames(x)
 
-	# create list of all fit objects
-	fitList = lapply(resList, function(obj) obj$fit)
-	names(fitList) = assayNames(x)
+# 	# create list of all fit objects
+# 	fitList = lapply(resList, function(obj) obj$fit)
+# 	names(fitList) = assayNames(x)
 
-	# create list of all data objects
-	dataList = lapply(resList, function(obj) obj$data)
-	names(dataList) = assayNames(x)
+# 	# create list of all data objects
+# 	dataList = lapply(resList, function(obj) obj$data)
+# 	names(dataList) = assayNames(x)
 
-	list(fit = fitList, data = new("dreamletProcessedData", dataList, data=data) )
-})
+# 	list(fit = fitList, data = new("dreamletProcessedData", dataList, data=data) )
+# })
 
 
 
@@ -342,7 +381,7 @@ setMethod("dreamlet", "SingleCellExperiment",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -358,12 +397,6 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		# get names of samples to extract from metadata
 		ids = colnames(procData$geneExpr)
-
-		# if include is not missing, keep the intersection
-		if( ! is.null(include) ){
-			ids = intersect(ids, include)
-			procData$geneExpr = procData$geneExpr[,ids]
-		}
 		data_sub = droplevels(data[ids,,drop=FALSE])
 
 		# drop any constant terms from the formula
@@ -398,7 +431,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 				}
 
 				# borrow information across genes with the Empircal Bayes step
-				fit = eBayes(fit, robust=robust, trend=procData$trend)
+				fit = eBayes(fit, robust=robust, trend=!procData$isCounts)
 			}else{	
 				fit = NULL
 			}
@@ -414,25 +447,6 @@ setMethod("dreamlet", "dreamletProcessedData",
 })
 
 
-
-
-
-# setGeneric("colData",
-# 	function(x,...){		
-# 	standardGeneric("colData")
-# })
-
-
-#' Extract colData from dreamletProcessedData
-#' 
-#' Extract colData from dreamletProcessedData
-#' @param x A dreamletProcessedData object
-#' @param ... other arguments
-# @export
-setMethod("colData", "dreamletProcessedData",
-	function(x,...){
-		x@data
-})
 
 
 
