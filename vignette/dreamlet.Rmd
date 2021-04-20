@@ -136,11 +136,33 @@ go.gs = get_GeneOntology(to="SYMBOL")
 geneSets_GO = recodeToList( go.gs )
 
 # Run zenith gene set analysis on result of dreamlet
-res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', geneSets_GO[1:1000])
+res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', geneSets_GO)
 
 # examine results
 head(res_zenith)
 ```
+
+## Heatmap of top genesets
+```{r heatmap, fig.height=6}
+plotZenithResults(res_zenith)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
