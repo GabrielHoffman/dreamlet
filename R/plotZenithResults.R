@@ -10,6 +10,7 @@
 #' @importFrom reshape2 dcast
 #' @importFrom ComplexHeatmap Heatmap draw
 #' @importFrom circlize colorRamp2
+#' @importFrom grid gpar
 #' 
 #' @export
 plotZenithResults = function(df, ntop=5, nbottom=5){
