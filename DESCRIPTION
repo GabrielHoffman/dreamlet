@@ -31,17 +31,18 @@ biocViews: RNASeq,
     Software
 Depends:
     R (>= 4.0.0),
-    methods
-Imports:
     variancePartition (>= 1.21.3),
     limma, 
+    ggplot2,
+    methods
+Imports:
     edgeR,
     SummarizedExperiment,
     SingleCellExperiment,
     BiocParallel,
     S4Vectors,
+    ggrepel,
     cowplot,
-    ggplot2,
     lme4,
     stats
 RoxygenNote: 7.1.1
