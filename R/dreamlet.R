@@ -90,11 +90,26 @@ setMethod("colData", "dreamletProcessedData",
 		x@data
 })
 
+#' Extract a subset of samples
+#'
+#' Extract a subset of samples
+#' 
+#' @param x dreamletProcessedData
+#' @param ids column names to retain
+#'
+#' @export
 subsetSamples = function(x, ids){
 
+	stopifnot( is(x, 'dreamletProcessedData'))
+
+	# for each assay
 	for(i in seq_len(length(x)) ){
 
-		x$geneExpr = x$geneExpr[,ids]
+		# intersect ids with column names
+		include = intersect(ids, colnames(x[[i]]$geneExpr))
+
+		# extract samples with these column names
+		x[[i]]$geneExpr = x[[i]]$geneExpr[,include]
 	}
 
 	x
