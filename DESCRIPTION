@@ -42,8 +42,12 @@ Imports:
     zenith,
     BiocParallel,
     S4Vectors,
+    ComplexHeatmap,
+    circlize,
+    reshape2,
     ggrepel,
     cowplot,
+    grid,
     lme4,
     stats
 RoxygenNote: 7.1.1
