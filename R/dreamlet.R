@@ -50,6 +50,7 @@ setMethod("show", "dreamletProcessedData",
 	}
 )
 
+#' @importFrom utils head tail
 setMethod("print", "dreamletProcessedData",
 	function(x,...){
 
@@ -282,7 +283,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
-#' @param L contrast matrix specifying a linear combination of fixed effects to test
+#' @param L.list list of contrasts specifying linear combinations of fixed effects to tests
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
 #' @param robust logical, use eBayes method that is robust to outlier genes
@@ -295,7 +296,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 #'
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data, L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	standardGeneric("dreamlet")
 })
@@ -391,6 +392,7 @@ setGeneric("dreamlet",
 
 
 
+#' @importFrom variancePartition getContrast dream
 #' @importFrom SummarizedExperiment as.data.frame colData assays
 #' @export
 #' @rdname dreamlet
