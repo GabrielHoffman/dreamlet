@@ -1,0 +1,64 @@
+
+#' Heatmap of zenith results
+#'
+#' Heatmap of zenith results showing genesets that have the top and bottom t-statistics from each assay.
+#'
+#' @param df result \code{data.frame} from \link{zenith_gsa}
+#' @param ntop number of gene sets with highest t-statistic to show
+#' @param nbottom number of gene sets with lowest t-statistic to show
+#' 
+#' @importFrom reshape2 dcast
+#' @importFrom ComplexHeatmap Heatmap draw
+#' @importFrom circlize colorRamp2
+#' 
+#' @export
+plotZenithResults = function(df, ntop=5, nbottom=5){
+
+	# construct t-statistic from effect size and standard error
+	df$tstat = with(df, delta/se)
+
+	# for each assay, return top and bottom genesets
+	gs = lapply( unique(df$Assay), function(assay){
+
+		# extract zenith results for one assay
+		df_sub = df[df$Assay == assay, ]
+
+		# sort t-statistics
+		tstat_sort = sort(df_sub$tstat)
+
+		# keep genesets with highest and lowest t-statistics
+		idx = (df_sub$tstat <= tstat_sort[nbottom]) | (df_sub$tstat >= tail(tstat_sort, ntop)[1]) 
+
+		df_sub$Geneset[idx]
+		})
+	gs = unique(unlist(gs))
+
+	# create matrix from retained gene sets
+	M = dcast(df[df$Geneset %in% gs,] , Assay ~ Geneset, value.var = "tstat")
+	rownames(M) = M[,1]
+	M = as.matrix(M[,-1])
+
+	# set breaks
+	zmax = max(abs(M), na.rm=TRUE)
+	at = seq(0, round(zmax), length.out=3)
+	at = sort(unique(c(-at, at)))
+
+	# set colors
+	col_fun = colorRamp2(c(-zmax, 0, zmax), c("blue", "white", "red"))
+
+	# create heatmap
+	hm = Heatmap(t(M),
+	        name = "t-statistic", #title of legend
+	        column_title = "Assays", row_title = "Gene sets",
+	        row_names_gp = gpar(fontsize = 8),
+		    width = nrow(M), 
+		    height = ncol(M),
+		    heatmap_legend_param = list(at = at,  direction = "horizontal", title_position="topcenter"), col = col_fun)
+
+	draw(hm, heatmap_legend_side = "bottom")
+}
+
+
+
+
+
