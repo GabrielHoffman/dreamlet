@@ -31,7 +31,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 knitr::opts_chunk$set(
   echo = TRUE,
   warning=FALSE,
-  message=FALSE,
+  message=TRUE,
   error = FALSE,
   tidy = FALSE,
   dev = c("png", "pdf"),
@@ -126,9 +126,8 @@ topTable(fit, coef = 'group_idstim' )
 ```
 
 
-# zenith analysis
+# Gene set analysis using zenith
 ```{r zenith}
-
 # Load Gene Ontology database 
 # use gene SYMBOL
 go.gs = get_GeneOntology(to="SYMBOL")
@@ -136,7 +135,11 @@ go.gs = get_GeneOntology(to="SYMBOL")
 # convert from GeneSetCollection to list used by camera and zenith
 geneSets_GO = recodeToList( go.gs )
 
-res_zentih = zenith_gsa(res.dl, geneSets_GO[1:1000])
+# Run zenith gene set analysis on result of dreamlet
+res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', geneSets_GO[1:1000])
+
+# examine results
+head(res_zenith)
 ```
 
 

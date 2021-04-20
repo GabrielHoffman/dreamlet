@@ -8,13 +8,16 @@
 #' zenith gene set analysis on dreamlet results
 #'
 #' @param res.dl results from \code{dreamlet}
+#' @param coef coefficient to test using \code{topTable(fit, coef)}
 #' @param geneSets a list of gene sets
 #' @param n_genes_min minumum number of genes in a geneset
 #'  
 #' @importFrom limma ids2indices
 #' @importFrom zenith zenith
+#' @importFrom stats p.adjust
+#'
 #' @export
-zenith_gsa = function(res.dl, geneSets, n_genes_min = 10){
+zenith_gsa = function(res.dl, coef, geneSets, n_genes_min = 10){
 
 	# for each assay
 	df_zenith = lapply( names(res.dl), function(assay){
