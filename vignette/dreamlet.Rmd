@@ -19,6 +19,9 @@ rmarkdown::render("dreamlet.Rmd")
 
  devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
 
+devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
+
+
 
 --->
 
@@ -42,6 +45,7 @@ library(dreamlet)
 library(muscat)
 library(ExperimentHub)
 library(cowplot)
+library(zenith)
 
 eh <- ExperimentHub()
 # query(eh, "Kang")
@@ -121,6 +125,19 @@ fit = res.dl[["B cells"]]
 topTable(fit, coef = 'group_idstim' )
 ```
 
+
+# zenith analysis
+```{r zenith}
+
+# Load Gene Ontology database 
+# use gene SYMBOL
+go.gs = get_GeneOntology(to="SYMBOL")
+   
+# convert from GeneSetCollection to list used by camera and zenith
+geneSets_GO = recodeToList( go.gs )
+
+res_zentih = zenith_gsa(res.dl, geneSets_GO[1:1000])
+```
 
 
 
