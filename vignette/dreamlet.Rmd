@@ -152,7 +152,7 @@ head(res_zenith)
 ```
 
 ## Heatmap of top genesets
-```{r heatmap, fig.height=14, fig.width=5}
+```{r heatmap, fig.height=10, fig.width=5}
 plotZenithResults(res_zenith, 5, 1)
 ```
 

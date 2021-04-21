@@ -7,8 +7,8 @@
 #' 
 #' zenith gene set analysis on dreamlet results
 #'
-#' @param res.dl results from \code{dreamlet}
-#' @param coef coefficient to test using \code{topTable(fit, coef)}
+#' @param x results from \code{dreamlet}
+#' @param coefs coefficients to test using \code{topTable(fit, coef)}
 #' @param geneSets a list of gene sets
 #' @param n_genes_min minumum number of genes in a geneset
 #'  
@@ -17,13 +17,13 @@
 #' @importFrom stats p.adjust
 #'
 #' @export
-zenith_gsa = function(res.dl, coef, geneSets, n_genes_min = 10){
+zenith_gsa = function(x, coefs, geneSets, n_genes_min = 10){
 
 	# for each assay
-	df_zenith = lapply( names(res.dl), function(assay){
+	df_zenith = lapply( names(x), function(assay){
 
 		# extract dream fit
-		fit = res.dl[[assay]]
+		fit = x[[assay]]
 
 		# Map from Ensembl genes in geneSets_GO to 
 		# from trimmed Ensembl names from RNA-seq data 
@@ -32,12 +32,18 @@ zenith_gsa = function(res.dl, coef, geneSets, n_genes_min = 10){
 		# filter by size of gene set
 		index = index[sapply(index, length) >= n_genes_min]
 
-		# run zenith on dream fits
-		df_res = zenith(fit, coef, index)
+		# for each coefficient selected
+		df_res = lapply( coefs, function(coef){
+			# run zenith on dream fits
+			df_res = zenith(fit, coef, index)
+			df_res$coef = coef
+			df_res
+		})
+		df_res = do.call(rbind, df_res)
 
 		data.frame(Assay = assay, Geneset = rownames(df_res), df_res)
 		})
-	names(df_zenith) = names(res.dl)
+	names(df_zenith) = names(x)
 	df_zenith = do.call(rbind, df_zenith)
 	rownames(df_zenith) = c()
 
@@ -46,3 +52,8 @@ zenith_gsa = function(res.dl, coef, geneSets, n_genes_min = 10){
 
 	df_zenith
 }
+
+
+
+
+
