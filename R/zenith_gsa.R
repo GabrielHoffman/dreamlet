@@ -37,7 +37,7 @@ zenith_gsa = function(x, coefs, geneSets, n_genes_min = 10){
 			# run zenith on dream fits
 			df_res = zenith(fit, coef, index)
 			
-			data.frame(Assay = assay, GeneSet = rownames(df_res), df_res)
+			data.frame(Assay = assay, coef = coef, Geneset = rownames(df_res), df_res)
 		})
 		do.call(rbind, df_res)
 	})

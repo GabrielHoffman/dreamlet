@@ -40,13 +40,16 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	})
 	gs = unique(unlist(gs))
 
-
 	# create matrix from retained gene sets
 	M = dcast(df[df$Geneset %in% gs,], Assay + coef ~ Geneset, value.var = "tstat")
-
 	annot = M[,1:2]
 	M = as.matrix(M[,-c(1:2)])
 	rownames(M) = annot$Assay
+
+	# move genesets with only a singel non-NA value
+	countNA = apply(M, 2, function(x) sum(!is.na(x)))
+	M = M[,countNA >1]
+
 
 	# set breaks
 	zmax = max(abs(M), na.rm=TRUE)
@@ -62,7 +65,8 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 		        row_names_gp = gpar(fontsize = 8),
 			    width = nrow(M), 
 			    height = ncol(M),
-			    column_split=annot$coef,
+			    column_split = annot$coef,
+			     cluster_column_slices = FALSE,
 			    heatmap_legend_param = list(at = at,  direction = "horizontal", title_position="topcenter"), 
 			    col = col_fun)
 
