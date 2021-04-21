@@ -29,7 +29,7 @@ plotVoom = function( x, ncol=3){
 	df_range = do.call(rbind, df_range)
 
 	xlim = range(df_range$range.x.)
-	ylim = range(df_range$range.y.)
+	ylim = c(0, max(df_range$range.y.))
 
 	xlab = bquote(log[2](counts + 0.5))
 	ylab = bquote(sqrt(standard~deviation))
@@ -43,5 +43,5 @@ plotVoom = function( x, ncol=3){
 		ggplot(df, aes(x, y)) + geom_point(size=0.1) + geom_line(data=df_curve, aes(x,y), color="red") + theme_classic() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + xlab(xlab) + ylab(ylab) + ggtitle(id) + xlim(xlim) + ylim(ylim)
 	})
 
-	plot_grid(plotlist = figList, ncols=ncol, align="hv", axis='tblr')
+	plot_grid(plotlist = figList, ncol=ncol, align="hv", axis='tblr')
 }
