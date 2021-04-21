@@ -125,6 +125,12 @@ fit = res.dl[["B cells"]]
 topTable(fit, coef = 'group_idstim' )
 ```
 
+### Forrest plot 
+```{r forrest}
+plotForrest( res.dl, coef = 'group_idstim', gene = 'IRF7')
+```
+
+
 
 # Gene set analysis using zenith
 ```{r zenith}
