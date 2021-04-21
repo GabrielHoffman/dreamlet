@@ -40,13 +40,13 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	})
 	gs = unique(unlist(gs))
 
-	# create matrix from retained gene sets
-	M = dcast(df[df$Geneset %in% gs,] , Assay ~ Geneset, value.var = "tstat")
-	rownames(M) = M[,1]
-	M = as.matrix(M[,-1])
 
-	idx = is.na(M)
-	if( length(idx) > 0) M[idx] = 0
+	# create matrix from retained gene sets
+	M = dcast(df[df$Geneset %in% gs,], Assay + coef ~ Geneset, value.var = "tstat")
+
+	annot = M[,1:2]
+	M = as.matrix(M[,-c(1:2)])
+	rownames(M) = annot$Assay
 
 	# set breaks
 	zmax = max(abs(M), na.rm=TRUE)
@@ -56,17 +56,25 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	# set colors
 	col_fun = colorRamp2(c(-zmax, 0, zmax), c("blue", "white", "red"))
 
-	# create heatmap
 	hm = Heatmap(t(M),
-	        name = "t-statistic", #title of legend
-	        column_title = "Assays", row_title = "Gene sets",
-	        row_names_gp = gpar(fontsize = 8),
-		    width = nrow(M), 
-		    height = ncol(M),
-		    heatmap_legend_param = list(at = at,  direction = "horizontal", title_position="topcenter"), col = col_fun)
+		        name = "t-statistic", #title of legend
+		        # column_title = "Assays", row_title = "Gene sets",
+		        row_names_gp = gpar(fontsize = 8),
+			    width = nrow(M), 
+			    height = ncol(M),
+			    column_split=annot$coef,
+			    heatmap_legend_param = list(at = at,  direction = "horizontal", title_position="topcenter"), 
+			    col = col_fun)
 
 	draw(hm, heatmap_legend_side = "bottom")
 }
+
+
+
+
+
+
+
 
 
 
