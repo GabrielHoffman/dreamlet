@@ -4,12 +4,12 @@
 \alias{zenith_gsa}
 \title{zenith gene set analysis on dreamlet results}
 \usage{
-zenith_gsa(res.dl, coef, geneSets, n_genes_min = 10)
+zenith_gsa(x, coefs, geneSets, n_genes_min = 10)
 }
 \arguments{
-\item{res.dl}{results from \code{dreamlet}}
+\item{x}{results from \code{dreamlet}}
 
-\item{coef}{coefficient to test using \code{topTable(fit, coef)}}
+\item{coefs}{coefficients to test using \code{topTable(fit, coef)}}
 
 \item{geneSets}{a list of gene sets}
 
