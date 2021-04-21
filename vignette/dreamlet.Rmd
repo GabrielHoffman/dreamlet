@@ -143,7 +143,7 @@ go.gs = get_GeneOntology(to="SYMBOL")
      
 # convert from GeneSetCollection to list used by camera and zenith
 geneSets_GO = recodeToList( go.gs )
-
+   
 # Run zenith gene set analysis on result of dreamlet
 res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', geneSets_GO)
 
