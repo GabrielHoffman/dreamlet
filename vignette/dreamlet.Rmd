@@ -1,9 +1,12 @@
 ---
-title: "Dreamlet analysis of single cell pseudo-bulk data"
-subtitle: ''
+title: "Dreamlet analysis of single cell RNA-seq"
+subtitle: 'Linear mixed model analysis of pseudobulk'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
+abstract: >
+ As the scale of single cell/nucleus RNA-seq has increased, so has the complexity of study designs.  Analysis of datasets with simple study designs can be performed using linear model as in the [muscat package](https://bioconductor.org/packages/muscat).  Yet analysis of datsets with complex study designs such as repeated measures or many technical batches can benefit from linear mixed model analysis to model to correlation structure between samples.  Dreamlet extends the previous work of [muscat](https://www.nature.com/articles/s41467-020-19894-4) to apply linear mixed models to pseudobulk data.  Dreamlet also supports linear models and facilitates application of 1) [variancePartition](https://bioconductor.org/packages/variancePartition) to quantify the contribution of multiple variables to expression variation, and 2) [zenith](https://github.com/GabrielHoffman/zenith) to perform gene set analysis on the differential expression signatures. 
+
 output:
   html_document:
     toc: true
@@ -31,30 +34,29 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 knitr::opts_chunk$set(
   echo = TRUE,
   warning=FALSE,
-  message=TRUE,
+  message=FALSE,
   error = FALSE,
   tidy = FALSE,
   dev = c("png", "pdf"),
   cache = TRUE)
 ```
 
+Describe pseudobulk, complex study design, variancePartition, and zenith.
+
+# Process single cell counts
 ## Preprocess data
 ```{r preprocess.data}
-
 library(dreamlet)
 library(muscat)
 library(ExperimentHub)
 library(cowplot)
 library(zenith)
+library(scater)
 
 eh <- ExperimentHub()
-# query(eh, "Kang")
-
-(sce <- eh[["EH2259"]])
-
+sce <- eh[["EH2259"]]
 sce <- sce[rowSums(counts(sce) > 0) > 0, ]
 
-library(scater)
 qc <- perCellQCMetrics(sce)
 
 # remove cells with few or many detected genes
@@ -69,11 +71,11 @@ sce <- logNormCounts(sce)
 ## Aggregate to pseudobulk
 ```{r aggregate}
 sce$id <- paste0(sce$stim, sce$ind)
-(sce <- prepSCE(sce, 
+sce <- prepSCE(sce, 
     kid = "cell", # subpopulation assignments
     gid = "stim",  # group IDs (ctrl/stim)
     sid = "id",   # sample IDs (ctrl/stim.1234)
-    drop = TRUE)) 
+    drop = TRUE)
 
 pb <- aggregateData(sce,
     assay = "counts", fun = "sum",
@@ -83,25 +85,25 @@ pb <- aggregateData(sce,
 assayNames(pb)
 ```
 
-# dreamlet code
-## Process pseudo bulk from each assay
+# Voom for pseudobulk 
 ```{r dreamlet, fig.width=9, fig.height=10}
 # Normalize and apply voom
 res.proc = processAssays( pb, ~ group_id)
 
 res.proc
-
+  
 plotVoom( res.proc)
 ```
 
 
-## Run variancePartition analysis
+# Run variancePartition analysis
 ```{r vp}
 vp.lst = fitVarPart( res.proc, ~ group_id)
 ```
 
-### variancePartition plots for each cell type
+## variancePartition plots
 ```{r plot.fitVarPart, fig.width=9, fig.height=10}
+# show variancePartition plots for each cell type
 fitList = lapply( names(vp.lst), function(cellType){
 	plotVarPart(vp.lst[[cellType]], main=cellType)
 	})
@@ -109,12 +111,13 @@ fitList = lapply( names(vp.lst), function(cellType){
 plot_grid(plotlist = fitList, ncol=3)
 ```
 
-## Run dreamlet
+# Run dreamlet
 ```{r test}
+# Differential expression analysis within each assay
 res.dl = dreamlet( res.proc, ~ group_id)
 ```
 
-### Volcano plot for each cell type
+## Volcano plot for each cell type
 ```{r plotVolcano, fig.width=9, fig.height=10}
 plotVolcano_grid( res.dl, coef = 'group_idstim' )
 ```
@@ -125,7 +128,7 @@ fit = res.dl[["B cells"]]
 topTable(fit, coef = 'group_idstim' )
 ```
 
-### Forrest plot 
+## Forrest plot 
 ```{r forrest}
 plotForrest( res.dl, coef = 'group_idstim', gene = 'IRF7')
 ```

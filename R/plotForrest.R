@@ -13,6 +13,10 @@
 #' @export
 plotForrest = function(x, coef, gene){
 
+	# Pass R CMD check
+	Assay = logFC = FDR = se = NULL
+
+
 	df = lapply( names(x), function(assay){
 		tab = topTable(x[[assay]], coef=coef, number=Inf)
 		data.frame(Assay = assay, Gene = rownames(tab), tab, se = with(tab, logFC / t))
