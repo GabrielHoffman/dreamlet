@@ -27,8 +27,11 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 		# sort t-statistics
 		tstat_sort = sort(df_sub$tstat)
 
+		cutoff1 = ifelse(nbottom > 0, tstat_sort[nbottom], -Inf)
+		cutoff2 = ifelse(ntop > 0, tail(tstat_sort, ntop)[1], Inf)
+
 		# keep genesets with highest and lowest t-statistics
-		idx = (df_sub$tstat <= tstat_sort[nbottom]) | (df_sub$tstat >= tail(tstat_sort, ntop)[1]) 
+		idx = (df_sub$tstat <= cutoff1) | (df_sub$tstat >= cutoff2) 
 
 		df_sub$Geneset[idx]
 		})
@@ -58,8 +61,5 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 
 	draw(hm, heatmap_legend_side = "bottom")
 }
-
-
-
 
 
