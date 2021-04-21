@@ -21,26 +21,32 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	# for each assay, return top and bottom genesets
 	gs = lapply( unique(df$Assay), function(assay){
 
-		# extract zenith results for one assay
-		df_sub = df[df$Assay == assay, ]
+		lapply( unique(df$coef), function(coef){
 
-		# sort t-statistics
-		tstat_sort = sort(df_sub$tstat)
+			# extract zenith results for one assay
+			df_sub = df[(df$Assay == assay) &(df$coef == coef), ]
 
-		cutoff1 = ifelse(nbottom > 0, tstat_sort[nbottom], -Inf)
-		cutoff2 = ifelse(ntop > 0, tail(tstat_sort, ntop)[1], Inf)
+			# sort t-statistics
+			tstat_sort = sort(df_sub$tstat)
 
-		# keep genesets with highest and lowest t-statistics
-		idx = (df_sub$tstat <= cutoff1) | (df_sub$tstat >= cutoff2) 
+			cutoff1 = ifelse(nbottom > 0, tstat_sort[nbottom], -Inf)
+			cutoff2 = ifelse(ntop > 0, tail(tstat_sort, ntop)[1], Inf)
 
-		df_sub$Geneset[idx]
+			# keep genesets with highest and lowest t-statistics
+			idx = (df_sub$tstat <= cutoff1) | (df_sub$tstat >= cutoff2) 
+
+			df_sub$Geneset[idx]
 		})
+	})
 	gs = unique(unlist(gs))
 
 	# create matrix from retained gene sets
 	M = dcast(df[df$Geneset %in% gs,] , Assay ~ Geneset, value.var = "tstat")
 	rownames(M) = M[,1]
 	M = as.matrix(M[,-1])
+
+	idx = is.na(M)
+	if( length(idx) > 0) M[idx] = 0
 
 	# set breaks
 	zmax = max(abs(M), na.rm=TRUE)
@@ -61,5 +67,6 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 
 	draw(hm, heatmap_legend_side = "bottom")
 }
+
 
 

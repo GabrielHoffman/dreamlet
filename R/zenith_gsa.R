@@ -36,13 +36,11 @@ zenith_gsa = function(x, coefs, geneSets, n_genes_min = 10){
 		df_res = lapply( coefs, function(coef){
 			# run zenith on dream fits
 			df_res = zenith(fit, coef, index)
-			df_res$coef = coef
-			df_res
+			
+			data.frame(Assay = assay, GeneSet = rownames(df_res), df_res)
 		})
-		df_res = do.call(rbind, df_res)
-
-		data.frame(Assay = assay, Geneset = rownames(df_res), df_res)
-		})
+		do.call(rbind, df_res)
+	})
 	names(df_zenith) = names(x)
 	df_zenith = do.call(rbind, df_zenith)
 	rownames(df_zenith) = c()
