@@ -46,10 +46,22 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	M = as.matrix(M[,-c(1:2)])
 	rownames(M) = annot$Assay
 
-	# move genesets with only a singel non-NA value
-	countNA = apply(M, 2, function(x) sum(!is.na(x)))
-	M = M[,countNA >1]
+	# Perform clustering on data in M
+	success = tryCatch({
+		hcl1 <- hclust(dist(M))
+		hcl2 <- hclust(dist(t(M)))
+		TRUE
+		}, error = function(e) FALSE)
 
+	# if original clustering fails, 
+	# replace NA's with 0
+	if( ! success ){
+		M_zero = M
+		i = which(is.na(M_zero))
+		if( length(i) > 0) M_zero[i] = 0
+		hcl1 <- hclust(dist(M_zero))
+		hcl2 <- hclust(dist(t(M_zero)))
+	}
 
 	# set breaks
 	zmax = max(abs(M), na.rm=TRUE)
@@ -59,14 +71,17 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	# set colors
 	col_fun = colorRamp2(c(-zmax, 0, zmax), c("blue", "white", "red"))
 
+	# create heatmap
 	hm = Heatmap(t(M),
 		        name = "t-statistic", #title of legend
 		        # column_title = "Assays", row_title = "Gene sets",
 		        row_names_gp = gpar(fontsize = 8),
 			    width = nrow(M), 
 			    height = ncol(M),
+			    cluster_rows = hcl2,
+				# cluster_columns = hcl1,
 			    column_split = annot$coef,
-			     cluster_column_slices = FALSE,
+			    cluster_column_slices = FALSE,
 			    heatmap_legend_param = list(at = at,  direction = "horizontal", title_position="topcenter"), 
 			    col = col_fun)
 
