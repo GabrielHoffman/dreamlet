@@ -48,7 +48,7 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 
 	# Perform clustering on data in M
 	success = tryCatch({
-		hcl1 <- hclust(dist(M))
+		# hcl1 <- hclust(dist(M))
 		hcl2 <- hclust(dist(t(M)))
 		TRUE
 		}, error = function(e) FALSE)
@@ -59,7 +59,7 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 		M_zero = M
 		i = which(is.na(M_zero))
 		if( length(i) > 0) M_zero[i] = 0
-		hcl1 <- hclust(dist(M_zero))
+		# hcl1 <- hclust(dist(M_zero))
 		hcl2 <- hclust(dist(t(M_zero)))
 	}
 
