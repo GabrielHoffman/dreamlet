@@ -88,7 +88,7 @@ assayNames(pb)
 # Voom for pseudobulk 
 ```{r dreamlet, fig.width=9, fig.height=10}
 # Normalize and apply voom
-res.proc = processAssays( pb, ~ group_id)
+res.proc = processAssays( pb, ~ group_id, min.count=5)
 
 res.proc
   

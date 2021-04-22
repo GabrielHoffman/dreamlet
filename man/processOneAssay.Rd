@@ -12,6 +12,7 @@ processOneAssay(
   min.cells = 10,
   isCounts = TRUE,
   normalize.method = "TMM",
+  min.count = 10,
   BPPARAM = bpparam(),
   ...
 )
@@ -30,6 +31,8 @@ processOneAssay(
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
+
+\item{min.count}{min.count used by \code{edgeR::filterByExpr}}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

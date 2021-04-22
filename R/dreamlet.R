@@ -147,6 +147,7 @@ subsetSamples = function(x, ids){
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
+#' @param min.count min.count used by \code{edgeR::filterByExpr}
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -160,7 +161,7 @@ subsetSamples = function(x, ids){
 #' @importFrom SummarizedExperiment as.data.frame colData assays
 #'
 #' @export
-processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, BPPARAM = bpparam(),...){
 
 	# nCells = extract from y
 
@@ -195,15 +196,16 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# get samples with enough cells
 		# filter genes
 		design = model.matrix( subbars(formula), data)
-		keep = filterByExpr(y, design)
+		keep = filterByExpr(y, design, min.count=min.count)
+		# keep[] = TRUE
 
 		# create EList object storing gene expression and sample weights
-		y = new("EList", list(	E 		= y[keep,],
+		obj = new("EList", list(	E 	= y[keep,],
 		 						weights = weights[keep,,drop=FALSE]))
 
 		# since the sample weights are already in y, don't need to 
 		# explicitly consider them here.
-		geneExpr = voomWithDreamWeights( y, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
+		geneExpr = voomWithDreamWeights( obj, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
 
 		result = list(	geneExpr = geneExpr, 
 						isCounts = isCounts) 
@@ -242,6 +244,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
+#' @param min.count min.count used by \code{edgeR::filterByExpr}
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -250,7 +253,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @importFrom S4Vectors metadata
 #'
 #' @export
-processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, BPPARAM = bpparam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -267,7 +270,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 		n.cells = .n_cells(sceObj)[k,colnames(y),drop=FALSE]
 
 		# processing counts with voom or log2 CPM
-		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
+		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, BPPARAM=BPPARAM,...)
 	})
 	names(resList) = assayNames(sceObj)
 
