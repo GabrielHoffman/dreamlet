@@ -153,13 +153,23 @@ head(res_zenith)
 
 ## Heatmap of top genesets
 ```{r heatmap, fig.height=10, fig.width=5}
+# for each cell type select 5 genesets with largest t-statistic
+# and 1 geneset with the lowest
 plotZenithResults(res_zenith, 5, 1)
 ```
 
+### All gene sets with FDR < 5%
 
+```{r heatmap2, fig.height=10, fig.width=5}
+# get genesets with FDR < 5%
+gs = unique(res_zenith$Geneset[res_zenith$FDR < 0.05])
 
+# keep only results of these genesets
+df = res_zenith[res_zenith$Geneset %in% gs,]
 
-
+# plot results, but with no limit based on the highest/lowest t-statistic
+plotZenithResults(df, Inf, Inf)
+```
 
 
 
