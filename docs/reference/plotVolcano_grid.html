@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Processing expression data from assay — processOneAssay • dreamlet</title>
+<title>Volcano plot for each cell type — plotVolcano_grid • dreamlet</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Processing expression data from assay — processOneAssay" />
-<meta property="og:description" content="For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells" />
+<meta property="og:title" content="Volcano plot for each cell type — plotVolcano_grid" />
+<meta property="og:description" content="Volcano plot for each cell type" />
 
 
 
@@ -111,70 +111,55 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Processing expression data from assay</h1>
-    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/dreamlet.R'><code>R/dreamlet.R</code></a></small>
-    <div class="hidden name"><code>processOneAssay.Rd</code></div>
+    <h1>Volcano plot for each cell type</h1>
+    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/plotVolcano.R'><code>R/plotVolcano.R</code></a></small>
+    <div class="hidden name"><code>plotVolcano_grid.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells</p>
+    <p>Volcano plot for each cell type</p>
     </div>
 
-    <pre class="usage"><span class='fu'>processOneAssay</span><span class='op'>(</span>
-  <span class='va'>y</span>,
-  <span class='va'>formula</span>,
-  <span class='va'>data</span>,
-  <span class='va'>n.cells</span>,
-  min.cells <span class='op'>=</span> <span class='fl'>10</span>,
-  isCounts <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  normalize.method <span class='op'>=</span> <span class='st'>"TMM"</span>,
-  min.count <span class='op'>=</span> <span class='fl'>10</span>,
-  BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>,
-  <span class='va'>...</span>
+    <pre class="usage"><span class='fu'>plotVolcano_grid</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>coef</span>,
+  nGenes <span class='op'>=</span> <span class='fl'>5</span>,
+  size <span class='op'>=</span> <span class='fl'>12</span>,
+  minp <span class='op'>=</span> <span class='fl'>9.99999999999997e-311</span>,
+  cutoff <span class='op'>=</span> <span class='fl'>0.05</span>,
+  ncol <span class='op'>=</span> <span class='fl'>3</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>y</th>
-      <td><p>matrix of counts or log2 CPM</p></td>
+      <th>x</th>
+      <td><p>result from <code>dreamlet</code></p></td>
     </tr>
     <tr>
-      <th>formula</th>
-      <td><p>regression formula for differential expression analysis</p></td>
+      <th>coef</th>
+      <td><p>coefficient to test with <code>topTable</code></p></td>
     </tr>
     <tr>
-      <th>data</th>
-      <td><p>metadata used in regression formula</p></td>
+      <th>nGenes</th>
+      <td><p>number of genes to highlight in each volcano plot</p></td>
     </tr>
     <tr>
-      <th>n.cells</th>
-      <td><p>array of cell count for each sample</p></td>
+      <th>size</th>
+      <td><p>text size</p></td>
     </tr>
     <tr>
-      <th>min.cells</th>
-      <td><p>minimum number of observed cells for a sample to be included in the analysis</p></td>
+      <th>minp</th>
+      <td><p>minimum p-value to show on the y-axis</p></td>
     </tr>
     <tr>
-      <th>isCounts</th>
-      <td><p>logical, indicating if data is raw counts</p></td>
+      <th>cutoff</th>
+      <td><p>adj.P.Val cutoff to distinguish significant from non-significant genes</p></td>
     </tr>
     <tr>
-      <th>normalize.method</th>
-      <td><p>normalization method to be used by <code>calcNormFactors</code></p></td>
-    </tr>
-    <tr>
-      <th>min.count</th>
-      <td><p>min.count used by <code><a href='https://rdrr.io/pkg/edgeR/man/filterByExpr.html'>edgeR::filterByExpr</a></code></p></td>
-    </tr>
-    <tr>
-      <th>BPPARAM</th>
-      <td><p>parameters for parallel evaluation</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>other arguments passed to <code>dream</code></p></td>
+      <th>ncol</th>
+      <td><p>number of columns in the plot</p></td>
     </tr>
     </table>
 
