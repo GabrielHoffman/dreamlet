@@ -41,9 +41,10 @@ knitr::opts_chunk$set(
   message=FALSE,
   error = FALSE,
   tidy = FALSE,
-  dev = c("png", "pdf"),
+  dev = c("png"),
   cache = TRUE)
 ```
+
 
 Describe pseudobulk, complex study design, variancePartition, and zenith.
 
@@ -98,7 +99,6 @@ res.proc
   
 plotVoom( res.proc)
 ```
-
 
 # Run variancePartition analysis
 ```{r vp}
