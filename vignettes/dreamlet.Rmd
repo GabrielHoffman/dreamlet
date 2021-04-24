@@ -45,8 +45,9 @@ knitr::opts_chunk$set(
   cache = TRUE)
 ```
 
+Analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).
 
-Describe pseudobulk, complex study design, variancePartition, and zenith.
+Coming soon: Describe pseudobulk, complex study design, variancePartition, and zenith.
 
 # Process single cell counts
 ## Preprocess data
