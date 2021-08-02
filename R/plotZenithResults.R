@@ -1,3 +1,7 @@
+# Gabriel Hoffman
+# April 21, 2021
+# 
+# plotZenithResults
 
 #' Heatmap of zenith results
 #'
@@ -41,7 +45,7 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	gs = unique(unlist(gs))
 
 	# create matrix from retained gene sets
-	M = dcast(df[df$Geneset %in% gs,], Assay + coef ~ Geneset, value.var = "tstat")
+	M = reshape2::dcast(df[df$Geneset %in% gs,], Assay + coef ~ Geneset, value.var = "tstat")
 	annot = M[,1:2]
 	M = as.matrix(M[,-c(1:2)])
 	rownames(M) = annot$Assay
