@@ -1,4 +1,8 @@
 
+May 14,
+	Include number of expressed genes, or other QC as covariates
+
+
 Authors@R: c(person("Gabriel", "Hoffman", role = c("aut", "cre"), email = "gabriel.hoffman@mssm.edu"))
 
 April 2,
