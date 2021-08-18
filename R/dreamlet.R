@@ -245,6 +245,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param min.count min.count used by \code{edgeR::filterByExpr}
+#' @param pmetadata sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula
+#' @param pkeys array of two strings indicating sample identifier and cell type identifier columns in pmetadata
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -253,21 +255,50 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @importFrom S4Vectors metadata
 #'
 #' @export
-processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, BPPARAM = bpparam(),...){
+processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, BPPARAM = bpparam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
 	stopifnot( is(formula, 'formula'))
 
 	# extract metadata shared across assays
-	data = as.data.frame(colData(sceObj))
+	data_constant = as.data.frame(colData(sceObj))
+
+	# pseudo-metadata about each sample for each cell type
+	# subset this metadata for use be each assay (i.e. cell type)
+	use_pmeta = FALSE
+	if( !is.null(pmetadata) ){
+		# cast to data.frame
+		pmetadata = as.data.frame(pmetadata)
+		use_pmeta = TRUE
+	}
+
+	# check that pkeys 
+	found = pkeys %in% colnames(pmetadata) 
+	if( any(!found) ){
+		stop("pkeys not found in pmetadata: ", paste(pkeys[!found], collapse=", "))
+	}
 
 	# for each assay
 	resList = lapply( assayNames(sceObj), function(k){
 
 		y = assay(sceObj, k)
 		# n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
-		n.cells = .n_cells(sceObj)[k,colnames(y),drop=FALSE]
+		n.cells = muscat:::.n_cells(sceObj)[k,colnames(y),drop=FALSE]
+
+		if( use_pmeta ){
+			# merge data with pseudo-metadata for this cell type
+			pmetadata_sub = pmetadata[pmetadata[[pkeys[2]]] == k, ]
+
+			# mergeand make sure order is the same
+			data = merge(data_constant, pmetadata_sub, by.x="row.names", by.y=pkeys[1])
+			rownames(data) = data$Row.names
+			data = data[rownames(data_constant),]
+
+			# identical(rownames(data), colnames(y))
+		}else{
+			data = data_constant
+		}
 
 		# processing counts with voom or log2 CPM
 		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, BPPARAM=BPPARAM,...)

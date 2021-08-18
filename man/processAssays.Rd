@@ -11,6 +11,8 @@ processAssays(
   isCounts = TRUE,
   normalize.method = "TMM",
   min.count = 10,
+  pmetadata = NULL,
+  pkeys = NULL,
   BPPARAM = bpparam(),
   ...
 )
@@ -27,6 +29,10 @@ processAssays(
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
 \item{min.count}{min.count used by \code{edgeR::filterByExpr}}
+
+\item{pmetadata}{sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula}
+
+\item{pkeys}{array of two strings indicating sample identifier and cell type identifier columns in pmetadata}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
