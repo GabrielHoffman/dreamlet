@@ -305,7 +305,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 	})
 	names(resList) = assayNames(sceObj)
 
-	new("dreamletProcessedData", resList, data=data)
+	new("dreamletProcessedData", resList, data = data_constant)
 }
 
 
