@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -89,6 +89,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -127,6 +130,8 @@
   isCounts <span class='op'>=</span> <span class='cn'>TRUE</span>,
   normalize.method <span class='op'>=</span> <span class='st'>"TMM"</span>,
   min.count <span class='op'>=</span> <span class='fl'>10</span>,
+  pmetadata <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pkeys <span class='op'>=</span> <span class='cn'>NULL</span>,
   BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -157,6 +162,14 @@
     <tr>
       <th>min.count</th>
       <td><p>min.count used by <code><a href='https://rdrr.io/pkg/edgeR/man/filterByExpr.html'>edgeR::filterByExpr</a></code></p></td>
+    </tr>
+    <tr>
+      <th>pmetadata</th>
+      <td><p>sample-specific metadata the varies across cell types.  This is merged with <code>colData(sceObj)</code> for each assay to make variables accessable to the formula</p></td>
+    </tr>
+    <tr>
+      <th>pkeys</th>
+      <td><p>array of two strings indicating sample identifier and cell type identifier columns in pmetadata</p></td>
     </tr>
     <tr>
       <th>BPPARAM</th>

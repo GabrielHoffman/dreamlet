@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -48,6 +48,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -67,7 +70,7 @@
 
       
 
-      </header><script src="dreamlet_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="dreamlet_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Dreamlet analysis of single cell RNA-seq</h1>
@@ -75,7 +78,7 @@
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-04-23 20:27:31</h4>
+            <h4 class="date">Run on 2021-08-19 22:10:37</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/master/vignettes/dreamlet.Rmd"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="hidden name"><code>dreamlet.Rmd</code></div>
@@ -91,6 +94,8 @@
 <!---
 
 cd /Users/gabrielhoffman/workspace/repos/variancePartition/vignettes
+
+# rm -rf dreamlet_cache/
 
 rmarkdown::render("dreamlet.Rmd")
 
@@ -160,55 +165,40 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Normalize and apply voom</span>
 <span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span>
-
-<span class="va">res.proc</span></code></pre></div>
-<pre><code>## class: dreamletProcessedData
-## assays(8): B cells CD14+ Monocytes ... Megakaryocytes NK cells
-## Samples
-##  min: 11 
-##  max: 16
-## Genes
-##  min: 548 
-##  max: 6195</code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotVoom.html">plotVoom</a></span><span class="op">(</span> <span class="va">res.proc</span><span class="op">)</span></code></pre></div>
-<p><img src="dreamlet_files/figure-html/dreamlet-1.png" width="864"></p>
+  
+<span class="fu"><a href="../reference/plotVoom.html">plotVoom</a></span><span class="op">(</span> <span class="va">res.proc</span><span class="op">)</span></code></pre></div>
+<p><img src="dreamlet_files/figure-html/dreamlet-1.png" width="768"></p>
 </div>
 <div id="run-variancepartition-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#run-variancepartition-analysis" class="anchor"></a>Run variancePartition analysis</h1>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vp.lst</span> <span class="op">=</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></code></pre></div>
 <div id="variancepartition-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#variancepartition-plots" class="anchor"></a>variancePartition plots</h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># show variancePartition plots for each cell type</span>
-<span class="va">fitList</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">vp.lst</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">cellType</span><span class="op">)</span><span class="op">{</span>
-    <span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[[</span><span class="va">cellType</span><span class="op">]</span><span class="op">]</span>, main<span class="op">=</span><span class="va">cellType</span><span class="op">)</span>
-    <span class="op">}</span><span class="op">)</span>
-
-<span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="va">fitList</span>, ncol<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="dreamlet_files/figure-html/plot.fitVarPart-1.png" width="864"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">)</span></code></pre></div>
+<p><img src="dreamlet_files/figure-html/plot.fitVarPart-1.png" width="768"></p>
 </div>
 </div>
 <div id="run-dreamlet" class="section level1">
 <h1 class="hasAnchor">
 <a href="#run-dreamlet" class="anchor"></a>Run dreamlet</h1>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Differential expression analysis within each assay</span>
 <span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></code></pre></div>
 <div id="volcano-plot-for-each-cell-type" class="section level2">
 <h2 class="hasAnchor">
 <a href="#volcano-plot-for-each-cell-type" class="anchor"></a>Volcano plot for each cell type</h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotVolcano_grid.html">plotVolcano_grid</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span> <span class="op">)</span></code></pre></div>
-<p><img src="dreamlet_files/figure-html/plotVolcano-1.png" width="864"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span> <span class="op">)</span></code></pre></div>
+<p><img src="dreamlet_files/figure-html/plotVolcano-1.png" width="768"></p>
 </div>
 <div id="extract-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extract-results" class="anchor"></a>Extract results</h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit</span> <span class="op">=</span> <span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>
 <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span> <span class="op">)</span></code></pre></div>
 <pre><code>##             logFC   AveExpr        t      P.Value    adj.P.Val        B
@@ -226,7 +216,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="forrest-plot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#forrest-plot" class="anchor"></a>Forrest plot</h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotForrest.html">plotForrest</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span>, gene <span class="op">=</span> <span class="st">'IRF7'</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/forrest-1.png" width="700"></p>
 </div>
@@ -234,7 +224,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="gene-set-analysis-using-zenith" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gene-set-analysis-using-zenith" class="anchor"></a>Gene set analysis using zenith</h1>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load Gene Ontology database </span>
 <span class="co"># use gene SYMBOL</span>
 <span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zenith/man/get_GeneOntology.html">get_GeneOntology</a></span><span class="op">(</span>to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span>
@@ -249,29 +239,29 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">)</span></code></pre></div>
 <pre><code>##     Assay         coef                                                Geneset
 ## 1 B cells group_idstim                      GO0045087: innate immune response
-## 2 B cells group_idstim          GO0098542: defense response to other organism
-## 3 B cells group_idstim GO0060333: interferon-gamma-mediated signaling pathway
-## 4 B cells group_idstim        GO0043207: response to external biotic stimulus
-## 5 B cells group_idstim                  GO0051707: response to other organism
-## 6 B cells group_idstim                GO0034341: response to interferon-gamma
-##   NGenes Correlation    delta        se    p.less    p.greater       PValue
-## 1    225 0.003284713 2.335158 0.2327984 1.0000000 4.495967e-08 8.991934e-08
-## 2    261 0.003673913 2.151716 0.2297680 0.9999999 1.046454e-07 2.092909e-07
-## 3     34 0.013891047 4.896364 0.5435502 0.9999998 1.675864e-07 3.351728e-07
-## 4    339 0.003320387 1.839687 0.2114879 0.9999997 2.549557e-07 5.099115e-07
-## 5    339 0.003320387 1.839687 0.2114879 0.9999997 2.549557e-07 5.099115e-07
-## 6     64 0.014032834 3.878597 0.4496588 0.9999997 2.819836e-07 5.639671e-07
-##   Direction          FDR
-## 1        Up 0.0009883934
-## 2        Up 0.0010193376
-## 3        Up 0.0010193376
-## 4        Up 0.0010193376
-## 5        Up 0.0010193376
-## 6        Up 0.0010193376</code></pre>
+## 2 B cells group_idstim GO0060333: interferon-gamma-mediated signaling pathway
+## 3 B cells group_idstim          GO0098542: defense response to other organism
+## 4 B cells group_idstim                           GO0009615: response to virus
+## 5 B cells group_idstim       GO0071346: cellular response to interferon-gamma
+## 6 B cells group_idstim                 GO0035456: response to interferon-beta
+##   NGenes  Correlation    delta        se    p.less    p.greater       PValue
+## 1    225  0.004146818 2.336118 0.2448918 0.9999999 8.349370e-08 1.669874e-07
+## 2     34  0.013891047 4.896364 0.5435502 0.9999998 1.675864e-07 3.351728e-07
+## 3    263  0.004258473 2.132944 0.2378160 0.9999998 1.766439e-07 3.532878e-07
+## 4    120  0.014150058 3.387872 0.3891981 0.9999997 2.528745e-07 5.057491e-07
+## 5     54  0.008595004 3.725494 0.4324994 0.9999997 2.866111e-07 5.732221e-07
+## 6     17 -0.014706821 5.457645 0.6402475 0.9999997 3.245707e-07 6.491415e-07
+##   Direction         FDR
+## 1        Up 0.001163099
+## 2        Up 0.001163099
+## 3        Up 0.001163099
+## 4        Up 0.001163099
+## 5        Up 0.001163099
+## 6        Up 0.001163099</code></pre>
 <div id="heatmap-of-top-genesets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#heatmap-of-top-genesets" class="anchor"></a>Heatmap of top genesets</h2>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># for each cell type select 5 genesets with largest t-statistic</span>
 <span class="co"># and 1 geneset with the lowest</span>
 <span class="fu"><a href="../reference/plotZenithResults.html">plotZenithResults</a></span><span class="op">(</span><span class="va">res_zenith</span>, <span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
@@ -279,7 +269,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="all-gene-sets-with-fdr-5" class="section level3">
 <h3 class="hasAnchor">
 <a href="#all-gene-sets-with-fdr-5" class="anchor"></a>All gene sets with FDR &lt; 5%</h3>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get genesets with FDR &lt; 5%</span>
 <span class="va">gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">FDR</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">]</span><span class="op">)</span>
 

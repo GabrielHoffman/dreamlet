@@ -42,15 +42,104 @@
 #' @rdname dreamletProcessedData-class
 #' @exportClass dreamletProcessedData
 setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'))
-	# representation("list", data="data.frame"))
 
+#' Subset with brackets
+#'
+#' Subset with brackets
+#'
+#' @param x dreamletProcessedData object
+#' @param i indeces to extract
+#'
+#' @rdname extract-methods
+#' @aliases [,dreamletProcessedData,dreamletProcessedData-method
+#' @export
+setMethod("[", signature(x="dreamletProcessedData"),
+	function(x, i){   
+		res = new("dreamletProcessedData", x@.Data[i], data = x@data)
+		names(res) = names(x)[i]
+		res
+	}
+)
+
+
+setGeneric('assayNames', SummarizedExperiment::assayNames)
+setGeneric('assay', SummarizedExperiment::assay)
+setGeneric('colData', SummarizedExperiment::colData)
+
+#' Get assayNames
+#' 
+#' Get assayNames
+#' 
+#' @param x dreamletProcessedData object
+#' @param ... other arguments
+#'
+#' @rdname assayNames-methods
+#' @aliases assayNames,dreamletProcessedData,dreamletProcessedData-method
+#' @export
+setMethod("assayNames", signature(x="dreamletProcessedData"),
+	function(x, ...){   
+		names(x)
+	}
+)
+#' Get assay
+#' 
+#' Get assay
+#' 
+#' @param x dreamletProcessedData object
+#' @param i number indicating index, or string indicating assay
+#' @param withDimnames not used
+#' @param ... other arguments
+#'
+#' @rdname assay-methods
+#' @aliases assay,dreamletProcessedData,dreamletProcessedData-method
+#' @export
+setMethod("assay", signature(x="dreamletProcessedData"),
+	function(x, i, withDimnames=TRUE,...){   
+		x[[i]]
+	}
+)
+
+
+#' Extract colData from dreamletProcessedData
+#' 
+#' Extract colData from dreamletProcessedData
+#'
+#' @param x A dreamletProcessedData object
+#' @param ... other arguments
+#' @export
+setMethod("colData", "dreamletProcessedData",
+	function(x,...){
+		x@data
+})
+
+
+
+#' Show object
+#' 
+#' Show object
+#' 
+#' @param object dreamletProcessedData object
+#'
+#' @rdname show-methods
+#' @aliases show,dreamletProcessedData,dreamletProcessedData-method
+#' @export
 setMethod("show", "dreamletProcessedData",
 	function(object){
 		print(object)
 	}
 )
 
+#' Print object
+#' 
+#' Print object
+#' 
+#' @param x dreamletProcessedData object
+#' @param ... other arguments
+#' 
 #' @importFrom utils head tail
+#' @export
+#' @rdname print-methods
+#' @aliases print,dreamletProcessedData,dreamletProcessedData-method
 setMethod("print", "dreamletProcessedData",
 	function(x,...){
 
@@ -74,23 +163,7 @@ setMethod("print", "dreamletProcessedData",
 	}
 )
 
-# setGeneric("colData",
-# 	function(x,...){		
-# 	standardGeneric("colData")
-# })
-
-
-#' Extract colData from dreamletProcessedData
-#' 
-#' Extract colData from dreamletProcessedData
-#' @param x A dreamletProcessedData object
-#' @param ... other arguments
-# @export
-setMethod("colData", "dreamletProcessedData",
-	function(x,...){
-		x@data
-})
-
+# setGene
 #' Extract a subset of samples
 #'
 #' Extract a subset of samples
@@ -158,7 +231,8 @@ subsetSamples = function(x, ids){
 #' @importFrom lme4 subbars  
 #' @importFrom methods is new
 #' @importFrom stats model.matrix var
-#' @importFrom SummarizedExperiment as.data.frame colData assays
+#' @importFrom SummarizedExperiment colData assays
+#' @importFrom S4Vectors as.data.frame
 #'
 #' @export
 processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, BPPARAM = bpparam(),...){
@@ -251,8 +325,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param ... other arguments passed to \code{dream}
 #'
 #' @import BiocParallel  
-#' @importFrom SummarizedExperiment as.data.frame colData assays assay assayNames
-#' @importFrom S4Vectors metadata
+#' @importFrom SummarizedExperiment colData assays assay assayNames
+#' @importFrom S4Vectors metadata as.data.frame
 #'
 #' @export
 processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, BPPARAM = bpparam(),...){
@@ -284,7 +358,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 
 		y = assay(sceObj, k)
 		# n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
-		n.cells = muscat:::.n_cells(sceObj)[k,colnames(y),drop=FALSE]
+		n.cells = .n_cells(sceObj)[k,colnames(y),drop=FALSE]
 
 		if( use_pmeta ){
 			# merge data with pseudo-metadata for this cell type
@@ -326,7 +400,8 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 #' @param ... other arguments passed to \code{dream}
 #'
 #' @import BiocParallel  
-#' @importFrom SummarizedExperiment as.data.frame colData assays
+#' @importFrom SummarizedExperiment colData assays
+#' @importFrom S4Vectors as.data.frame
 #'
 #' @export
 setGeneric("dreamlet", 
@@ -338,96 +413,13 @@ setGeneric("dreamlet",
 
 
 
-# #' @importFrom SummarizedExperiment as.data.frame colData assays assay assayNames
-# #' @importFrom variancePartition dream eBayes isRunableFormula
-# #' @import limma
-# #' @import SingleCellExperiment
-# #' @export
-# #' @rdname dreamlet
-# #' @aliases dreamlet,SingleCellExperiment-method
-# setMethod("dreamlet", "SingleCellExperiment",
-# 	function( x, formula, data, L.list=NULL, include=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
-
-# 	# checks
-# 	# stopifnot( is(x, 'SingleCellExperiment'))
-# 	stopifnot( is(formula, 'formula'))
-
-# 	# extract metadata shared across assays
-# 	data = as.data.frame(colData(x))
-
-# 	# for each assay
-# 	resList = lapply( assayNames(x), function(k){
-
-# 		message("\rAssay: ", k)
-		
-# 		# get data from assay k
-# 		y = assay(x, k)
-# 		n.cells = metadata(x)$n_cells[k,colnames(y),drop=FALSE]
-
-# 		# processing counts with voom or log2 CPM
-# 		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, BPPARAM=BPPARAM,...)
-
-# 		# initialze fit in case dream is not run
-# 		fit = NULL
-
-# 		# if samples are retained after filtering
-# 		if( ! is.null(res) ){
-
-# 			data_sub = data[colnames(res$geneExpr),,drop=FALSE]
-
-# 			# drop any constant terms from the formula
-# 			form_mod = removeConstantTerms(formula, data_sub)
-
-# 			# if model is full rank
-# 			if( isRunableFormula(res$geneExpr$E, form_mod, data_sub) ){
-	
-# 				# fit linear (mixed) model for each gene
-# 				# only include samples from data that are retained in res$geneExpr
-# 				# TODO include L now
-# 				fit = dream( res$geneExpr, form_mod, data_sub, BPPARAM=BPPARAM, quiet=TRUE,...)
-
-# 				# if model is degenerate
-# 				if( ! any(is.na(fit$sigma)) ){
-					
-# 					if( !is.null(fit$rdf)){
-# 						# keep genes with residual degrees of freedom > 1
-# 						# this prevents failures later
-# 						keep = which(fit$rdf >= 1)
-
-# 						fit = fit[keep,]
-# 					}
-
-# 					# borrow information across genes with the Empircal Bayes step
-# 					fit = eBayes(fit[keep,], robust=robust, trend=res$trend)
-# 				}else{
-# 					fit = NULL
-# 				}
-# 			}
-# 		}
-
-# 		list(fit = fit, data = res)
-# 	})
-# 	# name each result by the assay name
-# 	names(resList) = assayNames(x)
-
-# 	# create list of all fit objects
-# 	fitList = lapply(resList, function(obj) obj$fit)
-# 	names(fitList) = assayNames(x)
-
-# 	# create list of all data objects
-# 	dataList = lapply(resList, function(obj) obj$data)
-# 	names(dataList) = assayNames(x)
-
-# 	list(fit = fitList, data = new("dreamletProcessedData", dataList, data=data) )
-# })
-
-
 
 
 
 
 #' @importFrom variancePartition getContrast dream
-#' @importFrom SummarizedExperiment as.data.frame colData assays
+#' @importFrom SummarizedExperiment colData assays
+#' @importFrom S4Vectors as.data.frame
 #' @export
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
@@ -524,7 +516,9 @@ setGeneric("fitVarPart",
 
 
 #' @importFrom variancePartition fitExtractVarPartModel
-#' @importFrom SummarizedExperiment as.data.frame colData assays
+#' @importFrom SummarizedExperiment colData assays
+#' @importFrom data.table data.table
+#' @importFrom S4Vectors DataFrame as.data.frame
 #' @export
 #' @rdname fitVarPart
 #' @aliases fitVarPart,dreamletProcessedData-method
@@ -557,7 +551,14 @@ setMethod("fitVarPart", "dreamletProcessedData",
 	# name each result by the assay name
 	names(resList) = names(x)
 
-	resList
+	# Convert results to DataFrame in vpDF
+	vplst = lapply( names(resList), function(id){
+		data.table(assay = id, gene = rownames(resList[[id]]), data.frame(resList[[id]]))
+	})
+	df = do.call(rbind, vplst)
+	`:=` = NULL # Pass R CMD check
+	df[,assay:=factor(assay, names(resList))]
+	new("vpDF", DataFrame(df))
 })
 
 

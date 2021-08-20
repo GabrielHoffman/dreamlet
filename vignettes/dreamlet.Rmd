@@ -21,6 +21,8 @@ output:
 
 cd /Users/gabrielhoffman/workspace/repos/variancePartition/vignettes
 
+# rm -rf dreamlet_cache/
+
 rmarkdown::render("dreamlet.Rmd")
 
 
@@ -92,11 +94,9 @@ assayNames(pb)
 ```
 
 # Voom for pseudobulk 
-```{r dreamlet, fig.width=9, fig.height=10}
+```{r dreamlet, fig.width=8, fig.height=8}
 # Normalize and apply voom
 res.proc = processAssays( pb, ~ group_id, min.count=5)
-
-res.proc
   
 plotVoom( res.proc)
 ```
@@ -107,13 +107,8 @@ vp.lst = fitVarPart( res.proc, ~ group_id)
 ```
 
 ## variancePartition plots
-```{r plot.fitVarPart, fig.width=9, fig.height=10}
-# show variancePartition plots for each cell type
-fitList = lapply( names(vp.lst), function(cellType){
-	plotVarPart(vp.lst[[cellType]], main=cellType)
-	})
-
-plot_grid(plotlist = fitList, ncol=3)
+```{r plot.fitVarPart, fig.width=8, fig.height=8}
+plotVarPart(vp.lst)
 ```
 
 # Run dreamlet
@@ -123,8 +118,8 @@ res.dl = dreamlet( res.proc, ~ group_id)
 ```
 
 ## Volcano plot for each cell type
-```{r plotVolcano, fig.width=9, fig.height=10}
-plotVolcano_grid( res.dl, coef = 'group_idstim' )
+```{r plotVolcano, fig.width=8, fig.height=8}
+plotVolcano( res.dl, coef = 'group_idstim' )
 ```
 
 ## Extract results
@@ -189,6 +184,10 @@ plotZenithResults(df, Inf, Inf)
 
 
 
+
+```{r exit, cache=FALSE, eval=FALSE, echo=FALSE}
+knitr::knit_exit()
+```
 
 
 

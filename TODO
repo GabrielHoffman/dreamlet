@@ -1,4 +1,22 @@
 
+August 19,
+	do R CMD check to resolve issues with Generics
+	plotVarPart() should take arguments ncolumns
+	zenith_gsa should work on list of cell types of 1 cell type 
+
+
+
+August 18: DONE
+	- Allow class dreamletProcessedData to be subsetted to extract subset of assays
+	- plotVoom should work on one or many assays using class names
+	- Extend the following plots to single or multiple
+		plotVoom()
+		plotVarPart()
+		plotVolcano()
+
+
+
+
 May 14,
 	Include number of expressed genes, or other QC as covariates
 

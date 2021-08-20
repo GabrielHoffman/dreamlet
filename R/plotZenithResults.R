@@ -15,6 +15,7 @@
 #' @importFrom ComplexHeatmap Heatmap draw
 #' @importFrom circlize colorRamp2
 #' @importFrom grid gpar
+#' @importFrom stats hclust dist
 #' 
 #' @export
 plotZenithResults = function(df, ntop=5, nbottom=5){
@@ -45,9 +46,9 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	gs = unique(unlist(gs))
 
 	# create matrix from retained gene sets
-	M = reshape2::dcast(df[df$Geneset %in% gs,], Assay + coef ~ Geneset, value.var = "tstat")
-	annot = M[,1:2]
-	M = as.matrix(M[,-c(1:2)])
+	M = dcast(df[df$Geneset %in% gs,], Assay + coef ~ Geneset, value.var = "tstat")
+	annot = M[,seq(1,2)]
+	M = as.matrix(M[,-seq(1,2)])
 	rownames(M) = annot$Assay
 
 	# Perform clustering on data in M
