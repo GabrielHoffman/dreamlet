@@ -265,23 +265,23 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
         # evaluate statistics       
         if( "mean" %in% statistics ){
-            resLst[["mean"]] = rowMeans2(dataSub)
+            resLst[["mean"]] = DelayedMatrixStats::rowMeans2(dataSub)
         }
 
         if( "sum" %in% statistics ){
-            resLst[["sum"]] = rowSums2(dataSub)
+            resLst[["sum"]] = DelayedMatrixStats::rowSums2(dataSub)
         }
 
         if( "num.detected" %in% statistics ){
-            resLst[["num.detected"]] = rowSums2(dataSub > threshold)
+            resLst[["num.detected"]] = DelayedMatrixStats::rowSums2(dataSub > threshold)
         }
 
         if( "prop.detected" %in% statistics ){          
-            resLst[["prop.detected"]] = (ncol(dataSub) - rowCounts(dataSub, value=0)) / ncol(dataSub)
+            resLst[["prop.detected"]] = (ncol(dataSub) - DelayedMatrixStats::rowCounts(dataSub, value=0)) / ncol(dataSub)
         }
 
         if( "median" %in% statistics ){
-            resLst[["median"]] = rowMedians(dataSub)
+            resLst[["median"]] = DelayedMatrixStats::rowMedians(dataSub)
         }
 
         resLst
