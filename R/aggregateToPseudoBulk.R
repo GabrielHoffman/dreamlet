@@ -256,36 +256,36 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
     # Original version uses rowBlockApply() and is slow
     # Use matrixStats and DelayedMatrixStats 
-    resCombine = bplapply( by.group, function(idx){
+    resCombine = bplapply( by.group, function(idx, data){
 
         # subset data by column
-        dataSub = x[,idx,drop=FALSE]
+        dataSub = data[,idx,drop=FALSE]
 
         resLst = list()
 
         # evaluate statistics       
         if( "mean" %in% statistics ){
-            resLst[["mean"]] = DelayedMatrixStats::rowMeans2(dataSub)
+            resLst[["mean"]] = rowMeans2(dataSub)
         }
 
         if( "sum" %in% statistics ){
-            resLst[["sum"]] = DelayedMatrixStats::rowSums2(dataSub)
+            resLst[["sum"]] = rowSums2(dataSub)
         }
 
         if( "num.detected" %in% statistics ){
-            resLst[["num.detected"]] = DelayedMatrixStats::rowSums2(dataSub > threshold)
+            resLst[["num.detected"]] = rowSums2(dataSub > threshold)
         }
 
         if( "prop.detected" %in% statistics ){          
-            resLst[["prop.detected"]] = (ncol(dataSub) - DelayedMatrixStats::rowCounts(dataSub, value=0)) / ncol(dataSub)
+            resLst[["prop.detected"]] = (ncol(dataSub) - rowCounts(dataSub, value=0)) / ncol(dataSub)
         }
 
         if( "median" %in% statistics ){
-            resLst[["median"]] = DelayedMatrixStats::rowMedians(dataSub)
+            resLst[["median"]] = rowMedians(dataSub)
         }
 
         resLst
-    }, BPPARAM=BPPARAM)
+    }, data=x, BPPARAM=BPPARAM)
 
     # Create list of merged values for each statistic
     collected = lapply(statistics, function(stat){
