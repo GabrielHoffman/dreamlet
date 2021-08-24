@@ -4,7 +4,17 @@
 # Adapted from muscat and scuttle to allow faster access of 
 # SingleCellExperiment backed by H5AD file.  
 # Uses DelayedMatrixStats for faster computation of summary statistics
+# This also dramatically reduces memory usage for large datasets
+#
+# The only change is to .summarize_assay()
+# The rest of the code is imported here beccause it is private in muscat, 
+# and I didn't want to overwrite summarizeAssayByGroup() in scuttle
 
+
+#' @importFrom BiocParallel SerialParam
+#' @importFrom purrr map
+# @importFrom scuttle summarizeAssayByGroup
+#' @importFrom SummarizedExperiment assay colData
 .pb = function (x, by, assay, fun, BPPARAM = SerialParam()) 
 {
     y <- summarizeAssayByGroup2(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
@@ -30,15 +40,86 @@
 }
 
 
-
+#' Aggregation of single-cell to pseudobulk data
+#' 
+#' Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD files
+#' 
+#' @param x a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
+#' @param assay character string specifying the assay slot to use as 
+#'   input data. Defaults to the 1st available (\code{assayNames(x)[1]}).
+#' @param by character vector specifying which 
+#'   \code{colData(x)} columns to summarize by (at most 2!).
+#' @param fun a character string.
+#'   Specifies the function to use as summary statistic.
+#'   Passed to \code{summarizeAssayByGroup2}.
+#' @param scale logical. Should pseudo-bulks be scaled
+#'   with the effective library size & multiplied by 1M?
+#' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam}}
+#'   object specifying how aggregation should be parallelized.
+#' @param verbose logical. Should information on progress be reported?
+#' 
+#' @return a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
+#' \itemize{
+#' \item{If \code{length(by) == 2}, each sheet (\code{assay}) contains 
+#'   pseudobulks for each of \code{by[1]}, e.g., for each cluster when 
+#'   \code{by = "cluster_id"}. Rows correspond to genes, columns to 
+#'   \code{by[2]}, e.g., samples when \code{by = "sample_id"}}.
+#' \item{If \code{length(by) == 1}, the returned SCE will contain only 
+#'   a single \code{assay} with rows = genes and colums = \code{by}.}}
+#'   
+#'   Aggregation parameters (\code{assay, by, fun, scaled}) are stored in 
+#'   \code{metadata()$agg_pars}, and the number of cells that were aggregated 
+#'   are accessible in \code{int_colData()$n_cells}.
+#' 
+#' @examples 
+#' library(muscat)
+#'
+#' # pseudobulk counts by cluster-sample
+#' data(example_sce)
+#' pb <- aggregateToPseudoBulk(example_sce)
+#' 
+#' library(SingleCellExperiment)
+#' assayNames(example_sce)  # one sheet per cluster
+#' head(assay(example_sce)) # n_genes x n_samples
+#' 
+#' # scaled CPM
+#' cpm <- edgeR::cpm(assay(example_sce))
+#' assays(example_sce)$cpm <- cpm
+#' pb <- aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE)
+#' head(assay(pb)) 
+#' 
+#' # aggregate by cluster only
+#' pb <- aggregateToPseudoBulk(example_sce, by = "cluster_id")
+#' length(assays(pb)) # single assay
+#' head(assay(pb))    # n_genes x n_clusters
+#' 
+#' @author Gabriel Hoffman,Helena L Crowell & Mark D Robinson
+#'
+#' @details 
+#' Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD filesm because this summarized counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}
+#' 
+#' @references 
+#' Crowell, HL, Soneson, C, Germain, P-L, Calini, D, 
+#' Collin, L, Raposo, C, Malhotra, D & Robinson, MD: 
+#' On the discovery of population-specific state transitions from 
+#' multi-sample multi-condition single-cell RNA sequencing data. 
+#' \emph{bioRxiv} \strong{713412} (2018). 
+#' doi: \url{https://doi.org/10.1101/713412}
+#' 
+#' @importFrom Matrix colSums
+#' @importFrom purrr map
+#' @importFrom S4Vectors DataFrame metadata
+#' @importFrom SingleCellExperiment SingleCellExperiment int_colData<-
+#' @importFrom SummarizedExperiment rowData colData colData<-
+#' @export
 aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_id"), 
     fun = c("sum", "mean", "median", "prop.detected", "num.detected"), 
     scale = FALSE, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose)){
     fun <- match.arg(fun)
     if (is.null(assay)) 
         assay <- assayNames(x)[1]
-    muscat:::.check_arg_assay(x, assay)
-    muscat:::.check_args_aggData(as.list(environment()))
+    .check_arg_assay(x, assay)
+    .check_args_aggData(as.list(environment()))
     stopifnot(is(BPPARAM, "BiocParallelParam"))
     for (i in by) if (!is.factor(x[[i]])) 
         x[[i]] <- factor(x[[i]])
@@ -87,6 +168,26 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
 
 
+#' @importFrom SummarizedExperiment assayNames
+.check_arg_assay= function (x, y) 
+{
+    stopifnot(is.character(y), length(y) == 1, y %in% assayNames(x))
+    if (sum(assayNames(x) == y) > 1) 
+        stop("Argument 'assay' was matched to multiple times.\n ", 
+            " Please assure that the input SCE has unique 'assayNames'.")
+}
+
+
+#' @importFrom SummarizedExperiment colData
+.check_args_aggData = function (u) 
+{
+    stopifnot(is.character(u$by), length(u$by) <= 2, u$by %in% 
+        colnames(colData(u$x)))
+    stopifnot(is.logical(u$scale), length(u$scale) == 1)
+    if (u$scale & (!u$assay %in% c("cpm", "CPM") | u$fun != "sum")) 
+        stop("Option 'scale = TRUE' only valid for", " 'assay = \"cpm/CPM\"' and 'fun = \"sum\"'.")
+}
+
 
 
 
@@ -119,7 +220,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 }
 
 #' @importFrom BiocParallel SerialParam 
-#' @importFrom beachmat rowBlockApply
+#' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
     if (!is.null(subset.row)) {
@@ -172,7 +273,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
         }
 
         if( "num.detected" %in% statistics ){
-            resLst[["num.detected"]] = rowSums(dataSub > threshold)
+            resLst[["num.detected"]] = rowSums2(dataSub > threshold)
         }
 
         if( "prop.detected" %in% statistics ){          
@@ -200,47 +301,75 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     list(summary=collected, freq=freq)
 }
 
-#' @importFrom Matrix rowSums
-#' @importFrom DelayedMatrixStats rowMedians 
-#' @importClassesFrom Matrix sparseMatrix
-#' @importClassesFrom DelayedArray SparseArraySeed
-.summarize_assay_internal <- function(x, by.group, statistics, threshold) {
-    if (is(x, "SparseArraySeed")) {
-        x <- as(x, "sparseMatrix")
-    }
+# #' @importFrom Matrix rowSums
+# #' @importFrom DelayedMatrixStats rowMedians 
+# #' @importClassesFrom Matrix sparseMatrix
+# #' @importClassesFrom DelayedArray SparseArraySeed
+# .summarize_assay_internal <- function(x, by.group, statistics, threshold) {
+#     if (is(x, "SparseArraySeed")) {
+#         x <- as(x, "sparseMatrix")
+#     }
 
-    collated <- list()
+#     collated <- list()
     
-    if ("sum" %in% statistics || "mean" %in% statistics) {
-        out <- lapply(by.group, function(i) rowSums(x[,i,drop=FALSE]))
-        collated$sum <- .cbind_empty(out, x)
-    }
+#     if ("sum" %in% statistics || "mean" %in% statistics) {
+#         out <- lapply(by.group, function(i) rowSums(x[,i,drop=FALSE]))
+#         collated$sum <- .cbind_empty(out, x)
+#     }
 
-    if ("median" %in% statistics) {
-        out <- lapply(by.group, function(i) rowMedians(x[,i,drop=FALSE]))
-        out <- .cbind_empty(out, x)
-        rownames(out) <- rownames(x)
-        collated$median <- out
-    }
+#     if ("median" %in% statistics) {
+#         out <- lapply(by.group, function(i) rowMedians(x[,i,drop=FALSE]))
+#         out <- .cbind_empty(out, x)
+#         rownames(out) <- rownames(x)
+#         collated$median <- out
+#     }
 
-    if ("num.detected" %in% statistics || "prop.detected" %in% statistics) {
-        out <- lapply(by.group, function(i) rowSums(x[,i,drop=FALSE] > threshold))
-        collated$num.detected <- .cbind_empty(out, x)
-    }
+#     if ("num.detected" %in% statistics || "prop.detected" %in% statistics) {
+#         out <- lapply(by.group, function(i) rowSums(x[,i,drop=FALSE] > threshold))
+#         collated$num.detected <- .cbind_empty(out, x)
+#     }
 
-    collated
-}
+#     collated
+# }
 
-.cbind_empty <- function(out, x) {
-    if (length(out)) {
-        do.call(cbind, out)
-    } else {
-        as.matrix(x[,0,drop=FALSE])
-    }
-}
+# .cbind_empty <- function(out, x) {
+#     if (length(out)) {
+#         do.call(cbind, out)
+#     } else {
+#         as.matrix(x[,0,drop=FALSE])
+#     }
+# }
 
 ##########################
 ##########################
+
+# scuttle
+.subset2index = function (subset, target, byrow = TRUE) 
+{
+    if (is.na(byrow)) {
+        dummy <- seq_along(target)
+        names(dummy) <- names(target)
+    }
+    else if (byrow) {
+        dummy <- seq_len(nrow(target))
+        names(dummy) <- rownames(target)
+    }
+    else {
+        dummy <- seq_len(ncol(target))
+        names(dummy) <- colnames(target)
+    }
+    if (!is.null(subset)) {
+        subset <- dummy[subset]
+        if (any(is.na(subset))) {
+            stop("invalid subset indices specified")
+        }
+    }
+    else {
+        subset <- dummy
+    }
+    unname(subset)
+}
+
 
 #' @importFrom S4Vectors selfmatch
 .df_to_factor <- function(ids) {
@@ -286,17 +415,19 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 ##########################
 ##########################
 
-#' @export
-#' @rdname summarizeAssayByGroup2
+# Adapted form scuttle::summarizeAssayByGroup
+
+# @export
+# @rdname summarizeAssayByGroup2
 setGeneric("summarizeAssayByGroup2", function(x, ...) standardGeneric("summarizeAssayByGroup2"))
 
-#' @export
-#' @rdname summarizeAssayByGroup2
-#' @importFrom BiocParallel SerialParam
+# @export
+# @rdname summarizeAssayByGroup2
+# @importFrom BiocParallel SerialParam
 setMethod("summarizeAssayByGroup2", "ANY", .summarize_assay_by_group)
 
-#' @export
-#' @rdname summarizeAssayByGroup2
+# @export
+# @rdname summarizeAssayByGroup2
 #' @importFrom SummarizedExperiment assay
 setMethod("summarizeAssayByGroup2", "SummarizedExperiment", function(x, ..., assay.type="counts") {
     .summarize_assay_by_group(assay(x, assay.type), ...)
