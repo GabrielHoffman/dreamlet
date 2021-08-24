@@ -7,7 +7,7 @@
 
 .pb = function (x, by, assay, fun, BPPARAM = SerialParam()) 
 {
-    y <- summarizeAssayByGroup(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
+    y <- summarizeAssayByGroup2(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
         statistics = fun, BPPARAM = BPPARAM)
     colnames(y) <- y[[by[length(by)]]]
     if (length(by) == 1) 
@@ -155,7 +155,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
     # Original version uses rowBlockApply() and is slow
     # Use matrixStats and DelayedMatrixStats 
-    resCombine = pblapply( by.group, function(idx){
+    resCombine = bplapply( by.group, function(idx){
 
         # subset data by column
         dataSub = x[,idx,drop=FALSE]
