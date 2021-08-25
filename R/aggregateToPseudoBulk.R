@@ -246,8 +246,6 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     # Use matrixStats and DelayedMatrixStats 
     resCombine = bplapply( by.group, function(idx, data){
 
-        library(DelayedMatrixStats)
-
         # subset data by column
         dataSub = data[,idx,drop=FALSE]
 
