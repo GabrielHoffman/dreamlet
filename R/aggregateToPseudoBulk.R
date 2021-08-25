@@ -237,28 +237,14 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     # in .create_coldata doesn't make sense (as there is no mapping to a concrete observation).
     by.group <- split(seq_along(ids), ids, drop=TRUE)
 
-    # out <- rowBlockApply(x, FUN=.summarize_assay_internal, by.group=by.group, 
-    #     statistics=statistics, threshold=threshold, BPPARAM=BPPARAM)
-
-    # collected <- do.call(mapply, c(list(FUN=rbind, SIMPLIFY=FALSE, USE.NAMES=FALSE), out))
-    # names(collected) <- names(out[[1]])
-
+    # frequency of each cluster type
     freq <- lengths(by.group)
-
-    # if ("mean" %in% statistics) {
-    #     collected$mean <- t(t(collected$sum)/freq)
-    # }
-    # if ("prop.detected" %in% statistics) {
-    #     collected$prop.detected <- t(t(collected$num.detected)/freq)
-    # }
-
-    # loop through groups
-
-    browser()
 
     # Original version uses rowBlockApply() and is slow
     # Use matrixStats and DelayedMatrixStats 
     resCombine = bplapply( by.group, function(idx, data){
+
+        library(DelayedMatrixStats)
 
         # subset data by column
         dataSub = data[,idx,drop=FALSE]
