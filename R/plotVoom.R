@@ -34,8 +34,8 @@ setMethod("plotVoom", "dreamletProcessedData",
 	###################################
 	df_range = lapply( names(x), function(id){
 
-		if( !is.null(x[[id]]$geneExpr$voom.xy) ){
-			res = with(x[[id]]$geneExpr$voom.xy, data.frame(range(x),range(y), id=id))
+		if( !is.null(x[[id]]$voom.xy) ){
+			res = with(x[[id]]$voom.xy, data.frame(range(x),range(y), id=id))
 		}else{
 			res = NULL
 		}
@@ -54,13 +54,13 @@ setMethod("plotVoom", "dreamletProcessedData",
 
 	# make data.frame of points
 	df.list = lapply( validAssays, function(id){
-		with(x[[id]]$geneExpr$voom.xy, data.frame(id, x,y))
+		with(x[[id]]$voom.xy, data.frame(id, x,y))
 	})
 	df_points = do.call(rbind, df.list)
 
 	# make data.frame of curves
 	df.list = lapply( validAssays, function(id){
-		with(x[[id]]$geneExpr$voom.line, data.frame(id, x,y))
+		with(x[[id]]$voom.line, data.frame(id, x,y))
 	})
 	df_curve = do.call(rbind, df.list)
 
@@ -71,7 +71,7 @@ setMethod("plotVoom", "dreamletProcessedData",
 
 #' @rdname plotVoom-methods
 #' @aliases plotVoom,list,list-method
-setMethod("plotVoom", "list",
+setMethod("plotVoom", "EList",
   function(x, ncol=3){
 
 	# Pass R CMD check
@@ -80,7 +80,7 @@ setMethod("plotVoom", "list",
 	# get common range across all plots
 	###################################
 
-	df_range = with(x$geneExpr$voom.xy, data.frame(range(x),range(y)))
+	df_range = with(x$voom.xy, data.frame(range(x),range(y)))
 
 	xlim = range(df_range$range.x.)
 	ylim = c(0, max(df_range$range.y.))
@@ -89,10 +89,10 @@ setMethod("plotVoom", "list",
 	ylab = bquote(sqrt(standard~deviation))
 
 	# make data.frame of points
-	df_points = with(x$geneExpr$voom.xy, data.frame(x,y))
+	df_points = with(x$voom.xy, data.frame(x,y))
 
 	# make data.frame of curves
-	df_curve = with(x$geneExpr$voom.line, data.frame(x,y))
+	df_curve = with(x$voom.line, data.frame(x,y))
 
 	ggplot(df_points, aes(x,y)) + geom_point(size=0.1) + theme_bw() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + xlab(xlab) + ylab(ylab) + xlim(xlim) + ylim(ylim) + geom_line(data = df_curve, aes(x,y), color="red")
 })

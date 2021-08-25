@@ -22,7 +22,7 @@ setMethod("[", signature(x="dreamletProcessedData"),
 	function(x, i){   
 		res = new("dreamletProcessedData", x@.Data[i], 
 			data = x@data, 
-			metadata = x@pmetadata,
+			metadata = x@metadata,
 			pkeys = x@pkeys)
 		names(res) = names(x)[i]
 		res

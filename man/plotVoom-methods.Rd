@@ -5,7 +5,7 @@
 \alias{plotVoom}
 \alias{plotVoom,dreamletProcessedData-method}
 \alias{plotVoom,dreamletProcessedData,dreamletProcessedData-method}
-\alias{plotVoom,list-method}
+\alias{plotVoom,EList-method}
 \alias{plotVoom,list,list-method}
 \title{Plot voom curves from each cell type}
 \usage{
@@ -13,7 +13,7 @@ plotVoom(x, ncol = 3)
 
 \S4method{plotVoom}{dreamletProcessedData}(x, ncol = 3)
 
-\S4method{plotVoom}{list}(x, ncol = 3)
+\S4method{plotVoom}{EList}(x, ncol = 3)
 }
 \arguments{
 \item{x}{dreamletProcessedData}

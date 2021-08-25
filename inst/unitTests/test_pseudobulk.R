@@ -24,14 +24,15 @@ test_pseudobulk_example = function(){
 test_aggregateData = function(){
 
 	library(muscat)
+	library(BiocParallel)
 
 	# pseudobulk counts by cluster-sample
 	data(example_sce)
 	pb <- aggregateData(example_sce)
 
 	library(SingleCellExperiment)
-	assayNames(example_sce)  # one sheet per cluster
-	head(assay(example_sce)) # n_genes x n_samples
+	# assayNames(example_sce)  # one sheet per cluster
+	# head(assay(example_sce)) # n_genes x n_samples
 
 	# scaled CPM
 	cpm <- edgeR::cpm(assay(example_sce))
@@ -39,7 +40,7 @@ test_aggregateData = function(){
 	pb <- aggregateData(example_sce, assay = "cpm", scale = TRUE)
 	# head(assay(pb)) 
 
-	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE,BPPARAM = SnowParam(2, progressbar=TRUE))
+	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE) #,BPPARAM = SnowParam(2, progressbar=TRUE))
 	
 	check1 = checkEquals(pb, pb2)
 
