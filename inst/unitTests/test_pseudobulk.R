@@ -39,7 +39,7 @@ test_aggregateData = function(){
 	pb <- aggregateData(example_sce, assay = "cpm", scale = TRUE)
 	# head(assay(pb)) 
 
-	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE)
+	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE,BPPARAM = SnowParam(2, progressbar=TRUE))
 	
 	check1 = checkEquals(pb, pb2)
 
@@ -54,3 +54,23 @@ test_aggregateData = function(){
 
 	check1 & checkEquals(pb, pb2)
 }
+
+
+# devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
+
+# pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE,BPPARAM = SnowParam(2, progressbar=TRUE))
+
+
+
+# out2 <- dreamlet:::summarizeAssayByGroup2(example_sce, ids,BPPARAM = SnowParam(2, progressbar=TRUE))
+
+# Loading required package: HDF5Array
+# Loading required package: DelayedArray
+# Loading required package: stats4
+# Loading required package: Matrix
+# Loading required package: BiocGenerics
+# Loading required package: parallel
+# rhdf5
+# HDF5Array
+
+
