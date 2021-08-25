@@ -405,7 +405,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 #'
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data, L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	standardGeneric("dreamlet")
 })
@@ -424,16 +424,14 @@ setGeneric("dreamlet",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data, L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
+	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = bpparam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
 	stopifnot( is(formula, 'formula'))
 
 	# extract metadata shared across assays
-	if( missing(data) ){
-		data = as.data.frame(colData(x))
-	}
+	data = as.data.frame(data)
 
 	# for each assay
 	resList = lapply( x, function( procData ){
@@ -507,7 +505,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 #'
 #' @export
 setGeneric("fitVarPart", 
-	function( x, formula, data, BPPARAM = bpparam(),...){
+	function( x, formula, data = colData(x), BPPARAM = bpparam(),...){
 
 	standardGeneric("fitVarPart")
 })
@@ -523,16 +521,14 @@ setGeneric("fitVarPart",
 #' @rdname fitVarPart
 #' @aliases fitVarPart,dreamletProcessedData-method
 setMethod("fitVarPart", "dreamletProcessedData",
-	function( x, formula, data, BPPARAM = bpparam(),...){
+	function( x, formula, data = colData(x), BPPARAM = bpparam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
 	stopifnot( is(formula, 'formula'))
 	
 	# extract metadata shared across assays
-	if( missing(data) ){
-		data = as.data.frame(colData(x))
-	}
+	data = as.data.frame(data)
 
 	# for each assay
 	resList = lapply( x, function( procData ){
