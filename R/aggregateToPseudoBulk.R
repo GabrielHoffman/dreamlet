@@ -200,10 +200,12 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     statistics=c("mean", "sum", "num.detected", "prop.detected", "median"),
     store.number="ncells", threshold=0, BPPARAM=SerialParam()){
     
+    statistics = match.arg(statistics, several.ok=TRUE)
+
     new.ids <- .process_ids(x, ids, subset.col)
 
     sum.out <- .summarize_assay(x, ids=new.ids, subset.row=subset.row,
-        statistics=match.arg(statistics, several.ok=TRUE),
+        statistics=statistics,
         threshold=threshold, BPPARAM=BPPARAM)
 
     mat.out <- sum.out$summary
