@@ -20,6 +20,8 @@
 #' @export
 plotZenithResults = function(df, ntop=5, nbottom=5){
 
+	delta = se = NULL 
+	
 	# construct t-statistic from effect size and standard error
 	df$tstat = with(df, delta/se)
 
