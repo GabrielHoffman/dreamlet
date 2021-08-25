@@ -219,7 +219,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     SummarizedExperiment(mat.out, colData=coldata)
 }
 
-#' @importFrom BiocParallel SerialParam 
+#' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
@@ -254,6 +254,8 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
     # loop through groups
 
+    browser()
+
     # Original version uses rowBlockApply() and is slow
     # Use matrixStats and DelayedMatrixStats 
     resCombine = bplapply( by.group, function(idx, data){
@@ -265,7 +267,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
         # evaluate statistics       
         if( "mean" %in% statistics ){
-            resLst[["mean"]] = rowMeans2(dataSub)
+            resLst[["mean"]] = rowMeans(dataSub)
         }
 
         if( "sum" %in% statistics ){
