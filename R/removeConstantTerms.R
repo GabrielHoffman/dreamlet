@@ -17,6 +17,9 @@ removeConstantTerms = function( formula, data){
 	stopifnot(is(formula, "formula"))
 	stopifnot(is(data, "data.frame"))
 
+	# throw error if variable sis not in data
+    checkFormula( formula, data)
+
 	# create design matrix
 	design = tryCatch( {			
 		model.matrix( subbars(formula), droplevels(data))

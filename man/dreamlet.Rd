@@ -14,7 +14,7 @@ dreamlet(
   isCounts = TRUE,
   robust = FALSE,
   normalize.method = "TMM",
-  BPPARAM = bpparam(),
+  BPPARAM = SerialParam(),
   ...
 )
 
@@ -27,7 +27,7 @@ dreamlet(
   isCounts = TRUE,
   robust = FALSE,
   normalize.method = "TMM",
-  BPPARAM = bpparam(),
+  BPPARAM = SerialParam(),
   ...
 )
 }
