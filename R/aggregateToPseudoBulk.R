@@ -244,6 +244,9 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
     # Original version uses rowBlockApply() and is slow
     # Use matrixStats and DelayedMatrixStats 
+
+    # when run in paralle, each thread loads packages.  So supress.
+    suppressPackageStartupMessages({ 
     resCombine = bplapply( by.group, function(idx, data){
 
         # subset data by column
@@ -274,6 +277,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
 
         resLst
     }, data=x, BPPARAM=BPPARAM)
+    })
 
     # Create list of merged values for each statistic
     collected = lapply(statistics, function(stat){
