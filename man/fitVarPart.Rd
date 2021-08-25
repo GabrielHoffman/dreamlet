@@ -5,9 +5,9 @@
 \alias{fitVarPart,dreamletProcessedData-method}
 \title{Variance Partition analysis for each assay}
 \usage{
-fitVarPart(x, formula, data, BPPARAM = bpparam(), ...)
+fitVarPart(x, formula, data = colData(x), BPPARAM = bpparam(), ...)
 
-\S4method{fitVarPart}{dreamletProcessedData}(x, formula, data, BPPARAM = bpparam(), ...)
+\S4method{fitVarPart}{dreamletProcessedData}(x, formula, data = colData(x), BPPARAM = bpparam(), ...)
 }
 \arguments{
 \item{x}{SingleCellExperiment or dreamletProcessedData object}

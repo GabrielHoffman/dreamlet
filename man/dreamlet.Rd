@@ -8,7 +8,7 @@
 dreamlet(
   x,
   formula,
-  data,
+  data = colData(x),
   L.list = NULL,
   min.cells = 10,
   isCounts = TRUE,
@@ -21,7 +21,7 @@ dreamlet(
 \S4method{dreamlet}{dreamletProcessedData}(
   x,
   formula,
-  data,
+  data = colData(x),
   L.list = NULL,
   min.cells = 10,
   isCounts = TRUE,
