@@ -183,6 +183,8 @@ setMethod("dreamlet", "dreamletProcessedData",
 	# extract metadata shared across assays
 	data_constant = as.data.frame(data)
 
+	pkeys = x@pkeys
+
 	# for each assay
 	resList = lapply( assayNames(x), function( k ){
 
