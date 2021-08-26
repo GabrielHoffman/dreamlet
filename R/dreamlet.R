@@ -8,8 +8,8 @@
 # see use of sample weights here: 
 # https://rdrr.io/bioc/limma/src/R/voomWithQualityWeights.R
 
-
-
+# local definition so methods in this file have this class
+setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', pkeys="vector"))
 
 #' Class dreamletResult
 #'
@@ -57,7 +57,7 @@ setMethod("print", "dreamletResult",
 		# assay
 	    nms <- names(x)
 	    if (is.null(nms))
-	        nms <- character(length(assays(object, withDimnames=FALSE)))
+	        nms <- character(length(assays(x, withDimnames=FALSE)))
 	    coolcat("assays(%d): %s\n", nms)
 
 		df_count = lapply(x, function(obj) nrow(obj$coefficients))
@@ -66,6 +66,49 @@ setMethod("print", "dreamletResult",
 		cat('Genes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
 	}
 )
+
+
+
+setGeneric('assayNames', SummarizedExperiment::assayNames)
+setGeneric('assay', SummarizedExperiment::assay)
+# setGeneric('colData', SummarizedExperiment::colData)
+# setGeneric('metadata', S4Vectors::metadata)
+
+#' Get assayNames
+#' 
+#' Get assayNames
+#' 
+#' @param x dreamletResult object
+#' @param ... other arguments
+#'
+#' @rdname assayNames-methods
+#' @aliases assayNames,dreamletResult,dreamletResult-method
+#' @export
+setMethod("assayNames", signature(x="dreamletResult"),
+	function(x, ...){   
+		names(x)
+	}
+)
+
+#' Get assay
+#' 
+#' Get assay
+#' 
+#' @param x dreamletResult object
+#' @param i number indicating index, or string indicating assay
+#' @param withDimnames not used
+#' @param ... other arguments
+#'
+#' @rdname assay-methods
+#' @aliases assay,dreamletResult,dreamletResult-method
+#' @export
+setMethod("assay", signature(x="dreamletResult"),
+	function(x, i, withDimnames=TRUE,...){   
+		x[[i]]
+	}
+)
+
+
 
 
 
@@ -91,9 +134,17 @@ setMethod("[", signature(x="dreamletResult"),
 #' Extract a table of the top-ranked genes from a dreamlet fit.
 #'
 #' @param fit dreamletResult object
-#' @param ... arguments passed to topTable
+#' @param coef coef
+#' @param number number
+#' @param genelist genelist
+#' @param adjust.method adjust.method
+#' @param sort.by sort.by
+#' @param resort.by resort.by
+#' @param p.value p.value
+#' @param lfc lfc
+#' @param confint confint
 #'
-#' @rdname extract-methods
+#' @rdname topTable-methods
 #' @aliases topTable,dreamletResult,dreamletResult-method
 #' @export
 setMethod("topTable", signature(fit="dreamletResult"),
@@ -109,12 +160,12 @@ setMethod("topTable", signature(fit="dreamletResult"),
        confint = FALSE){   
 		
 		# Run topTable on each assay
-		res = lapply( names(x), function(k){
-			fit = x[[k]]
+		res = lapply( assayNames(fit), function(k){
+			fit1 = assay(fit, k)
 
-			if( is.null(genelist) ) genelist = rownames(fit)
+			if( is.null(genelist) ) genelist = rownames(fit1)
 
-			tab = topTable(fit, coef = coef, number = number, genelist = genelist, p.value=p.value, lfc=lfc, confint=confint)
+			tab = topTable(fit1, coef = coef, number = number, genelist = genelist, p.value=p.value, lfc=lfc, confint=confint)
 			data.frame(assay = k, tab)
 		})
 		# combine across assays
@@ -151,6 +202,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @param isCounts logical, indicating if data is raw counts
 #' @param robust logical, use eBayes method that is robust to outlier genes
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
+#' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -160,7 +212,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #'
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	standardGeneric("dreamlet")
 })
@@ -174,7 +226,7 @@ setGeneric("dreamlet",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -186,7 +238,10 @@ setMethod("dreamlet", "dreamletProcessedData",
 	pkeys = x@pkeys
 
 	# for each assay
-	resList = lapply( assayNames(x), function( k ){
+	resList = lapply( names(x), function( k ){
+
+		if( !quiet ) message('  ', k,'...', appendLF=FALSE)
+		startTime = Sys.time()
 
 		geneExpr = assay(x, k)
 
@@ -236,6 +291,9 @@ setMethod("dreamlet", "dreamletProcessedData",
 		}else{
 			fit = NULL
 		}
+
+		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
+
 		fit
 	})
 	# name each result by the assay name
