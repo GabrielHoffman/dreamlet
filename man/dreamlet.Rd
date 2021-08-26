@@ -14,6 +14,7 @@ dreamlet(
   isCounts = TRUE,
   robust = FALSE,
   normalize.method = "TMM",
+  quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
 )
@@ -27,6 +28,7 @@ dreamlet(
   isCounts = TRUE,
   robust = FALSE,
   normalize.method = "TMM",
+  quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
 )
@@ -47,6 +49,8 @@ dreamlet(
 \item{robust}{logical, use eBayes method that is robust to outlier genes}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
+
+\item{quiet}{show messages}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

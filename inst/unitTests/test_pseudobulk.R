@@ -44,16 +44,49 @@ test_aggregateData = function(){
 	
 	check1 = checkEquals(pb, pb2)
 
-
 	# aggregate by cluster only
 	pb <- muscat::aggregateData(example_sce, by = "cluster_id")
-	length(assays(pb)) # single assay
-	head(assay(pb))    # n_genes x n_clusters
+	# length(assays(pb)) # single assay
+	# head(assay(pb))    # n_genes x n_clusters
 
 	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, by = "cluster_id")
-	
 
 	check1 & checkEquals(pb, pb2)
+}
+
+
+test_pmetadata = function(){
+
+
+	# devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
+
+	library(muscat)
+	library(BiocParallel)
+	library(SingleCellExperiment)
+
+	# pseudobulk counts by cluster-sample
+	data(example_sce)
+	pb <- aggregateData(example_sce[1:100,])
+
+
+	# simulated pmetadata at the assay level
+	df = data.frame( ID = colnames(pb), assay = sort(rep(assayNames(pb), ncol(pb))))
+	df$Size = rnorm(nrow(df))
+	pkeys = c("ID", "assay")
+
+	res.proc = processAssays( pb, ~ (1|group_id) + Size, min.count=5, pmetadata=df, pkeys=pkeys)
+
+	fig = plotVoom(res.proc)
+
+	vp.lst = fitVarPart( res.proc, ~ Size + (1|group_id))
+
+	fig = plotVarPart( sortCols(vp.lst))
+
+	res.dl = dreamlet( res.proc, ~ (1|group_id) + Size)
+
+	tab = topTable(res.dl, coef="Size")
+
+	TRUE
 }
 
 

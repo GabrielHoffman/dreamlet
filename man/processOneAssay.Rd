@@ -32,7 +32,7 @@ processOneAssay(
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
-\item{min.count}{min.count used by \code{edgeR::filterByExpr}}
+\item{min.count}{minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

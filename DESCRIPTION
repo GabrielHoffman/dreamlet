@@ -14,6 +14,7 @@ Suggests:
     knitr,
     pander,
     rmarkdown,
+    muscat,
     RUnit,
     scuttle,
     BiocGenerics
@@ -31,9 +32,8 @@ biocViews: RNASeq,
     Software
 Depends:
     R (>= 4.0.0),
-    variancePartition (>= 1.21.3),
-    limma, 
     ggplot2,
+    variancePartition (>= 1.23.2),
     methods
 Imports:
     edgeR,
@@ -46,6 +46,7 @@ Imports:
     BiocParallel,
     S4Vectors,
     data.table,
+    limma,
     ComplexHeatmap,
     circlize,
     reshape2,

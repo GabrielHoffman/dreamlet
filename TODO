@@ -4,6 +4,12 @@ August 25:
 
 	type definition for zenith_gsa
 
+	test dreamlet() and fitVarPart() iwht metadta and pkeys
+
+	
+	  Variables in formula are not found in data:
+   1 | Donor, 1 | Batch
+
 	** cell counts are used as weighs in voom.
 	if not counts, they are used as weights directly
 	is this equivalent is the formula is just and intercept?

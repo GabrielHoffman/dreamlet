@@ -6,6 +6,7 @@
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
+#' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -13,13 +14,14 @@
 #'
 #' @export
 setGeneric("fitVarPart", 
-	function( x, formula, data = colData(x), BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), quiet = FALSE, BPPARAM = SerialParam(),...){
 
 	standardGeneric("fitVarPart")
 })
 
 
-
+# local definition so methods in this file have this class
+setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', pkeys="vector"))
 
 #' @importFrom variancePartition fitExtractVarPartModel
 #' @importFrom SummarizedExperiment colData assays
@@ -29,7 +31,7 @@ setGeneric("fitVarPart",
 #' @rdname fitVarPart
 #' @aliases fitVarPart,dreamletProcessedData-method
 setMethod("fitVarPart", "dreamletProcessedData",
-	function( x, formula, data = colData(x), BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), quiet = FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -42,6 +44,9 @@ setMethod("fitVarPart", "dreamletProcessedData",
 
 	# for each assay
 	resList = lapply( assayNames(x), function( k ){
+
+		if( !quiet ) message('  ', k,'...', appendLF=FALSE)
+		startTime = Sys.time()
 
 		geneExpr = assay(x, k)
 
@@ -57,7 +62,11 @@ setMethod("fitVarPart", "dreamletProcessedData",
 
 		# fit linear mixed model for each gene
 		# TODO add , L=L
-		fitExtractVarPartModel( geneExpr, form_mod, data2, BPPARAM=BPPARAM,...,quiet=TRUE)
+		res = fitExtractVarPartModel( geneExpr, form_mod, data2, BPPARAM=BPPARAM,...,quiet=TRUE)
+
+		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
+
+		res
 	})
 	# name each result by the assay name
 	names(resList) = names(x)

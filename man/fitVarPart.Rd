@@ -5,9 +5,23 @@
 \alias{fitVarPart,dreamletProcessedData-method}
 \title{Variance Partition analysis for each assay}
 \usage{
-fitVarPart(x, formula, data = colData(x), BPPARAM = SerialParam(), ...)
+fitVarPart(
+  x,
+  formula,
+  data = colData(x),
+  quiet = FALSE,
+  BPPARAM = SerialParam(),
+  ...
+)
 
-\S4method{fitVarPart}{dreamletProcessedData}(x, formula, data = colData(x), BPPARAM = SerialParam(), ...)
+\S4method{fitVarPart}{dreamletProcessedData}(
+  x,
+  formula,
+  data = colData(x),
+  quiet = FALSE,
+  BPPARAM = SerialParam(),
+  ...
+)
 }
 \arguments{
 \item{x}{SingleCellExperiment or dreamletProcessedData object}
@@ -15,6 +29,8 @@ fitVarPart(x, formula, data = colData(x), BPPARAM = SerialParam(), ...)
 \item{formula}{regression formula for differential expression analysis}
 
 \item{data}{metadata used in regression formula}
+
+\item{quiet}{show messages}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
