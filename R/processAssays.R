@@ -62,9 +62,10 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 
 		# get samples with enough cells
 		# filter genes
-		design = model.matrix( subbars(formula), data)
-		keep = filterByExpr(y, design, min.count=min.count)
-		# keep[] = TRUE
+		# design = model.matrix( subbars(formula), data)
+		# Design often includes batch and donor, which are very small
+		# 	this causes too many genes to be retained 
+		keep = filterByExpr(y, min.count=min.count)
 
 		# create EList object storing gene expression and sample weights
 		obj = new("EList", list(	E 	= y[keep,],
