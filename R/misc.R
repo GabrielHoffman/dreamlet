@@ -20,14 +20,13 @@
 #' @param formula formula of variables to check
 #' @param data data.frame storing variables in the formula
 #'
-#' @importFrom lme4 subbars
 #' @importFrom stats terms
 checkFormula = function(formula, data){
 
 	stopifnot(is(formula, "formula"))
 	stopifnot(is(data, "data.frame"))
 
-	v = attr(terms(subbars(formula)), "term.labels")
+	v = all.vars(formula)
  	found = v %in% colnames(data)
 
  	if( any(!found) ){
@@ -40,6 +39,39 @@ checkFormula = function(formula, data){
 
 
 
+#' Check if two formulas are equal
+#'
+#' Check if two formulas are equal by evaluating the formulas and extracting terms
+#'
+#' @param formula1 first formula
+#' @param formula2 second formula
+#'
+#' @examples
+#'
+#' # These formulas are equivalent
+#' formula1 = ~ Size + 1
+#' formula2 = ~ 1 + Size 
+#'
+#' dreamlet:::equalFormulas( formula1, formula2)
+#'
+#' @importFrom stats terms
+#'
+equalFormulas = function(formula1, formula2){
+
+    # extract terms from forumula1
+    trmf1 = terms(as.formula(formula1))
+    intercept1 = attr(trmf1, "intercept")
+    fterms1 = attr(trmf1, "term.labels")
+
+    # extract terms from forumula2
+    trmf2 = terms(as.formula(formula2))
+    intercept2 = attr(trmf2, "intercept")
+    fterms2 = attr(trmf2, "term.labels")
+
+    # check equality of intercept and variables 
+    # sort because the order might be different
+    (intercept1 == intercept2) & identical(sort(fterms1), sort(fterms2))
+}
 
 
 

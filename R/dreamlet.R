@@ -18,7 +18,7 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 #' @name dreamletResult-class
 #' @rdname dreamletResult-class
 #' @exportClass dreamletResult
-setClass("dreamletResult", contains="list")
+setClass("dreamletResult", contains="list", slots=c(df_details = "data.frame"))
 
 
 
@@ -64,6 +64,12 @@ setMethod("print", "dreamletResult",
 		df_count = do.call(rbind, df_count)
 
 		cat('Genes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
+
+		# metadata
+	    nms <- names(details(x))
+	    if (is.null(nms))
+	        nms <- character(length(metadata(x, withDimnames=FALSE)))
+	    coolcat("details(%d): %s\n", nms)
 	}
 )
 
@@ -127,6 +133,14 @@ setMethod("[", signature(x="dreamletResult"),
 		new("dreamletResult", x[i])
 	}
 )
+
+
+
+
+
+
+
+
 
 
 #' Table of Top Genes from dreamlet fit
@@ -255,7 +269,9 @@ setMethod("dreamlet", "dreamletProcessedData",
 		# drop any constant terms from the formula
 		form_mod = removeConstantTerms(formula, data2)
 
-		if( !is.null(form_mod) ){
+		# drop any constant terms from the formula
+		if( length(all.vars(form_mod)) > 0 ){
+
 			# construct contrasts based on design matrix for this datset
 			if( ! is.null(L.list) ){
 				L = lapply(L.list, function(coeffs){
@@ -294,12 +310,33 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
 
-		fit
+		list(fit = fit, formula = form_mod, n_retain = ncol(geneExpr))
 	})
 	# name each result by the assay name
 	names(resList) = names(x)
 
-	new("dreamletResult", resList)
+	if( !quiet ) message("\n")
+
+	# extract fit
+	fitList = lapply(resList, function(x) x$fit)
+
+	# extract details
+	df_details = lapply( names(resList), function(id){
+
+		data.frame( assay = id,
+			n_retain = resList[[id]]$n_retain,
+			formula = paste(as.character(resList[[id]]$formula), collapse=''),
+			formDropsTerms = ! equalFormulas( resList[[id]]$formula, formula)	)
+	})
+	df_details = do.call(rbind, df_details)
+
+	ndrop = sum(df_details$formDropsTerms)
+
+	if( ndrop > 0){
+		warning("Terms dropped from formulas for ", ndrop, " assays.\n Run details() on result for more information")
+	}
+
+	new("dreamletResult", fitList, df_details = df_details)
 })
 
 

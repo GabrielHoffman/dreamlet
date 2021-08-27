@@ -68,7 +68,6 @@ test_pmetadata = function(){
 	data(example_sce)
 	pb <- aggregateData(example_sce[1:100,])
 
-
 	# simulated pmetadata at the assay level
 	df = data.frame( ID = colnames(pb), assay = sort(rep(assayNames(pb), ncol(pb))))
 	df$Size = rnorm(nrow(df))

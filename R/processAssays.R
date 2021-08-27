@@ -19,11 +19,11 @@
 #' @import limma 
 #' @importFrom variancePartition voomWithDreamWeights
 #' @importFrom edgeR calcNormFactors filterByExpr DGEList 
-#' @importFrom lme4 subbars  
 #' @importFrom methods is new
 #' @importFrom stats model.matrix var
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
+#' @importFrom lme4 subbars
 #'
 #' @export
 processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, BPPARAM = SerialParam(),...){
@@ -73,6 +73,9 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# since the sample weights are already in y, don't need to 
 		# explicitly consider them here.
 		geneExpr = voomWithDreamWeights( obj, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
+
+		# save formula used after dropping constant terms
+		geneExpr$formula = formula
 	}else{
 	 	
 		# only include genes that show variation,

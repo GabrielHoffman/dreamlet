@@ -25,6 +25,7 @@ setGeneric("plotVolcano",
 
 
 
+#' @importFrom data.table data.table
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,list,list-method
 setMethod("plotVolcano", "list",
@@ -65,7 +66,7 @@ setMethod("plotVolcano", "list",
 
 
 
-
+#' @importFrom data.table data.table
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,MArrayLM,MArrayLM-method
 setMethod("plotVolcano", "MArrayLM",
