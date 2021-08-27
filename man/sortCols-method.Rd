@@ -13,7 +13,7 @@
 )
 }
 \arguments{
-\item{x}{object returned by \code{extractVarPart()} or \code{fitExtractVarPartModel()}}
+\item{x}{object returned by \code{fitVarPart()}}
 
 \item{FUN}{function giving summary statistic to sort by.  Defaults to median}
 

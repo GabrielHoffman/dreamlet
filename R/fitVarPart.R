@@ -25,8 +25,8 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 
 #' @importFrom variancePartition fitExtractVarPartModel
 #' @importFrom SummarizedExperiment colData assays
-#' @importFrom data.table data.table
 #' @importFrom S4Vectors DataFrame as.data.frame
+#' @importFrom gtools smartbind
 #' @export
 #' @rdname fitVarPart
 #' @aliases fitVarPart,dreamletProcessedData-method
@@ -60,26 +60,73 @@ setMethod("fitVarPart", "dreamletProcessedData",
 		# drop any constant terms from the formula
 		form_mod = removeConstantTerms(formula, data2)
 
-		# fit linear mixed model for each gene
-		# TODO add , L=L
-		res = fitExtractVarPartModel( geneExpr, form_mod, data2, BPPARAM=BPPARAM,...,quiet=TRUE)
+		# check if formula contains variables
+		if( length(all.vars(form_mod)) > 0 ){
+			# fit linear mixed model for each gene
+			# TODO add , L=L
+			res = fitExtractVarPartModel( geneExpr, form_mod, data2, BPPARAM=BPPARAM,...,quiet=TRUE)
+		}else{
+			res = data.frame()
+		}
 
 		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
 
-		res
+		list(df = res, formula = form_mod, n_retain = ncol(geneExpr))
 	})
 	# name each result by the assay name
-	names(resList) = names(x)
+	names(resList) = assayNames(x)
+
+	if( !quiet ) message("\n")
 
 	# Convert results to DataFrame in vpDF
 	vplst = lapply( names(resList), function(id){
-		data.table(assay = id, gene = rownames(resList[[id]]), data.frame(resList[[id]]))
+
+		# get variation partition results
+		df = resList[[id]]$df
+
+		if( nrow(df) > 0){
+			res = data.frame(assay = id, 
+				gene = rownames(df), 
+				data.frame(df))
+		}else{
+			res = data.frame()
+		}
+		res
 	})
-	df = do.call(rbind, vplst)
-	`:=` = NULL # Pass R CMD check
-	df[,assay:=factor(assay, names(resList))]
-	new("vpDF", DataFrame(df))
+	names(vplst) = names(resList) 
+
+	# Use smartbind in case a variable is droped from the analysis
+	df = do.call(smartbind, vplst)
+	if( nrow(df) > 0){
+		df$assay = factor(df$assay, names(resList))
+	}
+
+	# extract details
+	df_details = lapply( names(resList), function(id){
+
+		data.frame( assay = id,
+			n_retain = resList[[id]]$n_retain,
+			formula = paste(as.character(resList[[id]]$formula), collapse=''),
+			formDropsTerms = ! equalFormulas( resList[[id]]$formula, formula)	)
+	})
+	df_details = do.call(rbind, df_details)
+
+	ndrop = sum(df_details$formDropsTerms)
+
+	if( ndrop > 0){
+		warning("Terms dropped from formulas for ", ndrop, " assays.\n Run details() on result for more information")
+	}
+
+	new("vpDF", DataFrame(df), df_details=df_details)
 })
+
+
+
+
+
+
+
+
 
 
 

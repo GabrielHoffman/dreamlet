@@ -5,6 +5,8 @@
 	- Created new files for code
 	- Create object dreamletResult returned by dreamlet() and used by topTable()
 	- more capable dreamletProcessedData object
+	- add details() functions for dreamletResult, dreamletProcessedData and vpDF
+	- More information about when terms are dropped from formulas
 
 
 # dreamlet 0.0.4

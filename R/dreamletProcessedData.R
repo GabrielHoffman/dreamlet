@@ -110,6 +110,8 @@ setMethod("show", "dreamletProcessedData",
 	}
 )
 
+
+
 #' Print object
 #' 
 #' Print object
@@ -150,31 +152,92 @@ setMethod("print", "dreamletProcessedData",
 
 		cat('Samples:\n min:', min(df_count[,2]), '\n max:', max(df_count[,2]))
 		cat('\nGenes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
+
+		# metadata
+	    nms <- names(details(x))
+	    if (is.null(nms))
+	        nms <- character(length(metadata(x, withDimnames=FALSE)))
+	    coolcat("details(%d): %s\n", nms)
 	}
 )
 
-# setGene
-#' Extract a subset of samples
-#'
-#' Extract a subset of samples
+# # setGene
+# #' Extract a subset of samples
+# #'
+# #' Extract a subset of samples
+# #' 
+# #' @param x dreamletProcessedData
+# #' @param ids column names to retain
+# #'
+# #' @export
+# subsetSamples = function(x, ids){
+
+# 	stopifnot( is(x, 'dreamletProcessedData'))
+
+# 	# for each assay
+# 	for(i in seq_len(length(x)) ){
+
+# 		# intersect ids with column names
+# 		include = intersect(ids, colnames(x[[i]]))
+
+# 		# extract samples with these column names
+# 		x[[i]] = x[[i]][,include]
+# 	}
+
+# 	x
+# }
+
+
+
+#' Extract details from dreamletProcessedData
 #' 
-#' @param x dreamletProcessedData
-#' @param ids column names to retain
+#' Extract details from dreamletProcessedData
 #'
+#' @param object A dreamletProcessedData object
+#'
+#' @rdname details-methods
 #' @export
-subsetSamples = function(x, ids){
+setGeneric('details', function(object){
+	standardGeneric("details")
+	})
 
-	stopifnot( is(x, 'dreamletProcessedData'))
 
-	# for each assay
-	for(i in seq_len(length(x)) ){
+#' @export
+#' @rdname details-methods
+#' @aliases details,dreamletProcessedData-method
+setMethod("details", "dreamletProcessedData",
+	function(object){
+			
+	df = lapply( assayNames(object), function(k){
+		obj = assay(object, k)
+		DataFrame(assay = k, n_retained = ncol(obj$E), formula = paste(as.character(obj$formula), collapse=''))
+	})
+	df = do.call(rbind, df)
 
-		# intersect ids with column names
-		include = intersect(ids, colnames(x[[i]]))
+	df
+})
 
-		# extract samples with these column names
-		x[[i]] = x[[i]][,include]
-	}
 
-	x
-}
+
+
+#' @export
+#' @rdname details-methods
+#' @aliases details,dreamletResult-method
+setMethod("details", "dreamletResult",
+	function(object){
+					
+		object@df_details
+})
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,3 +14,15 @@ removeConstantTerms(formula, data)
 \description{
 Remove constant terms from formula
 }
+\details{
+Adapted from \code{MoEClust::drop_constants}
+}
+\examples{
+
+# Valid formula
+removeConstantTerms(~group + extra, sleep)
+
+# there is no variation in 'group' in this dataset
+removeConstantTerms(~group + extra, sleep[1:3,])
+
+}
