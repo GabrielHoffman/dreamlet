@@ -26,12 +26,12 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	df$tstat = with(df, delta/se)
 
 	# for each assay, return top and bottom genesets
-	gs = lapply( unique(df$Assay), function(assay){
+	gs = lapply( unique(df$assay), function(assay){
 
 		lapply( unique(df$coef), function(coef){
 
 			# extract zenith results for one assay
-			df_sub = df[(df$Assay == assay) &(df$coef == coef), ]
+			df_sub = df[(df$assay == assay) &(df$coef == coef), ]
 
 			# sort t-statistics
 			tstat_sort = sort(df_sub$tstat)
@@ -48,10 +48,10 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	gs = unique(unlist(gs))
 
 	# create matrix from retained gene sets
-	M = dcast(df[df$Geneset %in% gs,], Assay + coef ~ Geneset, value.var = "tstat")
+	M = dcast(df[df$Geneset %in% gs,], assay + coef ~ Geneset, value.var = "tstat")
 	annot = M[,seq(1,2)]
 	M = as.matrix(M[,-seq(1,2)])
-	rownames(M) = annot$Assay
+	rownames(M) = annot$assay
 
 	# Perform clustering on data in M
 	success = tryCatch({
@@ -81,7 +81,7 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 	# create heatmap
 	hm = Heatmap(t(M),
 		        name = "t-statistic", #title of legend
-		        # column_title = "Assays", row_title = "Gene sets",
+		        # column_title = "assay", row_title = "Gene sets",
 		        row_names_gp = gpar(fontsize = 8),
 			    width = nrow(M), 
 			    height = ncol(M),

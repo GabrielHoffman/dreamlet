@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-08-25 09:10:51</h4>
+            <h4 class="date">Run on 2021-08-27 10:21:08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/master/vignettes/dreamlet.Rmd"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="hidden name"><code>dreamlet.Rmd</code></div>
@@ -123,9 +123,14 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">zenith</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/scater/">scater</a></span><span class="op">)</span>
 
-<span class="va">eh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ExperimentHub/man/ExperimentHub-class.html">ExperimentHub</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">"EH2259"</span><span class="op">]</span><span class="op">]</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
+<span class="va">eh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ExperimentHub/man/ExperimentHub-class.html">ExperimentHub</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## snapshotDate(): 2021-05-18</code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">"EH2259"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<pre><code>## see ?muscData and browseVignettes('muscData') for documentation</code></pre>
+<pre><code>## loading from cache</code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
 
 <span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 
@@ -140,7 +145,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="aggregate-to-pseudobulk" class="section level2">
 <h2 class="hasAnchor">
 <a href="#aggregate-to-pseudobulk" class="anchor"></a>Aggregate to pseudobulk</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sce</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">stim</span>, <span class="va">sce</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/muscat/man/prepSCE.html">prepSCE</a></span><span class="op">(</span><span class="va">sce</span>, 
     kid <span class="op">=</span> <span class="st">"cell"</span>, <span class="co"># subpopulation assignments</span>
@@ -148,9 +153,10 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
     sid <span class="op">=</span> <span class="st">"id"</span>,   <span class="co"># sample IDs (ctrl/stim.1234)</span>
     drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/muscat/man/aggregateData.html">aggregateData</a></span><span class="op">(</span><span class="va">sce</span>,
+<span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">sce</span>,
     assay <span class="op">=</span> <span class="st">"counts"</span>, fun <span class="op">=</span> <span class="st">"sum"</span>,
-    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cluster_id"</span>, <span class="st">"sample_id"</span><span class="op">)</span><span class="op">)</span>
+    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cluster_id"</span>, <span class="st">"sample_id"</span><span class="op">)</span>,
+    verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># one sheet per subpopulation</span>
 <span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></code></pre></div>
@@ -162,7 +168,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="voom-for-pseudobulk" class="section level1">
 <h1 class="hasAnchor">
 <a href="#voom-for-pseudobulk" class="anchor"></a>Voom for pseudobulk</h1>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Normalize and apply voom</span>
 <span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span>
   
@@ -172,12 +178,20 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="run-variancepartition-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#run-variancepartition-analysis" class="anchor"></a>Run variancePartition analysis</h1>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vp.lst</span> <span class="op">=</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></code></pre></div>
+<pre><code>##   B cells...5.7 secs
+##   CD14+ Monocytes...9 secs
+##   CD4 T cells...12 secs
+##   CD8 T cells...4.2 secs
+##   Dendritic cells...1.7 secs
+##   FCGR3A+ Monocytes...5.4 secs
+##   Megakaryocytes...1.1 secs
+##   NK cells...5.3 secs</code></pre>
 <div id="variancepartition-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#variancepartition-plots" class="anchor"></a>variancePartition plots</h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plot.fitVarPart-1.png" width="768"></p>
 </div>
@@ -185,20 +199,28 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="run-dreamlet" class="section level1">
 <h1 class="hasAnchor">
 <a href="#run-dreamlet" class="anchor"></a>Run dreamlet</h1>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Differential expression analysis within each assay</span>
 <span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></code></pre></div>
+<pre><code>##   B cells...0.21 secs
+##   CD14+ Monocytes...0.28 secs
+##   CD4 T cells...0.37 secs
+##   CD8 T cells...0.16 secs
+##   Dendritic cells...0.056 secs
+##   FCGR3A+ Monocytes...0.16 secs
+##   Megakaryocytes...0.038 secs
+##   NK cells...0.21 secs</code></pre>
 <div id="volcano-plot-for-each-cell-type" class="section level2">
 <h2 class="hasAnchor">
 <a href="#volcano-plot-for-each-cell-type" class="anchor"></a>Volcano plot for each cell type</h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span> <span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotVolcano-1.png" width="768"></p>
 </div>
 <div id="extract-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extract-results" class="anchor"></a>Extract results</h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit</span> <span class="op">=</span> <span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>
 <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span> <span class="op">)</span></code></pre></div>
 <pre><code>##             logFC   AveExpr        t      P.Value    adj.P.Val        B
@@ -216,7 +238,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="forrest-plot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#forrest-plot" class="anchor"></a>Forrest plot</h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotForrest.html">plotForrest</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span>, gene <span class="op">=</span> <span class="st">'IRF7'</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/forrest-1.png" width="700"></p>
 </div>
@@ -224,20 +246,17 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="gene-set-analysis-using-zenith" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gene-set-analysis-using-zenith" class="anchor"></a>Gene set analysis using zenith</h1>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load Gene Ontology database </span>
 <span class="co"># use gene SYMBOL</span>
 <span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zenith/man/get_GeneOntology.html">get_GeneOntology</a></span><span class="op">(</span>to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span>
-     
-<span class="co"># convert from GeneSetCollection to list used by camera and zenith</span>
-<span class="va">geneSets_GO</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zenith/man/recodeToList.html">recodeToList</a></span><span class="op">(</span> <span class="va">go.gs</span> <span class="op">)</span>
    
 <span class="co"># Run zenith gene set analysis on result of dreamlet</span>
-<span class="va">res_zenith</span> <span class="op">=</span> <span class="fu"><a href="../reference/zenith_gsa.html">zenith_gsa</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span>, <span class="va">geneSets_GO</span><span class="op">)</span>
+<span class="va">res_zenith</span> <span class="op">=</span> <span class="fu"><a href="../reference/zenith_gsa.html">zenith_gsa</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span>, <span class="va">go.gs</span><span class="op">)</span>
 
 <span class="co"># examine results</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">)</span></code></pre></div>
-<pre><code>##     Assay         coef                                                Geneset
+<pre><code>##     assay         coef                                                Geneset
 ## 1 B cells group_idstim                      GO0045087: innate immune response
 ## 2 B cells group_idstim GO0060333: interferon-gamma-mediated signaling pathway
 ## 3 B cells group_idstim          GO0098542: defense response to other organism
@@ -261,7 +280,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="heatmap-of-top-genesets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#heatmap-of-top-genesets" class="anchor"></a>Heatmap of top genesets</h2>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># for each cell type select 5 genesets with largest t-statistic</span>
 <span class="co"># and 1 geneset with the lowest</span>
 <span class="fu"><a href="../reference/plotZenithResults.html">plotZenithResults</a></span><span class="op">(</span><span class="va">res_zenith</span>, <span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
@@ -269,7 +288,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="all-gene-sets-with-fdr-5" class="section level3">
 <h3 class="hasAnchor">
 <a href="#all-gene-sets-with-fdr-5" class="anchor"></a>All gene sets with FDR &lt; 5%</h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get genesets with FDR &lt; 5%</span>
 <span class="va">gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">FDR</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">]</span><span class="op">)</span>
 

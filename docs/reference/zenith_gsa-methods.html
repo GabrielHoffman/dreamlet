@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • dreamlet</title>
+<title>Perform zenith analysis — zenith_gsa • dreamlet</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Perform zenith analysis — zenith_gsa" />
+<meta property="og:description" content="Perform zenith analysis" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -113,54 +114,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Perform zenith analysis</h1>
+    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/zenith_gsa.R'><code>R/zenith_gsa.R</code></a></small>
+    <div class="hidden name"><code>zenith_gsa-methods.Rd</code></div>
     </div>
 
-    <div id="dreamlet-005" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.5">
-<a href="#dreamlet-005" class="anchor"></a>dreamlet 0.0.5</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>August <span class="dv">25</span>, <span class="dv">2021</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> handling of pmetadata by <span class="fu">processAssays</span>(), <span class="fu">fitVarPart</span>(), and <span class="fu">dreamlet</span>()</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> change defaults <span class="cf">for</span> bpparam to <span class="fu">SerialParam</span>()</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Created new files <span class="cf">for</span> code</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Create object dreamletResult returned by <span class="fu">dreamlet</span>() and used by <span class="fu">topTable</span>()</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> more capable dreamletProcessedData object</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add <span class="fu">details</span>() functions <span class="cf">for</span> dreamletResult, dreamletProcessedData and vpDF</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> More information about when terms are dropped from formulas</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> type definition to zenith_gsa</span></code></pre></div>
-</div>
-    <div id="dreamlet-004" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.4">
-<a href="#dreamlet-004" class="anchor"></a>dreamlet 0.0.4</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add <span class="fu">aggregateToPseudoBulk</span>() <span class="cf">for</span> faster access to <span class="fu">SingleCellExperiment</span>() backed by H5AD</span></code></pre></div>
-</div>
-    <div id="dreamlet-003" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.3">
-<a href="#dreamlet-003" class="anchor"></a>dreamlet 0.0.3</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add argument to <span class="st">`</span><span class="at">processAssays()</span><span class="st">`</span> to include extra meta<span class="sc">-</span>data  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add subseting with <span class="fu">assay</span>() <span class="cf">for</span> dreamletProcessedData</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> adapt <span class="fu">plotVoom</span>(), <span class="fu">plotVolcano</span>(), <span class="fu">plotVarPart</span>() to be more flexiable</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="fu">fitVarPart</span>() returns DataFrame</span></code></pre></div>
-</div>
-    <div id="dreamlet-002" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.2">
-<a href="#dreamlet-002" class="anchor"></a>dreamlet 0.0.2</h1>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> check failed regression</span></code></pre></div>
-</div>
-    <div id="dreamlet-001" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.1">
-<a href="#dreamlet-001" class="anchor"></a>dreamlet 0.0.1</h1>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Initial version</span></code></pre></div>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>Perform zenith analysis</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>zenith_gsa</span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>coefs</span>, <span class='va'>geneSets</span>, n_genes_min <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+
+<span class='co'># S4 method for dreamletResult,ANY,GeneSetCollection</span>
+<span class='fu'>zenith_gsa</span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>coefs</span>, <span class='va'>geneSets</span>, n_genes_min <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>fit</th>
+      <td><p>results from <code>dreamlet</code></p></td>
+    </tr>
+    <tr>
+      <th>coefs</th>
+      <td><p>coefficients to test using <code>topTable(fit, coef)</code></p></td>
+    </tr>
+    <tr>
+      <th>geneSets</th>
+      <td><p>a list of gene sets</p></td>
+    </tr>
+    <tr>
+      <th>n_genes_min</th>
+      <td><p>minumum number of genes in a geneset</p></td>
+    </tr>
+    </table>
+
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 

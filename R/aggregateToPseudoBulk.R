@@ -76,7 +76,7 @@
 #'
 #' # pseudobulk counts by cluster-sample
 #' data(example_sce)
-#' pb <- aggregateToPseudoBulk(example_sce)
+#' pb <- aggregateToPseudoBulk(example_sce, verbose=FALSE)
 #' 
 #' library(SingleCellExperiment)
 #' assayNames(example_sce)  # one sheet per cluster
@@ -85,15 +85,15 @@
 #' # scaled CPM
 #' cpm <- edgeR::cpm(assay(example_sce))
 #' assays(example_sce)$cpm <- cpm
-#' pb <- aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE)
-#' head(assay(pb)) 
+#' pb <- aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE, verbose=FALSE)
+#' head(assay(pb))
 #' 
 #' # aggregate by cluster only
-#' pb <- aggregateToPseudoBulk(example_sce, by = "cluster_id")
+#' pb <- aggregateToPseudoBulk(example_sce, by = "cluster_id", verbose=FALSE)
 #' length(assays(pb)) # single assay
 #' head(assay(pb))    # n_genes x n_clusters
 #' 
-#' @author Gabriel Hoffman,Helena L Crowell & Mark D Robinson
+#' @author Gabriel Hoffman, Helena L Crowell & Mark D Robinson
 #'
 #' @details 
 #' Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD filesm because this summarized counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}
