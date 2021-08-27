@@ -3,8 +3,8 @@
 August 25:
 
 	Feed contrasts to dreamlet()
-	
-	type definition for zenith_gsa
+
+	type definition for zenith_gsa for GeneSetCollection
 
 
 	** cell counts are used as weighs in voom.

@@ -7,6 +7,7 @@
 	- more capable dreamletProcessedData object
 	- add details() functions for dreamletResult, dreamletProcessedData and vpDF
 	- More information about when terms are dropped from formulas
+	- type definition to zenith_gsa
 
 
 # dreamlet 0.0.4

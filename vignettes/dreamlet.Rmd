@@ -40,7 +40,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 knitr::opts_chunk$set(
   echo = TRUE,
   warning=FALSE,
-  message=FALSE,
+  message=TRUE,
   error = FALSE,
   tidy = FALSE,
   dev = c("png"),
@@ -85,9 +85,10 @@ sce <- prepSCE(sce,
     sid = "id",   # sample IDs (ctrl/stim.1234)
     drop = TRUE)
 
-pb <- aggregateData(sce,
+pb <- aggregateToPseudoBulk(sce,
     assay = "counts", fun = "sum",
-    by = c("cluster_id", "sample_id"))
+    by = c("cluster_id", "sample_id"),
+    verbose = FALSE)
 
 # one sheet per subpopulation
 assayNames(pb)
@@ -140,12 +141,9 @@ plotForrest( res.dl, coef = 'group_idstim', gene = 'IRF7')
 # Load Gene Ontology database 
 # use gene SYMBOL
 go.gs = get_GeneOntology(to="SYMBOL")
-     
-# convert from GeneSetCollection to list used by camera and zenith
-geneSets_GO = recodeToList( go.gs )
    
 # Run zenith gene set analysis on result of dreamlet
-res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', geneSets_GO)
+res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', go.gs)
 
 # examine results
 head(res_zenith)

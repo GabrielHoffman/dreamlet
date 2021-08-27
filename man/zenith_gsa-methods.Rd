@@ -2,12 +2,15 @@
 % Please edit documentation in R/zenith_gsa.R
 \name{zenith_gsa}
 \alias{zenith_gsa}
-\title{zenith gene set analysis on dreamlet results}
+\alias{zenith_gsa,dreamletResult,ANY,GeneSetCollection-method}
+\title{Perform zenith analysis}
 \usage{
-zenith_gsa(x, coefs, geneSets, n_genes_min = 10)
+zenith_gsa(fit, coefs, geneSets, n_genes_min = 10)
+
+\S4method{zenith_gsa}{dreamletResult,ANY,GeneSetCollection}(fit, coefs, geneSets, n_genes_min = 10)
 }
 \arguments{
-\item{x}{results from \code{dreamlet}}
+\item{fit}{results from \code{dreamlet}}
 
 \item{coefs}{coefficients to test using \code{topTable(fit, coef)}}
 
@@ -16,5 +19,5 @@ zenith_gsa(x, coefs, geneSets, n_genes_min = 10)
 \item{n_genes_min}{minumum number of genes in a geneset}
 }
 \description{
-zenith gene set analysis on dreamlet results
+Perform zenith analysis
 }

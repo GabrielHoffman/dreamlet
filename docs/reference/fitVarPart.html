@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Variance Partition analysis for each assay</h1>
-    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/dreamlet.R'><code>R/dreamlet.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/fitVarPart.R'><code>R/fitVarPart.R</code></a></small>
     <div class="hidden name"><code>fitVarPart.Rd</code></div>
     </div>
 
@@ -123,10 +123,24 @@
     <p>Perform Variance Partition analysis  for each assay</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fitVarPart</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>formula</span>, <span class='va'>data</span>, BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>fitVarPart</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>formula</span>,
+  data <span class='op'>=</span> <span class='fu'>colData</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S4 method for dreamletProcessedData</span>
-<span class='fu'>fitVarPart</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>formula</span>, <span class='va'>data</span>, BPPARAM <span class='op'>=</span> <span class='fu'>bpparam</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>fitVarPart</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>formula</span>,
+  data <span class='op'>=</span> <span class='fu'>colData</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,6 +156,10 @@
     <tr>
       <th>data</th>
       <td><p>metadata used in regression formula</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>show messages</p></td>
     </tr>
     <tr>
       <th>BPPARAM</th>

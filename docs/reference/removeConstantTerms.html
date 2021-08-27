@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5</span>
       </span>
     </div>
 
@@ -138,7 +138,19 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>Adapted from <code><a href='https://rdrr.io/pkg/MoEClust/man/drop_constants.html'>MoEClust::drop_constants</a></code></p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='co'># Valid formula</span>
+<span class='fu'>removeConstantTerms</span><span class='op'>(</span><span class='op'>~</span><span class='va'>group</span> <span class='op'>+</span> <span class='va'>extra</span>, <span class='va'>sleep</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; ~group + extra</div><div class='input'>
+<span class='co'># there is no variation in 'group' in this dataset</span>
+<span class='fu'>removeConstantTerms</span><span class='op'>(</span><span class='op'>~</span><span class='va'>group</span> <span class='op'>+</span> <span class='va'>extra</span>, <span class='va'>sleep</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,<span class='op'>]</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; ~1 + extra</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
