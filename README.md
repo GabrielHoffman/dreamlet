@@ -7,7 +7,7 @@ Perform differential expression analysis on multi-sample single cell datasets us
 devtools::install_github("GabrielHoffman/dreamlet", auth_token=XXXXX)
 ```
 
-## Dependencies
+### Dependencies
 In case code aboves doesn't install these automatically
 ```r
 devtools::install_github("GabrielHoffman/variancePartition")
