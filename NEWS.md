@@ -1,3 +1,8 @@
+# dreamlet 0.0.1
+	Sept 1, 2021
+	- enforce package version requirements
+
+
 # dreamlet 0.0.5
 	August 25, 2021
 	- handling of pmetadata by processAssays(), fitVarPart(), and dreamlet()
