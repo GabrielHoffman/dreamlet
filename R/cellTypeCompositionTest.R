@@ -25,7 +25,6 @@ cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "
   	# loop thru assays and perform test
 	df_fit = lapply( assayNames(pb), function(k){
 
-		cat(k)
 		# create formula
 		form = paste0("cbind(`", k, "`, TotalCells - `", k, "`) ~ ", as.character(formula)[2])
 

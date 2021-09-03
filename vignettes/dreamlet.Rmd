@@ -40,7 +40,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 knitr::opts_chunk$set(
   echo = TRUE,
   warning=FALSE,
-  message=TRUE,
+  message=FALSE,
   error = FALSE,
   tidy = FALSE,
   dev = c("png"),
@@ -60,6 +60,7 @@ library(ExperimentHub)
 library(cowplot)
 library(zenith)
 library(scater)
+library(kableExtra)
 
 eh <- ExperimentHub()
 sce <- eh[["EH2259"]]
@@ -90,7 +91,7 @@ pb <- aggregateToPseudoBulk(sce,
     by = c("cluster_id", "sample_id"),
     verbose = FALSE)
 
-# one sheet per subpopulation
+# one 'assay' per subpopulation
 assayNames(pb)
 ```
 
@@ -171,6 +172,39 @@ plotZenithResults(df, Inf, Inf)
 
 
 
+# Testing difference in cell type composition
+Compare fraction of each cell type bewteen simulated and unstimulated samples
+
+```{r testCellComposition, eval=FALSE}
+formula = ~ group_id
+coef = 'group_idstim'
+
+# default is binomial model
+cellTypeCompositionTest( pb, formula, coef)
+```
+
+```{r testCellComposition.eval, results="html", echo=FALSE}
+tab1 = cellTypeCompositionTest( pb, formula, coef)
+tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
+
+knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(full_width = FALSE, html_font = "Cambria")
+```
+
+
+```{r testCellComposition.nb, eval=FALSE}
+# negative binomial model is more conservative.
+# estimated effects sizes are very similar, 
+#   but the standard errors are larger here
+cellTypeCompositionTest( pb, formula, coef, "nb")
+```
+
+```{r testCellComposition.nb.eval, results="html", echo=FALSE}
+tab1 = cellTypeCompositionTest( pb, formula, coef, "nb")
+tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
+
+knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(full_width = FALSE, html_font = "Cambria")
+```
+
 
 
 
@@ -186,13 +220,6 @@ plotZenithResults(df, Inf, Inf)
 ```{r exit, cache=FALSE, eval=FALSE, echo=FALSE}
 knitr::knit_exit()
 ```
-
-
-
-
-
-
-
 
 
 

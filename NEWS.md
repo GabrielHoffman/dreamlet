@@ -1,4 +1,9 @@
-# dreamlet 0.0.1
+# dreamlet 0.0.6a
+	Sept 2, 2021
+	- add cellTypeCompositionTest()
+
+
+# dreamlet 0.0.6
 	Sept 1, 2021
 	- enforce package version requirements
 
