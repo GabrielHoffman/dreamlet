@@ -72,3 +72,39 @@ cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "
 
 	df_fit
 }
+
+#' Bar plot of cell compositions
+#'
+#' Bar plot of cell compositions
+#'
+#' @param obj \code{SingleCellExperiment} from \code{aggregateToPseudoBulk}
+#' @param col array of colors.  If missing, use default colors.  If \code{names(col)} is the same as \code{arrayNames(obj)}, then colors will be assigned by assay name#' 
+#' @param width specify width of bars
+#'
+#' @importFrom variancePartition plotPercentBars ggColorHue
+#' @export
+plotCellComposition = function(obj, col, width=NULL){
+
+  # extract cell counts and other meta-data
+  df_cellCount = do.call(rbind, int_colData(obj)$n_cells)
+
+  df_frac = apply(df_cellCount, 1, function(x) x / sum(x))  
+  df = as.data.frame(t(df_frac))
+
+  if( missing(col) ){
+  	col = ggColorHue(ncol(df))
+  }else if( identical(sort(names(col)), sort(colnames(df))) ){
+  	col = col[colnames(df)]  	
+  }else if( length(col) < ncol(df) ){
+  	stop("Too few colors specified: ", length(col), ' < ', ncol(df) )
+  }
+
+  plotPercentBars( df, col = col, width=width ) + ylab("Cell percentage")
+}
+
+
+
+
+
+
+
