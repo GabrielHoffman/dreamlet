@@ -172,8 +172,15 @@ plotZenithResults(df, Inf, Inf)
 
 
 
-# Testing difference in cell type composition
+# Test differences in cell composition
 Compare fraction of each cell type bewteen simulated and unstimulated samples
+
+Plot cell type composition
+```{r plotCellComposition, fig.height=5, fig.width=5}
+plotCellComposition(pb)     
+```
+
+Perform statistical tests
 
 ```{r testCellComposition, eval=FALSE}
 formula = ~ group_id
@@ -184,6 +191,9 @@ cellTypeCompositionTest( pb, formula, coef)
 ```
 
 ```{r testCellComposition.eval, results="html", echo=FALSE}
+formula = ~ group_id
+coef = 'group_idstim'
+
 tab1 = cellTypeCompositionTest( pb, formula, coef)
 tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
 
@@ -204,15 +214,6 @@ tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
 
 knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(full_width = FALSE, html_font = "Cambria")
 ```
-
-
-
-
-
-
-
-
-
 
 
 
