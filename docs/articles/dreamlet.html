@@ -70,7 +70,8 @@
 
       
 
-      </header><script src="dreamlet_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><script src="dreamlet_files/header-attrs-2.10/header-attrs.js"></script><script src="dreamlet_files/kePrint-0.0.1/kePrint.js"></script><link href="dreamlet_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Dreamlet analysis of single cell RNA-seq</h1>
@@ -78,7 +79,7 @@
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-09-01 15:51:49</h4>
+            <h4 class="date">Run on 2021-09-03 12:35:07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/master/vignettes/dreamlet.Rmd"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="hidden name"><code>dreamlet.Rmd</code></div>
@@ -122,15 +123,11 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">zenith</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/scater/">scater</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
 
-<span class="va">eh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ExperimentHub/man/ExperimentHub-class.html">ExperimentHub</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## snapshotDate(): 2021-05-18</code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">"EH2259"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>## see ?muscData and browseVignettes('muscData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
+<span class="va">eh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ExperimentHub/man/ExperimentHub-class.html">ExperimentHub</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">"EH2259"</span><span class="op">]</span><span class="op">]</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
 
 <span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 
@@ -145,7 +142,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="aggregate-to-pseudobulk" class="section level2">
 <h2 class="hasAnchor">
 <a href="#aggregate-to-pseudobulk" class="anchor"></a>Aggregate to pseudobulk</h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sce</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">stim</span>, <span class="va">sce</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/muscat/man/prepSCE.html">prepSCE</a></span><span class="op">(</span><span class="va">sce</span>, 
     kid <span class="op">=</span> <span class="st">"cell"</span>, <span class="co"># subpopulation assignments</span>
@@ -158,7 +155,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cluster_id"</span>, <span class="st">"sample_id"</span><span class="op">)</span>,
     verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="co"># one sheet per subpopulation</span>
+<span class="co"># one 'assay' per subpopulation</span>
 <span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "B cells"           "CD14+ Monocytes"   "CD4 T cells"      
 ## [4] "CD8 T cells"       "Dendritic cells"   "FCGR3A+ Monocytes"
@@ -168,7 +165,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="voom-for-pseudobulk" class="section level1">
 <h1 class="hasAnchor">
 <a href="#voom-for-pseudobulk" class="anchor"></a>Voom for pseudobulk</h1>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Normalize and apply voom</span>
 <span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span>
   
@@ -178,20 +175,12 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="run-variancepartition-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#run-variancepartition-analysis" class="anchor"></a>Run variancePartition analysis</h1>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vp.lst</span> <span class="op">=</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></code></pre></div>
-<pre><code>##   B cells...5.7 secs
-##   CD14+ Monocytes...9 secs
-##   CD4 T cells...12 secs
-##   CD8 T cells...4.2 secs
-##   Dendritic cells...1.7 secs
-##   FCGR3A+ Monocytes...5.4 secs
-##   Megakaryocytes...1.1 secs
-##   NK cells...5.3 secs</code></pre>
 <div id="variancepartition-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#variancepartition-plots" class="anchor"></a>variancePartition plots</h2>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plot.fitVarPart-1.png" width="768"></p>
 </div>
@@ -199,46 +188,49 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="run-dreamlet" class="section level1">
 <h1 class="hasAnchor">
 <a href="#run-dreamlet" class="anchor"></a>Run dreamlet</h1>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Differential expression analysis within each assay</span>
 <span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></code></pre></div>
-<pre><code>##   B cells...0.21 secs
-##   CD14+ Monocytes...0.28 secs
-##   CD4 T cells...0.37 secs
-##   CD8 T cells...0.16 secs
-##   Dendritic cells...0.056 secs
-##   FCGR3A+ Monocytes...0.16 secs
-##   Megakaryocytes...0.038 secs
-##   NK cells...0.21 secs</code></pre>
 <div id="volcano-plot-for-each-cell-type" class="section level2">
 <h2 class="hasAnchor">
 <a href="#volcano-plot-for-each-cell-type" class="anchor"></a>Volcano plot for each cell type</h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span> <span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotVolcano-1.png" width="768"></p>
 </div>
 <div id="extract-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extract-results" class="anchor"></a>Extract results</h2>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit</span> <span class="op">=</span> <span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>
 <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span> <span class="op">)</span></code></pre></div>
-<pre><code>##             logFC   AveExpr        t      P.Value    adj.P.Val        B
-## ISG20   3.1795285 11.469787 42.32035 1.284688e-26 4.140550e-23 50.96236
-## ISG15   5.4914770 10.307382 34.33568 3.681642e-24 5.932966e-21 45.29748
-## LY6E    4.0797254  8.917790 28.20887 7.166626e-22 7.699345e-19 40.02783
-## UBE2L6  2.6472722  9.280198 24.71888 2.387000e-20 1.923325e-17 36.54695
-## TNFSF10 5.7377930  7.665066 24.24450 3.980480e-20 2.138181e-17 35.59404
-## IFIT3   6.7860660  8.097418 23.62167 7.899776e-20 3.637283e-17 34.79881
-## B2M     0.6855871 15.233063 24.44785 3.193414e-20 2.058474e-17 34.68551
-## IRF7    3.6122498  8.765672 22.83253 1.928427e-19 7.769150e-17 34.48596
-## PLSCR1  4.1099840  8.343233 22.55610 2.653613e-19 9.502881e-17 34.15739
-## NT5C3A  3.7868256  7.390032 21.85746 6.041739e-19 1.947252e-16 33.22998</code></pre>
+<pre><code>##                           logFC   AveExpr        t      P.Value    adj.P.Val
+## ISG20                 3.2279452 11.607875 41.63586 9.025079e-25 1.576681e-21
+## ISG15                 5.5232525 10.445470 32.79691 3.332657e-22 2.911076e-19
+## LY6E                  4.1097473  9.055878 28.20913 1.351356e-20 7.869398e-18
+## UBE2L6                2.6968987  9.418286 24.36425 4.793250e-19 2.093452e-16
+## IRF7                  3.6632422  8.903760 22.73560 2.549903e-18 7.424468e-16
+## B2M                   0.7369583 15.371152 23.82803 8.214515e-19 2.870152e-16
+## PLSCR1                4.0842819  8.481322 21.73466 7.525614e-18 1.878178e-15
+## PSMB9_ENSG00000240065 1.9719456 10.250412 20.55532 2.858022e-17 6.241205e-15
+## EIF2AK2               3.2842154  7.735670 20.12538 4.728782e-17 8.860006e-15
+## SAMD9                 2.9798307  7.757816 20.06626 5.071555e-17 8.860006e-15
+##                              B
+## ISG20                 46.79492
+## ISG15                 40.75111
+## LY6E                  37.01354
+## UBE2L6                33.64786
+## IRF7                  31.95117
+## B2M                   31.89731
+## PLSCR1                30.84181
+## PSMB9_ENSG00000240065 29.49723
+## EIF2AK2               28.99946
+## SAMD9                 28.94094</code></pre>
 </div>
 <div id="forrest-plot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#forrest-plot" class="anchor"></a>Forrest plot</h2>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotForrest.html">plotForrest</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'group_idstim'</span>, gene <span class="op">=</span> <span class="st">'IRF7'</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/forrest-1.png" width="700"></p>
 </div>
@@ -246,7 +238,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="gene-set-analysis-using-zenith" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gene-set-analysis-using-zenith" class="anchor"></a>Gene set analysis using zenith</h1>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load Gene Ontology database </span>
 <span class="co"># use gene SYMBOL</span>
 <span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zenith/man/get_GeneOntology.html">get_GeneOntology</a></span><span class="op">(</span>to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span>
@@ -257,30 +249,30 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="co"># examine results</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">)</span></code></pre></div>
 <pre><code>##     assay         coef                                                Geneset
-## 1 B cells group_idstim                      GO0045087: innate immune response
-## 2 B cells group_idstim GO0060333: interferon-gamma-mediated signaling pathway
-## 3 B cells group_idstim          GO0098542: defense response to other organism
-## 4 B cells group_idstim                           GO0009615: response to virus
-## 5 B cells group_idstim       GO0071346: cellular response to interferon-gamma
-## 6 B cells group_idstim                 GO0035456: response to interferon-beta
-##   NGenes  Correlation    delta        se    p.less    p.greater       PValue
-## 1    225  0.004146818 2.336118 0.2448918 0.9999999 8.349370e-08 1.669874e-07
-## 2     34  0.013891047 4.896364 0.5435502 0.9999998 1.675864e-07 3.351728e-07
-## 3    263  0.004258473 2.132944 0.2378160 0.9999998 1.766439e-07 3.532878e-07
-## 4    120  0.014150058 3.387872 0.3891981 0.9999997 2.528745e-07 5.057491e-07
-## 5     54  0.008595004 3.725494 0.4324994 0.9999997 2.866111e-07 5.732221e-07
-## 6     17 -0.014706821 5.457645 0.6402475 0.9999997 3.245707e-07 6.491415e-07
-##   Direction         FDR
-## 1        Up 0.001163099
-## 2        Up 0.001163099
-## 3        Up 0.001163099
-## 4        Up 0.001163099
-## 5        Up 0.001163099
-## 6        Up 0.001163099</code></pre>
+## 1 B cells group_idstim               GO0034340: response to type I interferon
+## 2 B cells group_idstim         GO0060337: type I interferon signaling pathway
+## 3 B cells group_idstim      GO0071357: cellular response to type I interferon
+## 4 B cells group_idstim                   GO0051607: defense response to virus
+## 5 B cells group_idstim                GO0034341: response to interferon-gamma
+## 6 B cells group_idstim GO0060333: interferon-gamma-mediated signaling pathway
+##   NGenes Correlation    delta        se    p.less    p.greater       PValue
+## 1     18  0.03514445 5.201415 0.7636952 0.9999958 4.224232e-06 8.448464e-06
+## 2     18  0.03514445 5.201415 0.7636952 0.9999958 4.224232e-06 8.448464e-06
+## 3     18  0.03514445 5.201415 0.7636952 0.9999958 4.224232e-06 8.448464e-06
+## 4     28  0.03501978 4.043155 0.6773035 0.9999828 1.715153e-05 3.430305e-05
+## 5     33  0.01101537 3.059516 0.5250423 0.9999781 2.194994e-05 4.389988e-05
+## 6     20  0.03415531 3.902594 0.7420953 0.9999396 6.043749e-05 1.208750e-04
+##   Direction        FDR
+## 1        Up 0.01205384
+## 2        Up 0.01205384
+## 3        Up 0.01205384
+## 4        Up 0.02260428
+## 5        Up 0.02571395
+## 6        Up 0.04901636</code></pre>
 <div id="heatmap-of-top-genesets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#heatmap-of-top-genesets" class="anchor"></a>Heatmap of top genesets</h2>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># for each cell type select 5 genesets with largest t-statistic</span>
 <span class="co"># and 1 geneset with the lowest</span>
 <span class="fu"><a href="../reference/plotZenithResults.html">plotZenithResults</a></span><span class="op">(</span><span class="va">res_zenith</span>, <span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
@@ -288,7 +280,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div id="all-gene-sets-with-fdr-5" class="section level3">
 <h3 class="hasAnchor">
 <a href="#all-gene-sets-with-fdr-5" class="anchor"></a>All gene sets with FDR &lt; 5%</h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get genesets with FDR &lt; 5%</span>
 <span class="va">gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">FDR</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">]</span><span class="op">)</span>
 
@@ -300,6 +292,395 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <p><img src="dreamlet_files/figure-html/heatmap2-1.png" width="480"></p>
 </div>
 </div>
+</div>
+<div id="test-differences-in-cell-composition" class="section level1">
+<h1 class="hasAnchor">
+<a href="#test-differences-in-cell-composition" class="anchor"></a>Test differences in cell composition</h1>
+<p>Compare fraction of each cell type bewteen simulated and unstimulated samples</p>
+<p>Plot cell type composition</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotCellComposition.html">plotCellComposition</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span>     </code></pre></div>
+<p><img src="dreamlet_files/figure-html/plotCellComposition-1.png" width="480"></p>
+<p>Perform statistical tests</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">formula</span> <span class="op">=</span> <span class="op">~</span> <span class="va">group_id</span>
+<span class="va">coef</span> <span class="op">=</span> <span class="st">'group_idstim'</span>
+
+<span class="co"># default is binomial model</span>
+<span class="fu"><a href="../reference/cellTypeCompositionTest.html">cellTypeCompositionTest</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">formula</span>, <span class="va">coef</span><span class="op">)</span></code></pre></div>
+<table class="table  lightable-classic">
+<thead><tr>
+<th style="text-align:left;">
+assay
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+se
+</th>
+<th style="text-align:right;">
+zstat
+</th>
+<th style="text-align:left;">
+pValue
+</th>
+<th style="text-align:right;">
+p.adj
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+B cells
+</td>
+<td style="text-align:right;">
+-0.08
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+-1.981
+</td>
+<td style="text-align:left;">
+4.8e-02
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CD14+ Monocytes
+</td>
+<td style="text-align:right;">
+-0.08
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+-2.586
+</td>
+<td style="text-align:left;">
+9.7e-03
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CD4 T cells
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.855
+</td>
+<td style="text-align:left;">
+3.9e-01
+</td>
+<td style="text-align:right;">
+0.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CD8 T cells
+</td>
+<td style="text-align:right;">
+-0.15
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+-3.551
+</td>
+<td style="text-align:left;">
+3.8e-04
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dendritic cells
+</td>
+<td style="text-align:right;">
+0.38
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+2.751
+</td>
+<td style="text-align:left;">
+5.9e-03
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FCGR3A+ Monocytes
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+2.635
+</td>
+<td style="text-align:left;">
+8.4e-03
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Megakaryocytes
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+0.893
+</td>
+<td style="text-align:left;">
+3.7e-01
+</td>
+<td style="text-align:right;">
+0.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NK cells
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+4.741
+</td>
+<td style="text-align:left;">
+2.1e-06
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># negative binomial model is more conservative.</span>
+<span class="co"># estimated effects sizes are very similar, </span>
+<span class="co">#   but the standard errors are larger here</span>
+<span class="fu"><a href="../reference/cellTypeCompositionTest.html">cellTypeCompositionTest</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">formula</span>, <span class="va">coef</span>, <span class="st">"nb"</span><span class="op">)</span></code></pre></div>
+<table class="table  lightable-classic">
+<thead><tr>
+<th style="text-align:left;">
+assay
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+se
+</th>
+<th style="text-align:right;">
+zstat
+</th>
+<th style="text-align:left;">
+pValue
+</th>
+<th style="text-align:right;">
+p.adj
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+B cells
+</td>
+<td style="text-align:right;">
+-0.06
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+<td style="text-align:right;">
+-0.373
+</td>
+<td style="text-align:left;">
+7.1e-01
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CD14+ Monocytes
+</td>
+<td style="text-align:right;">
+-0.07
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+-0.523
+</td>
+<td style="text-align:left;">
+6.0e-01
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CD4 T cells
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+<td style="text-align:left;">
+9.3e-01
+</td>
+<td style="text-align:right;">
+0.93
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CD8 T cells
+</td>
+<td style="text-align:right;">
+-0.11
+</td>
+<td style="text-align:right;">
+0.38
+</td>
+<td style="text-align:right;">
+-0.281
+</td>
+<td style="text-align:left;">
+7.8e-01
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dendritic cells
+</td>
+<td style="text-align:right;">
+0.39
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+1.875
+</td>
+<td style="text-align:left;">
+6.1e-02
+</td>
+<td style="text-align:right;">
+0.49
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FCGR3A+ Monocytes
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+0.23
+</td>
+<td style="text-align:right;">
+0.481
+</td>
+<td style="text-align:left;">
+6.3e-01
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Megakaryocytes
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+0.889
+</td>
+<td style="text-align:left;">
+3.7e-01
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NK cells
+</td>
+<td style="text-align:right;">
+0.18
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+1.330
+</td>
+<td style="text-align:left;">
+1.8e-01
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+</tr>
+</tbody>
+</table>
 </div>
   </div>
 

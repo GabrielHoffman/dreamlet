@@ -9,8 +9,7 @@
 #' @param coef which coefficient to test
 #' @param method which regression model to use
 #'
-#' @importFrom aod betabin
-#' @importFrom MASS glm.nb
+#' @description Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'
 #'
 #' @export
 cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "betabinomial", "lm", "lmlog", "poisson", "nb") ){
@@ -20,50 +19,27 @@ cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "
 	# extract cell counts and other meta-data
 	df_cellCount = do.call(rbind, int_colData(obj)$n_cells)
 	df_cellCount = cbind(df_cellCount, TotalCells = rowSums(df_cellCount))
-	df_cellCount = merge(df_cellCount, colData(pb), by="row.names")
+	df_cellCount = merge(df_cellCount, colData(obj), by="row.names")
 
   	# loop thru assays and perform test
-	df_fit = lapply( assayNames(pb), function(k){
+	df_fit = lapply( assayNames(obj), function(k){
 
 		# create formula
-		form = paste0("cbind(`", k, "`, TotalCells - `", k, "`) ~ ", as.character(formula)[2])
+		if( method %in% c("binomial", "betabinomial") ){
 
-	    # evaluate regression
-	   	res = switch( method,
-			"binomial" = {
-				fit = glm(as.formula(form), data=df_cellCount, family="binomial")
-				coef(summary(fit))[coef,,drop=FALSE]},
-			"betabinomial" = { 
-				fit = betabin(as.formula(form), ~ 1, data=df_cellCount)
-				summary(fit)@Coef[coef,,drop=FALSE]},
-			"lm" = {
-				form = paste0("`", k, "`  / TotalCells ~ ", as.character(formula)[2])
-				fit = lm(as.formula(form), data=df_cellCount)
-				coef(summary(fit))[coef,,drop=FALSE]},
-			"lmlog" = {
-				form = paste0("log(`", k, "`  / TotalCells) ~ ", as.character(formula)[2])
-				fit = lm(as.formula(form), data=df_cellCount)
-				coef(summary(fit))[coef,,drop=FALSE]},
-			"poisson" = {
-				form = paste0("`", k, "` ~ offset(log(TotalCells)) + ", as.character(formula)[2])
-				fit = glm(as.formula(form), data=df_cellCount, family="poisson")
-				coef(summary(fit))[coef,,drop=FALSE]},
-			"nb" = {
-				form = paste0("`", k, "` ~ offset(log(TotalCells)) + ", as.character(formula)[2])
-				# if error or warning in NB, use Poisson
-				tryCatch({
-					fit = glm.nb(as.formula(form), data=df_cellCount, control=glm.control(maxit=1000))
-					coef(summary(fit))[coef,,drop=FALSE]}, 
-					error = function(e){
-						fit = glm(as.formula(form), data=df_cellCount, family="poisson")
-						coef(summary(fit))[coef,,drop=FALSE]
-					},
-					warning=function(w) {
-						fit = glm(as.formula(form), data=df_cellCount, family="poisson")
-						coef(summary(fit))[coef,,drop=FALSE]
-					})
-				}
-	      )
+			form = paste0("cbind(`", k, "`, TotalCells - `", k, "`) ~ ", as.character(formula)[2])
+
+		}else if( method == "lm"){
+			form = paste0("`", k, "`  / TotalCells ~ ", as.character(formula)[2])
+		}else if(method == 'lmlog'){
+			form = paste0("log(`", k, "`  / TotalCells) ~ ", as.character(formula)[2])
+		}else if(method %in% c("poisson", "nb") ){		
+			form = paste0("`", k, "` ~ offset(log(TotalCells)) + ", as.character(formula)[2])
+		}
+
+		# evaluate regression model
+		res = regModel(form, df_cellCount, coef, method)
+
 		data.frame(assay =k, res)
 	})
 	df_fit = as.data.frame(do.call(rbind, df_fit))
@@ -72,6 +48,90 @@ cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "
 
 	df_fit
 }
+
+.isMixedModelFormula = function(formula){	
+    !is.null(findbars(as.formula(formula)))
+}
+
+#' @importFrom aod betabin
+#' @importFrom MASS glm.nb
+#' @importFrom lme4 glmer glmer.nb lmerControl glmerControl .makeCC
+#' @importFrom lmerTest lmer
+#' @importFrom stats lm glm glm.control
+regModel = function(formula, data, coef, method = c("binomial", "betabinomial", "lm", "lmlog", "poisson", "nb")){
+
+	method = match.arg(method)
+
+	formula = as.formula(formula)
+
+	if( .isMixedModelFormula(formula) ){
+
+		# mixed model
+
+		if( method %in% c("binomial",  "poisson") ){
+			control = glmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))
+			fit = glmer(formula, data, family=method, control=control)
+			df = coef(summary(fit))[coef,,drop=FALSE]
+
+		}else if(method == "betabinomial"){
+			stop("'betabinomial' model can't accept random effects")
+
+		}else if(method %in% c("lm", "lmlog") ){
+			control = lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))
+	
+			fit = lmer(formula, data, control = control)			
+			colids = c('Estimate', 'Std. Error', 't value', 'Pr(>|t|)')
+			df = coef(summary(fit))[coef,colids,drop=FALSE]
+
+		}else if(method == "nb" ){
+			control = glmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))
+			# if NB fit fails, use poisson model
+			fit = tryCatch({				
+				glmer.nb(formula, data, control=control)
+				}, error = function(e){
+				glmer(formula, data, family="poisson", control=control)
+				}, warning=function(w) {				
+				glmer(formula, data, family="poisson", control=control)
+				})
+			df = coef(summary(fit))[coef,,drop=FALSE]
+		}
+	}else{
+		# only fixed effects
+		if( method %in% c("binomial",  "poisson") ){
+			fit = glm(formula, data, family=method)
+			df = coef(summary(fit))[coef,,drop=FALSE]
+
+		}else if(method == "betabinomial"){
+			fit = betabin(formula, ~ 1, data)
+			df = summary(fit)@Coef[coef,,drop=FALSE]
+
+		}else if(method %in% c("lm", "lmlog") ){
+			fit = lm(formula, data)
+			df = coef(summary(fit))[coef,,drop=FALSE]
+
+		}else if(method == "nb" ){
+			# if NB fit fails, use poisson model
+			fit = tryCatch({
+				glm.nb(formula, data, control=glm.control(maxit=1000))
+				}, error = function(e){
+				glm(formula, data, family="poisson")
+				}, warning=function(w) {				
+				glm(formula, data, family="poisson")
+				})
+
+				df = coef(summary(fit))[coef,,drop=FALSE]
+		}
+	}
+
+	df
+}
+
+
+
+
+
+
+
 
 #' Bar plot of cell compositions
 #'
@@ -101,6 +161,19 @@ plotCellComposition = function(obj, col, width=NULL){
 
   plotPercentBars( df, col = col, width=width ) + ylab("Cell percentage")
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

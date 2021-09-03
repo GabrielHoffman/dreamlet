@@ -29,7 +29,7 @@ removeConstantTerms = function(formula, data){
 	stopifnot(is(data, "data.frame"))
 
 	# throw error if variable is not in data
-    checkFormula( formula, data)
+	checkFormula( formula, data)
 
 	trmf = terms(formula)
 
