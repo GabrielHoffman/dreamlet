@@ -21,5 +21,8 @@ cellTypeCompositionTest(
 \item{method}{which regression model to use}
 }
 \description{
+Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'
+}
+\details{
 Test difference in cell type composition using a regression models
 }
