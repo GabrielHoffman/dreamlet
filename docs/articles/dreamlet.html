@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-09-03 12:35:07</h4>
+            <h4 class="date">Run on 2021-09-03 21:23:34</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/master/vignettes/dreamlet.Rmd"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="hidden name"><code>dreamlet.Rmd</code></div>
@@ -306,197 +306,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <code class="sourceCode R"><span class="va">formula</span> <span class="op">=</span> <span class="op">~</span> <span class="va">group_id</span>
 <span class="va">coef</span> <span class="op">=</span> <span class="st">'group_idstim'</span>
 
-<span class="co"># default is binomial model</span>
+<span class="co"># default is negative binomial model</span>
+<span class="co"># poisson model gives similar effect sizes, but *much* smaller standard errors</span>
 <span class="fu"><a href="../reference/cellTypeCompositionTest.html">cellTypeCompositionTest</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">formula</span>, <span class="va">coef</span><span class="op">)</span></code></pre></div>
-<table class="table  lightable-classic">
-<thead><tr>
-<th style="text-align:left;">
-assay
-</th>
-<th style="text-align:right;">
-Estimate
-</th>
-<th style="text-align:right;">
-se
-</th>
-<th style="text-align:right;">
-zstat
-</th>
-<th style="text-align:left;">
-pValue
-</th>
-<th style="text-align:right;">
-p.adj
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-B cells
-</td>
-<td style="text-align:right;">
--0.08
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
--1.981
-</td>
-<td style="text-align:left;">
-4.8e-02
-</td>
-<td style="text-align:right;">
-0.06
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CD14+ Monocytes
-</td>
-<td style="text-align:right;">
--0.08
-</td>
-<td style="text-align:right;">
-0.03
-</td>
-<td style="text-align:right;">
--2.586
-</td>
-<td style="text-align:left;">
-9.7e-03
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CD4 T cells
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-<td style="text-align:right;">
-0.855
-</td>
-<td style="text-align:left;">
-3.9e-01
-</td>
-<td style="text-align:right;">
-0.39
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CD8 T cells
-</td>
-<td style="text-align:right;">
--0.15
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
--3.551
-</td>
-<td style="text-align:left;">
-3.8e-04
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Dendritic cells
-</td>
-<td style="text-align:right;">
-0.38
-</td>
-<td style="text-align:right;">
-0.14
-</td>
-<td style="text-align:right;">
-2.751
-</td>
-<td style="text-align:left;">
-5.9e-03
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-FCGR3A+ Monocytes
-</td>
-<td style="text-align:right;">
-0.14
-</td>
-<td style="text-align:right;">
-0.05
-</td>
-<td style="text-align:right;">
-2.635
-</td>
-<td style="text-align:left;">
-8.4e-03
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Megakaryocytes
-</td>
-<td style="text-align:right;">
-0.11
-</td>
-<td style="text-align:right;">
-0.13
-</td>
-<td style="text-align:right;">
-0.893
-</td>
-<td style="text-align:left;">
-3.7e-01
-</td>
-<td style="text-align:right;">
-0.39
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-NK cells
-</td>
-<td style="text-align:right;">
-0.21
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
-4.741
-</td>
-<td style="text-align:left;">
-2.1e-06
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># negative binomial model is more conservative.</span>
-<span class="co"># estimated effects sizes are very similar, </span>
-<span class="co">#   but the standard errors are larger here</span>
-<span class="fu"><a href="../reference/cellTypeCompositionTest.html">cellTypeCompositionTest</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">formula</span>, <span class="va">coef</span>, <span class="st">"nb"</span><span class="op">)</span></code></pre></div>
 <table class="table  lightable-classic">
 <thead><tr>
 <th style="text-align:left;">
@@ -681,6 +493,13 @@ NK cells
 </tr>
 </tbody>
 </table>
+<p>Partition variation in cell type composition</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df_vp</span> <span class="op">=</span> <span class="fu"><a href="../reference/cellTypeCompositionVarPart.html">cellTypeCompositionVarPart</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">formula</span>, <span class="va">coef</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">df_vp</span><span class="op">)</span> <span class="op">=</span> <span class="va">df_vp</span><span class="op">$</span><span class="va">assay</span>
+<span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">df_vp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<p><img src="dreamlet_files/figure-html/cellTypeCompositionVarPart-1.png" width="576"></p>
 </div>
   </div>
 

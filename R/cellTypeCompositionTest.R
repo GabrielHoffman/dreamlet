@@ -9,12 +9,39 @@
 #' @param coef which coefficient to test
 #' @param method which regression model to use
 #'
-#' @description Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'
+#' @details Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'
 #'
 #' @export
-cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "betabinomial", "lm", "lmlog", "poisson", "nb") ){
+cellTypeCompositionTest = function( obj, formula, coef,  method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson")  ){
+
+	cellTypeComposition_eval(obj, formula, coef, eval="test", method)
+}
+
+#' Variance partitioning of cell type composition
+#'
+#' Variance partitioning of cell type composition using a regression models
+#'
+#' @param obj \code{SingleCellExperiment} from \code{aggregateToPseudoBulk}
+#' @param formula formula indicating variables to include in the regression
+#' @param coef which coefficient to test
+#' @param method which regression model to use
+#'
+#' @details Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'
+#'
+#' @export
+cellTypeCompositionVarPart = function( obj, formula, coef,  method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson")  ){
+
+	cellTypeComposition_eval(obj, formula, coef, eval="vp", method)
+}
+
+
+
+
+# @param eval evaluate either hypothesis test 'test' or variance fractions 'vp'
+cellTypeComposition_eval = function( obj, formula, coef, eval = c("test", "vp"), method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson") ){
 
 	method = match.arg(method)
+	eval = match.arg(eval)
 
 	# extract cell counts and other meta-data
 	df_cellCount = do.call(rbind, int_colData(obj)$n_cells)
@@ -22,7 +49,7 @@ cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "
 	df_cellCount = merge(df_cellCount, colData(obj), by="row.names")
 
   	# loop thru assays and perform test
-	df_fit = lapply( assayNames(obj), function(k){
+	res = lapply( assayNames(obj), function(k){
 
 		# create formula
 		if( method %in% c("binomial", "betabinomial") ){
@@ -38,17 +65,23 @@ cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "
 		}
 
 		# evaluate regression model
-		res = regModel(form, df_cellCount, coef, method)
+		res = regModel(form, df_cellCount, coef, eval, method)
 
-		data.frame(assay =k, res)
+		data.frame(assay = k, res)
 	})
-	df_fit = as.data.frame(do.call(rbind, df_fit))
-	colnames(df_fit)[3:5] = c("se", "zstat", "pValue")
-	df_fit$p.adj = p.adjust(df_fit$pValue, "fdr")
 
-	df_fit
+	# combine results
+	df = as.data.frame(do.call(rbind, res))
+
+	if( eval == "test"){
+		colnames(df)[3:5] = c("se", "zstat", "pValue")
+		df$p.adj = p.adjust(df$pValue, "fdr")
+	}
+
+	df
 }
 
+#' @importFrom lme4 findbars
 .isMixedModelFormula = function(formula){	
     !is.null(findbars(as.formula(formula)))
 }
@@ -58,20 +91,20 @@ cellTypeCompositionTest = function( obj, formula, coef, method = c("binomial", "
 #' @importFrom lme4 glmer glmer.nb lmerControl glmerControl .makeCC
 #' @importFrom lmerTest lmer
 #' @importFrom stats lm glm glm.control
-regModel = function(formula, data, coef, method = c("binomial", "betabinomial", "lm", "lmlog", "poisson", "nb")){
+regModel = function(formula, data, coef, eval = c("test", "vp"), method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson") ){
 
 	method = match.arg(method)
+	eval = match.arg(eval)
 
 	formula = as.formula(formula)
 
 	if( .isMixedModelFormula(formula) ){
 
 		# mixed model
-
 		if( method %in% c("binomial",  "poisson") ){
 			control = glmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))
 			fit = glmer(formula, data, family=method, control=control)
-			df = coef(summary(fit))[coef,,drop=FALSE]
+			df_coef = coef(summary(fit))
 
 		}else if(method == "betabinomial"){
 			stop("'betabinomial' model can't accept random effects")
@@ -81,7 +114,7 @@ regModel = function(formula, data, coef, method = c("binomial", "betabinomial", 
 	
 			fit = lmer(formula, data, control = control)			
 			colids = c('Estimate', 'Std. Error', 't value', 'Pr(>|t|)')
-			df = coef(summary(fit))[coef,colids,drop=FALSE]
+			df_coef = coef(summary(fit))[,colids,drop=FALSE]
 
 		}else if(method == "nb" ){
 			control = glmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4))
@@ -93,21 +126,21 @@ regModel = function(formula, data, coef, method = c("binomial", "betabinomial", 
 				}, warning=function(w) {				
 				glmer(formula, data, family="poisson", control=control)
 				})
-			df = coef(summary(fit))[coef,,drop=FALSE]
+			df_coef = coef(summary(fit))
 		}
 	}else{
 		# only fixed effects
 		if( method %in% c("binomial",  "poisson") ){
 			fit = glm(formula, data, family=method)
-			df = coef(summary(fit))[coef,,drop=FALSE]
+			df_coef = coef(summary(fit))
 
 		}else if(method == "betabinomial"){
 			fit = betabin(formula, ~ 1, data)
-			df = summary(fit)@Coef[coef,,drop=FALSE]
+			df_coef = summary(fit)@Coef[coef,,drop=FALSE]
 
 		}else if(method %in% c("lm", "lmlog") ){
 			fit = lm(formula, data)
-			df = coef(summary(fit))[coef,,drop=FALSE]
+			df_coef = coef(summary(fit))
 
 		}else if(method == "nb" ){
 			# if NB fit fails, use poisson model
@@ -119,11 +152,24 @@ regModel = function(formula, data, coef, method = c("binomial", "betabinomial", 
 				glm(formula, data, family="poisson")
 				})
 
-				df = coef(summary(fit))[coef,,drop=FALSE]
+				df_coef = coef(summary(fit))
 		}
 	}
 
-	df
+	# which result to return
+	if( eval == "test"){
+
+		if( ! coef %in% rownames(df_coef) ){
+			stop(paste0("coef is not found in model fit....\n coef: ", coef, "\n Coefficients: ",paste(rownames(df_coef), collapse=', '), "\n Note: only fixed effects can be tested" ))
+		}
+
+		res = df_coef[coef,,drop=FALSE]
+	}else{
+		res = calcVarPart( fit )
+		res = as.data.frame(t(res))
+	}
+
+	res
 }
 
 

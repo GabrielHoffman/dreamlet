@@ -2,6 +2,7 @@
 
 export(aggregateToPseudoBulk)
 export(cellTypeCompositionTest)
+export(cellTypeCompositionVarPart)
 export(details)
 export(dreamlet)
 export(fitVarPart)
