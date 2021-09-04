@@ -186,7 +186,8 @@ Perform statistical tests
 formula = ~ group_id
 coef = 'group_idstim'
 
-# default is binomial model
+# default is negative binomial model
+# poisson model gives similar effect sizes, but *much* smaller standard errors
 cellTypeCompositionTest( pb, formula, coef)
 ```
 
@@ -199,6 +200,19 @@ tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
 
 knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(full_width = FALSE, html_font = "Cambria")
 ```
+
+Partition variation in cell type composition
+```{r cellTypeCompositionVarPart, fig.height=2, fig.width=6}
+df_vp = cellTypeCompositionVarPart( pb, formula, coef)
+
+rownames(df_vp) = df_vp$assay
+plotPercentBars(df_vp[,-1])
+```
+
+```{r exit, cache=FALSE, eval=TRUE, echo=FALSE}
+knitr::knit_exit()
+```
+
 
 
 ```{r testCellComposition.nb, eval=FALSE}
@@ -216,11 +230,6 @@ knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(
 ```
 
 
-
-
-```{r exit, cache=FALSE, eval=FALSE, echo=FALSE}
-knitr::knit_exit()
-```
 
 
 

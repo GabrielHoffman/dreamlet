@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Test difference in cell type composition — cellTypeCompositionTest" />
-<meta property="og:description" content="Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'" />
+<meta property="og:description" content="Test difference in cell type composition using a regression models" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
       </span>
     </div>
 
@@ -120,14 +120,14 @@
     </div>
 
     <div class="ref-description">
-    <p>Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'</p>
+    <p>Test difference in cell type composition using a regression models</p>
     </div>
 
     <pre class="usage"><span class='fu'>cellTypeCompositionTest</span><span class='op'>(</span>
   <span class='va'>obj</span>,
   <span class='va'>formula</span>,
   <span class='va'>coef</span>,
-  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"binomial"</span>, <span class='st'>"betabinomial"</span>, <span class='st'>"lm"</span>, <span class='st'>"lmlog"</span>, <span class='st'>"poisson"</span>, <span class='st'>"nb"</span><span class='op'>)</span>
+  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nb"</span>, <span class='st'>"binomial"</span>, <span class='st'>"betabinomial"</span>, <span class='st'>"lm"</span>, <span class='st'>"lmlog"</span>, <span class='st'>"poisson"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -153,7 +153,7 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Test difference in cell type composition using a regression models</p>
+    <p>Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

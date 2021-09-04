@@ -1,4 +1,4 @@
-# dreamlet 0.0.6a
+# dreamlet 0.0.7
 	Sept 2, 2021
 	- add cellTypeCompositionTest()
 		- handle random effects
