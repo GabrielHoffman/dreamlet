@@ -233,6 +233,30 @@ setGeneric("dreamlet",
 
 
 
+# #' @importFrom variancePartition getContrast dream
+# #' @importFrom SummarizedExperiment colData assays
+# #' @importFrom S4Vectors as.data.frame
+# #' @export
+# #' @rdname dreamlet
+# #' @aliases dreamlet,SingleCellExperiment-method
+# setMethod("dreamlet", "SingleCellExperiment",
+# 	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', quiet=FALSE, BPPARAM = SerialParam(),...){
+
+# 	dreamlet(x 				= as(x, "dreamletProcessedData"),
+# 			formula 		= formula,
+# 			data 			= data,
+# 			L.list 			= L.list,
+# 			min.cells 		= min.cells,
+# 			isCounts  		= FALSE,
+# 			robust 			= robust,
+# 			normalize.method= normalize.method,
+# 			quiet 			= quiet,
+# 			BPPARAM 		= BPPARAM,
+# 			...	)
+
+# })
+
+
 #' @importFrom variancePartition getContrast dream
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame

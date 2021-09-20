@@ -8,6 +8,21 @@
 #' @exportClass dreamletProcessedData
 setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', pkeys="vector"))
 
+# Convert SingleCellExperiment to dreamletProcessedData
+# @export
+# setAs("SingleCellExperiment", "dreamletProcessedData", function(from){
+
+# 	assayLists = lapply(assayNames(from), function(k){
+# 		obj = new("EList", list(E=assay(from, k)))
+# 		obj$isCounts = FALSE
+# 		obj
+# 	})
+# 	names(assayLists) = assayNames(from)
+
+# 	new("dreamletProcessedData", assayLists, data = as.data.frame(colData(from)), metadata = data.frame(), pkeys=vector())
+# })
+
+
 #' Subset with brackets
 #'
 #' Subset with brackets
