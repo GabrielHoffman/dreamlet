@@ -1,8 +1,10 @@
 
 
+
 August 25:
 
 	Feed contrasts to dreamlet()
+	# dreamlet() should work with SingleCellExperiment also
 
 	type definition for zenith_gsa for GeneSetCollection
 

@@ -43,6 +43,10 @@ setMethod("plotVoom", "dreamletProcessedData",
 	})
 	df_range = do.call(rbind, df_range)
 
+	if( is.null(df_range) ){
+		stop("Voom was not run on this object")
+	}
+
 	xlim = range(df_range$range.x.)
 	ylim = c(0, max(df_range$range.y.))
 

@@ -29,6 +29,9 @@
 processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, BPPARAM = SerialParam(),...){
 
     checkFormula( formula, data)
+    if( is.null(n.cells) ){
+    	stop("n_cells must not be NULL")
+    }
 
 	# nCells = extract from y
 
@@ -65,7 +68,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# design = model.matrix( subbars(formula), data)
 		# Design often includes batch and donor, which are very small
 		# 	this causes too many genes to be retained 
-		keep = filterByExpr(y, min.count=min.count)
+		keep = suppressWarnings(filterByExpr(y, min.count=min.count))
 
 		# create EList object storing gene expression and sample weights
 		obj = new("EList", list(	E 	= y[keep,],
@@ -79,6 +82,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		geneExpr$formula = formula
 	}else{
 	 	
+		# assumse already converted to log2 CPM
+
 		# only include genes that show variation,
 		# and have at least 5 nonzero values
 	 	include = apply(y, 1, function(x)
@@ -153,8 +158,14 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 	resList = lapply( assayNames(sceObj), function(k){
 
 		y = assay(sceObj, k)
-		# n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
+
+		# dreamlet style
 		n.cells = .n_cells(sceObj)[k,colnames(y),drop=FALSE]
+
+		if(is.null(n.cells)){
+			# muscat style
+			n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
+		}
 
 		# merge data_constant and pmetadata based on pkeys and assay k
 		data = merge_metadata(data_constant, pmetadata, pkeys, k)
