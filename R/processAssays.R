@@ -93,6 +93,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# if data is already log2 CPM
 		# create EList object storing gene expression and sample weights
 		geneExpr = new("EList", list(E=y[include,,drop=FALSE], weights = weights[include,,drop=FALSE]))
+
+		geneExpr$formula = ~ 0
 	}
 
 	geneExpr$isCounts = isCounts
@@ -174,6 +176,9 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, BPPARAM=BPPARAM,...)
 	})
 	names(resList) = assayNames(sceObj)
+
+	# remove empty assays
+	resList = resList[!sapply(resList, is.null)]
 
 	new("dreamletProcessedData", resList, data = data_constant, metadata = pmetadata, pkeys=pkeys)
 }

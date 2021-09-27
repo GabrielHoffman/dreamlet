@@ -224,6 +224,7 @@ setMethod("details", "dreamletProcessedData",
 	function(object){
 			
 	df = lapply( assayNames(object), function(k){
+
 		obj = assay(object, k)
 		DataFrame(assay = k, n_retained = ncol(obj$E), formula = paste(as.character(obj$formula), collapse=''))
 	})
