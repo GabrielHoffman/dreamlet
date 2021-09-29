@@ -211,11 +211,11 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
-#' @param L.list list of contrasts specifying linear combinations of fixed effects to tests
+#' @param contrasts character vector specifying contrasts specifying linear combinations of fixed effects to test
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
 #' @param robust logical, use eBayes method that is robust to outlier genes
-#' @param normalize.method normalization method to be used by \code{calcNormFactors}
+# @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
@@ -223,38 +223,16 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @import BiocParallel  
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
+#' @seealso \code{dream}, \code{makeContrastsDream}
 #'
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', quiet=FALSE, BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	standardGeneric("dreamlet")
 })
 
 
-
-# #' @importFrom variancePartition getContrast dream
-# #' @importFrom SummarizedExperiment colData assays
-# #' @importFrom S4Vectors as.data.frame
-# #' @export
-# #' @rdname dreamlet
-# #' @aliases dreamlet,SingleCellExperiment-method
-# setMethod("dreamlet", "SingleCellExperiment",
-# 	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', quiet=FALSE, BPPARAM = SerialParam(),...){
-
-# 	dreamlet(x 				= as(x, "dreamletProcessedData"),
-# 			formula 		= formula,
-# 			data 			= data,
-# 			L.list 			= L.list,
-# 			min.cells 		= min.cells,
-# 			isCounts  		= FALSE,
-# 			robust 			= robust,
-# 			normalize.method= normalize.method,
-# 			quiet 			= quiet,
-# 			BPPARAM 		= BPPARAM,
-# 			...	)
-
-# })
 
 
 #' @importFrom variancePartition getContrast dream
@@ -264,7 +242,7 @@ setGeneric("dreamlet",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data = colData(x), L.list=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, normalize.method = 'TMM', quiet=FALSE, BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -296,15 +274,12 @@ setMethod("dreamlet", "dreamletProcessedData",
 		# drop any constant terms from the formula
 		if( length(all.vars(form_mod)) > 0 ){
 
-			# construct contrasts based on design matrix for this datset
-			if( ! is.null(L.list) ){
-				L = lapply(L.list, function(coeffs){
-					getContrast(geneExpr, form_mod, data2, coeffs)
-				})
-				L = do.call(cbind, L)
+			# get contrasts customized for the formula for this cell type
+			if( ! is.null(contrasts) ){
+				L = makeContrastsDream( form_mod, data2, contrasts=contrasts)
 			}else{
 				L = NULL
-			}
+			}			
 
 			fit = tryCatch( {
 				# fit linear (mixed) model for each gene			

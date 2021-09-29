@@ -203,7 +203,7 @@ knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(
 
 Partition variation in cell type composition
 ```{r cellTypeCompositionVarPart, fig.height=2, fig.width=6}
-df_vp = cellTypeCompositionVarPart( pb, formula, coef)
+df_vp = cellTypeCompositionVarPart( pb, formula)
 
 rownames(df_vp) = df_vp$assay
 plotPercentBars(df_vp[,-1])

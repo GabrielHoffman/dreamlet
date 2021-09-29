@@ -1,14 +1,19 @@
+# dreamlet 0.0.8
+- Sept 28, 2021
+- update docs, logos, TODO
+- update `dreamlet()` to handle linear contrasts
+- `removeConstantTerms()` now drops categorical variables with only a max of one example per category
+- Cleaner code for cell composition test
+
 # dreamlet 0.0.7
 - Sept 2, 2021
-- add ``cellTypeCompositionTest()`
+- add `cellTypeCompositionTest()`
 	- handle random effects
-- Add `dreamlet()` for object `SingleCellExperiment`
 
 
 # dreamlet 0.0.6
 Sept 1, 2021
 - enforce package version requirements
-
 
 # dreamlet 0.0.5
 August 25, 2021

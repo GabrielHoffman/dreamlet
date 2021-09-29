@@ -3,10 +3,33 @@
 
 August 25:
 
+	cell type composition:
+		feed into dream/voom/eBayes to borrow information 
+		glmer can't
+
+	examples about adding metadata to processAssays()	
+
+
+	Describe treatment of NA's
+	Describe behavior of voom plots
+
+	DONE
+	Donghoon's error:
+		A categorical variable can only be included if there is variation within that 	category.  So with the NPS-AD I included Donor because there is variation within.  When there are no replicates, you can’t include Donor since there is just one sample per donor, and no variation within.  In your case, the error is due to dropped samples.  processAssays() only keeps samples with at least min.cells in a given cluster.  In the case your replicates are dropped, Donor becomes problematic and you get this error.
+	I already check of const removeConstantTerms.  But check no variation
+
+
+	docs:
+		There are two separate questions that variancePartition/dreamlet address: 1) estimate fraction of variance explained, 2) hypothesis test on fixed effects while accounting for random effects.  So the dream() and dreamlet() functions only perform hypothesis tests on fixed effect variables.  But fitVarPart() addresses question (1) and if any categorical variables are modeled as random, they all must be random.  Yes, a little counter-intuitive, but fixed vs random depends on the question and analysis
+
+		
+	DONE
 	Feed contrasts to dreamlet()
 	# dreamlet() should work with SingleCellExperiment also
 
 	type definition for zenith_gsa for GeneSetCollection
+
+	documentation for `prepSCE`: it maps each cell to 1) a cell cluster, 2) a biological sample and 3) a donor.
 
 
 	** cell counts are used as weighs in voom.

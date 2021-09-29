@@ -8,6 +8,13 @@
 
 <title>Changelog • dreamlet</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -40,6 +47,7 @@
 
 
 <meta property="og:title" content="Changelog" />
+<meta property="og:image" content="/logo.svg" />
 
 
 
@@ -71,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8</span>
       </span>
     </div>
 
@@ -117,54 +125,84 @@
       <small>Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="dreamlet-008" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.8">
+<a href="#dreamlet-008" class="anchor"></a>dreamlet 0.0.8</h1>
+<ul>
+<li>Sept 28, 2021</li>
+<li>update docs, logos, TODO</li>
+<li>update <code><a href="../reference/dreamlet.html">dreamlet()</a></code> to handle linear contrasts</li>
+<li>
+<code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> now drops categorical variables with only a max of one example per category</li>
+<li>Cleaner code for cell composition test</li>
+</ul>
+</div>
     <div id="dreamlet-007" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.7">
 <a href="#dreamlet-007" class="anchor"></a>dreamlet 0.0.7</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Sept <span class="dv">2</span>, <span class="dv">2021</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add <span class="fu">cellTypeCompositionTest</span>()</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span> handle random effects</span></code></pre></div>
+<ul>
+<li>Sept 2, 2021</li>
+<li>add <code><a href="../reference/cellTypeCompositionTest.html">cellTypeCompositionTest()</a></code>
+<ul>
+<li>handle random effects</li>
+</ul>
+</li>
+</ul>
 </div>
     <div id="dreamlet-006" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.6">
 <a href="#dreamlet-006" class="anchor"></a>dreamlet 0.0.6</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Sept <span class="dv">1</span>, <span class="dv">2021</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> enforce package version requirements</span></code></pre></div>
+<p>Sept 1, 2021</p>
+<ul>
+<li>enforce package version requirements</li>
+</ul>
 </div>
     <div id="dreamlet-005" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.5">
 <a href="#dreamlet-005" class="anchor"></a>dreamlet 0.0.5</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>August <span class="dv">25</span>, <span class="dv">2021</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> handling of pmetadata by <span class="fu">processAssays</span>(), <span class="fu">fitVarPart</span>(), and <span class="fu">dreamlet</span>()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> change defaults <span class="cf">for</span> bpparam to <span class="fu">SerialParam</span>()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Created new files <span class="cf">for</span> code</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Create object dreamletResult returned by <span class="fu">dreamlet</span>() and used by <span class="fu">topTable</span>()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> more capable dreamletProcessedData object</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add <span class="fu">details</span>() functions <span class="cf">for</span> dreamletResult, dreamletProcessedData and vpDF</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> More information about when terms are dropped from formulas</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> type definition to zenith_gsa</span></code></pre></div>
+<p>August 25, 2021</p>
+<ul>
+<li>handling of pmetadata by processAssays(), fitVarPart(), and dreamlet()</li>
+<li>change defaults for bpparam to SerialParam()</li>
+<li>Created new files for code</li>
+<li>Create object dreamletResult returned by dreamlet() and used by topTable()</li>
+<li>more capable dreamletProcessedData object</li>
+<li>add details() functions for dreamletResult, dreamletProcessedData and vpDF</li>
+<li>More information about when terms are dropped from formulas</li>
+<li>type definition to zenith_gsa</li>
+</ul>
 </div>
     <div id="dreamlet-004" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.4">
 <a href="#dreamlet-004" class="anchor"></a>dreamlet 0.0.4</h1>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add <span class="fu">aggregateToPseudoBulk</span>() <span class="cf">for</span> faster access to <span class="fu">SingleCellExperiment</span>() backed by H5AD</span></code></pre></div>
+<ul>
+<li>add aggregateToPseudoBulk() for faster access to SingleCellExperiment() backed by H5AD</li>
+</ul>
 </div>
     <div id="dreamlet-003" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.3">
 <a href="#dreamlet-003" class="anchor"></a>dreamlet 0.0.3</h1>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add argument to <span class="st">`</span><span class="at">processAssays()</span><span class="st">`</span> to include extra meta<span class="sc">-</span>data  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> add subseting with <span class="fu">assay</span>() <span class="cf">for</span> dreamletProcessedData</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> adapt <span class="fu">plotVoom</span>(), <span class="fu">plotVolcano</span>(), <span class="fu">plotVarPart</span>() to be more flexiable</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="fu">fitVarPart</span>() returns DataFrame</span></code></pre></div>
+<ul>
+<li>add argument to <code><a href="../reference/processAssays.html">processAssays()</a></code> to include extra meta-data<br>
+</li>
+<li>add subseting with assay() for dreamletProcessedData</li>
+<li>adapt plotVoom(), plotVolcano(), plotVarPart() to be more flexiable</li>
+<li>fitVarPart() returns DataFrame</li>
+</ul>
 </div>
     <div id="dreamlet-002" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.2">
 <a href="#dreamlet-002" class="anchor"></a>dreamlet 0.0.2</h1>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> check failed regression</span></code></pre></div>
+<ul>
+<li>check failed regression</li>
+</ul>
 </div>
     <div id="dreamlet-001" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.1">
 <a href="#dreamlet-001" class="anchor"></a>dreamlet 0.0.1</h1>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Initial version</span></code></pre></div>
+<ul>
+<li>Initial version</li>
+</ul>
 </div>
   </div>
 

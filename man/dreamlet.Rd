@@ -9,11 +9,10 @@ dreamlet(
   x,
   formula,
   data = colData(x),
-  L.list = NULL,
+  contrasts = NULL,
   min.cells = 10,
   isCounts = TRUE,
   robust = FALSE,
-  normalize.method = "TMM",
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -23,11 +22,10 @@ dreamlet(
   x,
   formula,
   data = colData(x),
-  L.list = NULL,
+  contrasts = NULL,
   min.cells = 10,
   isCounts = TRUE,
   robust = FALSE,
-  normalize.method = "TMM",
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -40,15 +38,13 @@ dreamlet(
 
 \item{data}{metadata used in regression formula}
 
-\item{L.list}{list of contrasts specifying linear combinations of fixed effects to tests}
+\item{contrasts}{character vector specifying contrasts specifying linear combinations of fixed effects to test}
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{robust}{logical, use eBayes method that is robust to outlier genes}
-
-\item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
 \item{quiet}{show messages}
 
@@ -58,4 +54,7 @@ dreamlet(
 }
 \description{
 Perform differential expression for each assay using linear mixed models
+}
+\seealso{
+\code{dream}, \code{makeContrastsDream}
 }
