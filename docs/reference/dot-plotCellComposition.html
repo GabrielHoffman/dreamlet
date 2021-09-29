@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Violin plot of variance fractions — plotVarPart,DataFrame-method • dreamlet</title>
+<title>Bar plot of cell compositions — .plotCellComposition • dreamlet</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Violin plot of variance fractions — plotVarPart,DataFrame-method" />
-<meta property="og:description" content="Violin plot of variance fraction for each gene and each variable" />
+<meta property="og:title" content="Bar plot of cell compositions — .plotCellComposition" />
+<meta property="og:description" content="Bar plot of cell compositions" />
 <meta property="og:image" content="/logo.svg" />
 
 
@@ -122,56 +122,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Violin plot of variance fractions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/plotVarPart.R'><code>R/plotVarPart.R</code></a></small>
-    <div class="hidden name"><code>plotVarPart-methods.Rd</code></div>
+    <h1>Bar plot of cell compositions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/plotCellComposition.R'><code>R/plotCellComposition.R</code></a></small>
+    <div class="hidden name"><code>dot-plotCellComposition.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Violin plot of variance fraction for each gene and each variable</p>
+    <p>Bar plot of cell compositions</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for DataFrame</span>
-<span class='fu'>plotVarPart</span><span class='op'>(</span>
-  <span class='va'>obj</span>,
-  col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>ggColorHue</span><span class='op'>(</span><span class='fu'>base</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>3</span><span class='op'>)</span>, <span class='st'>"grey85"</span><span class='op'>)</span>,
-  label.angle <span class='op'>=</span> <span class='fl'>20</span>,
-  main <span class='op'>=</span> <span class='st'>""</span>,
-  ylab <span class='op'>=</span> <span class='st'>""</span>,
-  convertToPercent <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.plotCellComposition</span><span class='op'>(</span><span class='va'>countMatrix</span>, <span class='va'>col</span>, width <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>obj</th>
-      <td><p><code>varParFrac</code> object returned by <code>fitExtractVarPart</code> or <code>extractVarPart</code></p></td>
+      <th>countMatrix</th>
+      <td><p>matrix of [cells] x [samples]</p></td>
     </tr>
     <tr>
       <th>col</th>
-      <td><p>vector of colors</p></td>
+      <td><p>array of colors.  If missing, use default colors.  If <code><a href='https://rdrr.io/r/base/names.html'>names(col)</a></code> is the same as <code>arrayNames(obj)</code>, then colors will be assigned by assay name#'</p></td>
     </tr>
     <tr>
-      <th>label.angle</th>
-      <td><p>angle of labels on x-axis</p></td>
-    </tr>
-    <tr>
-      <th>main</th>
-      <td><p>title of plot</p></td>
-    </tr>
-    <tr>
-      <th>ylab</th>
-      <td><p>text on y-axis</p></td>
-    </tr>
-    <tr>
-      <th>convertToPercent</th>
-      <td><p>multiply fractions by 100 to convert to percent values</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>additional arguments</p></td>
+      <th>width</th>
+      <td><p>specify width of bars</p></td>
     </tr>
     </table>
 

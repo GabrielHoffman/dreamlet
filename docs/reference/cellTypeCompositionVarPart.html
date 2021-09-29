@@ -8,6 +8,13 @@
 
 <title>Variance partitioning of cell type composition — cellTypeCompositionVarPart • dreamlet</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -41,6 +48,7 @@
 
 <meta property="og:title" content="Variance partitioning of cell type composition — cellTypeCompositionVarPart" />
 <meta property="og:description" content="Variance partitioning of cell type composition using a regression models" />
+<meta property="og:image" content="/logo.svg" />
 
 
 
@@ -72,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8</span>
       </span>
     </div>
 
@@ -126,7 +134,6 @@
     <pre class="usage"><span class='fu'>cellTypeCompositionVarPart</span><span class='op'>(</span>
   <span class='va'>obj</span>,
   <span class='va'>formula</span>,
-  <span class='va'>coef</span>,
   method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nb"</span>, <span class='st'>"binomial"</span>, <span class='st'>"betabinomial"</span>, <span class='st'>"lm"</span>, <span class='st'>"lmlog"</span>, <span class='st'>"poisson"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
@@ -140,10 +147,6 @@
     <tr>
       <th>formula</th>
       <td><p>formula indicating variables to include in the regression</p></td>
-    </tr>
-    <tr>
-      <th>coef</th>
-      <td><p>which coefficient to test</p></td>
     </tr>
     <tr>
       <th>method</th>

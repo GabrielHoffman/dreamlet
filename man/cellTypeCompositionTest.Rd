@@ -8,7 +8,7 @@ cellTypeCompositionTest(
   obj,
   formula,
   coef,
-  method = c("nb", "binomial", "betabinomial", "lm", "lmlog", "poisson")
+  method = c("nb", "binomial", "betabinomial", "lm", "lmlog", "poisson", "dream")
 )
 }
 \arguments{

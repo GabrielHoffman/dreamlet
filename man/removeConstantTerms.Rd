@@ -12,7 +12,7 @@ removeConstantTerms(formula, data)
 \item{data}{data.frame}
 }
 \description{
-Remove constant terms from formula
+Remove constant terms from formula.  Also remove categorical variables with a max of one example per category
 }
 \details{
 Adapted from \code{MoEClust::drop_constants}
@@ -20,9 +20,9 @@ Adapted from \code{MoEClust::drop_constants}
 \examples{
 
 # Valid formula
-removeConstantTerms(~group + extra, sleep)
+removeConstantTerms(~ group + extra, sleep)
 
 # there is no variation in 'group' in this dataset
-removeConstantTerms(~group + extra, sleep[1:3,])
+removeConstantTerms(~ group + extra, sleep[1:3,])
 
 }

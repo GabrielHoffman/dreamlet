@@ -11,10 +11,41 @@
 #'
 #' @details Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'
 #'
+#' @importFrom variancePartition dream voomWithDreamWeights eBayes topTable
+#' @importFrom edgeR DGEList
 #' @export
-cellTypeCompositionTest = function( obj, formula, coef,  method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson")  ){
+cellTypeCompositionTest = function( obj, formula, coef, method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson", "dream")  ){
 
-	cellTypeComposition_eval(obj, formula, coef, eval="test", method)
+	stopifnot(is( obj, "SingleCellExperiment") )
+	method = match.arg(method)
+
+	# extract cell counts from SingleCellExperiment
+	countMatrix = do.call(rbind, int_colData(obj)$n_cells)
+
+	# merge counts with metadata to ensure row ordering
+	data = merge(countMatrix, colData(obj), by="row.names")
+	rownames(data) = data$Row.names
+	data = data[,-1]
+
+	# extract columns now that order is ensured
+	countMatrix = data[,seq_len(ncol(countMatrix)),drop=FALSE]
+	data = data[,-seq_len(ncol(countMatrix)),drop=FALSE]
+
+	if( method == "dream"){
+
+		dge = DGEList(t(countMatrix))
+		vobj = voomWithDreamWeights(dge, ~1, data)
+		fit = dream(vobj, formula, data)
+		fit = eBayes(fit)
+
+		tab = topTable(fit, coef=coef, number=Inf, sort.by="none")
+		tab = with(tab, data.frame(assay = rownames(tab), Estimate=logFC, se=logFC/t, zstat=t, pValue=P.Value, p.adj=adj.P.Val))
+
+		}else{
+			tab = testComposition(countMatrix, formula, data, coef, eval="test", method)
+		}
+
+		tab
 }
 
 #' Variance partitioning of cell type composition
@@ -23,33 +54,45 @@ cellTypeCompositionTest = function( obj, formula, coef,  method = c( "nb", "bino
 #'
 #' @param obj \code{SingleCellExperiment} from \code{aggregateToPseudoBulk}
 #' @param formula formula indicating variables to include in the regression
-#' @param coef which coefficient to test
 #' @param method which regression model to use
 #'
 #' @details Evaluates regression model where cell fraction is response using one of the 6 specified methods.  Methods can be fit with random effects, except for 'betabinomial'
 #'
 #' @export
-cellTypeCompositionVarPart = function( obj, formula, coef,  method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson")  ){
+cellTypeCompositionVarPart = function( obj, formula, method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson")  ){
 
-	cellTypeComposition_eval(obj, formula, coef, eval="vp", method)
+	stopifnot(is( obj, "SingleCellExperiment") )
+	method = match.arg(method)
+
+	# extract cell counts from SingleCellExperiment
+	countMatrix = do.call(rbind, int_colData(obj)$n_cells)
+
+	# merge counts with metadata to ensure row ordering
+	data = merge(countMatrix, colData(obj), by="row.names")
+	rownames(data) = data$Row.names
+	data = data[,-1]
+
+	# extract columns now that order is ensured
+	countMatrix = data[,seq_len(ncol(countMatrix)),drop=FALSE]
+	data = data[,-seq_len(ncol(countMatrix)),drop=FALSE]
+
+	testComposition(countMatrix, formula, data, coef=NULL, eval="vp", method)
 }
 
 
 
 
 # @param eval evaluate either hypothesis test 'test' or variance fractions 'vp'
-cellTypeComposition_eval = function( obj, formula, coef, eval = c("test", "vp"), method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson") ){
+testComposition = function( countMatrix, formula, data, coef, eval = c("test", "vp"), method = c( "nb", "binomial", "betabinomial", "lm", "lmlog", "poisson") ){
 
 	method = match.arg(method)
 	eval = match.arg(eval)
 
 	# extract cell counts and other meta-data
-	df_cellCount = do.call(rbind, int_colData(obj)$n_cells)
-	df_cellCount = cbind(df_cellCount, TotalCells = rowSums(df_cellCount))
-	df_cellCount = merge(df_cellCount, colData(obj), by="row.names")
+	data = data.frame(data, countMatrix, TotalCells = rowSums(countMatrix), check.names=FALSE)
 
   	# loop thru assays and perform test
-	res = lapply( assayNames(obj), function(k){
+	res = lapply( colnames(countMatrix), function(k){
 
 		# create formula
 		if( method %in% c("binomial", "betabinomial") ){
@@ -65,7 +108,7 @@ cellTypeComposition_eval = function( obj, formula, coef, eval = c("test", "vp"),
 		}
 
 		# evaluate regression model
-		res = regModel(form, df_cellCount, coef, eval, method)
+		res = regModel(form, data, coef, eval, method)
 
 		data.frame(assay = k, res)
 	})
@@ -174,43 +217,9 @@ regModel = function(formula, data, coef, eval = c("test", "vp"), method = c( "nb
 
 
 
-
-
-
-
-
-#' Bar plot of cell compositions
-#'
-#' Bar plot of cell compositions
-#'
-#' @param obj \code{SingleCellExperiment} from \code{aggregateToPseudoBulk}
-#' @param col array of colors.  If missing, use default colors.  If \code{names(col)} is the same as \code{arrayNames(obj)}, then colors will be assigned by assay name#' 
-#' @param width specify width of bars
-#'
-#' @importFrom variancePartition plotPercentBars ggColorHue
-#' @export
-plotCellComposition = function(obj, col, width=NULL){
-
-  # extract cell counts and other meta-data
-  df_cellCount = do.call(rbind, int_colData(obj)$n_cells)
-
-  df_frac = apply(df_cellCount, 1, function(x) x / sum(x))  
-  df = as.data.frame(t(df_frac))
-
-  if( missing(col) ){
-  	col = ggColorHue(ncol(df))
-  }else if( identical(sort(names(col)), sort(colnames(df))) ){
-  	col = col[colnames(df)]  	
-  }else if( length(col) < ncol(df) ){
-  	stop("Too few colors specified: ", length(col), ' < ', ncol(df) )
-  }
-
-  plotPercentBars( df, col = col, width=width ) + ylab("Cell percentage")
-}
-
-
-
-
+# library(edgeR)
+# dge = DGEList(df_cellCount)
+# vobj = voomWithDreamWeights(dge, ~1, data.frame(mu = rep(1,8)), plot=TRUE)
 
 
 

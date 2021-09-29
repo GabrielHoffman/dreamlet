@@ -5,7 +5,7 @@
 
 #' Remove constant terms from formula
 #' 
-#' Remove constant terms from formula
+#' Remove constant terms from formula.  Also remove categorical variables with a max of one example per category
 #'
 #' @param formula original formula
 #' @param data data.frame
@@ -13,10 +13,10 @@
 #' @examples
 #' 
 #' # Valid formula
-#' removeConstantTerms(~group + extra, sleep)
+#' removeConstantTerms(~ group + extra, sleep)
 #' 
 #' # there is no variation in 'group' in this dataset
-#' removeConstantTerms(~group + extra, sleep[1:3,])
+#' removeConstantTerms(~ group + extra, sleep[1:3,])
 #' 
 #' @details Adapted from \code{MoEClust::drop_constants}
 #' 
@@ -42,11 +42,19 @@ removeConstantTerms = function(formula, data){
 
 	# keep only columns corresponding to variables in formula
 	idx = colnames(data) %in% all.vars(update.formula(formula, NULL ~ .))
-	data = data[,idx, drop=FALSE]
+	data = droplevels(data[,idx, drop=FALSE])
 
 	# identify variables with no variation
-	excludeVar = names(which(apply(data, 2L, function(x) all(x == x[1L], na.rm=TRUE))))
+	excludeVarConstant = names(which(apply(data, 2L, function(x) all(x == x[1L], na.rm=TRUE))))
 	
+	# identify categorical variables with only single examples per category
+	excludeVarCat = sapply(data, function(x){
+		# exlcude variable if it is a factor with max level count of 1
+		ifelse( is.factor(x), max(table(x)) == 1, FALSE)
+		})
+
+	excludeVar = c(excludeVarConstant, names(excludeVarCat)[which(excludeVarCat)])
+
 	# replace each excluded variable with an intercept
 	if( length(excludeVar) > 0){
 		fterms_new = array(sapply(excludeVar, function(x) gsub(x, '1', fterms)))

@@ -7,7 +7,6 @@
 cellTypeCompositionVarPart(
   obj,
   formula,
-  coef,
   method = c("nb", "binomial", "betabinomial", "lm", "lmlog", "poisson")
 )
 }
@@ -15,8 +14,6 @@ cellTypeCompositionVarPart(
 \item{obj}{\code{SingleCellExperiment} from \code{aggregateToPseudoBulk}}
 
 \item{formula}{formula indicating variables to include in the regression}
-
-\item{coef}{which coefficient to test}
 
 \item{method}{which regression model to use}
 }
