@@ -53,7 +53,7 @@ a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD files
 }
 \details{
-Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD filesm because this summarized counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}
+Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD files because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}
 }
 \examples{
 library(muscat)

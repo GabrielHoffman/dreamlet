@@ -1,3 +1,9 @@
+# dreamlet 0.0.9
+- Sept 30, 2021
+- call to `zenith_gsa()` adds argument `inter.gene.cor` and `progressbar`
+- fix output to `cellTypeCompositionVarPart()` and `cellTypeCompositionTest()`
+- fix issue with `topTable()` where FDR was evaluated on only a subset of genes
+
 # dreamlet 0.0.8
 - Sept 28, 2021
 - update docs, logos, TODO

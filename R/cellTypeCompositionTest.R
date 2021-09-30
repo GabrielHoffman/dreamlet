@@ -121,6 +121,7 @@ testComposition = function( countMatrix, formula, data, coef, eval = c("test", "
 		df$p.adj = p.adjust(df$pValue, "fdr")
 	}
 
+	rownames(df) = c()
 	df
 }
 

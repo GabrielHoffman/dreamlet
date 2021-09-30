@@ -179,13 +179,14 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 			if( is.null(genelist) ) genelist = rownames(fit1)
 
-			tab = topTable(fit1, coef = coef, number = number, genelist = genelist, p.value=p.value, lfc=lfc, confint=confint)
+			tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, p.value=p.value, lfc=lfc, confint=confint)
 			data.frame(assay = k, tab)
 		})
 		# combine across assays
 		res = DataFrame(do.call(rbind, res))
 
-		# apply multiple testing across all tests
+		# apply multiple testing across *all* tests
+		# subset based on number afterwards
 		res$adj.P.Val = p.adjust( res$P.Value, adjust.method)
 
 		# sorting
@@ -195,7 +196,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 			t = order(abs(t), decreasing = TRUE), 
 			B = order(res$B, decreasing = TRUE), none = seq_len(nrow(res)) )
 
-		res[ord,] 
+		head(res[ord,], number)
 	}
 )
 

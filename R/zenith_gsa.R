@@ -12,10 +12,12 @@
 #' @param coefs coefficients to test using \code{topTable(fit, coef)}
 #' @param geneSets a list of gene sets
 #' @param n_genes_min minumum number of genes in a geneset
+#' @param inter.gene.cor if NA, estimate correlation from data.  Otherwise, use specified value
+#' @param progressbar if TRUE, show progress bar
 #'  
 #' @rdname zenith_gsa-methods
 #' @export
-setGeneric('zenith_gsa', function(fit, coefs, geneSets, n_genes_min = 10){
+setGeneric('zenith_gsa', function(fit, coefs, geneSets, n_genes_min = 10, inter.gene.cor=NA, progressbar=TRUE){
 	standardGeneric("zenith_gsa")
 	})
 
@@ -29,7 +31,7 @@ setGeneric('zenith_gsa', function(fit, coefs, geneSets, n_genes_min = 10){
 #' @aliases zenith_gsa,dreamletResult,ANY,GeneSetCollection-method
 #' @export
 setMethod("zenith_gsa", signature(fit="dreamletResult", coefs="ANY", geneSets = "GeneSetCollection"),
-	function(fit, coefs, geneSets, n_genes_min = 10){
+	function(fit, coefs, geneSets, n_genes_min = 10, inter.gene.cor=NA, progressbar=TRUE){
 
 	# convert GeneSetCollection to list
 	geneSets.lst = recodeToList( geneSets )
@@ -50,7 +52,7 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", coefs="ANY", geneSets = 
 		# for each coefficient selected
 		df_res = lapply( coefs, function(coef){
 			# run zenith on dream fits
-			df_res = zenith(fit_local, coef, index)
+			df_res = zenith(fit_local, coef, index, inter.gene.cor=inter.gene.cor, progressbar=progressbar)
 			
 			data.frame(assay = k, coef = coef, Geneset = rownames(df_res), df_res)
 		})
