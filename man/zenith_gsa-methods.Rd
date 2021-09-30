@@ -5,9 +5,23 @@
 \alias{zenith_gsa,dreamletResult,ANY,GeneSetCollection-method}
 \title{Perform zenith analysis}
 \usage{
-zenith_gsa(fit, coefs, geneSets, n_genes_min = 10)
+zenith_gsa(
+  fit,
+  coefs,
+  geneSets,
+  n_genes_min = 10,
+  inter.gene.cor = NA,
+  progressbar = TRUE
+)
 
-\S4method{zenith_gsa}{dreamletResult,ANY,GeneSetCollection}(fit, coefs, geneSets, n_genes_min = 10)
+\S4method{zenith_gsa}{dreamletResult,ANY,GeneSetCollection}(
+  fit,
+  coefs,
+  geneSets,
+  n_genes_min = 10,
+  inter.gene.cor = NA,
+  progressbar = TRUE
+)
 }
 \arguments{
 \item{fit}{results from \code{dreamlet}}
@@ -17,6 +31,10 @@ zenith_gsa(fit, coefs, geneSets, n_genes_min = 10)
 \item{geneSets}{a list of gene sets}
 
 \item{n_genes_min}{minumum number of genes in a geneset}
+
+\item{inter.gene.cor}{if NA, estimate correlation from data.  Otherwise, use specified value}
+
+\item{progressbar}{if TRUE, show progress bar}
 }
 \description{
 Perform zenith analysis

@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -131,10 +131,24 @@
     <p>Perform zenith analysis</p>
     </div>
 
-    <pre class="usage"><span class='fu'>zenith_gsa</span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>coefs</span>, <span class='va'>geneSets</span>, n_genes_min <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>zenith_gsa</span><span class='op'>(</span>
+  <span class='va'>fit</span>,
+  <span class='va'>coefs</span>,
+  <span class='va'>geneSets</span>,
+  n_genes_min <span class='op'>=</span> <span class='fl'>10</span>,
+  inter.gene.cor <span class='op'>=</span> <span class='cn'>NA</span>,
+  progressbar <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
 <span class='co'># S4 method for dreamletResult,ANY,GeneSetCollection</span>
-<span class='fu'>zenith_gsa</span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>coefs</span>, <span class='va'>geneSets</span>, n_genes_min <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></pre>
+<span class='fu'>zenith_gsa</span><span class='op'>(</span>
+  <span class='va'>fit</span>,
+  <span class='va'>coefs</span>,
+  <span class='va'>geneSets</span>,
+  n_genes_min <span class='op'>=</span> <span class='fl'>10</span>,
+  inter.gene.cor <span class='op'>=</span> <span class='cn'>NA</span>,
+  progressbar <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,6 +168,14 @@
     <tr>
       <th>n_genes_min</th>
       <td><p>minumum number of genes in a geneset</p></td>
+    </tr>
+    <tr>
+      <th>inter.gene.cor</th>
+      <td><p>if NA, estimate correlation from data.  Otherwise, use specified value</p></td>
+    </tr>
+    <tr>
+      <th>progressbar</th>
+      <td><p>if TRUE, show progress bar</p></td>
     </tr>
     </table>
 

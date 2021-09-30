@@ -3,6 +3,10 @@
 
 August 25:
 
+	Show progress for processAssays like for dreamlet
+
+	Add test of effect size heterogeneity across cell types
+
 	cell type composition:
 		feed into dream/voom/eBayes to borrow information 
 		glmer can't
@@ -23,11 +27,10 @@ August 25:
 		There are two separate questions that variancePartition/dreamlet address: 1) estimate fraction of variance explained, 2) hypothesis test on fixed effects while accounting for random effects.  So the dream() and dreamlet() functions only perform hypothesis tests on fixed effect variables.  But fitVarPart() addresses question (1) and if any categorical variables are modeled as random, they all must be random.  Yes, a little counter-intuitive, but fixed vs random depends on the question and analysis
 
 		
-	DONE
-	Feed contrasts to dreamlet()
+	DONE: Feed contrasts to dreamlet()
 	# dreamlet() should work with SingleCellExperiment also
 
-	type definition for zenith_gsa for GeneSetCollection
+	DONE: type definition for zenith_gsa for GeneSetCollection
 
 	documentation for `prepSCE`: it maps each cell to 1) a cell cluster, 2) a biological sample and 3) a donor.
 

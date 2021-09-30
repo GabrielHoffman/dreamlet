@@ -96,7 +96,7 @@
 #' @author Gabriel Hoffman, Helena L Crowell & Mark D Robinson
 #'
 #' @details 
-#' Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD filesm because this summarized counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}
+#' Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD files because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}
 #' 
 #' @references 
 #' Crowell, HL, Soneson, C, Germain, P-L, Calini, D, 
