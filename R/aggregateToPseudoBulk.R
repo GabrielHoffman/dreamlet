@@ -161,9 +161,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
             vapply(cd[m, ], function(u) length(unique(u)), numeric(1))
         }, numeric(ncol(colData(x))))
         cd_keep <- apply(counts, 1, function(u) all(u == 1))
-        # comment out to retain sample_id
-        # GEH Oct 5, 2021
-        # cd_keep <- setdiff(names(which(cd_keep)), by) 
+        cd_keep <- setdiff(names(which(cd_keep)), by) 
         if (length(cd_keep) != 0) {
             m <- match(ids, cd[, by[2]], nomatch = 0)
             cd <- cd[m, cd_keep, drop = FALSE]
