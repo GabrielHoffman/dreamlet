@@ -159,6 +159,9 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 	# for each assay
 	resList = lapply( assayNames(sceObj), function(k){
 
+		if( !quiet ) message('  ', k,'...', appendLF=FALSE)
+		startTime = Sys.time()
+
 		y = assay(sceObj, k)
 
 		# dreamlet style
@@ -173,7 +176,11 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 		data = merge_metadata(data_constant, pmetadata, pkeys, k)
 
 		# processing counts with voom or log2 CPM
-		processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, BPPARAM=BPPARAM,...)
+		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, BPPARAM=BPPARAM,...)
+
+		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
+
+		res
 	})
 	names(resList) = assayNames(sceObj)
 
