@@ -120,6 +120,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param min.count min.count used by \code{edgeR::filterByExpr}
 #' @param pmetadata sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula
 #' @param pkeys array of two strings indicating sample identifier and cell type identifier columns in pmetadata
+#' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -129,7 +130,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @export
-processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
