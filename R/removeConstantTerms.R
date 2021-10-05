@@ -36,6 +36,11 @@ removeConstantTerms = function(formula, data){
 	intercept = attr(trmf, "intercept")
 	fterms = attr(trmf, "term.labels")
 
+	# if there are no terms, return the original formula
+	if( length(fterms) == 0){
+		return(formula)
+	}
+
 	# find terms with bars, and add back parentheses
 	i = which(fterms %in% findbars(formula)[])
 	fterms[i] = paste0('(', fterms[i], ')')

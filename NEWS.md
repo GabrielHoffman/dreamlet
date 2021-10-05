@@ -1,6 +1,7 @@
 # dreamlet 0.0.10
 - Oct 5, 2021
 - suppress package startup messages in `aggregateToPseudoBulk()`
+- bug fix in `removeConstantTerms()`
 
 
 - Sept 30, 2021
