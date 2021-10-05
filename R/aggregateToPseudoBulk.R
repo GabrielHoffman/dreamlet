@@ -123,11 +123,14 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     stopifnot(is(BPPARAM, "BiocParallelParam"))
     for (i in by) if (!is.factor(x[[i]])) 
         x[[i]] <- factor(x[[i]])
-    pb <- .pb(x, by, assay, fun, BPPARAM)
+    suppressPackageStartupMessages({ 
+        pb <- .pb(x, by, assay, fun, BPPARAM)
+    })
     if (scale & length(by) == 2) {
         cs <- if (assay == "counts" && fun == "sum") 
             pb
-        else .pb(x, by, "counts", "sum", BPPARAM)
+        else suppressPackageStartupMessages({ 
+            .pb(x, by, "counts", "sum", BPPARAM)})
         ls <- lapply(cs, colSums)
         pb <- lapply(seq_along(pb), function(i) pb[[i]]/1e+06 * 
             ls[[i]])
@@ -245,8 +248,6 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     # Original version uses rowBlockApply() and is slow
     # Use matrixStats and DelayedMatrixStats 
 
-    # when run in parallel, each thread loads packages.  So suppress
-    suppressPackageStartupMessages({ 
     resCombine = bplapply( by.group, function(idx, data){
 
         # subset data by column
@@ -274,10 +275,9 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
         if( "median" %in% statistics ){
             resLst[["median"]] = rowMedians(dataSub)
         }
-        
+
         resLst
     }, data=x, BPPARAM=BPPARAM)
-    })
 
     # Create list of merged values for each statistic
     collected = lapply(statistics, function(stat){
