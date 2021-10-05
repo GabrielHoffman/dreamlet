@@ -245,39 +245,39 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     # Original version uses rowBlockApply() and is slow
     # Use matrixStats and DelayedMatrixStats 
 
-    # when run in paralle, each thread loads packages.  So supress.
-    suppressPackageStartupMessages({ 
+    # when run in parallel, each thread loads packages.  So suppress
     resCombine = bplapply( by.group, function(idx, data){
 
-        # subset data by column
-        dataSub = data[,idx,drop=FALSE]
+        suppressPackageStartupMessages({ 
+            # subset data by column
+            dataSub = data[,idx,drop=FALSE]
 
-        resLst = list()
+            resLst = list()
 
-        # evaluate statistics       
-        if( "mean" %in% statistics ){
-            resLst[["mean"]] = rowMeans(dataSub)
-        }
+            # evaluate statistics       
+            if( "mean" %in% statistics ){
+                resLst[["mean"]] = rowMeans(dataSub)
+            }
 
-        if( "sum" %in% statistics ){
-            resLst[["sum"]] = rowSums2(dataSub)
-        }
+            if( "sum" %in% statistics ){
+                resLst[["sum"]] = rowSums2(dataSub)
+            }
 
-        if( "num.detected" %in% statistics ){
-            resLst[["num.detected"]] = rowSums2(dataSub > threshold)
-        }
+            if( "num.detected" %in% statistics ){
+                resLst[["num.detected"]] = rowSums2(dataSub > threshold)
+            }
 
-        if( "prop.detected" %in% statistics ){          
-            resLst[["prop.detected"]] = (ncol(dataSub) - rowCounts(dataSub, value=0)) / ncol(dataSub)
-        }
+            if( "prop.detected" %in% statistics ){          
+                resLst[["prop.detected"]] = (ncol(dataSub) - rowCounts(dataSub, value=0)) / ncol(dataSub)
+            }
 
-        if( "median" %in% statistics ){
-            resLst[["median"]] = rowMedians(dataSub)
-        }
+            if( "median" %in% statistics ){
+                resLst[["median"]] = rowMedians(dataSub)
+            }
 
+        })
         resLst
     }, data=x, BPPARAM=BPPARAM)
-    })
 
     # Create list of merged values for each statistic
     collected = lapply(statistics, function(stat){

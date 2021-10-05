@@ -1,4 +1,8 @@
-# dreamlet 0.0.9
+# dreamlet 0.0.10
+- Oct 5, 2021
+- suppress package startup messages in .summarize_assay
+
+
 - Sept 30, 2021
 - call to `zenith_gsa()` adds argument `inter.gene.cor` and `progressbar`
 - fix output to `cellTypeCompositionVarPart()` and `cellTypeCompositionTest()`
