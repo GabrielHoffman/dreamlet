@@ -1,6 +1,6 @@
 # dreamlet 0.0.10
 - Oct 5, 2021
-- suppress package startup messages in .summarize_assay
+- suppress package startup messages in `aggregateToPseudoBulk()`
 
 
 - Sept 30, 2021
