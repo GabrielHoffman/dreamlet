@@ -123,6 +123,11 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
     stopifnot(is(BPPARAM, "BiocParallelParam"))
     for (i in by) if (!is.factor(x[[i]])) 
         x[[i]] <- factor(x[[i]])
+
+    # store metdata
+    md <- metadata(x)
+    metadata(x) = list() # set to empty so not passed to downstream functions
+        
     suppressPackageStartupMessages({ 
         pb <- .pb(x, by, assay, fun, BPPARAM)
     })
@@ -136,7 +141,6 @@ aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_
             ls[[i]])
         names(pb) <- names(ls)
     }
-    md <- metadata(x)
     md$agg_pars <- list(assay = assay, by = by, fun = fun, scale = scale)
     pb <- SingleCellExperiment(pb, rowData = rowData(x), metadata = md)
     cd <- data.frame(colData(x)[, by])
