@@ -1,8 +1,17 @@
+# dreamlet 0.0.12
+- Oct 15, 2021
+- update print for `dreamletResult` using `coefNames()`
+- small bug fix
+
+# dreamlet 0.0.11
+- Oct 6, 2021
+- `removeConstantTerms()` now doesn't drop terms solely because of NA's
+	- this means that other functions can gracefully warn the user about NA's
+
 # dreamlet 0.0.10
 - Oct 5, 2021
 - suppress package startup messages in `aggregateToPseudoBulk()`
 - bug fix in `removeConstantTerms()`
-
 
 - Sept 30, 2021
 - call to `zenith_gsa()` adds argument `inter.gene.cor` and `progressbar`

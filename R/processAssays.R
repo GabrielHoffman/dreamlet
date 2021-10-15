@@ -9,6 +9,7 @@
 #' @param data metadata used in regression formula
 #' @param n.cells array of cell count for each sample
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
+#' @param useCountsWeights use cell count weights
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param min.count minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}
@@ -26,7 +27,7 @@
 #' @importFrom lme4 subbars
 #'
 #' @export
-processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, BPPARAM = SerialParam(),...){
+processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, useCountsWeights = TRUE, BPPARAM = SerialParam(),...){
 
     checkFormula( formula, data)
     if( is.null(n.cells) ){
@@ -50,9 +51,9 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 	# per sample weights based on cell counts in sceObj
 	w = n.cells[include] #weights by cell types
 
-	# convert vector of sample weights to full matrix
-	# each gene is weighted the same
-	weights = asMatrixWeights(w, dim=c(nrow(y), ncol(y)))
+	if( ! useCountsWeights ){
+		w[] = 1
+	}
 
 	if( isCounts ){
 
@@ -70,19 +71,24 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# 	this causes too many genes to be retained 
 		keep = suppressWarnings(filterByExpr(y, min.count=min.count))
 
-		# create EList object storing gene expression and sample weights
-		obj = new("EList", list(	E 	= y[keep,],
-		 						weights = weights[keep,,drop=FALSE]))
+		# convert vector of sample weights to full matrix
+		# each gene is weighted the same
+		# need here, because DGEList can drop genes
+		weights = asMatrixWeights(w, dim=c(nrow(y), ncol(y)))
 
 		# since the sample weights are already in y, don't need to 
 		# explicitly consider them here.
-		geneExpr = voomWithDreamWeights( obj, formula, data, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
+		geneExpr = voomWithDreamWeights( y[keep,], formula, data, weights = weights[keep,,drop=FALSE], BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
 
 		# save formula used after dropping constant terms
 		geneExpr$formula = formula
 	}else{
 	 	
-		# assumse already converted to log2 CPM
+		# convert vector of sample weights to full matrix
+		# each gene is weighted the same
+		weights = asMatrixWeights(w, dim=c(nrow(y), ncol(y)))
+
+		# assumes already converted to log2 CPM
 
 		# only include genes that show variation,
 		# and have at least 5 nonzero values
@@ -120,6 +126,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param min.count min.count used by \code{edgeR::filterByExpr}
 #' @param pmetadata sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula
 #' @param pkeys array of two strings indicating sample identifier and cell type identifier columns in pmetadata
+#' @param useCountsWeights use cell count weights
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
@@ -130,7 +137,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @export
-processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, quiet=FALSE, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, useCountsWeights=TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -177,7 +184,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 		data = merge_metadata(data_constant, pmetadata, pkeys, k)
 
 		# processing counts with voom or log2 CPM
-		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, BPPARAM=BPPARAM,...)
+		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, useCountsWeights=useCountsWeights, BPPARAM=BPPARAM,...)
 
 		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
 

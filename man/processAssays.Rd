@@ -13,6 +13,7 @@ processAssays(
   min.count = 10,
   pmetadata = NULL,
   pkeys = NULL,
+  useCountsWeights = TRUE,
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -34,6 +35,8 @@ processAssays(
 \item{pmetadata}{sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula}
 
 \item{pkeys}{array of two strings indicating sample identifier and cell type identifier columns in pmetadata}
+
+\item{useCountsWeights}{use cell count weights}
 
 \item{quiet}{show messages}
 

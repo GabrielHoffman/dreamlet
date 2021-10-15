@@ -70,8 +70,38 @@ setMethod("print", "dreamletResult",
 	    if (is.null(nms))
 	        nms <- character(length(metadata(x, withDimnames=FALSE)))
 	    coolcat("details(%d): %s\n", nms)
+
+	    # show coef names
+	    coolcat("coefNames(%d): %s\n", coefNames(x))
 	}
 )
+
+
+
+#' Get coefficient names
+#' 
+#' Get coefficient names
+#'
+#' @param obj A dreamletResult object
+#'
+#' @rdname coefNames-methods
+#' @export
+setGeneric('coefNames', function(obj){
+	standardGeneric("coefNames")
+	})
+
+#' @export
+#' @rdname coefNames-methods
+#' @aliases coefNames,dreamletResult-method
+#' @importFrom stats coef
+setMethod("coefNames", "dreamletResult",
+	function(obj){		
+
+	unique(c(unlist(sapply(obj, function(x) colnames(coef(x))))))
+})
+
+
+
 
 
 
@@ -184,6 +214,9 @@ setMethod("topTable", signature(fit="dreamletResult"),
 		})
 		# combine across assays
 		res = DataFrame(do.call(rbind, res))
+
+		# remove rownames
+		rownames(res) = c()
 
 		# apply multiple testing across *all* tests
 		# subset based on number afterwards

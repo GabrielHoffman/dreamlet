@@ -1,7 +1,28 @@
 
+Oct 15
+	voomWithQualityWeights using weights
+
+	I think to be fully correct you would need a version of arrayWeights that does mixed models
+	I think you can pretty much copy the code for limma:::.arrayWeightsGeneByGene except that you’d replace the call to lm.wfit with the equivalent mixed model fit, and then you’d probably replace the loop with equivalent BiocParallel code to make it fast.
 
 
 August 25:
+
+	write function to extra cell type counts
+
+	compositionCounts(sce)
+
+	cellTypeCompositionTest() 
+		extend to test multiple factors at the same time
+		- use cell count weights for logit frac
+
+
+	variancePartition and dream uses too many threads per fork
+		RhpcBLASctl?
+
+	When there is an NA in a covariate in dreamlet,
+		dream warns each time.
+	Instead have dreamlet warn once
 
 	Show progress for processAssays like for dreamlet
 

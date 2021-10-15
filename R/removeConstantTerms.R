@@ -28,6 +28,11 @@ removeConstantTerms = function(formula, data){
 	stopifnot(is(formula, "formula"))
 	stopifnot(is(data, "data.frame"))
 
+	# only retain columns used in the formula
+	# Therefore, NA values in variable not used in the formula are ok
+	data = data[, colnames(data) %in% unique(all.vars(formula)), drop=FALSE]
+	data = droplevels(data)
+
 	# throw error if variable is not in data
 	checkFormula( formula, data)
 
@@ -50,7 +55,10 @@ removeConstantTerms = function(formula, data){
 	data = droplevels(data[,idx, drop=FALSE])
 
 	# identify variables with no variation
-	excludeVarConstant = names(which(apply(data, 2L, function(x) all(x == x[1L], na.rm=TRUE))))
+	excludeVarConstant = names(which(apply(data, 2L, function(x){
+		x = x[!is.na(x)]
+		all(x == x[1L], na.rm=TRUE)
+		})))
 	
 	# identify categorical variables with only single examples per category
 	excludeVarCat = sapply(data, function(x){

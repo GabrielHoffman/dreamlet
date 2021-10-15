@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.11</span>
       </span>
     </div>
 
@@ -140,6 +140,7 @@
   min.count <span class='op'>=</span> <span class='fl'>10</span>,
   pmetadata <span class='op'>=</span> <span class='cn'>NULL</span>,
   pkeys <span class='op'>=</span> <span class='cn'>NULL</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
   BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -178,6 +179,10 @@
     <tr>
       <th>pkeys</th>
       <td><p>array of two strings indicating sample identifier and cell type identifier columns in pmetadata</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>show messages</p></td>
     </tr>
     <tr>
       <th>BPPARAM</th>

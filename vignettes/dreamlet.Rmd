@@ -65,6 +65,7 @@ library(kableExtra)
 eh <- ExperimentHub()
 sce <- eh[["EH2259"]]
 sce <- sce[rowSums(counts(sce) > 0) > 0, ]
+sce <- sce[,colData(sce)$multiplets == 'singlet']
 
 qc <- perCellQCMetrics(sce)
 
