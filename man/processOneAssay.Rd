@@ -13,6 +13,7 @@ processOneAssay(
   isCounts = TRUE,
   normalize.method = "TMM",
   min.count = 10,
+  useCountsWeights = TRUE,
   BPPARAM = SerialParam(),
   ...
 )
@@ -33,6 +34,8 @@ processOneAssay(
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
 \item{min.count}{minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
+
+\item{useCountsWeights}{use cell count weights}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

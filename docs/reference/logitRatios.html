@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Forrest plot — plotForrest • dreamlet</title>
+<title>Compute logit ratios and their precisions — logitRatios • dreamlet</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Forrest plot — plotForrest" />
-<meta property="og:description" content="Forrest plot" />
+<meta property="og:title" content="Compute logit ratios and their precisions — logitRatios" />
+<meta property="og:description" content="Compute logit ratios and their precisions given a matrix of counts" />
 <meta property="og:image" content="/logo.svg" />
 
 
@@ -122,34 +122,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Forrest plot</h1>
-    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/plotForrest.R'><code>R/plotForrest.R</code></a></small>
-    <div class="hidden name"><code>plotForrest.Rd</code></div>
+    <h1>Compute logit ratios and their precisions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/logitRatios.R'><code>R/logitRatios.R</code></a></small>
+    <div class="hidden name"><code>logitRatios.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Forrest plot</p>
+    <p>Compute logit ratios and their precisions given a matrix of counts</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotForrest</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>coef</span>, <span class='va'>gene</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>logitRatios</span><span class='op'>(</span><span class='va'>data</span>, pc <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span>
+
+<span class='co'># S4 method for matrix</span>
+<span class='fu'>logitRatios</span><span class='op'>(</span><span class='va'>data</span>, pc <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span>
+
+<span class='co'># S4 method for SingleCellExperiment</span>
+<span class='fu'>logitRatios</span><span class='op'>(</span><span class='va'>data</span>, pc <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>result from <code>dreamlet</code></p></td>
+      <th>data</th>
+      <td><p>matrix of counts where rows are samples and columns are categories, or object that this information can be extracted from</p></td>
     </tr>
     <tr>
-      <th>coef</th>
-      <td><p>coefficient to test with <code>topTable</code></p></td>
-    </tr>
-    <tr>
-      <th>gene</th>
-      <td><p>gene to show results for</p></td>
+      <th>pc</th>
+      <td><p>pseudocount</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>EList</code> defined by limma storing logit ratio in <code>E</code> and precisions in <code>weights</code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Let \(c1 \sim \Gamma(\alpha, 1)\), \(c2 \sim \Gamma(\beta, 1)\) and \(x = \frac{c1}{c2}\), then \(x \sim B(\alpha, \beta)\), the expected value of \(x\) is \(E[x] = \frac{\alpha}{\beta}\).  The expected log is \(E[\log(x)] = \psi(\alpha) - \psi(\alpha - \beta)\), where \(\psi()\) is the <code><a href='https://rdrr.io/r/base/Special.html'>digamma()</a></code> function.</p>
+<p>The variance of the logit transformed fraction is \(var[log(\frac{x}{1-x})] = \psi_1(\alpha) + \psi_1(\beta)\), where \(\psi_1()\) is the <code><a href='https://rdrr.io/r/base/Special.html'>trigamma()</a></code> function. For sufficiently large values of \(\alpha\) and \(\beta\), this is well approximated by \(1/\alpha + 1/\beta\).</p>
+<p>The counts producing these ratios are discrete.  But approximating the counts by \(\Gamma(\lambda, 1)\) instead of \(Pois(\lambda)\) matches the first two moments exactly.</p>
+<p>See <a href='https://en.wikipedia.org/wiki/Beta_distribution#Moments_of_logarithmically_transformed_random_variables'>https://en.wikipedia.org/wiki/Beta_distribution#Moments_of_logarithmically_transformed_random_variables</a></p>
+<p>Since <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code> and <code><a href='https://rdrr.io/r/base/Special.html'>trigamma()</a></code> are not defined at zero, add a pseudocount of 0.25.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

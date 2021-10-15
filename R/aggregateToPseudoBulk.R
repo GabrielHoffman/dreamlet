@@ -108,7 +108,7 @@
 #' 
 #' @importFrom Matrix colSums
 #' @importFrom purrr map
-#' @importFrom S4Vectors DataFrame metadata
+#' @importFrom S4Vectors DataFrame metadata metadata<-
 #' @importFrom SingleCellExperiment SingleCellExperiment int_colData<-
 #' @importFrom SummarizedExperiment rowData colData colData<-
 #' @export
