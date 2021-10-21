@@ -88,6 +88,12 @@ testComposition = function( countMatrix, formula, data, coef, eval = c("test", "
 	method = match.arg(method)
 	eval = match.arg(eval)
 
+	# if add pseudocount
+	# log cannot handle zero counts
+	if(method == 'lmlog'){
+		countMatrix = countMatrix + .25
+	}
+
 	# extract cell counts and other meta-data
 	data = data.frame(data, countMatrix, TotalCells = rowSums(countMatrix), check.names=FALSE)
 
@@ -130,7 +136,7 @@ testComposition = function( countMatrix, formula, data, coef, eval = c("test", "
     !is.null(findbars(as.formula(formula)))
 }
 
-#' @importFrom aod betabin
+#' @importFrom aod betabin summary
 #' @importFrom MASS glm.nb
 #' @importFrom lme4 glmer glmer.nb lmerControl glmerControl .makeCC
 #' @importFrom lmerTest lmer
