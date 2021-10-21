@@ -2,6 +2,7 @@
 - Oct 15, 2021
 - update print for `dreamletResult` using `coefNames()`
 - small bug fix
+- fix bugs in `regModel()`
 
 # dreamlet 0.0.11
 - Oct 6, 2021
