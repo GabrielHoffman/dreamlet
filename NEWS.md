@@ -1,3 +1,7 @@
+# dreamlet 0.0.13
+- Oct 25, 2021
+- add `ilr_composition_test.R`
+
 # dreamlet 0.0.12
 - Oct 15, 2021
 - update print for `dreamletResult` using `coefNames()`
