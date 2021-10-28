@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Processing SingleCellExperiment to dreamletProcessedData — processAssays" />
 <meta property="og:description" content="For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells" />
-<meta property="og:image" content="/logo.svg" />
+<meta property="og:image" content="http://gabrielhoffman.github.io/dreamlet/logo.svg" />
 
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.14</span>
       </span>
     </div>
 
@@ -140,6 +140,7 @@
   min.count <span class='op'>=</span> <span class='fl'>10</span>,
   pmetadata <span class='op'>=</span> <span class='cn'>NULL</span>,
   pkeys <span class='op'>=</span> <span class='cn'>NULL</span>,
+  useCountsWeights <span class='op'>=</span> <span class='cn'>TRUE</span>,
   quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
   BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>,
   <span class='va'>...</span>
@@ -181,6 +182,10 @@
       <td><p>array of two strings indicating sample identifier and cell type identifier columns in pmetadata</p></td>
     </tr>
     <tr>
+      <th>useCountsWeights</th>
+      <td><p>use cell count weights</p></td>
+    </tr>
+    <tr>
       <th>quiet</th>
       <td><p>show messages</p></td>
     </tr>
@@ -206,7 +211,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Gabriel Hoffman.</p>
+  <p>Developed by <a href='http://gabrielhoffman.github.io'>Gabriel Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown">

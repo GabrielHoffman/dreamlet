@@ -1,7 +1,10 @@
-pandoc: 2.14.0.3
+pandoc: 2.14.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   dreamlet: dreamlet.html
-last_built: 2021-09-30T19:36Z
+last_built: 2021-10-28T20:41Z
+urls:
+  reference: http://gabrielhoffman.github.io/dreamlet/reference
+  article: http://gabrielhoffman.github.io/dreamlet/articles
 

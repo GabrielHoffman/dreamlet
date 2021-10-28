@@ -184,6 +184,8 @@ plotCellComposition(pb)
 
 Perform statistical testss
 ```{r ctc.crumblr}
+library(crumblr)
+
 # get transformed counts and precision weights with crumblr
 cobj = crumblr( cellCounts(pb) )
 
