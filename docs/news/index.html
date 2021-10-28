@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Changelog" />
-<meta property="og:image" content="/logo.svg" />
+<meta property="og:image" content="http://gabrielhoffman.github.io/dreamlet/logo.svg" />
 
 
 
@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.14</span>
       </span>
     </div>
 
@@ -125,16 +125,58 @@
       <small>Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="dreamlet-009" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.9">
-<a href="#dreamlet-009" class="anchor"></a>dreamlet 0.0.9</h1>
+    <div id="dreamlet-0014" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.14">
+<a href="#dreamlet-0014" class="anchor"></a>dreamlet 0.0.14</h1>
 <ul>
-<li>Sept 30, 2021</li>
-<li>call to <code><a href="../reference/zenith_gsa.html">zenith_gsa()</a></code> adds argument <code>inter.gene.cor</code> and <code>progressbar</code>
+<li>move count ratio code to crumblr package</li>
+</ul>
+</div>
+    <div id="dreamlet-0013" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.13">
+<a href="#dreamlet-0013" class="anchor"></a>dreamlet 0.0.13</h1>
+<ul>
+<li>Oct 25, 2021</li>
+<li>add <code>ilr_composition_test.R</code>
 </li>
-<li>fix output to <code><a href="../reference/cellTypeCompositionVarPart.html">cellTypeCompositionVarPart()</a></code> and <code><a href="../reference/cellTypeCompositionTest.html">cellTypeCompositionTest()</a></code>
+</ul>
+</div>
+    <div id="dreamlet-0012" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.12">
+<a href="#dreamlet-0012" class="anchor"></a>dreamlet 0.0.12</h1>
+<ul>
+<li>Oct 15, 2021</li>
+<li>update print for <code>dreamletResult</code> using <code><a href="../reference/coefNames.html">coefNames()</a></code>
 </li>
-<li>fix issue with <code>topTable()</code> where FDR was evaluated on only a subset of genes</li>
+<li>small bug fix</li>
+<li>fix bugs in <code>regModel()</code>
+</li>
+</ul>
+</div>
+    <div id="dreamlet-0011" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.11">
+<a href="#dreamlet-0011" class="anchor"></a>dreamlet 0.0.11</h1>
+<ul>
+<li>Oct 6, 2021</li>
+<li>
+<code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> now doesn’t drop terms solely because of NA’s
+<ul>
+<li>this means that other functions can gracefully warn the user about NA’s</li>
+</ul>
+</li>
+</ul>
+</div>
+    <div id="dreamlet-0010" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.10">
+<a href="#dreamlet-0010" class="anchor"></a>dreamlet 0.0.10</h1>
+<ul>
+<li><p>Oct 5, 2021</p></li>
+<li><p>suppress package startup messages in <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code></p></li>
+<li><p>bug fix in <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code></p></li>
+<li><p>Sept 30, 2021</p></li>
+<li><p>call to <code><a href="../reference/zenith_gsa.html">zenith_gsa()</a></code> adds argument <code>inter.gene.cor</code> and <code>progressbar</code></p></li>
+<li><p>fix output to <code>cellTypeCompositionVarPart()</code> and <code>cellTypeCompositionTest()</code></p></li>
+<li><p>fix issue with <code>topTable()</code> where FDR was evaluated on only a subset of genes</p></li>
 </ul>
 </div>
     <div id="dreamlet-008" class="section level1">
@@ -154,7 +196,7 @@
 <a href="#dreamlet-007" class="anchor"></a>dreamlet 0.0.7</h1>
 <ul>
 <li>Sept 2, 2021</li>
-<li>add <code><a href="../reference/cellTypeCompositionTest.html">cellTypeCompositionTest()</a></code>
+<li>add <code>cellTypeCompositionTest()</code>
 <ul>
 <li>handle random effects</li>
 </ul>
@@ -229,7 +271,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Gabriel Hoffman.</p>
+  <p>Developed by <a href='http://gabrielhoffman.github.io'>Gabriel Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown">

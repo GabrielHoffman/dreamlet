@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Aggregation of single-cell to pseudobulk data — aggregateToPseudoBulk" />
 <meta property="og:description" content="Aggregation of single-cell to pseudobulk data.  Adapted from muscat::aggregateData and has same syntax and results.  But can be much faster in for SingleCellExperiment backed by H5AD files" />
-<meta property="og:image" content="/logo.svg" />
+<meta property="og:image" content="http://gabrielhoffman.github.io/dreamlet/logo.svg" />
 
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.14</span>
       </span>
     </div>
 
@@ -215,7 +215,7 @@ doi: <a href='https://doi.org/10.1101/713412'>https://doi.org/10.1101/713412</a>
 <span class='co'># pseudobulk counts by cluster-sample</span>
 <span class='fu'><a href='https://rdrr.io/pkg/muscat/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>example_sce</span><span class='op'>)</span>
 <span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span><span class='va'>example_sce</span>, verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in metadata(x) = list(): could not find function "metadata&lt;-"</span></div><div class='input'>
+
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>SingleCellExperiment</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MatrixGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: matrixStats</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘MatrixGenerics’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:matrixStats’:</span>
@@ -670,7 +670,7 @@ doi: <a href='https://doi.org/10.1101/713412'>https://doi.org/10.1101/713412</a>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Gabriel Hoffman.</p>
+  <p>Developed by <a href='http://gabrielhoffman.github.io'>Gabriel Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown">

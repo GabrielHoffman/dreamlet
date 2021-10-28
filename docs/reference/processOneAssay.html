@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Processing expression data from assay — processOneAssay" />
 <meta property="og:description" content="For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells" />
-<meta property="og:image" content="/logo.svg" />
+<meta property="og:image" content="http://gabrielhoffman.github.io/dreamlet/logo.svg" />
 
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.14</span>
       </span>
     </div>
 
@@ -140,6 +140,7 @@
   isCounts <span class='op'>=</span> <span class='cn'>TRUE</span>,
   normalize.method <span class='op'>=</span> <span class='st'>"TMM"</span>,
   min.count <span class='op'>=</span> <span class='fl'>10</span>,
+  useCountsWeights <span class='op'>=</span> <span class='cn'>TRUE</span>,
   BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -180,6 +181,10 @@
       <td><p>minimum number of reads for a gene to be consider expressed in a sample.  Passed to <code><a href='https://rdrr.io/pkg/edgeR/man/filterByExpr.html'>edgeR::filterByExpr</a></code></p></td>
     </tr>
     <tr>
+      <th>useCountsWeights</th>
+      <td><p>use cell count weights</p></td>
+    </tr>
+    <tr>
       <th>BPPARAM</th>
       <td><p>parameters for parallel evaluation</p></td>
     </tr>
@@ -201,7 +206,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Gabriel Hoffman.</p>
+  <p>Developed by <a href='http://gabrielhoffman.github.io'>Gabriel Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown">
