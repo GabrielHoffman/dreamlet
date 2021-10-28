@@ -1,6 +1,10 @@
 # Gabriel Hoffman
 # Oct 25, 2021
 
+# Count Ratio Uncertainty Modelling Based Linear Regression
+# CRUMBLR
+
+
 # create class to store resilt of compositionTest
 # @importFrom variancePartition MArrayLM2
 # setClass("MArrayLM2_ilr", representation("MArrayLM2", V.back = "matrix"))
@@ -79,28 +83,55 @@ compositionTest = function(counts, formula, info, pseudocount=.1, useWeights=TRU
 	res
 }
 
-# need to return variances, rathern than variance fractions
-# @export
-# compositionVP = function(counts, formula, info, pseudocount=.1, BPPARAM=SerialParam()){
+#' Variance Partition analysis on compositions
+#' 
+#' Variance Partition analysis on composition changes using linear (mixed) models using log ratio of counts
+#' 
+#' @param counts count data
+#' @param formula regression formula for independent variables
+#' @param info data.frame storing variables in formula
+#' @param pseudocount added to counts to avoid issues with zeros
+#' @param useWeights default: TRUE. If TRUE use precision weights, else ignore weights
+#' @param BPPARAM parameters for parallel evaluation
+#' 
+#' @importFrom compositions ilrBase
+#' @importFrom variancePartition fitVarPartModel calcVarPart
+#' @export
+compositionVarPart = function(counts, formula, info, pseudocount=.1, useWeights=TRUE, BPPARAM=SerialParam() ){
 
-# 	# eval ILR transform with precision weights
-# 	cobj = ilrWithPrecisionWeights( counts, pseudocount=pseudocount )
+	# eval ILR transform with precision weights
+	cobj = ilrWithPrecisionWeights( counts, pseudocount=pseudocount )
 
-# 	# fit regression models
-# 	vc.ilr = fitVarPartModel( cobj, formula, info, BPPARAM=BPPARAM, fxn=function(fit){
-# 		calcVarPart(fit, returnFraction=FALSE)
-# 	})
-# 	vc.ilr = do.call(rbind, vc.ilr)
+	if( ! useWeights ){
+		cobj$weights[] = 1
+	}
 
-# 	# get matrix to perform back-transfrom from ilr -> clr
-# 	V.back = ilrBase(z=t(vc.ilr))
+	# fit regression models
+	vc.ilr = fitVarPartModel( cobj, formula, info, BPPARAM=BPPARAM, fxn=function(fit){
+		calcVarPart(fit, returnFractions=FALSE)
+		})
+	vc.ilr = do.call(rbind, vc.ilr)
 
-# 	# Does ilr -> clr transform for variances work for variance fractions?
-# 	vp.backtransform = diag(V.back %*% tcrossprod(vc.ilr, V.back))
+	# get matrix to perform back-transfrom from ilr -> clr
+	V.back = ilrBase(z=t(vc.ilr))
+	colnames(V.back) = paste0("ilr_", seq_len(ncol(V.back)))
+	rownames(V.back) = colnames(counts)
 
-# 	# enforce closure so components sum to 1
-# 	apply(vp.backtransform, 1, function(x) x / sum(x))
-# }
+	# transform each column	
+	# Does ilr -> clr transform for variances work for variance fractions?
+	t_V.back = t(V.back)
+	vc.clr = apply(vc.ilr, 2, function(x){
+		 # diag(V.back %*% tcrossprod(diag(x), V.back))
+
+		 # equivalent but faster for large V
+		 colSums((x * t_V.back) * t_V.back)
+		})
+
+	# normalize rows to get fractions that sum to 1
+	vp.clr = t(apply(vc.clr, 1, function(x) x/sum(x)))
+
+	data.frame(vp.clr)
+}
 
 
 
@@ -184,6 +215,10 @@ setMethod("topTable", "MArrayLM2_ilr",
        lfc = 0,
        confint = FALSE){
 
+	if( length(coef) > 1){
+		stop("Tests of multiple coefficients not currently supported")
+	}
+
 	# extract results using standard topTable
 	# then back-transform the results from ilr -> clr space	
 	if( fit$original[1] == "MArrayLM"){
@@ -192,7 +227,7 @@ setMethod("topTable", "MArrayLM2_ilr",
 		fit.orig = as(fit, "MArrayLM2")
 	}
 
-	tab = topTable(fit.orig, coef=coef, number=number, genelist=genelist, adjust.method=adjust.method, sort.by=sort.by, resort.by=resort.by, p.value=p.value, lfc=lfc, confint=confint)
+	tab = topTable(fit.orig, coef=coef, number=number, genelist=genelist, adjust.method=adjust.method, sort.by="none", resort.by=resort.by, p.value=p.value, lfc=lfc, confint=confint)
 
 	# extract coefficients
 	beta_irl = tab$logFC
@@ -200,15 +235,16 @@ setMethod("topTable", "MArrayLM2_ilr",
 	# back-transform is motivated by 
 	# ilrInv(coef(fit)[,coef], orig = counts )
 
-	# create back-transform matrix: ilr -> clr
-	# fit$V.back
-
 	# apply back-transform to coefficients
+	# fit$V.back is back-transform matrix: ilr -> clr
 	beta = tcrossprod(beta_irl, fit$V.back)	
 
 	# back-transform variance
 	se = with(tab, logFC/t)
-	beta.se = sqrt(diag(fit$V.back %*% tcrossprod(se^2, fit$V.back)))
+	# beta.se = sqrt(diag(fit$V.back %*% tcrossprod(diag(se^2), fit$V.back)))
+
+	# equivalent but faster for large V ()
+	beta.se = sqrt(colSums((se^2 * t(fit$V.back)) * t(fit$V.back)))
 
 	# compute t-statistic on clr scale
 	tstat = c(beta / beta.se)
@@ -221,3 +257,12 @@ setMethod("topTable", "MArrayLM2_ilr",
 				P.Value 	= p.value,
 				adj.P.Val 	= p.adjust(p.value, "fdr"))
 })
+
+
+
+
+
+
+
+
+
