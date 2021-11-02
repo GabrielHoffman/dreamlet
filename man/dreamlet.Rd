@@ -15,6 +15,7 @@ dreamlet(
   robust = FALSE,
   quiet = FALSE,
   BPPARAM = SerialParam(),
+  use.eBayes = TRUE,
   ...
 )
 

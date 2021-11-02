@@ -256,7 +256,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #'
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
 
 	standardGeneric("dreamlet")
 })
