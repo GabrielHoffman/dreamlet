@@ -3,11 +3,6 @@
 #
 # dreamlet uses linear mixed models in dream to perform differential expression in single cell data
 
-#
-# need to adapt voomByDreamWeights to allow per sample weights
-# see use of sample weights here: 
-# https://rdrr.io/bioc/limma/src/R/voomWithQualityWeights.R
-
 # local definition so methods in this file have this class
 setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', pkeys="vector"))
 
@@ -332,8 +327,10 @@ setMethod("dreamlet", "dreamletProcessedData",
 					fit = fit[keep,]
 				}
 
-				# borrow information across genes with the Empircal Bayes step
-				fit = eBayes(fit, robust=robust, trend=!geneExpr$isCounts)
+				if( ! missing(omiteBayes) ){
+					# borrow information across genes with the Empircal Bayes step
+					fit = eBayes(fit, robust=robust, trend=!geneExpr$isCounts)
+				}
 			}else{	
 				fit = NULL
 			}
