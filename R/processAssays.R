@@ -48,11 +48,11 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 	y = y[,include,drop=FALSE] 
 	data = droplevels(data[include,,drop=FALSE])
 
-	# per sample weights based on cell counts in sceObj
-	w = n.cells[include] #weights by cell types
+	# sample-level weights based on cell counts
+	w_cells = n.cells[include] 
 
 	if( ! useCountsWeights ){
-		w[] = 1
+		w_cells[] = 1
 	}
 
 	if( isCounts ){
@@ -71,23 +71,19 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 		# 	this causes too many genes to be retained 
 		keep = suppressWarnings(filterByExpr(y, min.count=min.count))
 
-		# convert vector of sample weights to full matrix
-		# each gene is weighted the same
-		# need here, because DGEList can drop genes
-		weights = asMatrixWeights(w, dim=c(nrow(y), ncol(y)))
+		# weights from w_cells are used in calculating residuals that 
+		# voom uses to compute precision weights
+		geneExpr = voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
 
-		# since the sample weights are already in y, don't need to 
-		# explicitly consider them here.
-		geneExpr = voomWithDreamWeights( y[keep,], formula, data, weights = weights[keep,,drop=FALSE], BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
+		# combine empirical weights from voomWithDreamWeights
+		# with weighting by the number of cells
+		# w = w_cells - mean(w_cells)
+		# geneExpr = applyQualityWeights(geneExpr, w_cells)
 
 		# save formula used after dropping constant terms
 		geneExpr$formula = formula
 	}else{
 	 	
-		# convert vector of sample weights to full matrix
-		# each gene is weighted the same
-		weights = asMatrixWeights(w, dim=c(nrow(y), ncol(y)))
-
 		# assumes already converted to log2 CPM
 
 		# only include genes that show variation,
@@ -98,7 +94,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 
 		# if data is already log2 CPM
 		# create EList object storing gene expression and sample weights
-		geneExpr = new("EList", list(E=y[include,,drop=FALSE], weights = weights[include,,drop=FALSE]))
+		geneExpr = new("EList", list(E=y[include,,drop=FALSE], weights = w_cells))
 
 		geneExpr$formula = ~ 0
 	}

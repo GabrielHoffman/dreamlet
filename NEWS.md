@@ -1,5 +1,6 @@
 # dreamlet 0.0.14
 - move count ratio code to crumblr package
+- use `applyQualityWeights()`
 
 # dreamlet 0.0.13
 - Oct 25, 2021
