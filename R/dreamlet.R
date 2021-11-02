@@ -271,7 +271,7 @@ setGeneric("dreamlet",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -327,7 +327,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 					fit = fit[keep,]
 				}
 
-				if( ! missing(omiteBayes) ){
+				if( use.eBayes ){
 					# borrow information across genes with the Empircal Bayes step
 					fit = eBayes(fit, robust=robust, trend=!geneExpr$isCounts)
 				}
