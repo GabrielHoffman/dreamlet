@@ -1,3 +1,7 @@
+# dreamlet 0.0.15
+- `processOneAssay()` weights by number of cells
+- require `variancePartition >= 1.25.1` to handle weights in `voomWithDreamWeights()`
+
 # dreamlet 0.0.14
 - move count ratio code to crumblr package
 - use `applyQualityWeights()`
