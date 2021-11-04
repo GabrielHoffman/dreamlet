@@ -204,7 +204,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 			if( is.null(genelist) ) genelist = rownames(fit1)
 
-			tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, p.value=p.value, lfc=lfc, confint=confint)
+			tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
 			data.frame(assay = k, tab)
 		})
 		# combine across assays
@@ -217,20 +217,22 @@ setMethod("topTable", signature(fit="dreamletResult"),
 		# subset based on number afterwards
 		res$adj.P.Val = p.adjust( res$P.Value, adjust.method)
 
+		opt = c('logFC', 'AveExpr', 'P', 't', 'B', 'none')
+		if( ! sort.by %in% opt){
+			stop("sort.by must be in: ", paste0(opt, collapse=', '))
+		}
+
 		# sorting
 		ord <- switch(sort.by, logFC = order(abs(res$logFC), decreasing = TRUE), 
 			AveExpr = order(res$AveExpr, decreasing = TRUE), 
 			P = order(res$P.Value, decreasing = FALSE), 
 			t = order(abs(t), decreasing = TRUE), 
-			B = order(res$B, decreasing = TRUE), none = seq_len(nrow(res)) )
+			B = order(res$B, decreasing = TRUE), 
+			none = seq_len(nrow(res)) )
 
 		head(res[ord,], number)
 	}
 )
-
-
-
-
 
 
 #' Differential expression for each assay
@@ -247,6 +249,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 # @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
+#' @param use.eBayes should \code{eBayes} be used on result? (defualt: TRUE)
 #' @param ... other arguments passed to \code{dream}
 #'
 #' @import BiocParallel  
@@ -267,6 +270,7 @@ setGeneric("dreamlet",
 #' @importFrom variancePartition getContrast dream
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
+#' @import Rdpack
 #' @export
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method

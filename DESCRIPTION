@@ -48,8 +48,6 @@ Imports:
     S4Vectors,
     limma,
     ComplexHeatmap,
-    MASS,
-    lmerTest,
     circlize,
     reshape2,
     gtools,

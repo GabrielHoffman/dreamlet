@@ -52,6 +52,8 @@ dreamlet(
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
+\item{use.eBayes}{should \code{eBayes} be used on result? (defualt: TRUE)}
+
 \item{...}{other arguments passed to \code{dream}}
 }
 \description{
