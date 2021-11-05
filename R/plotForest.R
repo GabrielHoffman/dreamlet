@@ -1,9 +1,8 @@
 
-#' Forrest plot
+#' Forest plot
 #'
-#' Forrest plot
+#' Forest plot
 #'
-
 #' @param x result from \code{dreamlet}
 #' @param coef coefficient to test with \code{topTable}
 #' @param gene gene to show results for
@@ -11,7 +10,7 @@
 #' @import variancePartition limma
 #' @import ggplot2
 #' @export
-plotForrest = function(x, coef, gene){
+plotForest = function(x, coef, gene){
 
 	# Pass R CMD check
 	Assay = logFC = FDR = se = NULL

@@ -4,8 +4,6 @@ subtitle: 'Linear mixed model analysis of pseudobulk'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
-abstract: >
- As the scale of single cell/nucleus RNA-seq has increased, so has the complexity of study designs.  Analysis of datasets with simple study designs can be performed using linear model as in the [muscat package](https://bioconductor.org/packages/muscat).  Yet analysis of datsets with complex study designs such as repeated measures or many technical batches can benefit from linear mixed model analysis to model to correlation structure between samples.  Dreamlet extends the previous work of [muscat](https://www.nature.com/articles/s41467-020-19894-4) to apply linear mixed models to pseudobulk data.  Dreamlet also supports linear models and facilitates application of 1) [variancePartition](https://bioconductor.org/packages/variancePartition) to quantify the contribution of multiple variables to expression variation, and 2) [zenith](https://github.com/GabrielHoffman/zenith) to perform gene set analysis on the differential expression signatures. 
 vignette: >
   %\VignetteIndexEntry{Dreamlet analysis of single cell RNA-seq}
   %\VignetteEngine{knitr::rmarkdown}
@@ -47,12 +45,16 @@ knitr::opts_chunk$set(
   cache = TRUE)
 ```
 
-Analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).
-
-Coming soon: Describe pseudobulk, complex study design, variancePartition, and zenith.
+ As the scale of single cell/nucleus RNA-seq has increased, so has the complexity of study designs.  Analysis of datasets with simple study designs can be performed using linear model as in the [muscat package](https://bioconductor.org/packages/muscat).  Yet analysis of datsets with complex study designs such as repeated measures or many technical batches can benefit from linear mixed model analysis to model to correlation structure between samples.  We previously developed [dream](https://doi.org/10.1093/bioinformatics/btaa687) to apply linear mixed models to bulk RNA-seq data using a [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)-style workflow.  Dreamlet extends the previous work of dream and [muscat](https://www.nature.com/articles/s41467-020-19894-4) to apply linear mixed models to pseudobulk data.  Dreamlet also supports linear models and facilitates application of 1) [variancePartition](https://bioconductor.org/packages/variancePartition) to quantify the contribution of multiple variables to expression variation, and 2) [zenith](https://github.com/GabrielHoffman/zenith) to perform gene set analysis on the differential expression signatures. 
 
 # Process single cell counts
+
+Here we perform analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).  This is a small dataset that does not have repeated measures or high dimensional batch effects, so the sophisticated features of dreamlet are not strictly necessary.  But this gives us a oppurtunity to walk through a standard dreamlet workflow.
+
+
 ## Preprocess data
+Here single cell RNA-seq data is downloaded from [ExperimentHub](https://bioconductor.org/packages/ExperimentHub/)
+
 ```{r preprocess.data}
 library(dreamlet)
 library(muscat)
@@ -62,92 +64,157 @@ library(zenith)
 library(scater)
 library(kableExtra)
 
+# Download data, specifying EH2259 for the Kang, et al study
 eh <- ExperimentHub()
 sce <- eh[["EH2259"]]
+
+# only keep singlet cells with sufficient reads
 sce <- sce[rowSums(counts(sce) > 0) > 0, ]
 sce <- sce[,colData(sce)$multiplets == 'singlet']
 
+# compute QC metrics
 qc <- perCellQCMetrics(sce)
 
 # remove cells with few or many detected genes
 ol <- isOutlier(metric = qc$detected, nmads = 2, log = TRUE)
 sce <- sce[, !ol]
 
+# compute normalized data
 sce <- sce[rowSums(counts(sce) > 1) >= 10, ]
 sce <- computeLibraryFactors(sce)
 sce <- logNormCounts(sce)
+
+# set variable indicating stimulated (stim) or control (ctrl)
+sce$StimStatus = sce$stim
 ```
 
 ## Aggregate to pseudobulk
-```{r aggregate}
-sce$id <- paste0(sce$stim, sce$ind)
-sce <- prepSCE(sce, 
-    kid = "cell", # subpopulation assignments
-    gid = "stim",  # group IDs (ctrl/stim)
-    sid = "id",   # sample IDs (ctrl/stim.1234)
-    drop = TRUE)
+Dreamlet, like muscat, performs analysis at the pseudobulk-level by summing reads across cells for a given sample and cell type.  `aggregateToPseudoBulk` is substantially faster for large on-disk datasets than [`muscat::aggregateData`](https://rdrr.io/bioc/muscat/man/aggregateData.html).
 
+
+
+```{r aggregate}
+# Since 'ind' is the individual and 'StimStatus' is the stimulus status,
+# create unique identifier for each sample
+sce$id <- paste0(sce$StimStatus, sce$ind)
+
+# Create pseudobulk data by specifying cluster_id and sample_id
+# Count data for each cell type is then stored in the `assay` field
+# assay: entry in assayNames(sce) storing raw counts
+# cluster_id: variable in colData(sce) indicating cell clusters
+# sample_id: variable in colData(sce) indicating sample id for aggregating cells
 pb <- aggregateToPseudoBulk(sce,
-    assay = "counts", fun = "sum",
-    by = c("cluster_id", "sample_id"),
+    assay = "counts",     
+    cluster_id = "cell",  
+    sample_id = "id",
     verbose = FALSE)
 
-# one 'assay' per subpopulation
+# one 'assay' per cell type
 assayNames(pb)
 ```
 
 # Voom for pseudobulk 
+Apply [voom](https://rdrr.io/bioc/limma/man/voom.html)-style normalization for pseudobulk counts within each cell cluster using [voomWithDreamWeights](https://gabrielhoffman.github.io/variancePartition/reference/voomWithDreamWeights.html) to handle random effects (if specified).     
+
 ```{r dreamlet, fig.width=8, fig.height=8}
-# Normalize and apply voom
-res.proc = processAssays( pb, ~ group_id, min.count=5)
-  
+# Normalize and apply voom/voomWithDreamWeights
+res.proc = processAssays( pb, ~ StimStatus, min.count=5)
+
+# the resulting object of class dreamletProcessedData stores 
+# normalized data and other information
+res.proc
+```
+
+`processAssays()` retains samples with at least `min.cells` in a given cell type.  While dropping a few samples usually is not a problem, in some cases dropping sames can mean that a variable included in the regression formula no longer has any variation.  For example, dropping all stimulated samples from analysis of a given cell type would be mean the variable `StimStatus` has no variation and is perfectly colinear with the intercept term.  This colinearity issue is detected internally and variables with these problem are dropped from the regression formula for that particular cell type.  The number of samples retained and the resulting formula used in each cell type can be accessed as follows.  In this analysis, samples are dropped from 3 cell types but the original formula remains valid in each case.               
+```{r details}
+# view details of dropping samples
+details(res.proc)
+```
+
+Here the mean-variance trend from voom is shown for each cell type.  Cell types with sufficient number of cells and reads show a clear mean-variance trend.  While in rare cell types like megakaryocytes, fewer genes have sufficient reads and the trend is less apparent.
+
+```{r voom.plots, fig.height=7}
+# show voom plot for each cell clusters  
 plotVoom( res.proc)
+
+# Show plots for subset of cell clusters
+# plotVoom( res.proc[1:3] )
+
+# Show plots for one cell cluster
+# plotVoom( res.proc[["B cells"]])
 ```
 
 # Run variancePartition analysis
+The [variancePartition](http://bioconductor.org/packages/variancePartition/) package uses linear and linear mixed models to quanify the contribution of multiple sources of expression variation at the gene-level.  For each gene it fits a linear (mixed) model and evalutes the fraction of expression variation explained by each variable.  
+
+Variance fractions can be visualized at the gene-level for each cell type using a bar plot, or genome-wide using a violin plot.
+
 ```{r vp}
-vp.lst = fitVarPart( res.proc, ~ group_id)
+# run variance partitioning analysis
+vp.lst = fitVarPart( res.proc, ~ StimStatus)
 ```
 
-## variancePartition plots
-```{r plot.fitVarPart, fig.width=8, fig.height=8}
+```{r vp.barplt, fig.height=3}
+# Show variance fractions at the gene-level for each cell type
+genes = vp.lst$gene[2:4]
+plotPercentBars(vp.lst[vp.lst$gene %in% genes,])
+```
+
+```{r vp.violin, fig.height=7}
+# Summarize variance fractions genome-wide for each cell type
 plotVarPart(vp.lst)
 ```
 
-# Run dreamlet
+
+# Run dreamlet differential expression
+Since the normalized expression data and metadata are stored within `res.proc`, only the regression formula remains to be specified.  Here we only included the stimulus status, but analyses of larger datasets can include covariates and random effects.
+
 ```{r test}
-# Differential expression analysis within each assay
-res.dl = dreamlet( res.proc, ~ group_id)
+# Differential expression analysis within each assay,
+# evaluated on the voom normalized data 
+res.dl = dreamlet( res.proc, ~ StimStatus)
+
+# the resulting object of class dreamletResult
+# stores results and other information
+res.dl
 ```
 
 ## Volcano plot for each cell type
+The volcano plot can indicate the strength of the differential expression signal with each cell type.  Red points indicate FDR < 0.05.
 ```{r plotVolcano, fig.width=8, fig.height=8}
-plotVolcano( res.dl, coef = 'group_idstim' )
+plotVolcano( res.dl, coef = 'StimStatusstim' )
 ```
 
 ## Extract results
+Each entry in `res.dl` stores a model fit by [`dream()`](https://rdrr.io/bioc/variancePartition/man/dream-method.html), and results can be extracted using `topTable()` as in `limma` by specifying the coefficient of interest.  The results shows the gene name, log fold change, average expression, t-statistic, p-value, FDR (i.e. adj.P.Val). 
 ```{r extract}
-fit = res.dl[["B cells"]]
-topTable(fit, coef = 'group_idstim' )
+topTable(res.dl[["B cells"]], coef = 'StimStatusstim' )
 ```
 
-## Forrest plot 
+## Forest plot 
+A forest plot shows the log fold change and standard error of a given gene across all cell types.  The color indicates the FDR. 
 ```{r forrest}
-plotForrest( res.dl, coef = 'group_idstim', gene = 'IRF7')
+plotForest( res.dl, coef = 'StimStatusstim', gene = 'IRF7')
 ```
-
 
 
 # Gene set analysis using zenith
+While standard enrichment methods like Fishers exact test, requires specifying a FDR cutoff to identify differentially expressed genes.  However, dichotomizing differential expression results is often too simple and ignores the quantitative variation captured by the differential expression test statistics.   Here we use `zenith`, a wrapper for [`limma::camera](https://rdrr.io/bioc/limma/man/camera.html), to perform gene set analysis using the full spectrum of differential expression test statistics.  `zenith/camera` is a [competetive test](https://www.nature.com/articles/nrg.2016.29) that compares the mean test statistic for genes in a given gene set, to genes not in that set while accounting for correlation between genes.        
+
+Here, `zenith_gsa` takes a `dreamletResult` object, the coefficient of interest, and gene sets as a `GeneSetCollection` object from [GSEABase](https://bioconductor.org/packages/GSEABase/).      
+
+
 ```{r zenith}
 # Load Gene Ontology database 
-# use gene SYMBOL
+# use gene 'SYMBOL', or 'ENSEMBL' id
+# use get_MSigDB() to load MSigDB
+# 
 go.gs = get_GeneOntology(to="SYMBOL")
    
 # Run zenith gene set analysis on result of dreamlet
-res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', go.gs)
+res_zenith = zenith_gsa(res.dl, coef = 'StimStatusstim', go.gs)
 
-# examine results
+# examine results for each ell type and gene set
 head(res_zenith)
 ```
 
@@ -155,11 +222,13 @@ head(res_zenith)
 ```{r heatmap, fig.height=10, fig.width=5}
 # for each cell type select 5 genesets with largest t-statistic
 # and 1 geneset with the lowest
+# Grey boxes indicate the gene set could not be evaluted because
+#    to few genes were represented
 plotZenithResults(res_zenith, 5, 1)
 ```
 
 ### All gene sets with FDR < 5%
-
+Here, show all genes with FDR < 5% in any cell type
 ```{r heatmap2, fig.height=10, fig.width=5}
 # get genesets with FDR < 5%
 gs = unique(res_zenith$Geneset[res_zenith$FDR < 0.05])
@@ -173,32 +242,31 @@ plotZenithResults(df, Inf, Inf)
 
 
 
-# Test differences in cell composition
-Compare fraction of each cell type bewteen simulated and unstimulated samples
+# Testing differences in cell composition
+The number of cells observed in of each type varies across samples.  Visualizing these difference and evaluating weither these differences are explained by other measured variables can give insight into the biology of this variation in cell type composition.    
+Here, compare fraction of each cell type bewteen simulated and unstimulated samples
 
-Plot cell type composition
 ```{r plotCellComposition, fig.height=5, fig.width=5}
 plotCellComposition(pb)     
 ```
 
-
-Perform statistical testss
+Use [crumblr](https://gabrielhoffman.github.io/crumblr/reference/crumblr.html) to transform the cell counts for each sample into log count ratios and precision weights for analysis with dream.
 ```{r ctc.crumblr}
 library(crumblr)
 
 # get transformed counts and precision weights with crumblr
 cobj = crumblr( cellCounts(pb) )
 
-fit = dream(cobj, ~ group_id, as.data.frame(colData(pb)))
+# perform standard dream analysis
+fit = dream(cobj, ~ StimStatus, as.data.frame(colData(pb)))
 fit = eBayes(fit)
 
-topTable(fit, coef='group_idstim', sort.by="none")
+topTable(fit, coef='StimStatusstim', sort.by="none")
 ```
 
-
-Partition variation in cell type composition
+Variance partioning analysis quanifyies the contribution of multiple sources of variation in cell type composition differences. 
 ```{r ctc.crumblr.cp}
-vp = fitExtractVarPartModel(cobj, ~ group_id, as.data.frame(colData(pb)))
+vp = fitExtractVarPartModel(cobj, ~ StimStatus, as.data.frame(colData(pb)))
 
 plotPercentBars(vp)
 ```
@@ -215,8 +283,8 @@ knitr::knit_exit()
 Perform statistical tests
 
 ```{r testCellComposition, eval=FALSE}
-formula = ~ group_id
-coef = 'group_idstim'
+formula = ~ StimStatus
+coef = 'StimStatusstim'
 
 # default is negative binomial model
 # poisson model gives similar effect sizes, but *much* smaller standard errors
@@ -224,8 +292,8 @@ cellTypeCompositionTest( pb, formula, coef)
 ```
 
 ```{r testCellComposition.eval, results="html", echo=FALSE}
-formula = ~ group_id
-coef = 'group_idstim'
+formula = ~ StimStatus
+coef = 'StimStatusstim'
 
 tab1 = cellTypeCompositionTest( pb, formula, coef)
 tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)

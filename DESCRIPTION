@@ -33,7 +33,7 @@ biocViews: RNASeq,
 Depends:
     R (>= 4.1.0),
     ggplot2,
-    variancePartition (>= 1.25.1),
+    variancePartition (>= 1.25.2),
     methods
 Imports:
     edgeR,

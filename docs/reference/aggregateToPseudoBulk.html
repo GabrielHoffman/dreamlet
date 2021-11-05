@@ -146,7 +146,8 @@
     <pre class="usage"><span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span>
   <span class='va'>x</span>,
   assay <span class='op'>=</span> <span class='cn'>NULL</span>,
-  by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cluster_id"</span>, <span class='st'>"sample_id"</span><span class='op'>)</span>,
+  sample_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cluster_id <span class='op'>=</span> <span class='cn'>NULL</span>,
   fun <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sum"</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span>, <span class='st'>"prop.detected"</span>, <span class='st'>"num.detected"</span><span class='op'>)</span>,
   scale <span class='op'>=</span> <span class='cn'>FALSE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
@@ -166,9 +167,12 @@
 input data. Defaults to the 1st available (<code>assayNames(x)[1]</code>).</p></td>
     </tr>
     <tr>
-      <th>by</th>
-      <td><p>character vector specifying which 
-<code>colData(x)</code> columns to summarize by (at most 2!).</p></td>
+      <th>sample_id</th>
+      <td><p>character string specifying which variable to use as sample id</p></td>
+    </tr>
+    <tr>
+      <th>cluster_id</th>
+      <td><p>character string specifying which variable to use as cluster id</p></td>
     </tr>
     <tr>
       <th>fun</th>
@@ -226,7 +230,11 @@ doi: <a href='https://doi.org/10.1101/713412'>https://doi.org/10.1101/713412</a>
 
 <span class='co'># pseudobulk counts by cluster-sample</span>
 <span class='fu'><a href='https://rdrr.io/pkg/muscat/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>example_sce</span><span class='op'>)</span>
-<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span><span class='va'>example_sce</span>, verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span><span class='va'>example_sce</span>, 
+   cluster_id <span class='op'>=</span> <span class='st'>'cluster_id'</span>, 
+   sample_id <span class='op'>=</span> <span class='st'>'sample_id'</span>,
+   verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>SingleCellExperiment</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MatrixGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: matrixStats</span></div><div class='output co'>#&gt; <span class='message'></span>
@@ -650,7 +658,13 @@ doi: <a href='https://doi.org/10.1101/713412'>https://doi.org/10.1101/713412</a>
 <span class='co'># scaled CPM</span>
 <span class='va'>cpm</span> <span class='op'>&lt;-</span> <span class='fu'>edgeR</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/edgeR/man/cpm.html'>cpm</a></span><span class='op'>(</span><span class='fu'>assay</span><span class='op'>(</span><span class='va'>example_sce</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>assays</span><span class='op'>(</span><span class='va'>example_sce</span><span class='op'>)</span><span class='op'>$</span><span class='va'>cpm</span> <span class='op'>&lt;-</span> <span class='va'>cpm</span>
-<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span><span class='va'>example_sce</span>, assay <span class='op'>=</span> <span class='st'>"cpm"</span>, scale <span class='op'>=</span> <span class='cn'>TRUE</span>, verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span><span class='va'>example_sce</span>, 
+   assay <span class='op'>=</span> <span class='st'>"cpm"</span>, 
+   cluster_id <span class='op'>=</span> <span class='st'>'cluster_id'</span>, 
+   sample_id <span class='op'>=</span> <span class='st'>'sample_id'</span>,
+   scale <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+   verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>assay</span><span class='op'>(</span><span class='va'>pb</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;             ctrl101  ctrl107    stim101     stim107
 #&gt; HES4       49.61317   0.0000   511.1207    69.06912
@@ -660,7 +674,7 @@ doi: <a href='https://doi.org/10.1101/713412'>https://doi.org/10.1101/713412</a>
 #&gt; SSU72    2640.12114 873.4110  2443.2336   834.68816
 #&gt; RER1     1225.83834 636.7921  1196.8081   980.45076</div><div class='input'>
 <span class='co'># aggregate by cluster only</span>
-<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span><span class='va'>example_sce</span>, by <span class='op'>=</span> <span class='st'>"cluster_id"</span>, verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateToPseudoBulk</span><span class='op'>(</span><span class='va'>example_sce</span>, cluster_id <span class='op'>=</span> <span class='st'>"cluster_id"</span>, verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'>assays</span><span class='op'>(</span><span class='va'>pb</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># single assay</span>
 </div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>assay</span><span class='op'>(</span><span class='va'>pb</span><span class='op'>)</span><span class='op'>)</span>    <span class='co'># n_genes x n_clusters</span>
 </div><div class='output co'>#&gt;          B cells CD14+ Monocytes CD4 T cells CD8 T cells FCGR3A+ Monocytes

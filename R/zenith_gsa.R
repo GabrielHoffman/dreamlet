@@ -17,7 +17,7 @@
 #'  
 #' @rdname zenith_gsa-methods
 #' @export
-setGeneric('zenith_gsa', function(fit, coefs, geneSets, n_genes_min = 10, inter.gene.cor=NA, progressbar=TRUE){
+setGeneric('zenith_gsa', function(fit, coefs, geneSets, n_genes_min = 10, inter.gene.cor=0.01, progressbar=TRUE){
 	standardGeneric("zenith_gsa")
 	})
 
@@ -31,7 +31,7 @@ setGeneric('zenith_gsa', function(fit, coefs, geneSets, n_genes_min = 10, inter.
 #' @aliases zenith_gsa,dreamletResult,ANY,GeneSetCollection-method
 #' @export
 setMethod("zenith_gsa", signature(fit="dreamletResult", coefs="ANY", geneSets = "GeneSetCollection"),
-	function(fit, coefs, geneSets, n_genes_min = 10, inter.gene.cor=NA, progressbar=TRUE){
+	function(fit, coefs, geneSets, n_genes_min = 10, inter.gene.cor=0.01, progressbar=TRUE){
 
 	# convert GeneSetCollection to list
 	geneSets.lst = recodeToList( geneSets )

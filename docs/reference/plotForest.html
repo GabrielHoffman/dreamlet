@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perform zenith analysis — zenith_gsa • dreamlet</title>
+<title>Forest plot — plotForest • dreamlet</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Perform zenith analysis — zenith_gsa" />
-<meta property="og:description" content="Perform zenith analysis" />
+<meta property="og:title" content="Forest plot — plotForest" />
+<meta property="og:description" content="Forest plot" />
 <meta property="og:image" content="http://gabrielhoffman.github.io/dreamlet/logo.svg" />
 
 
@@ -134,60 +134,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Perform zenith analysis</h1>
-    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/zenith_gsa.R'><code>R/zenith_gsa.R</code></a></small>
-    <div class="hidden name"><code>zenith_gsa-methods.Rd</code></div>
+    <h1>Forest plot</h1>
+    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/plotForest.R'><code>R/plotForest.R</code></a></small>
+    <div class="hidden name"><code>plotForest.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Perform zenith analysis</p>
+    <p>Forest plot</p>
     </div>
 
-    <pre class="usage"><span class='fu'>zenith_gsa</span><span class='op'>(</span>
-  <span class='va'>fit</span>,
-  <span class='va'>coefs</span>,
-  <span class='va'>geneSets</span>,
-  n_genes_min <span class='op'>=</span> <span class='fl'>10</span>,
-  inter.gene.cor <span class='op'>=</span> <span class='fl'>0.01</span>,
-  progressbar <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-
-<span class='co'># S4 method for dreamletResult,ANY,GeneSetCollection</span>
-<span class='fu'>zenith_gsa</span><span class='op'>(</span>
-  <span class='va'>fit</span>,
-  <span class='va'>coefs</span>,
-  <span class='va'>geneSets</span>,
-  n_genes_min <span class='op'>=</span> <span class='fl'>10</span>,
-  inter.gene.cor <span class='op'>=</span> <span class='fl'>0.01</span>,
-  progressbar <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plotForest</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>coef</span>, <span class='va'>gene</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fit</th>
-      <td><p>results from <code>dreamlet</code></p></td>
+      <th>x</th>
+      <td><p>result from <code>dreamlet</code></p></td>
     </tr>
     <tr>
-      <th>coefs</th>
-      <td><p>coefficients to test using <code>topTable(fit, coef)</code></p></td>
+      <th>coef</th>
+      <td><p>coefficient to test with <code>topTable</code></p></td>
     </tr>
     <tr>
-      <th>geneSets</th>
-      <td><p>a list of gene sets</p></td>
-    </tr>
-    <tr>
-      <th>n_genes_min</th>
-      <td><p>minumum number of genes in a geneset</p></td>
-    </tr>
-    <tr>
-      <th>inter.gene.cor</th>
-      <td><p>if NA, estimate correlation from data.  Otherwise, use specified value</p></td>
-    </tr>
-    <tr>
-      <th>progressbar</th>
-      <td><p>if TRUE, show progress bar</p></td>
+      <th>gene</th>
+      <td><p>gene to show results for</p></td>
     </tr>
     </table>
 

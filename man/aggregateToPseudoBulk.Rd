@@ -7,7 +7,8 @@
 aggregateToPseudoBulk(
   x,
   assay = NULL,
-  by = c("cluster_id", "sample_id"),
+  sample_id = NULL,
+  cluster_id = NULL,
   fun = c("sum", "mean", "median", "prop.detected", "num.detected"),
   scale = FALSE,
   verbose = TRUE,
@@ -20,8 +21,9 @@ aggregateToPseudoBulk(
 \item{assay}{character string specifying the assay slot to use as 
 input data. Defaults to the 1st available (\code{assayNames(x)[1]}).}
 
-\item{by}{character vector specifying which 
-\code{colData(x)} columns to summarize by (at most 2!).}
+\item{sample_id}{character string specifying which variable to use as sample id}
+
+\item{cluster_id}{character string specifying which variable to use as cluster id}
 
 \item{fun}{a character string.
 Specifies the function to use as summary statistic.
@@ -60,7 +62,11 @@ library(muscat)
 
 # pseudobulk counts by cluster-sample
 data(example_sce)
-pb <- aggregateToPseudoBulk(example_sce, verbose=FALSE)
+
+pb <- aggregateToPseudoBulk(example_sce, 
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
 
 library(SingleCellExperiment)
 assayNames(example_sce)  # one sheet per cluster
@@ -69,11 +75,17 @@ head(assay(example_sce)) # n_genes x n_samples
 # scaled CPM
 cpm <- edgeR::cpm(assay(example_sce))
 assays(example_sce)$cpm <- cpm
-pb <- aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE, verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce, 
+   assay = "cpm", 
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   scale = TRUE, 
+   verbose=FALSE)
+
 head(assay(pb))
 
 # aggregate by cluster only
-pb <- aggregateToPseudoBulk(example_sce, by = "cluster_id", verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose=FALSE)
 length(assays(pb)) # single assay
 head(assay(pb))    # n_genes x n_clusters
 
