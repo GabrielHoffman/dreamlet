@@ -1,4 +1,4 @@
-# dreamlet <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# dreamlet <img src="man/figures/logo.png" align="right" alt="" width="160" />
 
 Perform differential expression analysis on multi-sample single cell datasets using linear mixed models
 

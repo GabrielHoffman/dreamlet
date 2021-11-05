@@ -12,7 +12,7 @@
 #' @param ... additional arguments
 #' 
 #' @rdname plotVarPart-methods
-#' @aliases plotVarPart,dreamletProcessedData,dreamletProcessedData-method
+#' @aliases plotVarPart,DataFrame,DataFrame-method
 #' @importFrom reshape2 melt
 #' @importFrom S4Vectors as.data.frame
 #' @import ggplot2

@@ -47,8 +47,10 @@
 #' @param x a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 #' @param assay character string specifying the assay slot to use as 
 #'   input data. Defaults to the 1st available (\code{assayNames(x)[1]}).
-#' @param by character vector specifying which 
-#'   \code{colData(x)} columns to summarize by (at most 2!).
+# @param by character vector specifying which 
+#   \code{colData(x)} columns to summarize by (at most 2!).
+#' @param sample_id character string specifying which variable to use as sample id
+#' @param cluster_id character string specifying which variable to use as cluster id
 #' @param fun a character string.
 #'   Specifies the function to use as summary statistic.
 #'   Passed to \code{summarizeAssayByGroup2}.
@@ -76,7 +78,11 @@
 #'
 #' # pseudobulk counts by cluster-sample
 #' data(example_sce)
-#' pb <- aggregateToPseudoBulk(example_sce, verbose=FALSE)
+#'
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
 #' 
 #' library(SingleCellExperiment)
 #' assayNames(example_sce)  # one sheet per cluster
@@ -85,11 +91,17 @@
 #' # scaled CPM
 #' cpm <- edgeR::cpm(assay(example_sce))
 #' assays(example_sce)$cpm <- cpm
-#' pb <- aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE, verbose=FALSE)
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "cpm", 
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    scale = TRUE, 
+#'    verbose=FALSE)
+#' 
 #' head(assay(pb))
 #' 
 #' # aggregate by cluster only
-#' pb <- aggregateToPseudoBulk(example_sce, by = "cluster_id", verbose=FALSE)
+#' pb <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose=FALSE)
 #' length(assays(pb)) # single assay
 #' head(assay(pb))    # n_genes x n_clusters
 #' 
@@ -112,10 +124,19 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment int_colData<-
 #' @importFrom SummarizedExperiment rowData colData colData<-
 #' @export
-aggregateToPseudoBulk = function (x, assay = NULL, by = c("cluster_id", "sample_id"), 
+aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id = NULL,
     fun = c("sum", "mean", "median", "prop.detected", "num.detected"), 
     scale = FALSE, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose)){
+    
     fun <- match.arg(fun)
+
+    # specify the 'by' parameter using cluster_id and sample_id.
+    by = c(cluster_id, sample_id)
+
+    if( is.null(by) ){
+        stop("Must specify at least one (and usually both): sample_id, cluster_id ")
+    }
+
     if (is.null(assay)) 
         assay <- assayNames(x)[1]
     .check_arg_assay(x, assay)
@@ -431,8 +452,6 @@ setMethod("summarizeAssayByGroup2", "ANY", .summarize_assay_by_group)
 setMethod("summarizeAssayByGroup2", "SummarizedExperiment", function(x, ..., assay.type="counts") {
     .summarize_assay_by_group(assay(x, assay.type), ...)
 })
-
-
 
 
 

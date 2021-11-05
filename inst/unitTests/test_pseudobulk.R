@@ -40,7 +40,10 @@ test_aggregateData = function(){
 	pb <- aggregateData(example_sce, assay = "cpm", scale = TRUE)
 	# head(assay(pb)) 
 
-	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm", scale = TRUE) #,BPPARAM = SnowParam(2, progressbar=TRUE))
+	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm",
+			cluster_id = "cluster_id",
+			sample_id = "sample_id", 
+			scale = TRUE) 
 	
 	check1 = checkEquals(pb, pb2)
 
@@ -49,7 +52,7 @@ test_aggregateData = function(){
 	# length(assays(pb)) # single assay
 	# head(assay(pb))    # n_genes x n_clusters
 
-	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, by = "cluster_id")
+	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id")
 
 	check1 & checkEquals(pb, pb2)
 }

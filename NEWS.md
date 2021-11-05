@@ -2,6 +2,7 @@
 - `processOneAssay()` weights by number of cells
 - require `variancePartition >= 1.25.1` to handle weights in `voomWithDreamWeights()`
 - fix bug in `topTable()`
+- add `plotPercentBars` for class `vpDF`
 
 # dreamlet 0.0.14
 - move count ratio code to crumblr package

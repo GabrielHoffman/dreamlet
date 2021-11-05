@@ -10,7 +10,7 @@ zenith_gsa(
   coefs,
   geneSets,
   n_genes_min = 10,
-  inter.gene.cor = NA,
+  inter.gene.cor = 0.01,
   progressbar = TRUE
 )
 
@@ -19,7 +19,7 @@ zenith_gsa(
   coefs,
   geneSets,
   n_genes_min = 10,
-  inter.gene.cor = NA,
+  inter.gene.cor = 0.01,
   progressbar = TRUE
 )
 }
