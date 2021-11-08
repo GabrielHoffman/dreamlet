@@ -178,6 +178,30 @@
     </table>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> 
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HelenaLC/muscat'>muscat</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>SingleCellExperiment</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/pkg/muscat/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>example_sce</span><span class='op'>)</span>
+
+<span class='co'># create pseudobulk for each sample and cell cluster</span>
+<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='aggregateToPseudoBulk.html'>aggregateToPseudoBulk</a></span><span class='op'>(</span><span class='va'>example_sce</span>, 
+   assay <span class='op'>=</span> <span class='st'>"counts"</span>,    
+   cluster_id <span class='op'>=</span> <span class='st'>'cluster_id'</span>, 
+   sample_id <span class='op'>=</span> <span class='st'>'sample_id'</span>,
+   verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='co'># voom-style normalization</span>
+<span class='va'>res.proc</span> <span class='op'>=</span> <span class='fu'><a href='processAssays.html'>processAssays</a></span><span class='op'>(</span> <span class='va'>pb</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.019 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.019 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.021 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.017 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.02 secs</span></div><div class='input'>
+<span class='co'># variance partitioning analysis</span>
+<span class='va'>vp</span> <span class='op'>=</span> <span class='fu'><a href='fitVarPart.html'>fitVarPart</a></span><span class='op'>(</span> <span class='va'>res.proc</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>1.1 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>1.9 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>1.2 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.53 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>1.5 secs</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'>
+<span class='co'># Summarize variance fractions genome-wide for each cell type</span>
+<span class='fu'>plotVarPart</span><span class='op'>(</span> <span class='fu'>sortCols</span><span class='op'>(</span><span class='va'>vp</span><span class='op'>)</span> <span class='op'>)</span>
+</div><div class='img'><img src='sortCols-method-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

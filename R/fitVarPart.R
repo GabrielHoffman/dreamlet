@@ -10,8 +10,36 @@
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
-#' @import BiocParallel  
+#' @return Object of class \code{vpDF} inheriting from \code{DataFrame} storing the variance fractions for each gene and cell type.
 #'
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # variance partitioning analysis
+#' vp = fitVarPart( res.proc, ~ group_id)
+#' 
+#' # Show variance fractions at the gene-level for each cell type
+#' genes = vp$gene[2:4]
+#' plotPercentBars(vp[vp$gene %in% genes,])
+#' 
+#' # Summarize variance fractions genome-wide for each cell type
+#' plotVarPart(vp)
+#'
+#' @import BiocParallel  
 #' @export
 setGeneric("fitVarPart", 
 	function( x, formula, data = colData(x), quiet = FALSE, BPPARAM = SerialParam(),...){

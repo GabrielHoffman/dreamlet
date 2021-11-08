@@ -15,6 +15,43 @@
 #' @param inter.gene.cor if NA, estimate correlation from data.  Otherwise, use specified value
 #' @param progressbar if TRUE, show progress bar
 #'  
+#' @return \code{data.frame} of results for each gene set and cell type 
+#'
+#' @examples
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # Load Gene Ontology database 
+#' # use gene 'SYMBOL', or 'ENSEMBL' id
+#' # use get_MSigDB() to load MSigDB
+#' library(zenith)
+#' go.gs = get_GeneOntology("CC", to="SYMBOL")
+#'    
+#' # Run zenith gene set analysis on result of dreamlet
+#' res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', go.gs)
+#' 
+#' # for each cell type select 5 genesets with largest t-statistic
+#' # and 1 geneset with the lowest
+#' # Grey boxes indicate the gene set could not be evaluted because
+#' #    to few genes were represented
+#' plotZenithResults(res_zenith, 5, 1)
+#' 
 #' @rdname zenith_gsa-methods
 #' @export
 setGeneric('zenith_gsa', function(fit, coefs, geneSets, n_genes_min = 10, inter.gene.cor=0.01, progressbar=TRUE){
@@ -47,7 +84,7 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", coefs="ANY", geneSets = 
 		index = ids2indices( geneSets.lst, rownames(fit_local))
 		   
 		# filter by size of gene set
-		index = index[sapply(index, length) >= n_genes_min]
+		index = index[vapply(index, length, FUN.VALUE=numeric(1)) >= n_genes_min]
 
 		# for each coefficient selected
 		df_res = lapply( coefs, function(coef){

@@ -18,7 +18,8 @@ setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
 #' @param x vpDF object
 #' @param ... additional arguments
 #'
-#' @rdname vpDF-class
+#' @rdname assayNames-methods
+#' @aliases assayNames,vpDF,vpDF-method
 #' @export
 setMethod("assayNames", signature(x="vpDF"),
 	function(x, ...){   
@@ -34,7 +35,8 @@ setMethod("assayNames", signature(x="vpDF"),
 #' @param i number indicating index, or string indicating assay
 #' @param withDimnames not used
 #'
-#' @rdname vpDF-class
+#' @rdname assay-methods
+#' @aliases assay,vpDF,vpDF-method
 #' @export
 setMethod("assay", signature(x="vpDF"),
 	function(x, i, withDimnames=TRUE,...){ 
@@ -47,12 +49,36 @@ setMethod("assay", signature(x="vpDF"),
 
 #' Sort variance partition statistics
 #'
+#' Sort variance partition statistics
 #'
 #' @param x object returned by \code{fitVarPart()}
 #' @param FUN function giving summary statistic to sort by.  Defaults to median
 #' @param decreasing  logical.  Should the sorting be increasing or decreasing?  
 #' @param last columns to be placed on the right, regardless of values in these columns
 #' @param ... other arguments to sort 
+#'
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # variance partitioning analysis
+#' vp = fitVarPart( res.proc, ~ group_id)
+#' 
+#' # Summarize variance fractions genome-wide for each cell type
+#' plotVarPart( sortCols(vp) )
 #'
 #' @export
 #' @rdname sortCols-method

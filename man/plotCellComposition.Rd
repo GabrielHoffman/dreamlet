@@ -22,6 +22,33 @@ plotCellComposition(obj, col, width = NULL)
 
 \item{width}{specify width of bars}
 }
+\value{
+Barplot showing cell fractions
+}
 \description{
 Bar plot of cell compositions
+}
+\examples{
+ 
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# create pseudobulk for each sample and cell cluster
+pb <- aggregateToPseudoBulk(example_sce, 
+   assay = "counts",    
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
+
+# show cell composition bar plots
+plotCellComposition(pb)
+
+# extract cell counts
+df_cellCounts = cellCounts(pb)
+
+# show cell composition bar plots
+plotCellComposition(df_cellCounts)
+
 }

@@ -14,6 +14,9 @@
 \arguments{
 \item{object}{dreamletProcessedData object}
 }
+\value{
+show data stored in object
+}
 \description{
 Show object
 

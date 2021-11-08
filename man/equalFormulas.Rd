@@ -11,6 +11,9 @@ equalFormulas(formula1, formula2)
 
 \item{formula2}{second formula}
 }
+\value{
+boolean value indciating of formulas are equivalent
+}
 \description{
 Check if two formulas are equal by evaluating the formulas and extracting terms
 }

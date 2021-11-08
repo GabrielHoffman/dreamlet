@@ -44,6 +44,30 @@ processAssays(
 
 \item{...}{other arguments passed to \code{dream}}
 }
+\value{
+Object of class \code{dreamletProcessedData} storing voom-style normalized expression data
+}
 \description{
 For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells
+}
+\examples{
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# create pseudobulk for each sample and cell cluster
+pb <- aggregateToPseudoBulk(example_sce, 
+   assay = "counts",    
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
+
+# voom-style normalization
+res.proc = processAssays( pb, ~ group_id)
+
+# Differential expression analysis within each assay,
+# evaluated on the voom normalized data 
+res.dl = dreamlet( res.proc, ~ group_id)
+
 }

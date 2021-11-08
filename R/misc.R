@@ -20,6 +20,16 @@
 #' @param formula formula of variables to check
 #' @param data data.frame storing variables in the formula
 #'
+#' @return If formula is valid, return TRUE.  Else throw error
+#'
+#' @examples
+#'
+#' # Valid formula
+#' dreamlet:::checkFormula( ~ speed, cars)
+#' 
+#' # Not valid formula
+#' # dreamlet:::checkFormula( ~ speed + a, cars)
+#' 
 #' @importFrom stats terms
 checkFormula = function(formula, data){
 
@@ -46,6 +56,8 @@ checkFormula = function(formula, data){
 #' @param formula1 first formula
 #' @param formula2 second formula
 #'
+#' @return boolean value indciating of formulas are equivalent
+#'
 #' @examples
 #'
 #' # These formulas are equivalent
@@ -55,7 +67,6 @@ checkFormula = function(formula, data){
 #' dreamlet:::equalFormulas( formula1, formula2)
 #'
 #' @importFrom stats terms
-#'
 equalFormulas = function(formula1, formula2){
 
     # extract terms from forumula1

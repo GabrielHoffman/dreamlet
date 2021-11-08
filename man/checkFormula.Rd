@@ -11,6 +11,18 @@ checkFormula(formula, data)
 
 \item{data}{data.frame storing variables in the formula}
 }
+\value{
+If formula is valid, return TRUE.  Else throw error
+}
 \description{
 Check that variables in formula are present in the data
+}
+\examples{
+
+# Valid formula
+dreamlet:::checkFormula( ~ speed, cars)
+
+# Not valid formula
+# dreamlet:::checkFormula( ~ speed + a, cars)
+
 }

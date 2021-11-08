@@ -189,7 +189,7 @@
     </tr>
     <tr>
       <th>contrasts</th>
-      <td><p>character vector specifying contrasts specifying linear combinations of fixed effects to test</p></td>
+      <td><p>character vector specifying contrasts specifying linear combinations of fixed effects to test.  This is fed into <code>makeContrastsDream( formula, data, contrasts=contrasts)</code></p></td>
     </tr>
     <tr>
       <th>min.cells</th>
@@ -221,10 +221,56 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Object of class <code>dreamletResult</code> storing results for each cell type</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Fit linear (mixed) model on each cell type separately.  For advanced use of contrasts see <code><a href='https://rdrr.io/pkg/variancePartition/man/makeContrastsDream.html'>variancePartition::makeContrastsDream()</a></code> and vignette <a href='https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1'>https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>dream</code>, <code>makeContrastsDream</code></p></div>
+    <div class='dont-index'><p><code>dream()</code>, <code>makeContrastsDream()</code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> 
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HelenaLC/muscat'>muscat</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>SingleCellExperiment</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/pkg/muscat/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>example_sce</span><span class='op'>)</span>
+
+<span class='co'># create pseudobulk for each sample and cell cluster</span>
+<span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='aggregateToPseudoBulk.html'>aggregateToPseudoBulk</a></span><span class='op'>(</span><span class='va'>example_sce</span>, 
+   assay <span class='op'>=</span> <span class='st'>"counts"</span>,    
+   cluster_id <span class='op'>=</span> <span class='st'>'cluster_id'</span>, 
+   sample_id <span class='op'>=</span> <span class='st'>'sample_id'</span>,
+   verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='co'># voom-style normalization</span>
+<span class='va'>res.proc</span> <span class='op'>=</span> <span class='fu'><a href='processAssays.html'>processAssays</a></span><span class='op'>(</span> <span class='va'>pb</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.018 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.019 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.021 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.017 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.02 secs</span></div><div class='input'>
+<span class='co'># Differential expression analysis within each assay,</span>
+<span class='co'># evaluated on the voom normalized data </span>
+<span class='va'>res.dl</span> <span class='op'>=</span> <span class='fu'>dreamlet</span><span class='op'>(</span> <span class='va'>res.proc</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.039 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.061 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.046 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.023 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.053 secs</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'>
+<span class='co'># show coefficients estimated for each cell type</span>
+<span class='fu'><a href='coefNames.html'>coefNames</a></span><span class='op'>(</span><span class='va'>res.dl</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "(Intercept)"  "group_idstim"</div><div class='input'>
+<span class='co'># extract results using limma-style syntax</span>
+<span class='co'># combines all cell types together</span>
+<span class='co'># adj.P.Val gives study-wide FDR</span>
+<span class='fu'>topTable</span><span class='op'>(</span><span class='va'>res.dl</span>, coef<span class='op'>=</span><span class='st'>"group_idstim"</span>, number<span class='op'>=</span><span class='fl'>3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; DataFrame with 3 rows and 8 columns
+#&gt;         assay          ID     logFC   AveExpr         t     P.Value   adj.P.Val
+#&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;
+#&gt; 1     B cells       ISG20   3.59771   11.5794   15.5721 1.01377e-18 3.55733e-15
+#&gt; 2 CD4 T cells       ISG15   5.50055   10.1672   21.5266 1.38871e-15 2.43649e-12
+#&gt; 3 CD4 T cells       ISG20   3.07310   10.7918   17.0119 1.37235e-13 1.60520e-10
+#&gt;           B
+#&gt;   &lt;numeric&gt;
+#&gt; 1   32.2930
+#&gt; 2   24.9379
+#&gt; 3   21.2155</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

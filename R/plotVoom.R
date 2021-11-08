@@ -11,6 +11,31 @@
 #' @param x dreamletProcessedData
 #' @param ncol number of columns in the plot
 #'
+#' @return Plot of mean-variance trend
+#'
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Show mean-variance trend from voom
+#' plotVoom(res.proc)
+#' 
+#' # plot for first two cell types
+#' plotVoom(res.proc[1:2])
+#' 
 #' @import ggplot2
 #' @export
 #' @docType methods

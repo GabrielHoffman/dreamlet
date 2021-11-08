@@ -10,9 +10,35 @@
 #' @param col color of bars for each variable
 #' @param width specify width of bars
 #' 
+#' @return Bar plot showing variance fractions for each gene
+#' 
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # variance partitioning analysis
+#' vp = fitVarPart( res.proc, ~ group_id)
+#' 
+#' # Show variance fractions at the gene-level for each cell type
+#' genes = vp$gene[2:4]
+#' plotPercentBars(vp[vp$gene %in% genes,])
+#' 
 #' @export
-#' @rdname plotVarPart-methods
-#' @aliases plotVarPart,vpDF,vpDF-method
+#' @rdname plotPercentBars-methods
+#' @aliases plotPercentBars,vpDF,vpDF-method
 #' @importFrom reshape2 melt
 #' @importFrom S4Vectors as.data.frame
 #' @import ggplot2
@@ -38,11 +64,13 @@ setMethod("plotPercentBars", "vpDF",
 		panel.border = element_blank(),
 		panel.background = element_blank(), 
 		axis.ticks.y = element_blank(), 
+		# legend.position = "bottom",
+		# plot.margin = unit(c(0,.3,0,.8), "cm"),
 		legend.key = element_blank(),
-		plot.margin = unit(c(0,.3,0,.8), "cm")) +
+		panel.spacing.x = unit(.8, "lines")) +
 		guides(fill=guide_legend(title=NULL)) +
 		scale_fill_manual( values = col) + 
-		scale_y_reverse(breaks=seq(0, 100, by=20), label=seq(100, 0, by=-20), expand=c(0,0.03)) + 
+		scale_y_reverse(breaks=seq(0, 100, by=20), label=seq(100, 0, by=-20), expand=c(.00,0)) + 
 		ylab("Variance explained (%)")
 
 	fig = fig + theme(text 		= element_text(colour="black"), 

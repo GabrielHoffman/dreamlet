@@ -11,6 +11,9 @@ removeConstantTerms(formula, data)
 
 \item{data}{data.frame}
 }
+\value{
+a formula, possibly with terms omitted.
+}
 \description{
 Remove constant terms from formula.  Also remove categorical variables with a max of one example per category
 }

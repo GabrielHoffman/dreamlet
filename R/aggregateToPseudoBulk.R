@@ -61,54 +61,44 @@
 #' @param verbose logical. Should information on progress be reported?
 #' 
 #' @return a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' \itemize{
-#' \item{If \code{length(by) == 2}, each sheet (\code{assay}) contains 
-#'   pseudobulks for each of \code{by[1]}, e.g., for each cluster when 
-#'   \code{by = "cluster_id"}. Rows correspond to genes, columns to 
-#'   \code{by[2]}, e.g., samples when \code{by = "sample_id"}}.
-#' \item{If \code{length(by) == 1}, the returned SCE will contain only 
-#'   a single \code{assay} with rows = genes and colums = \code{by}.}}
-#'   
-#'   Aggregation parameters (\code{assay, by, fun, scaled}) are stored in 
-#'   \code{metadata()$agg_pars}, and the number of cells that were aggregated 
-#'   are accessible in \code{int_colData()$n_cells}.
+# \itemize{
+# \item{If \code{length(by) == 2}, each sheet (\code{assay}) contains 
+#   pseudobulks for each of \code{by[1]}, e.g., for each cluster when 
+#   \code{by = "cluster_id"}. Rows correspond to genes, columns to 
+#   \code{by[2]}, e.g., samples when \code{by = "sample_id"}}.
+# \item{If \code{length(by) == 1}, the returned SCE will contain only 
+#   a single \code{assay} with rows = genes and colums = \code{by}.}}
+#' 
+#'  Aggregation parameters (\code{assay, by, fun, scaled}) are stored in  \code{metadata()$agg_pars}, where \code{by = c(cluster_id, sample_id)}.  The number of cells that were aggregated are accessible in \code{int_colData()$n_cells}.
 #' 
 #' @examples 
+#' 
 #' library(muscat)
+#' library(SingleCellExperiment)
 #'
-#' # pseudobulk counts by cluster-sample
 #' data(example_sce)
 #'
+#' # create pseudobulk for each sample and cell cluster
 #' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
 #'    cluster_id = 'cluster_id', 
 #'    sample_id = 'sample_id',
 #'    verbose=FALSE)
+#'
+#' # pseudobulk data from each cell type
+#' # is stored as its own assay 
+#' pb
 #' 
-#' library(SingleCellExperiment)
-#' assayNames(example_sce)  # one sheet per cluster
-#' head(assay(example_sce)) # n_genes x n_samples
+#' # aggregate by cluster only, 
+#' # collapsing all samples into the same pseudobulk
+#' pb2 <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose=FALSE)
 #' 
-#' # scaled CPM
-#' cpm <- edgeR::cpm(assay(example_sce))
-#' assays(example_sce)$cpm <- cpm
-#' pb <- aggregateToPseudoBulk(example_sce, 
-#'    assay = "cpm", 
-#'    cluster_id = 'cluster_id', 
-#'    sample_id = 'sample_id',
-#'    scale = TRUE, 
-#'    verbose=FALSE)
-#' 
-#' head(assay(pb))
-#' 
-#' # aggregate by cluster only
-#' pb <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose=FALSE)
-#' length(assays(pb)) # single assay
-#' head(assay(pb))    # n_genes x n_clusters
+#' pb2  
 #' 
 #' @author Gabriel Hoffman, Helena L Crowell & Mark D Robinson
 #'
 #' @details 
-#' Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD files because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}
+#' Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD files because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.
 #' 
 #' @references 
 #' Crowell, HL, Soneson, C, Germain, P-L, Calini, D, 
