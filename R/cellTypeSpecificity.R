@@ -28,17 +28,35 @@
 #' verbose=FALSE)
 #' 
 #' # Compute cell type specifity of each gene
-#' df = cellTypeSpecifity( pb)
+#' df = cellTypeSpecificity( pb)
 #' 
 #' df_melt = reshape2::melt(df)
 #' 
 #' # Violin plot of cell type specificity
-#' ggplot(df_melt, aes(Var2, value, fill=Var2)) + geom_violin() + geom_boxplot(width=.1, fill="grey") + theme_classic() + theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + ylim(0,1) + ylab("Fraction of gene expression") + ggtitle("Cell type specifity")
+#' ggplot(df_melt, aes(Var2, value, fill=Var2)) + 
+#'	geom_violin() + 
+#'	geom_boxplot(width=.1, fill="grey") + 
+#'	theme_classic() + 
+#'	theme(aspect.ratio=1, legend.position="none", 
+#'		plot.title = element_text(hjust = 0.5),
+#'		axis.text.x = element_text(angle = 60, vjust = 1, hjust=1)) + 
+#'	ylim(0,1) + 
+#'	ylab("Fraction of gene expression") + 
+#'	ggtitle("Cell type specifity")
 #' 
 #' # Barplot of 5 genes
 #' genes = rownames(df)[1:5]
 #' 
-#' ggplot(df_melt[df_melt$Var1 %in% genes,], aes(Var1, value, fill=Var2)) + geom_bar(stat="identity") + theme_classic() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + coord_flip() + scale_fill_discrete(name = "Cell type") + xlab("Gene") + ylab("Fraction of gene expression") + scale_y_continuous(limits=c(0, 1), expand=c(0,0)) + ggtitle("Cell type specifity")
+#' ggplot(df_melt[df_melt$Var1 %in% genes,], aes(Var1, value, fill=Var2)) + 
+#' 	geom_bar(stat="identity") + 
+#' 	theme_classic() + 
+#' 	theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + 
+#' 	coord_flip() + 
+#' 	scale_fill_discrete(name = "Cell type") + 
+#' 	xlab("Gene") + 
+#' 	ylab("Fraction of gene expression") + 
+#' 	scale_y_continuous(limits=c(0, 1), expand=c(0,0)) + 
+#'  ggtitle("Cell type specifity")
 #' 
 #' @importFrom edgeR DGEList calcNormFactors cpm
 #' @export
