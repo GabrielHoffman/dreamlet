@@ -42,7 +42,7 @@
 #' 
 #' @importFrom edgeR DGEList calcNormFactors cpm
 #' @export
-cellTypeSpecifity = function(pb,...){
+cellTypeSpecificity = function(pb,...){
 
 	# sum counts for each cell type
 	geneExpr = lapply( assayNames(pb), function(key){
