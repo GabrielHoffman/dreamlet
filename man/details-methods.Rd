@@ -21,3 +21,6 @@ details(object)
 \description{
 Extract details from dreamletProcessedData
 }
+\details{
+Extract detailed information from some classes
+}

@@ -10,6 +10,8 @@
 #' @param formula original formula
 #' @param data data.frame
 #'
+#' @return a formula, possibly with terms omitted.
+#'
 #' @examples
 #' 
 #' # Valid formula
@@ -61,10 +63,10 @@ removeConstantTerms = function(formula, data){
 		})))
 	
 	# identify categorical variables with only single examples per category
-	excludeVarCat = sapply(data, function(x){
+	excludeVarCat = vapply(data, function(x){
 		# exlcude variable if it is a factor with max level count of 1
 		ifelse( is.factor(x), max(table(x)) == 1, FALSE)
-		})
+		}, FUN.VALUE=logical(1))
 
 	excludeVar = c(excludeVarConstant, names(excludeVarCat)[which(excludeVarCat)])
 

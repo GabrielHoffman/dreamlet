@@ -16,6 +16,9 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/cellCounts.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/cellTypeSpecifity.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/checkFormula.html</loc>
   </url>
   <url>
@@ -26,9 +29,6 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/details-methods.html</loc>
-  </url>
-  <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dot-plotCellComposition.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamlet.html</loc>
@@ -59,6 +59,9 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotPercentBars-methods.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotVarPart-methods.html</loc>

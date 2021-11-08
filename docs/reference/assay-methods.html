@@ -48,7 +48,8 @@
 
 <meta property="og:title" content="Get assay — assay,dreamletResult,ANY-method" />
 <meta property="og:description" content="Get assay
-Get assay" />
+Get assay
+Get assays by name" />
 <meta property="og:image" content="http://gabrielhoffman.github.io/dreamlet/logo.svg" />
 
 
@@ -136,19 +137,23 @@ Get assay" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get assay</h1>
-    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/dreamlet.R'><code>R/dreamlet.R</code></a>, <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/dreamletProcessedData.R'><code>R/dreamletProcessedData.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/dreamlet.R'><code>R/dreamlet.R</code></a>, <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/dreamletProcessedData.R'><code>R/dreamletProcessedData.R</code></a>, <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/R/vpDF.R'><code>R/vpDF.R</code></a></small>
     <div class="hidden name"><code>assay-methods.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Get assay</p>
 <p>Get assay</p>
+<p>Get assays by name</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for dreamletResult,ANY</span>
 <span class='fu'>assay</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, withDimnames <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for dreamletProcessedData,ANY</span>
+<span class='fu'>assay</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, withDimnames <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S4 method for vpDF,ANY</span>
 <span class='fu'>assay</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, withDimnames <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -156,7 +161,7 @@ Get assay" />
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>dreamletProcessedData object</p></td>
+      <td><p>vpDF object</p></td>
     </tr>
     <tr>
       <th>i</th>

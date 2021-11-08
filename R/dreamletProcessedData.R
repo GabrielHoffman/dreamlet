@@ -210,6 +210,8 @@ setMethod("print", "dreamletProcessedData",
 #'
 #' @param object A dreamletProcessedData object
 #'
+#' @details Extract detailed information from some classes
+#'
 #' @rdname details-methods
 #' @export
 setGeneric('details', function(object){

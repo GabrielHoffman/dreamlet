@@ -15,3 +15,21 @@ matrix of cell counts with samples as rows and cell types as columns
 \description{
 Extract matrix of cell counts from \code{SingleCellExperiment}
 }
+\examples{
+ 
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# create pseudobulk for each sample and cell cluster
+pb <- aggregateToPseudoBulk(example_sce, 
+   assay = "counts",    
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
+
+# get matrix of cell counts for each sample
+cellCounts(pb)
+
+}

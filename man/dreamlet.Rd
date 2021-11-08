@@ -40,7 +40,7 @@ dreamlet(
 
 \item{data}{metadata used in regression formula}
 
-\item{contrasts}{character vector specifying contrasts specifying linear combinations of fixed effects to test}
+\item{contrasts}{character vector specifying contrasts specifying linear combinations of fixed effects to test.  This is fed into \code{makeContrastsDream( formula, data, contrasts=contrasts)}}
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 
@@ -56,9 +56,45 @@ dreamlet(
 
 \item{...}{other arguments passed to \code{dream}}
 }
+\value{
+Object of class \code{dreamletResult} storing results for each cell type
+}
 \description{
 Perform differential expression for each assay using linear mixed models
 }
+\details{
+Fit linear (mixed) model on each cell type separately.  For advanced use of contrasts see \code{variancePartition::makeContrastsDream()} and vignette \url{https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1}.
+}
+\examples{
+ 
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# create pseudobulk for each sample and cell cluster
+pb <- aggregateToPseudoBulk(example_sce, 
+   assay = "counts",    
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
+
+# voom-style normalization
+res.proc = processAssays( pb, ~ group_id)
+
+# Differential expression analysis within each assay,
+# evaluated on the voom normalized data 
+res.dl = dreamlet( res.proc, ~ group_id)
+
+# show coefficients estimated for each cell type
+coefNames(res.dl)
+
+# extract results using limma-style syntax
+# combines all cell types together
+# adj.P.Val gives study-wide FDR
+topTable(res.dl, coef="group_idstim", number=3)
+
+}
 \seealso{
-\code{dream}, \code{makeContrastsDream}
+\code{dream()}, \code{makeContrastsDream()}
 }

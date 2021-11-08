@@ -1,6 +1,6 @@
 ---
 title: "Dreamlet analysis of single cell RNA-seq"
-subtitle: 'Linear mixed model analysis of pseudobulk'
+subtitle: 'Linear mixed model analysis of pseudobulk data'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
@@ -144,7 +144,7 @@ plotVoom( res.proc)
 # plotVoom( res.proc[["B cells"]])
 ```
 
-# Run variancePartition analysis
+# Variance partitioning analysis
 The [variancePartition](http://bioconductor.org/packages/variancePartition/) package uses linear and linear mixed models to quanify the contribution of multiple sources of expression variation at the gene-level.  For each gene it fits a linear (mixed) model and evalutes the fraction of expression variation explained by each variable.  
 
 Variance fractions can be visualized at the gene-level for each cell type using a bar plot, or genome-wide using a violin plot.
@@ -162,22 +162,27 @@ plotPercentBars(vp.lst[vp.lst$gene %in% genes,])
 
 ```{r vp.violin, fig.height=7}
 # Summarize variance fractions genome-wide for each cell type
-plotVarPart(vp.lst)
+plotVarPart(vp.lst, label.angle=60)
 ```
 
 
-# Run dreamlet differential expression
-Since the normalized expression data and metadata are stored within `res.proc`, only the regression formula remains to be specified.  Here we only included the stimulus status, but analyses of larger datasets can include covariates and random effects.
+# Differential expression using `dreamlet`
+Since the normalized expression data and metadata are stored within `res.proc`, only the regression formula remains to be specified.  Here we only included the stimulus status, but analyses of larger datasets can include covariates and random effects. With formula `~ StimStatus`, an intercept is fit and coefficient `StimStatusstim` log fold change between simulated and controls. 
+
 
 ```{r test}
 # Differential expression analysis within each assay,
 # evaluated on the voom normalized data 
 res.dl = dreamlet( res.proc, ~ StimStatus)
 
+# names of estimated coefficients
+coefNames(res.dl) 
+
 # the resulting object of class dreamletResult
 # stores results and other information
 res.dl
 ```
+
 
 ## Volcano plot for each cell type
 The volcano plot can indicate the strength of the differential expression signal with each cell type.  Red points indicate FDR < 0.05.
@@ -198,8 +203,32 @@ plotForest( res.dl, coef = 'StimStatusstim', gene = 'IRF7')
 ```
 
 
+## Advanced used of contrasts
+A hypothesis test of the _difference_ between two or more coefficients can be performed using contrasts.  The contrast matrix is evaluated for each cell type in the backend, so only the contrast string must be supplied to `dreamlet()`.  
+
+```{r dreamlet.contrasts}
+# create a contrasts called 'Diff' that is the difference between expression
+# in the stimulated and controls.
+# More than one can be specified
+contrasts = c(Diff = 'StimStatusstim - StimStatusctrl')
+
+# Evalaute the regression model without an intercept term.
+# Instead estimate the mean expression in stimulated, controls and then
+# set Diff to the difference between the two
+res.dl2 = dreamlet( res.proc, ~ 0 + StimStatus, contrasts=contrasts)
+
+# see estimated coefficients
+coefNames(res.dl2)
+
+# Volcano plot of Diff
+plotVolcano( res.dl2[1:2], coef = 'Diff' )
+```
+This new `Diff` variable can then be used downstream for analysis asking for a coefficient.  But note that since there is no intercept term in this model, the meaning of `StimStatusstim` changes here.  When the formula is ` 0 + StimStatus` then `StimStatusstim` is the mean expression in stimulated samples.  
+
+For further information about using contrasts see [makeContrastsDream()](https://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html) and [vignette](https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1).
+
 # Gene set analysis using zenith
-While standard enrichment methods like Fishers exact test, requires specifying a FDR cutoff to identify differentially expressed genes.  However, dichotomizing differential expression results is often too simple and ignores the quantitative variation captured by the differential expression test statistics.   Here we use `zenith`, a wrapper for [`limma::camera](https://rdrr.io/bioc/limma/man/camera.html), to perform gene set analysis using the full spectrum of differential expression test statistics.  `zenith/camera` is a [competetive test](https://www.nature.com/articles/nrg.2016.29) that compares the mean test statistic for genes in a given gene set, to genes not in that set while accounting for correlation between genes.        
+While standard enrichment methods like Fishers exact test, requires specifying a FDR cutoff to identify differentially expressed genes.  However, dichotomizing differential expression results is often too simple and ignores the quantitative variation captured by the differential expression test statistics.   Here we use `zenith`, a wrapper for [`limma::camera`](https://rdrr.io/bioc/limma/man/camera.html), to perform gene set analysis using the full spectrum of differential expression test statistics.  `zenith/camera` is a [competetive test](https://www.nature.com/articles/nrg.2016.29) that compares the mean test statistic for genes in a given gene set, to genes not in that set while accounting for correlation between genes.        
 
 Here, `zenith_gsa` takes a `dreamletResult` object, the coefficient of interest, and gene sets as a `GeneSetCollection` object from [GSEABase](https://bioconductor.org/packages/GSEABase/).      
 

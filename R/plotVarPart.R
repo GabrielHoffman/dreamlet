@@ -11,6 +11,32 @@
 #' @param convertToPercent multiply fractions by 100 to convert to percent values
 #' @param ... additional arguments
 #' 
+#' @return Violin plot showing variance fractions
+#' 
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # variance partitioning analysis
+#' vp = fitVarPart( res.proc, ~ group_id)
+#' 
+#' # Summarize variance fractions genome-wide for each cell type
+#' genes = vp$gene[2:4]
+#' plotVarPart(vp)
+#'
 #' @rdname plotVarPart-methods
 #' @aliases plotVarPart,DataFrame,DataFrame-method
 #' @importFrom reshape2 melt

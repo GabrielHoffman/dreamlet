@@ -26,7 +26,6 @@
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
 #'
-#' @export
 processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, useCountsWeights = TRUE, BPPARAM = SerialParam(),...){
 
     checkFormula( formula, data)
@@ -127,6 +126,28 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
+#' @return Object of class \code{dreamletProcessedData} storing voom-style normalized expression data
+#'
+#' @examples
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#'
 #' @import BiocParallel  
 #' @importFrom SummarizedExperiment colData assays assay assayNames
 #' @importFrom S4Vectors metadata as.data.frame
@@ -189,7 +210,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 	names(resList) = assayNames(sceObj)
 
 	# remove empty assays
-	resList = resList[!sapply(resList, is.null)]
+	resList = resList[!vapply(resList, is.null, FUN.VALUE=logical(1))]
 
 	new("dreamletProcessedData", resList, data = data_constant, metadata = pmetadata, pkeys=pkeys)
 }

@@ -16,6 +16,9 @@
 
 \item{...}{other arguments}
 }
+\value{
+print data stored in object
+}
 \description{
 Print object
 

@@ -23,6 +23,8 @@ setClass("dreamletResult", contains="list", slots=c(df_details = "data.frame"))
 #' 
 #' @param object dreamletResult object
 #'
+#' @return show data stored in object
+#'
 #' @rdname show-methods
 #' @aliases show,dreamletResult,dreamletResult-method
 #' @export
@@ -38,6 +40,8 @@ setMethod("show", "dreamletResult",
 #' 
 #' @param x dreamletResult object
 #' @param ... other arguments
+#'
+#' @return print data stored in object
 #' 
 #' @importFrom utils head tail
 #' @importFrom S4Vectors coolcat
@@ -79,6 +83,32 @@ setMethod("print", "dreamletResult",
 #'
 #' @param obj A dreamletResult object
 #'
+#' @return array storing names of coefficients
+#'
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # show coefficients estimated for each cell type
+#' coefNames(res.dl)
+#'
 #' @rdname coefNames-methods
 #' @export
 setGeneric('coefNames', function(obj){
@@ -92,7 +122,7 @@ setGeneric('coefNames', function(obj){
 setMethod("coefNames", "dreamletResult",
 	function(obj){		
 
-	unique(c(unlist(sapply(obj, function(x) colnames(coef(x))))))
+	unique(c(unlist(sapply(obj, function(x) colnames(coef(x))) )))
 })
 
 
@@ -155,13 +185,15 @@ setMethod("assay", signature(x="dreamletResult"),
 #' @export
 setMethod("[", signature(x="dreamletResult"),
 	function(x, i){   
-		new("dreamletResult", x[i])
+
+
+	res = new("dreamletResult", x@.Data[i], 
+				df_details = details(x)[i,,drop=FALSE])
+	names(res) = names(x)[i]
+	res
+
 	}
 )
-
-
-
-
 
 
 
@@ -183,6 +215,38 @@ setMethod("[", signature(x="dreamletResult"),
 #' @param lfc lfc
 #' @param confint confint
 #'
+#' @return \code{data.frame} storing hypothesis test for each gene and cell type
+#'
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # show coefficients estimated for each cell type
+#' coefNames(res.dl)
+#' 
+#' # extract results using limma-style syntax
+#' # combines all cell types together
+#' # adj.P.Val gives study-wide FDR
+#' topTable(res.dl, coef="group_idstim", number=3)
+#' 
+#' @seealso \code{limma::topTable()}, \code{variancePartition::topTable()}
 #' @rdname topTable-methods
 #' @aliases topTable,dreamletResult,dreamletResult-method
 #' @export
@@ -242,7 +306,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
-#' @param contrasts character vector specifying contrasts specifying linear combinations of fixed effects to test
+#' @param contrasts character vector specifying contrasts specifying linear combinations of fixed effects to test.  This is fed into \code{makeContrastsDream( formula, data, contrasts=contrasts)}
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
 #' @param robust logical, use eBayes method that is robust to outlier genes
@@ -252,11 +316,44 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @param use.eBayes should \code{eBayes} be used on result? (defualt: TRUE)
 #' @param ... other arguments passed to \code{dream}
 #'
+#' @details
+#' Fit linear (mixed) model on each cell type separately.  For advanced use of contrasts see \code{variancePartition::makeContrastsDream()} and vignette \url{https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1}.  
+#'
+#' @return Object of class \code{dreamletResult} storing results for each cell type
+#'
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # show coefficients estimated for each cell type
+#' coefNames(res.dl)
+#' 
+#' # extract results using limma-style syntax
+#' # combines all cell types together
+#' # adj.P.Val gives study-wide FDR
+#' topTable(res.dl, coef="group_idstim", number=3)
+#' 
 #' @import BiocParallel  
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
-#' @seealso \code{dream}, \code{makeContrastsDream}
-#'
+#' @seealso \code{dream()}, \code{makeContrastsDream()}
 #' @export
 setGeneric("dreamlet", 
 	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
