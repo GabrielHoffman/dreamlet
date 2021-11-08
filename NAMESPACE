@@ -2,7 +2,7 @@
 
 export(aggregateToPseudoBulk)
 export(cellCounts)
-export(cellTypeSpecifity)
+export(cellTypeSpecificity)
 export(coefNames)
 export(details)
 export(dreamlet)
