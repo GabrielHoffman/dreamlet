@@ -27,7 +27,7 @@
 #' sample_id = 'sample_id',
 #' verbose=FALSE)
 #' 
-#' # Compute cell type specifity of each gene
+#' # Compute cell type specificity of each gene
 #' df = cellTypeSpecificity( pb)
 #' 
 #' df_melt = reshape2::melt(df)
@@ -42,7 +42,7 @@
 #'		axis.text.x = element_text(angle = 60, vjust = 1, hjust=1)) + 
 #'	ylim(0,1) + 
 #'	ylab("Fraction of gene expression") + 
-#'	ggtitle("Cell type specifity")
+#'	ggtitle("Cell type specificity")
 #' 
 #' # Barplot of 5 genes
 #' genes = rownames(df)[1:5]
@@ -56,7 +56,7 @@
 #' 	xlab("Gene") + 
 #' 	ylab("Fraction of gene expression") + 
 #' 	scale_y_continuous(limits=c(0, 1), expand=c(0,0)) + 
-#'  ggtitle("Cell type specifity")
+#'  ggtitle("Cell type specificity")
 #' 
 #' @importFrom edgeR DGEList calcNormFactors cpm
 #' @export
