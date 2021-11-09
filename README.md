@@ -1,6 +1,6 @@
 # dreamlet <img src="man/figures/logo.png" align="right" alt="" width="160" />
 
-Perform differential expression analysis on multi-sample single cell datasets using linear mixed models
+Perform differential expression analysis on multi-sample single cell datasets using linear (mixed) models
 
 ## Install
 ```r
