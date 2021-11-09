@@ -40,8 +40,9 @@
 #'	theme(aspect.ratio=1, legend.position="none", 
 #'		plot.title = element_text(hjust = 0.5),
 #'		axis.text.x = element_text(angle = 60, vjust = 1, hjust=1)) + 
-#'	ylim(0,1) + 
+#'	scale_y_continuous(limits=c(0,1), expand=c(0,0)) + 
 #'	ylab("Fraction of gene expression") + 
+#'  geom_hline(yintercept=1/ncol(df), color="grey60", linetype="dashed") +
 #'	ggtitle("Cell type specificity")
 #' 
 #' # Barplot of 5 genes

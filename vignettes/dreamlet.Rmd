@@ -88,10 +88,9 @@ sce <- logNormCounts(sce)
 sce$StimStatus = sce$stim
 ```
 
+
 ## Aggregate to pseudobulk
 Dreamlet, like muscat, performs analysis at the pseudobulk-level by summing reads across cells for a given sample and cell type.  `aggregateToPseudoBulk` is substantially faster for large on-disk datasets than [`muscat::aggregateData`](https://rdrr.io/bioc/muscat/man/aggregateData.html).
-
-
 
 ```{r aggregate}
 # Since 'ind' is the individual and 'StimStatus' is the stimulus status,
