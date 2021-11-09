@@ -143,7 +143,7 @@ plotVoom( res.proc)
 # plotVoom( res.proc[["B cells"]])
 ```
 
-# Variance partitioning analysis
+# Variance partitioning
 The [variancePartition](http://bioconductor.org/packages/variancePartition/) package uses linear and linear mixed models to quanify the contribution of multiple sources of expression variation at the gene-level.  For each gene it fits a linear (mixed) model and evalutes the fraction of expression variation explained by each variable.  
 
 Variance fractions can be visualized at the gene-level for each cell type using a bar plot, or genome-wide using a violin plot.
@@ -165,7 +165,7 @@ plotVarPart(vp.lst, label.angle=60)
 ```
 
 
-# Differential expression using `dreamlet`
+# Differential expression 
 Since the normalized expression data and metadata are stored within `res.proc`, only the regression formula remains to be specified.  Here we only included the stimulus status, but analyses of larger datasets can include covariates and random effects. With formula `~ StimStatus`, an intercept is fit and coefficient `StimStatusstim` log fold change between simulated and controls. 
 
 
@@ -183,7 +183,7 @@ res.dl
 ```
 
 
-## Volcano plot for each cell type
+## Volcano plots
 The volcano plot can indicate the strength of the differential expression signal with each cell type.  Red points indicate FDR < 0.05.
 ```{r plotVolcano, fig.width=8, fig.height=8}
 plotVolcano( res.dl, coef = 'StimStatusstim' )
@@ -226,7 +226,7 @@ This new `Diff` variable can then be used downstream for analysis asking for a c
 
 For further information about using contrasts see [makeContrastsDream()](https://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html) and [vignette](https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1).
 
-# Gene set analysis using zenith
+# Gene set analysis 
 While standard enrichment methods like Fishers exact test, requires specifying a FDR cutoff to identify differentially expressed genes.  However, dichotomizing differential expression results is often too simple and ignores the quantitative variation captured by the differential expression test statistics.   Here we use `zenith`, a wrapper for [`limma::camera`](https://rdrr.io/bioc/limma/man/camera.html), to perform gene set analysis using the full spectrum of differential expression test statistics.  `zenith/camera` is a [competetive test](https://www.nature.com/articles/nrg.2016.29) that compares the mean test statistic for genes in a given gene set, to genes not in that set while accounting for correlation between genes.        
 
 Here, `zenith_gsa` takes a `dreamletResult` object, the coefficient of interest, and gene sets as a `GeneSetCollection` object from [GSEABase](https://bioconductor.org/packages/GSEABase/).      
@@ -270,7 +270,7 @@ plotZenithResults(df, Inf, Inf)
 
 
 
-# Testing differences in cell composition
+# Variation in cell counts
 The number of cells observed in of each type varies across samples.  Visualizing these difference and evaluating weither these differences are explained by other measured variables can give insight into the biology of this variation in cell type composition.    
 Here, compare fraction of each cell type bewteen simulated and unstimulated samples
 

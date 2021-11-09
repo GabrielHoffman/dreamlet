@@ -97,7 +97,7 @@
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-11-09 09:39:30</h4>
+            <h4 class="date">Run on 2021-11-09 10:11:43</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/master/vignettes/dreamlet.Rmd"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="hidden name"><code>dreamlet.Rmd</code></div>
@@ -239,9 +239,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="co"># Show plots for one cell cluster</span>
 <span class="co"># plotVoom( res.proc[["B cells"]])</span></code></pre></div>
 </div>
-<div id="variance-partitioning-analysis" class="section level1">
+<div id="variance-partitioning" class="section level1">
 <h1 class="hasAnchor">
-<a href="#variance-partitioning-analysis" class="anchor"></a>Variance partitioning analysis</h1>
+<a href="#variance-partitioning" class="anchor"></a>Variance partitioning</h1>
 <p>The <a href="http://bioconductor.org/packages/variancePartition/">variancePartition</a> package uses linear and linear mixed models to quanify the contribution of multiple sources of expression variation at the gene-level. For each gene it fits a linear (mixed) model and evalutes the fraction of expression variation explained by each variable.</p>
 <p>Variance fractions can be visualized at the gene-level for each cell type using a bar plot, or genome-wide using a violin plot.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -257,10 +257,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.violin-1.png" width="700"></p>
 </div>
-<div id="differential-expression-using-dreamlet" class="section level1">
+<div id="differential-expression" class="section level1">
 <h1 class="hasAnchor">
-<a href="#differential-expression-using-dreamlet" class="anchor"></a>Differential expression using <code>dreamlet</code>
-</h1>
+<a href="#differential-expression" class="anchor"></a>Differential expression</h1>
 <p>Since the normalized expression data and metadata are stored within <code>res.proc</code>, only the regression formula remains to be specified. Here we only included the stimulus status, but analyses of larger datasets can include covariates and random effects. With formula <code>~ StimStatus</code>, an intercept is fit and coefficient <code>StimStatusstim</code> log fold change between simulated and controls.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Differential expression analysis within each assay,</span>
@@ -281,9 +280,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 ##  max: 4455 
 ## details(4): assay n_retain formula formDropsTerms
 ## coefNames(2): (Intercept) StimStatusstim</code></pre>
-<div id="volcano-plot-for-each-cell-type" class="section level2">
+<div id="volcano-plots" class="section level2">
 <h2 class="hasAnchor">
-<a href="#volcano-plot-for-each-cell-type" class="anchor"></a>Volcano plot for each cell type</h2>
+<a href="#volcano-plots" class="anchor"></a>Volcano plots</h2>
 <p>The volcano plot can indicate the strength of the differential expression signal with each cell type. Red points indicate FDR &lt; 0.05.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></code></pre></div>
@@ -340,9 +339,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <p>For further information about using contrasts see <a href="https://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html">makeContrastsDream()</a> and <a href="https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1">vignette</a>.</p>
 </div>
 </div>
-<div id="gene-set-analysis-using-zenith" class="section level1">
+<div id="gene-set-analysis" class="section level1">
 <h1 class="hasAnchor">
-<a href="#gene-set-analysis-using-zenith" class="anchor"></a>Gene set analysis using zenith</h1>
+<a href="#gene-set-analysis" class="anchor"></a>Gene set analysis</h1>
 <p>While standard enrichment methods like Fishers exact test, requires specifying a FDR cutoff to identify differentially expressed genes. However, dichotomizing differential expression results is often too simple and ignores the quantitative variation captured by the differential expression test statistics. Here we use <code>zenith</code>, a wrapper for <a href="https://rdrr.io/bioc/limma/man/camera.html"><code>limma::camera</code></a>, to perform gene set analysis using the full spectrum of differential expression test statistics. <code>zenith/camera</code> is a <a href="https://www.nature.com/articles/nrg.2016.29">competetive test</a> that compares the mean test statistic for genes in a given gene set, to genes not in that set while accounting for correlation between genes.</p>
 <p>Here, <code>zenith_gsa</code> takes a <code>dreamletResult</code> object, the coefficient of interest, and gene sets as a <code>GeneSetCollection</code> object from <a href="https://bioconductor.org/packages/GSEABase/">GSEABase</a>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -405,9 +404,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 </div>
 </div>
 </div>
-<div id="testing-differences-in-cell-composition" class="section level1">
+<div id="variation-in-cell-counts" class="section level1">
 <h1 class="hasAnchor">
-<a href="#testing-differences-in-cell-composition" class="anchor"></a>Testing differences in cell composition</h1>
+<a href="#variation-in-cell-counts" class="anchor"></a>Variation in cell counts</h1>
 <p>The number of cells observed in of each type varies across samples. Visualizing these difference and evaluating weither these differences are explained by other measured variables can give insight into the biology of this variation in cell type composition.<br>
 Here, compare fraction of each cell type bewteen simulated and unstimulated samples</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
