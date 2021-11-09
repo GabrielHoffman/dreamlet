@@ -93,7 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Loading large-scale H5AD datasets</h1>
-            <h3 class="subtitle">On-disk access of H5AD files via SingleCellExperiment interface</h3>
+            <h3 class="subtitle">On-disk SingleCellExperiment</h3>
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
@@ -123,9 +123,9 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 <h2 class="hasAnchor">
 <a href="#using-zellkonverter" class="anchor"></a>Using zellkonverter</h2>
 <p><code>zellkonverter</code> &gt;=1.3.0 is required in general and &gt;=1.3.3 is required for the last example below. <code>zellkonverter</code> is an interface for python code. Note that the python dependencies are installed the first time <code><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html">readH5AD()</a></code> is run, rather than when the package is installed. So the first run of <code><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html">readH5AD()</a></code> can take a few minutes, but subsequent runs will be fast.</p>
-<div id="standard-usage-to-access-main-dataset" class="section level3">
+<div id="standard-usage" class="section level3">
 <h3 class="hasAnchor">
-<a href="#standard-usage-to-access-main-dataset" class="anchor"></a>Standard usage to access main dataset</h3>
+<a href="#standard-usage" class="anchor"></a>Standard usage</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/theislab/zellkonverter">zellkonverter</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span>
