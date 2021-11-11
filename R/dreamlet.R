@@ -301,7 +301,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 #' Differential expression for each assay
 #'
-#' Perform differential expression for each assay using linear mixed models
+#' Perform differential expression for each assay using linear (mixed) models
 #'
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
@@ -429,7 +429,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 				}
 
 				if( use.eBayes ){
-					# borrow information across genes with the Empircal Bayes step
+					# borrow information across genes with the empirical Bayes step
 					fit = eBayes(fit, robust=robust, trend=!geneExpr$isCounts)
 				}
 			}else{	
