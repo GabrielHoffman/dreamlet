@@ -85,7 +85,13 @@ equalFormulas = function(formula1, formula2){
 }
 
 
-
+#' Extract residuls from dreamletResult
+#' 
+#' Extract residuls from dreamletResult
+#' 
+#' @param object dreamletResult object
+#' @param ... other arguments
+#' 
 #' @rdname residuals-methods
 #' @aliases residuals,dreamletResult,dreamletResult-method
 setMethod("residuals", "dreamletResult",
