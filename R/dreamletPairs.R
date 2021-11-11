@@ -58,6 +58,18 @@ dreamletPairs = function( pb, assay.pairs, method = c("random", "fixed", "none")
 
 	method = match.arg(method)
 
+	# check that assay.pairs has two entries
+	if( length(assay.pairs) != 2){
+		stop("assay.pairs must have 2 entries")
+	}
+
+	# check that assay.pairs is present in pseudobulk
+	test = assay.pairs %in% assayNames(pb)
+	if( any(!test) ){
+		txt = paste0("Assays not found: ", paste0(assay.pairs[!test], collapse=', '))
+		stop(txt)
+	}
+
     # extract pseudobulk counts for each cell type
 	countsMatrix1 = assay(pb, assay.pairs[1])
 	colnames(countsMatrix1) = paste0(assay.pairs[1], '_', colnames(countsMatrix1))
