@@ -85,15 +85,41 @@ equalFormulas = function(formula1, formula2){
 }
 
 
-#' Extract residuls from dreamletResult
+#' Extract residuls from \code{dreamletResult}
 #' 
-#' Extract residuls from dreamletResult
+#' Extract residuls from \code{dreamletResult}
 #' 
-#' @param object dreamletResult object
+#' @param object \code{dreamletResult} object
 #' @param ... other arguments
+#' 
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # extract residuals for each assay (i.e. cell type)
+#' # Return list with entry for each assay with for retained samples and genes
+#' resid.lst = residuals(res.dl)
 #' 
 #' @rdname residuals-methods
 #' @aliases residuals,dreamletResult,dreamletResult-method
+#' @export
 setMethod("residuals", "dreamletResult",
   function(object,...){
 

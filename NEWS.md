@@ -1,4 +1,6 @@
 # dreamlet 0.0.16
+- add `residuals()` for `dreamlet()` result
+- add `dreamletPairs()`
 - fix bug in `removeConstantTerms()` with multiple constant terms
 
 # dreamlet 0.0.15

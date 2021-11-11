@@ -60,7 +60,7 @@ dreamlet(
 Object of class \code{dreamletResult} storing results for each cell type
 }
 \description{
-Perform differential expression for each assay using linear mixed models
+Perform differential expression for each assay using linear (mixed) models
 }
 \details{
 Fit linear (mixed) model on each cell type separately.  For advanced use of contrasts see \code{variancePartition::makeContrastsDream()} and vignette \url{https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1}.
