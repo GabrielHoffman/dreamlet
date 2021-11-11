@@ -100,7 +100,8 @@ dreamletPairs = function( pb, assay.pairs, method = c("random", "fixed", "none")
 	vobj = processOneAssay(countsMatrix, form, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, useCountsWeights=useCountsWeights, BPPARAM=BPPARAM,...)
 
 	# perform differential expression regression analysis
-	fit = dream( vobj, form, data, BPPARAM=BPPARAM,..., quiet=TRUE)
+	idx = rownames(data) %in% rownames(vobj$design)
+	fit = dream( vobj, form, data[idx,], BPPARAM=BPPARAM,..., quiet=TRUE)
 
 	# borrow information across genes with the Empirical Bayes step
 	fit = eBayes(fit, robust=robust, trend=!vobj$isCounts)
