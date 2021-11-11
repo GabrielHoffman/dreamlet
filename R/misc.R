@@ -86,6 +86,21 @@ equalFormulas = function(formula1, formula2){
 
 
 
+#' @rdname residuals-methods
+#' @aliases residuals,dreamletResult,dreamletResult-method
+setMethod("residuals", "dreamletResult",
+  function(object,...){
+
+    res = lapply( names(object), function(key){
+        residuals(object[[key]])
+    })
+    names(res) = names(object)
+
+    res
+})
+
+
+
 
 
 
