@@ -1,3 +1,6 @@
+# dreamlet 0.0.16
+- fix bug in `removeConstantTerms()` with multiple constant terms
+
 # dreamlet 0.0.15
 - `processOneAssay()` weights by number of cells
 - require `variancePartition >= 1.25.1` to handle weights in `voomWithDreamWeights()`

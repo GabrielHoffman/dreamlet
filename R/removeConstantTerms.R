@@ -2,7 +2,6 @@
 # April 6, 2021
 
 
-
 #' Remove constant terms from formula
 #' 
 #' Remove constant terms from formula.  Also remove categorical variables with a max of one example per category
@@ -65,14 +64,24 @@ removeConstantTerms = function(formula, data){
 	# identify categorical variables with only single examples per category
 	excludeVarCat = vapply(data, function(x){
 		# exlcude variable if it is a factor with max level count of 1
-		ifelse( is.factor(x), max(table(x)) == 1, FALSE)
+		ifelse( is.factor(x), length(table(x)) == 1, FALSE)
 		}, FUN.VALUE=logical(1))
 
+	# combine excludes from multiple tests
 	excludeVar = c(excludeVarConstant, names(excludeVarCat)[which(excludeVarCat)])
+	excludeVar = unique(excludeVar)
 
 	# replace each excluded variable with an intercept
 	if( length(excludeVar) > 0){
-		fterms_new = array(sapply(excludeVar, function(x) gsub(x, '1', fterms)))
+
+		# replace each exclude term with with intercept
+		fterms_new = fterms
+		for( x in excludeVar){
+			fterms_new = gsub(x, '1', fterms_new)
+		}
+		fterms_new = unique(fterms_new)
+
+		# fterms_new = array(sapply(excludeVar, function(x) gsub(x, '1', fterms)))
 		fterms_new = fterms_new[fterms_new!=""]
 	}else{
 		fterms_new = fterms
