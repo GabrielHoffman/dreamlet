@@ -187,12 +187,35 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
 
 #' @importFrom SummarizedExperiment assayNames
-.check_arg_assay= function (x, y) 
-{
-    stopifnot(is.character(y), length(y) == 1, y %in% assayNames(x))
-    if (sum(assayNames(x) == y) > 1) 
+.check_arg_assay = function (x, y){
+    stopifnot(is.character(y), length(y) == 1)
+
+    if( ! y %in% assayNames(x)){
+        stop("Assay name not found: ", y)
+    }
+    if (sum(assayNames(x) == y) > 1){
         stop("Argument 'assay' was matched to multiple times.\n ", 
             " Please assure that the input SCE has unique 'assayNames'.")
+    }
+
+    # check that assay is integers
+    #-----------------------------
+    # get nonzero values from first 3 samples 
+    values = as.numeric(assay(x,y)[,1:3])
+    values = values[values!=0]
+
+    if( any(values < 0) ){
+        txt = paste0("Assay '", y, "' stores negatives values instead of counts.\n\tThis is not allowed for creating pseudobulk.\n\tThis dataset contains assays: ", paste(assayNames(x), collapse=', '))
+        stop(txt)
+    }
+
+    # compute fraction that are already integers
+    integerFrac = sum(values == floor(values)) / length(values)
+
+    if( integerFrac < 1 ){
+        txt = paste0("Assay '", y, "' stores continuous values instead of counts.\n\tMake sure this is the intended assay.\n\tThis dataset contains assays: ", paste(assayNames(x), collapse=', '))
+        warning(txt, immediate.=TRUE)
+    }
 }
 
 

@@ -2,6 +2,9 @@
 - add `residuals()` for `dreamlet()` result
 - add `dreamletPairs()`
 - fix bug in `removeConstantTerms()` with multiple constant terms
+- improve usability of `cellTypeSpecificity()` by adding `plotPercentBars()` and `plotViolin()` compatability
+- fix bug in `topTable()` when `coef` is not estimated
+- add argument `assays` to `dreamlet()`, `fitVarPart()`, and `processAssays()`
 
 # dreamlet 0.0.15
 - `processOneAssay()` weights by number of cells

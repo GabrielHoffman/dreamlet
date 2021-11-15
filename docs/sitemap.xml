@@ -16,6 +16,9 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/cellCounts.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/cellSpecificityValues-class.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/cellTypeSpecificity.html</loc>
   </url>
   <url>
@@ -32,6 +35,9 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamlet.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletPairs.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletProcessedData-class.html</loc>
@@ -67,6 +73,9 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotVarPart-methods.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotViolin-methods.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotVolcano-methods.html</loc>
   </url>
   <url>
@@ -86,6 +95,9 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/removeConstantTerms.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/residuals-methods.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/show-methods.html</loc>

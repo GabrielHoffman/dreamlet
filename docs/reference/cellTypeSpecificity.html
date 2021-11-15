@@ -173,43 +173,25 @@
 
 <span class='co'># create pseudobulk for each sample and cell cluster</span>
 <span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='aggregateToPseudoBulk.html'>aggregateToPseudoBulk</a></span><span class='op'>(</span><span class='va'>example_sce</span>, 
-assay <span class='op'>=</span> <span class='st'>"counts"</span>,    
-cluster_id <span class='op'>=</span> <span class='st'>'cluster_id'</span>, 
-sample_id <span class='op'>=</span> <span class='st'>'sample_id'</span>,
-verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+  assay <span class='op'>=</span> <span class='st'>"counts"</span>,    
+  cluster_id <span class='op'>=</span> <span class='st'>'cluster_id'</span>, 
+  sample_id <span class='op'>=</span> <span class='st'>'sample_id'</span>,
+  verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># Compute cell type specificity of each gene</span>
 <span class='va'>df</span> <span class='op'>=</span> <span class='fu'>cellTypeSpecificity</span><span class='op'>(</span> <span class='va'>pb</span><span class='op'>)</span>
 
-<span class='va'>df_melt</span> <span class='op'>=</span> <span class='fu'>reshape2</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/reshape2/man/melt.html'>melt</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
-
-<span class='co'># Violin plot of cell type specificity</span>
-<span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>df_melt</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>Var2</span>, <span class='va'>value</span>, fill<span class='op'>=</span><span class='va'>Var2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>geom_violin</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>geom_boxplot</span><span class='op'>(</span>width<span class='op'>=</span><span class='fl'>.1</span>, fill<span class='op'>=</span><span class='st'>"grey"</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>theme</span><span class='op'>(</span>aspect.ratio<span class='op'>=</span><span class='fl'>1</span>, legend.position<span class='op'>=</span><span class='st'>"none"</span>, 
-  plot.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>hjust <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>,
-  axis.text.x <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>angle <span class='op'>=</span> <span class='fl'>60</span>, vjust <span class='op'>=</span> <span class='fl'>1</span>, hjust<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>scale_y_continuous</span><span class='op'>(</span>limits<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span>, expand<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>ylab</span><span class='op'>(</span><span class='st'>"Fraction of gene expression"</span><span class='op'>)</span> <span class='op'>+</span> 
- <span class='fu'>geom_hline</span><span class='op'>(</span>yintercept<span class='op'>=</span><span class='fl'>1</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>, color<span class='op'>=</span><span class='st'>"grey60"</span>, linetype<span class='op'>=</span><span class='st'>"dashed"</span><span class='op'>)</span> <span class='op'>+</span>
-<span class='fu'>ggtitle</span><span class='op'>(</span><span class='st'>"Cell type specificity"</span><span class='op'>)</span>
+<span class='co'># Violin plot of specificity score for each cell type</span>
+<span class='fu'><a href='plotViolin.html'>plotViolin</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
 </div><div class='img'><img src='cellTypeSpecificity-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Barplot of 5 genes</span>
-<span class='va'>genes</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>
-
-<span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>df_melt</span><span class='op'>[</span><span class='va'>df_melt</span><span class='op'>$</span><span class='va'>Var1</span> <span class='op'>%in%</span> <span class='va'>genes</span>,<span class='op'>]</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>Var1</span>, <span class='va'>value</span>, fill<span class='op'>=</span><span class='va'>Var2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>geom_bar</span><span class='op'>(</span>stat<span class='op'>=</span><span class='st'>"identity"</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>theme</span><span class='op'>(</span>aspect.ratio<span class='op'>=</span><span class='fl'>1</span>, plot.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>hjust <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>scale_fill_discrete</span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Cell type"</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>xlab</span><span class='op'>(</span><span class='st'>"Gene"</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>ylab</span><span class='op'>(</span><span class='st'>"Fraction of gene expression"</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'>scale_y_continuous</span><span class='op'>(</span>limits<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, expand<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
- <span class='fu'>ggtitle</span><span class='op'>(</span><span class='st'>"Cell type specificity"</span><span class='op'>)</span>
+<span class='fu'>plotPercentBars</span><span class='op'>(</span> <span class='va'>df</span>, genes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='img'><img src='cellTypeSpecificity-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># Compute the maximum specificity score for each gene</span>
+<span class='va'>scoreMax</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>df</span>, <span class='fl'>1</span>, <span class='va'>max</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>scoreMax</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      HES4     ISG15  AURKAIP1    MRPL20     SSU72      RER1 
+#&gt; 0.4642496 0.4958420 0.2204701 0.3240954 0.2995513 0.2563389 </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

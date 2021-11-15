@@ -1,4 +1,20 @@
 
+Nov 9
+
+	processAssays: check that values are integer counts
+	
+	Add to vignette
+		residuals
+		cellTypeSpecificity
+	Differential expression between cell types
+		show empirically, that standard method gives false positives
+			Need to account for Donor
+	flexible filtering in processAssays()
+	DONE: improved plotting for cellTypeSpecificity
+	mashr
+	
+
+
 Nov 4
 	describe makeContrastsDream:
 	https://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html
