@@ -115,6 +115,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #'
 #' @param sceObj SingleCellExperiment object 
 #' @param formula regression formula for differential expression analysis
+#' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(sceObj)}
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
@@ -154,7 +155,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @export
-processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, useCountsWeights=TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, useCountsWeights=TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -181,8 +182,15 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 		pkeys = array()
 	}
 
+	# check if assays are valid
+	if( any( ! assays %in% assayNames(sceObj)) ){
+		idx = which( ! assays %in% assayNames(sceObj))
+		txt = paste("Assays are not found in dataset:", paste(head(assays[idx]), collapse=', '))
+		stop(txt)
+	}
+
 	# for each assay
-	resList = lapply( assayNames(sceObj), function(k){
+	resList = lapply( assays, function(k){
 
 		if( !quiet ) message('  ', k,'...', appendLF=FALSE)
 		startTime = Sys.time()
@@ -207,7 +215,7 @@ processAssays = function( sceObj, formula, min.cells = 10, isCounts=TRUE, normal
 
 		res
 	})
-	names(resList) = assayNames(sceObj)
+	names(resList) = assays
 
 	# remove empty assays
 	resList = resList[!vapply(resList, is.null, FUN.VALUE=logical(1))]

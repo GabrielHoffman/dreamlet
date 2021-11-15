@@ -7,6 +7,7 @@
 processAssays(
   sceObj,
   formula,
+  assays = assayNames(sceObj),
   min.cells = 10,
   isCounts = TRUE,
   normalize.method = "TMM",
@@ -23,6 +24,8 @@ processAssays(
 \item{sceObj}{SingleCellExperiment object}
 
 \item{formula}{regression formula for differential expression analysis}
+
+\item{assays}{array of assay names to include in analysis. Defaults to \code{assayNames(sceObj)}}
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 

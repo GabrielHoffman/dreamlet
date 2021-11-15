@@ -9,6 +9,7 @@ dreamlet(
   x,
   formula,
   data = colData(x),
+  assays = assayNames(x),
   contrasts = NULL,
   min.cells = 10,
   isCounts = TRUE,
@@ -23,6 +24,7 @@ dreamlet(
   x,
   formula,
   data = colData(x),
+  assays = assayNames(x),
   contrasts = NULL,
   min.cells = 10,
   isCounts = TRUE,
@@ -39,6 +41,8 @@ dreamlet(
 \item{formula}{regression formula for differential expression analysis}
 
 \item{data}{metadata used in regression formula}
+
+\item{assays}{array of assay names to include in analysis. Defaults to \code{assayNames(x)}}
 
 \item{contrasts}{character vector specifying contrasts specifying linear combinations of fixed effects to test.  This is fed into \code{makeContrastsDream( formula, data, contrasts=contrasts)}}
 

@@ -306,6 +306,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
+#' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(x)}
 #' @param contrasts character vector specifying contrasts specifying linear combinations of fixed effects to test.  This is fed into \code{makeContrastsDream( formula, data, contrasts=contrasts)}
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param isCounts logical, indicating if data is raw counts
@@ -356,7 +357,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @seealso \code{dream()}, \code{makeContrastsDream()}
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
+	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
 
 	standardGeneric("dreamlet")
 })
@@ -372,19 +373,26 @@ setGeneric("dreamlet",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data = colData(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
+	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
 	stopifnot( is(formula, 'formula'))
 
+	# check if assays are valid
+	if( any( ! assays %in% assayNames(x)) ){
+		idx = which( ! assays %in% assayNames(x))
+		txt = paste("Assays are not found in dataset:", paste(head(assays[idx]), collapse=', '))
+		stop(txt)
+	}
+	
 	# extract metadata shared across assays
 	data_constant = as.data.frame(data)
 
 	pkeys = x@pkeys
 
 	# for each assay
-	resList = lapply( names(x), function( k ){
+	resList = lapply( assays, function( k ){
 
 		if( !quiet ) message('  ', k,'...', appendLF=FALSE)
 		startTime = Sys.time()
@@ -444,12 +452,16 @@ setMethod("dreamlet", "dreamletProcessedData",
 		list(fit = fit, formula = form_mod, n_retain = ncol(geneExpr))
 	})
 	# name each result by the assay name
-	names(resList) = names(x)
+	names(resList) = assays
 
 	if( !quiet ) message("\n")
 
 	# extract fit
 	fitList = lapply(resList, function(x) x$fit)
+
+	# only keep entries that are not NULL
+	# NUll is returned when coef of interest is dropped
+	fitList = fitList[!sapply(fitList, is.null)]
 
 	# extract details
 	df_details = lapply( names(resList), function(id){

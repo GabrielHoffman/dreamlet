@@ -9,6 +9,7 @@ fitVarPart(
   x,
   formula,
   data = colData(x),
+  assays = assayNames(x),
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -18,6 +19,7 @@ fitVarPart(
   x,
   formula,
   data = colData(x),
+  assays = assayNames(x),
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -29,6 +31,8 @@ fitVarPart(
 \item{formula}{regression formula for differential expression analysis}
 
 \item{data}{metadata used in regression formula}
+
+\item{assays}{array of assay names to include in analysis. Defaults to \code{assayNames(x)}}
 
 \item{quiet}{show messages}
 

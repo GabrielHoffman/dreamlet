@@ -6,6 +6,7 @@
 #' @param x SingleCellExperiment or dreamletProcessedData object 
 #' @param formula regression formula for differential expression analysis
 #' @param data metadata used in regression formula
+#' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(x)}
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
@@ -42,7 +43,7 @@
 #' @import BiocParallel  
 #' @export
 setGeneric("fitVarPart", 
-	function( x, formula, data = colData(x), quiet = FALSE, BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), assays = assayNames(x), quiet = FALSE, BPPARAM = SerialParam(),...){
 
 	standardGeneric("fitVarPart")
 })
@@ -59,19 +60,26 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 #' @rdname fitVarPart
 #' @aliases fitVarPart,dreamletProcessedData-method
 setMethod("fitVarPart", "dreamletProcessedData",
-	function( x, formula, data = colData(x), quiet = FALSE, BPPARAM = SerialParam(),...){
+	function( x, formula, data = colData(x), assays = assayNames(x), quiet = FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
 	stopifnot( is(formula, 'formula'))
-	
+
+	# check if assays are valid
+	if( any( ! assays %in% assayNames(x)) ){
+		idx = which( ! assays %in% assayNames(x))
+		txt = paste("Assays are not found in dataset:", paste(head(assays[idx]), collapse=', '))
+		stop(txt)
+	}
+
 	# extract metadata shared across assays
 	data_constant = as.data.frame(data)
 
 	pkeys = x@pkeys
 
 	# for each assay
-	resList = lapply( assayNames(x), function( k ){
+	resList = lapply( assays, function( k ){
 
 		if( !quiet ) message('  ', k,'...', appendLF=FALSE)
 		startTime = Sys.time()
@@ -102,7 +110,7 @@ setMethod("fitVarPart", "dreamletProcessedData",
 		list(df = res, formula = form_mod, n_retain = ncol(geneExpr))
 	})
 	# name each result by the assay name
-	names(resList) = assayNames(x)
+	names(resList) = assays
 
 	if( !quiet ) message("\n")
 
