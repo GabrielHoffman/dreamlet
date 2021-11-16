@@ -461,7 +461,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 	# only keep entries that are not NULL
 	# NUll is returned when coef of interest is dropped
-	fitList = fitList[!sapply(fitList, is.null)]
+	fitList = fitList[!vapply(fitList, is.null, FUN.VALUE=logical(1))]
 
 	# extract details
 	df_details = lapply( names(resList), function(id){
