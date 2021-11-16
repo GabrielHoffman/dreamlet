@@ -47,6 +47,10 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 	y = y[,include,drop=FALSE] 
 	data = droplevels(data[include,,drop=FALSE])
 
+	if( nrow(data) < 3){
+		return( NULL )
+	}
+
 	# sample-level weights based on cell counts
 	w_cells = n.cells[include] 
 
