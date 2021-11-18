@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   dreamlet: dreamlet.html
   h5ad_on_disk: h5ad_on_disk.html
-last_built: 2021-11-16T00:26Z
+last_built: 2021-11-18T15:43Z
 urls:
   reference: http://gabrielhoffman.github.io/dreamlet/reference
   article: http://gabrielhoffman.github.io/dreamlet/articles

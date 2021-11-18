@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Bar plot of variance fractions — plotPercentBars,vpDF-method" />
@@ -123,6 +129,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -200,10 +212,10 @@
 
 <span class='co'># voom-style normalization</span>
 <span class='va'>res.proc</span> <span class='op'>=</span> <span class='fu'><a href='processAssays.html'>processAssays</a></span><span class='op'>(</span> <span class='va'>pb</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.018 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.018 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.02 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.017 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.019 secs</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.023 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.021 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.022 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.021 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.024 secs</span></div><div class='input'>
 <span class='co'># variance partitioning analysis</span>
 <span class='va'>vp</span> <span class='op'>=</span> <span class='fu'><a href='fitVarPart.html'>fitVarPart</a></span><span class='op'>(</span> <span class='va'>res.proc</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>1.1 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>1.7 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>1.2 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.49 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>1.5 secs</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>1.4 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>2.1 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>1.5 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.62 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>1.8 secs</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'>
 <span class='co'># Show variance fractions at the gene-level for each cell type</span>
 <span class='fu'>plotPercentBars</span><span class='op'>(</span><span class='va'>vp</span>, genes <span class='op'>=</span> <span class='va'>vp</span><span class='op'>$</span><span class='va'>gene</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='img'><img src='plotPercentBars-methods-1.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -230,6 +242,23 @@
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: 'dedcc260e9d3743bc634e728855cdbaf',
+    indexName: 'dreamlet',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>
