@@ -1,5 +1,8 @@
 
 Nov 9
+	
+df_vp = fitExtractVarPartModel(cobj, form, as.data.frame(colData(pbObj[,i])))
+
 
 	processAssays: check that values are integer counts
 	
