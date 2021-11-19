@@ -47,7 +47,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 	y = y[,include,drop=FALSE] 
 	data = droplevels(data[include,,drop=FALSE])
 
-	if( nrow(data) < 3){
+	if( nrow(data) < 4){
 		return( NULL )
 	}
 
