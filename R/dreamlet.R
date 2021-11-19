@@ -62,7 +62,11 @@ setMethod("print", "dreamletResult",
 		df_count = lapply(x, function(obj) nrow(obj$coefficients))
 		df_count = do.call(rbind, df_count)
 
-		cat('Genes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
+		if( is.null(df_count) ){
+			cat("No assays retained\n")
+		}else{
+			cat('Genes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
+		}
 
 		# metadata
 	    nms <- names(details(x))
