@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dreamlet analysis followed by mashr • dreamlet</title>
+<title>mashr analysis following dreamlet • dreamlet</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -19,7 +19,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Dreamlet analysis followed by mashr">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="mashr analysis following dreamlet">
 <meta property="og:description" content="dreamlet">
 <meta property="og:image" content="http://gabrielhoffman.github.io/dreamlet/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -69,7 +69,7 @@
       <a href="../articles/h5ad_on_disk.html">Loading large-scale H5AD datasets</a>
     </li>
     <li>
-      <a href="../articles/mashr.html">Dreamlet analysis followed by mashr</a>
+      <a href="../articles/mashr.html">mashr analysis following dreamlet</a>
     </li>
   </ul>
 </li>
@@ -103,13 +103,13 @@
       </header><script src="mashr_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Dreamlet analysis followed by mashr</h1>
+      <h1 data-toc-skip>mashr analysis following dreamlet</h1>
             <h3 class="subtitle">
 <a href="https://cran.r-project.org/web/packages/mashr/index.html">mashr</a> borrows information across genes and cell types</h3>
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-11-24 16:00:00</h4>
+            <h4 class="date">Run on 2021-11-24 16:20:23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/master/vignettes/mashr.Rmd"><code>vignettes/mashr.Rmd</code></a></small>
       <div class="hidden name"><code>mashr.Rmd</code></div>
@@ -152,20 +152,20 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">eh</span><span class="op">[[</span><span class="st">"EH2259"</span><span class="op">]</span><span class="op">]</span>
 
 <span class="co"># only keep singlet cells with sufficient reads</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span>
 
 <span class="co"># compute QC metrics</span>
-<span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
+<span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu">perCellQCMetrics</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 
 <span class="co"># remove cells with few or many detected genes</span>
-<span class="va">ol</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/isOutlier.html">isOutlier</a></span><span class="op">(</span>metric <span class="op">=</span> <span class="va">qc</span><span class="op">$</span><span class="va">detected</span>, nmads <span class="op">=</span> <span class="fl">2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">ol</span> <span class="op">&lt;-</span> <span class="fu">isOutlier</span><span class="op">(</span>metric <span class="op">=</span> <span class="va">qc</span><span class="op">$</span><span class="va">detected</span>, nmads <span class="op">=</span> <span class="fl">2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="op">!</span><span class="va">ol</span><span class="op">]</span>
 
 <span class="co"># compute normalized data</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">10</span>, <span class="op">]</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/librarySizeFactors.html">computeLibraryFactors</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/logNormCounts.html">logNormCounts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">10</span>, <span class="op">]</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">computeLibraryFactors</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">logNormCounts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 
 <span class="co"># set variable indicating stimulated (stim) or control (ctrl)</span>
 <span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">=</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></code></pre></div>
