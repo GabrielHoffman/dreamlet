@@ -35,7 +35,7 @@ removeConstantTerms = function(formula, data){
 	data = droplevels(data)
 
 	# throw error if variable is not in data
-	dreamlet:::checkFormula( formula, data)
+	checkFormula( formula, data)
 
 	trmf = terms(formula)
 
@@ -76,10 +76,17 @@ removeConstantTerms = function(formula, data){
 	if( length(excludeVar) > 0){
 
 		# replace each exclude term with with intercept
+		# gsub can overwrite other variables
 		fterms_new = fterms
 		for( x in excludeVar){
-			fterms_new = gsub(x, '1', fterms_new)
+
+			# fterms_new = gsub(x, '1', fterms_new)
+
+			# make sure string goes to end, or end followed by )
+			fterms_new = gsub(paste0(x, '$'), '1', fterms_new)
+			fterms_new = gsub(paste0(x, '\\)'), '1)', fterms_new)
 		}
+
 		fterms_new = unique(fterms_new)
 
 		# fterms_new = array(sapply(excludeVar, function(x) gsub(x, '1', fterms)))

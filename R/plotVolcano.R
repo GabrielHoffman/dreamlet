@@ -110,7 +110,6 @@ setMethod("plotVolcano", "MArrayLM",
   xmax = max(abs(df_combine$logFC))
   ymax = -log10(min(df_combine$P.Value))
 
-
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = Gene = NULL
 
@@ -134,6 +133,55 @@ setMethod("plotVolcano", "MArrayLM",
 
 
 
+
+
+#' @importFrom data.table data.table
+#' @importFrom reshape2 melt
+#' @rdname plotVolcano-methods
+#' @aliases plotVolcano,dreamlet_mash_result,dreamlet_mash_result-method
+setMethod("plotVolcano", "dreamlet_mash_result",
+  function(x, coef, nGenes=5, size=12, minp=1.0e-16, cutoff=0.05, ncol=3){
+
+  df_logFC = reshape2::melt(get_pm(x$model))
+  colnames(df_logFC) = c("Gene", "ID", "logFC")
+  df_logFC$key = paste(df_logFC$Gene, df_logFC$ID)
+
+  df_lfsr = reshape2::melt(get_lfsr(x$model))
+  colnames(df_lfsr) = c("Gene", "ID", "lFSR")
+  df_lfsr$key = paste(df_lfsr$Gene, df_lfsr$ID)
+
+  df = merge(df_logFC, df_lfsr, by='key')
+  df = data.table(df[!is.na(df$logFC),])
+
+  # sort by lFSR
+  df = df[order(df$lFSR),]
+
+  # Pass R CMD check
+  .SD = logFC = P.Value = isSignif = Gene.x = lFSR = NULL
+
+  df$isSignif = c("no","yes")[(df$lFSR < cutoff)+1]
+  df$lFSR = pmax(minp, df$lFSR )
+
+  xmax = max(abs(df$logFC))
+  ymax = -log10(min(df$lFSR))
+
+  # top significant genes in each cell type
+  df2 = df[,head(.SD, nGenes), by="ID.x"]
+
+  # reverse order to plot significant points last
+  df = df[seq(nrow(df), 1)]
+
+  ggplot(df, aes(logFC, -log10(lFSR), color=isSignif)) + 
+    geom_point() + 
+    theme_bw(size) + 
+    theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
+    xlab(bquote(log[2]~fold~change)) + 
+    ylab(bquote(-log[10]~local~False~Sign~Rate~(mashr))) + 
+    scale_color_manual(values=c("grey", "darkred")) + 
+    scale_y_continuous(limits=c(0, ymax*1.04), expand=c(0,0)) + 
+    geom_text_repel(data=df2, aes(logFC, -log10(lFSR), label=Gene.x), segment.size=.5,  segment.color="black", color="black", force=1, nudge_x=.005, nudge_y=.5) +
+    facet_wrap(~ID.x, ncol=ncol) 
+})
 
 
 

@@ -198,7 +198,7 @@ topTable(res.dl[["B cells"]], coef = 'StimStatusstim' )
 ## Forest plot 
 A forest plot shows the log fold change and standard error of a given gene across all cell types.  The color indicates the FDR. 
 ```{r forrest}
-plotForest( res.dl, coef = 'StimStatusstim', gene = 'IRF7')
+plotForest( res.dl, coef = 'StimStatusstim', gene = 'ISG20')
 ```
 
 
@@ -222,6 +222,7 @@ coefNames(res.dl2)
 # Volcano plot of Diff
 plotVolcano( res.dl2[1:2], coef = 'Diff' )
 ```
+
 This new `Diff` variable can then be used downstream for analysis asking for a coefficient.  But note that since there is no intercept term in this model, the meaning of `StimStatusstim` changes here.  When the formula is ` 0 + StimStatus` then `StimStatusstim` is the mean expression in stimulated samples.  
 
 For further information about using contrasts see [makeContrastsDream()](https://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html) and [vignette](https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1).
@@ -236,7 +237,6 @@ Here, `zenith_gsa` takes a `dreamletResult` object, the coefficient of interest,
 # Load Gene Ontology database 
 # use gene 'SYMBOL', or 'ENSEMBL' id
 # use get_MSigDB() to load MSigDB
-# 
 go.gs = get_GeneOntology(to="SYMBOL")
    
 # Run zenith gene set analysis on result of dreamlet
@@ -292,12 +292,42 @@ fit = eBayes(fit)
 topTable(fit, coef='StimStatusstim', sort.by="none")
 ```
 
-Variance partioning analysis quanifyies the contribution of multiple sources of variation in cell type composition differences. 
+Variance partioning analysis quantifies the contribution of multiple sources of variation in cell type composition differences. 
 ```{r ctc.crumblr.cp}
 vp = fitExtractVarPartModel(cobj, ~ StimStatus, as.data.frame(colData(pb)))
 
 plotPercentBars(vp)
 ```
+
+
+# Comparing expression in clusters
+Identifying genes that are differentially expressed between cell clusters incorporates a paired analysis design, since each individual is observed for each cell cluster.    
+
+```{r dreamletCompareClusters}
+# test differential expression between B cells and the rest of the cell clusters
+ct.pairs = c("B cells", "rest")
+
+df_Bcell = dreamletCompareClusters( pb, ct.pairs, method="random")
+
+head(df_Bcell)
+```
+
+# Gene-cluster specificity
+Evaluate the specificity of each gene for each cluster:
+```{r cellTypeSpecificity}
+df_cts = cellTypeSpecificity( pb )
+
+# Violin plot of specificity score for each cell type
+plotViolin(df_cts)
+```
+
+```{r plotPercentBars}
+genes = rownames(df_cts)[apply(df_cts, 2, which.max)]
+plotPercentBars( df_cts, genes = genes )
+
+dreamlet::plotHeatmap( df_cts, genes = genes)
+```
+
 
 
 ```{r exit, cache=FALSE, eval=TRUE, echo=FALSE}
@@ -306,8 +336,54 @@ knitr::knit_exit()
 
 
 
+<!---
+```{r dreamletCompareClusters.all}
+df = lapply( assayNames(pb), function(CT){
+  res = dreamletCompareClusters( pb, c(CT, "rest"), method="fixed", min.count=5)
+  data.frame(cluster = CT, Gene = rownames(res), res)
+})
+df = do.call(rbind, df)
+rownames(df) = c()
+
+table(df$P.Value < 1e-4)
+
+markerGenes = lapply( assayNames(pb), function(CT){
+  df[df$cluster == CT,][1:5, 'Gene']
+  })
+names(markerGenes) = assayNames(pb)
+
+genes = unique(unlist(markerGenes))
+
+df_cts = cellTypeSpecificity( pb)
+dreamlet::plotHeatmap( df_cts, genes)
 
 
+# sum counts for each cell type
+geneCounts = lapply( assayNames(pb), function(key){
+
+  # get expression for this assay, and sum across all samples
+  rowSums(assay(pb, key))
+  })
+names(geneCounts) = assayNames(pb)
+geneCounts = do.call(cbind, geneCounts)
+
+# get total expression counts for each cell,
+# and peform normalization
+dge = DGEList(geneCounts)
+dge = calcNormFactors(dge)
+
+# evalute counts per million
+geneExpr = cpm(dge, log=TRUE)
+
+plotHeatmap( geneExpr, genes)
+```
+--->
+
+
+
+
+
+<!---
 Perform statistical tests
 
 ```{r testCellComposition, eval=FALSE}
@@ -351,12 +427,7 @@ tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
 
 knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(full_width = FALSE, html_font = "Cambria")
 ```
-
-
-
-
-
-
+--->
 
 
 

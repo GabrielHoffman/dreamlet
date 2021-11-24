@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.17</span>
       </span>
     </div>
 
@@ -112,6 +112,9 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/h5ad_on_disk.html">Loading large-scale H5AD datasets</a>
+    </li>
+    <li>
+      <a href="../articles/mashr.html">Dreamlet analysis followed by mashr</a>
     </li>
   </ul>
 </li>
@@ -149,12 +152,27 @@
       <small>Source: <a href='https://github.com/GabrielHoffman/dreamlet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="dreamlet-0017" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.17">
+<a href="#dreamlet-0017" class="anchor"></a>dreamlet 0.0.17</h1>
+<ul>
+<li>add <code><a href="../reference/run_mash.html">run_mash()</a></code>
+<ul>
+<li>add <code><a href="../reference/zenith_gsa.html">zenith_gsa()</a></code>, <code><a href="../reference/plotVolcano.html">plotVolcano()</a></code>, <code><a href="../reference/plotForest.html">plotForest()</a></code> for results</li>
+</ul>
+</li>
+<li>fix bug in <code><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity()</a></code> for genes with zero reads across all cell types</li>
+<li>order of arguments in <code><a href="../reference/plotForest.html">plotForest()</a></code> and <code><a href="../reference/zenith_gsa.html">zenith_gsa()</a></code> changed for consistancy</li>
+<li>expand vignettes</li>
+<li>bug fix for <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> when excluded variable string (i.e. tissue) is also a substring of other variables (i.e. tissueStatus)</li>
+</ul>
+</div>
     <div id="dreamlet-0016" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.16">
 <a href="#dreamlet-0016" class="anchor"></a>dreamlet 0.0.16</h1>
 <ul>
 <li>add <code><a href="https://rdrr.io/r/stats/residuals.html">residuals()</a></code> for <code><a href="../reference/dreamlet.html">dreamlet()</a></code> result</li>
-<li>add <code><a href="../reference/dreamletPairs.html">dreamletPairs()</a></code>
+<li>add <code>dreamletPairs()</code>
 </li>
 <li>fix bug in <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> with multiple constant terms</li>
 <li>improve usability of <code><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity()</a></code> by adding <code>plotPercentBars()</code> and <code><a href="../reference/plotViolin.html">plotViolin()</a></code> compatability</li>

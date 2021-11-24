@@ -37,13 +37,16 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamlet.html</loc>
   </url>
   <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletPairs.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletCompareClusters.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletProcessedData-class.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletResult-class.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamlet_mash_result-class.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/equalFormulas.html</loc>
@@ -64,7 +67,10 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotCellComposition.html</loc>
   </url>
   <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest-methods.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotHeatmap-methods.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotPercentBars-methods.html</loc>
@@ -100,10 +106,16 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/residuals-methods.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/run_mash.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/show-methods.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/sortCols-method.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/tabToMatrix.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/topTable-methods.html</loc>
@@ -119,5 +131,8 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/articles/h5ad_on_disk.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/mashr.html</loc>
   </url>
 </urlset>

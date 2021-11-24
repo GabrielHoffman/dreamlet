@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.17</span>
       </span>
     </div>
 
@@ -67,6 +67,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/h5ad_on_disk.html">Loading large-scale H5AD datasets</a>
+    </li>
+    <li>
+      <a href="../articles/mashr.html">Dreamlet analysis followed by mashr</a>
     </li>
   </ul>
 </li>
@@ -105,7 +108,7 @@
                         <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-11-18 10:47:13</h4>
+            <h4 class="date">Run on 2021-11-24 15:59:43</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/master/vignettes/dreamlet.Rmd"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="hidden name"><code>dreamlet.Rmd</code></div>
@@ -319,7 +322,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <a href="#forest-plot" class="anchor"></a>Forest plot</h2>
 <p>A forest plot shows the log fold change and standard error of a given gene across all cell types. The color indicates the FDR.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotForest.html">plotForest</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span>, gene <span class="op">=</span> <span class="st">'IRF7'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotForest.html">plotForest</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span>, gene <span class="op">=</span> <span class="st">'ISG20'</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/forrest-1.png" width="700"></p>
 </div>
 <div id="advanced-used-of-contrasts" class="section level2">
@@ -343,7 +346,8 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Volcano plot of Diff</span>
 <span class="fu"><a href="../reference/plotVolcano.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">'Diff'</span> <span class="op">)</span></code></pre></div>
-<p><img src="dreamlet_files/figure-html/dreamlet.contrasts-1.png" width="700"> This new <code>Diff</code> variable can then be used downstream for analysis asking for a coefficient. But note that since there is no intercept term in this model, the meaning of <code>StimStatusstim</code> changes here. When the formula is <code>0 + StimStatus</code> then <code>StimStatusstim</code> is the mean expression in stimulated samples.</p>
+<p><img src="dreamlet_files/figure-html/dreamlet.contrasts-1.png" width="700"></p>
+<p>This new <code>Diff</code> variable can then be used downstream for analysis asking for a coefficient. But note that since there is no intercept term in this model, the meaning of <code>StimStatusstim</code> changes here. When the formula is <code>0 + StimStatus</code> then <code>StimStatusstim</code> is the mean expression in stimulated samples.</p>
 <p>For further information about using contrasts see <a href="https://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html">makeContrastsDream()</a> and <a href="https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1">vignette</a>.</p>
 </div>
 </div>
@@ -356,7 +360,6 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <code class="sourceCode R"><span class="co"># Load Gene Ontology database </span>
 <span class="co"># use gene 'SYMBOL', or 'ENSEMBL' id</span>
 <span class="co"># use get_MSigDB() to load MSigDB</span>
-<span class="co"># </span>
 <span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zenith/man/get_GeneOntology.html">get_GeneOntology</a></span><span class="op">(</span>to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span>
    
 <span class="co"># Run zenith gene set analysis on result of dreamlet</span>
@@ -450,12 +453,56 @@ Here, compare fraction of each cell type bewteen simulated and unstimulated samp
 ## FCGR3A+ Monocytes -4.734407
 ## Megakaryocytes    -4.634451
 ## NK cells          -4.754474</code></pre>
-<p>Variance partioning analysis quanifyies the contribution of multiple sources of variation in cell type composition differences.</p>
+<p>Variance partioning analysis quantifies the contribution of multiple sources of variation in cell type composition differences.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vp</span> <span class="op">=</span> <span class="fu">fitExtractVarPartModel</span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/ctc.crumblr.cp-1.png" width="700"></p>
+</div>
+<div id="comparing-expression-in-clusters" class="section level1">
+<h1 class="hasAnchor">
+<a href="#comparing-expression-in-clusters" class="anchor"></a>Comparing expression in clusters</h1>
+<p>Identifying genes that are differentially expressed between cell clusters incorporates a paired analysis design, since each individual is observed for each cell cluster.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># test differential expression between B cells and the rest of the cell clusters</span>
+<span class="va">ct.pairs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">"rest"</span><span class="op">)</span>
+
+<span class="va">df_Bcell</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"random"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df_Bcell</span><span class="op">)</span></code></pre></div>
+<pre><code>##                            logFC   AveExpr        t      P.Value    adj.P.Val
+## CD74                    2.504512 10.733691 24.20509 1.202273e-43 4.953366e-41
+## HLA-DRA_ENSG00000204287 2.714833  9.647900 20.81930 3.633298e-38 5.987676e-36
+## RPS5                    1.391233 10.656255 19.19339 3.384529e-35 3.984074e-33
+## CD37                    2.081230  8.280893 19.01155 7.306134e-35 7.525318e-33
+## RPL18A                  1.147747 11.811362 17.49652 5.178633e-32 4.741326e-30
+## RPSA                    1.294866  9.678130 17.32769 8.906262e-32 7.338760e-30
+##                                B    z.std
+## CD74                    89.57681 13.85406
+## HLA-DRA_ENSG00000204287 77.67880 12.91649
+## RPS5                    69.73250 12.37926
+## CD37                    69.98044 12.31734
+## RPL18A                  62.52715 11.77618
+## RPSA                    61.83624 11.73038</code></pre>
+</div>
+<div id="gene-cluster-specificity" class="section level1">
+<h1 class="hasAnchor">
+<a href="#gene-cluster-specificity" class="anchor"></a>Gene-cluster specificity</h1>
+<p>Evaluate the specificity of each gene for each cluster:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df_cts</span> <span class="op">=</span> <span class="fu"><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span> <span class="va">pb</span> <span class="op">)</span>
+
+<span class="co"># Violin plot of specificity score for each cell type</span>
+<span class="fu"><a href="../reference/plotViolin.html">plotViolin</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span></code></pre></div>
+<p><img src="dreamlet_files/figure-html/cellTypeSpecificity-1.png" width="700"></p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span>
+<span class="fu">plotPercentBars</span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span> <span class="op">)</span></code></pre></div>
+<p><img src="dreamlet_files/figure-html/plotPercentBars-1.png" width="700"></p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></code></pre></div>
+<p><img src="dreamlet_files/figure-html/plotPercentBars-2.png" width="700"></p>
 </div>
   </div>
 

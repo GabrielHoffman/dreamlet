@@ -53,14 +53,20 @@
 #' @importFrom circlize colorRamp2
 #' @importFrom grid gpar
 #' @importFrom stats hclust dist
+#' @importFrom ashr get_pm get_lfsr get_psd
 #' 
 #' @export
 plotZenithResults = function(df, ntop=5, nbottom=5){
 
 	delta = se = NULL 
 	
-	# construct t-statistic from effect size and standard error
-	df$tstat = with(df, delta/se)
+	if( all(c('delta', 'se') %in% colnames(df)) ){
+		# construct t-statistic from effect size and standard error
+		df$tstat = with(df, delta/se)
+	}else{
+		df$tstat = with(df, qnorm(PValue, lower.tail=FALSE))
+		df$tstat = df$tstat * ifelse(df$Direction == "Up", 1, -1)
+	}
 
 	# for each assay, return top and bottom genesets
 	gs = lapply( unique(df$assay), function(assay){

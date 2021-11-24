@@ -1,93 +1,197 @@
-# # Gabriel Hoffman
-# # Nov 15, 2021
+# Gabriel Hoffman
+# Nov 15, 2021
+
+#' Class dreamlet_mash_result
+#'
+#' Class \code{dreamlet_mash_result} 
+#'
+#' @name dreamlet_mash_result-class
+#' @rdname dreamlet_mash_result-class
+#' @exportClass dreamlet_mash_result
+setClass("dreamlet_mash_result", contains="list")
 
 
-# #' Convert results table to matrix
-# #' 
-# #' Convert results table to matrix
-# #' 
-# #' @param tab results table from \code{topTable()}
-# #' @param col which column to extract
-# #' 
-# #' @importFrom Matrix sparseMatrix 
-# toMatrix = function(tab, col){
-  
-#   # row and column names
-#   rn = unique(tab$ID)
-#   cn = unique(tab$assay)
+#' Show object
 
-#   i = match(tab$ID, rn)
-#   j = match(tab$assay, cn)
+#' Convert results table to matrix
+#' 
+#' Convert results table to matrix
+#' 
+#' @param tab results table from \code{topTable()}
+#' @param col which column to extract
+#' @param rn rownames
+#' @param cn colnames
+#' 
+#' @importFrom Matrix sparseMatrix 
+tabToMatrix = function(tab, col, rn, cn){
 
-#   M = sparseMatrix(i,j, x=tab[[col]], 
-#     dims=c(length(rn), length(cn)),
-#     dimnames = list(rn, cn))
+  # row and column names
+  rn = unique(tab$ID)
+  cn = levels(tab$assay)
 
-#   data = as.matrix(M)
-#   data[data == 0] = NA 
-#   data
-# }
+  i = match(tab$ID, rn)
+  j = match(tab$assay, cn)
 
-# # fit = res.dl
-# # coef = 'StimStatusstim'
+  M = sparseMatrix(i,j, x=tab[[col]], 
+    dims=c(length(rn), length(cn)),
+    dimnames = list(rn, cn))
 
-# #' @importFrom mashr mash_set_data cov_canonical mash_estimate_corr_em
-# run_mash = function( fit, coef){
-
-# 	# get results for each gene and cell type
-# 	tab = topTable(fit, coef=coef, Inf)
-
-# 	# compute standard error from t-stat and logFC
-# 	tab$se = tab$logFC / tab$t
-
-# 	# convert to matricies
-# 	B = toMatrix(tab, "logFC")
-# 	S = toMatrix(tab, "se")
-
-# 	# run mashr on these matricies
-# 	#-----------------------------
-
-# 	# set up
-# 	# NA's are replaced with beta = 0 with se = 1e6 
-# 	data = mash_set_data(B, S)
-
-# 	# estimate some parameters
-# 	U.c = cov_canonical(data)
-
-# 	# Estimate correlation structure 
-# 	V.em = mash_estimate_corr_em(data, U.c, details = TRUE)
-
-# 	# get model fit
-# 	V.em$mash.model
-# }
+  data = as.matrix(M)
+  data[data == 0] = NA 
+  data
+}
 
 
-# # see posterior mean for logFC
-# # head(get_pm(m.Vem))
+#' Run mash analysis on dreamlet results
+#' 
+#' Run mash analysis on dreamlet results
+#' 
+#' @param fit result from \code{dreamlet()}
+#' @param coef coefficient to be analyzed
+#'
+#' @details
+#' Apply mashr analysis (Urbut, et al. 2019) on the joint set of coefficients for each gene and cell type.  Mashr is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
+#'
+#' In single cell data, a given gene is often not sufficiently expressed in all cell types.  So it is not evaluated in a subsets of cell types, and its coefficient value is NA. Since mashr assumes coefficients and standard errors for every gene and cell type pair, entries with these missing values are set to have \code{coef = 0}, and \code{se = 1e6}.  The output of mashr is then modified to set the corresponding values to NA, to avoid nonsensical results downstream.
+#' 
+#' @return a list storing the \code{mashr} model as \code{model} and the original coefficients as \code{logFC.original}
+#' 
+#' @examples
+#' library(muscat)
+#' library(mashr)
+#' library(SingleCellExperiment)
+#' 
+#' data(example_sce)
+#' 
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#' 	assay = "counts",    
+#' 	cluster_id = 'cluster_id', 
+#' 	sample_id = 'sample_id',
+#' 	verbose=FALSE)
+#' 
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # run MASH model
+#' # This can take 10s of minutes on real data
+#' # This small datasets should take ~30s
+#' res_mash = run_mash( res.dl, 'group_idstim')
+#' 
+#' # extract statistics from mashr model
+#' # NA values indicate genes not sufficiently expressed
+#' # in a given cell type
+#' 
+#' # original logFC
+#' head(res_mash$logFC.original)
+#' 
+#' # posterior mean for logFC
+#' head(get_pm(res_mash$model))
+#' 
+#' # how many gene-by-celltype tests are significant
+#' # i.e.  if a gene is significant in 2 celltypes, it is counted twice
+#' table(get_lfsr(res_mash$model) < 0.05, useNA="ifany")
+#' 
+#' # how many genes are significant in at least one cell type
+#' table( apply(get_lfsr(res_mash$model), 1, min, na.rm=TRUE) < 0.05)
+#' 
+#' # how many genes are significant in each cell type
+#' apply(get_lfsr(res_mash$model), 2, function(x) sum(x < 0.05, na.rm=TRUE))
+#' 
+#' # examine top set of genes
+#' # which genes are significant in at least 1 cell type
+#' sort(names(get_significant_results(res_mash$model)))[1:10]
+#' 
+#' # Lets examine CXCL3
+#' # There is a lot of variation in the raw logFC
+#' res_mash$logFC.original["ISG20",]
+#' 
+#' # posterior mean after borrowing across cell type and genes
+#' get_pm(res_mash$model)["ISG20",]
+#' 
+#' # gene set analysis using mashr results
+#' library(zenith)
+#' go.gs = get_GeneOntology("CC", to="SYMBOL")
+#' # valid values for statistic: 
+#' # "tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)"
+#' df_gs = zenith_gsa(res_mash, go.gs)
+#' 
+#' # Heatmap of results
+#' plotZenithResults(df_gs, 2, 1)
+#' 
+#' # forest plot based on mashr results
+#' plotForest(res_mash, "ISG20")
+#' 
+#' # volcano plot based on mashr results
+#' # yaxis uses local false sign rate (lfsr)
+#' plotVolcano(res_mash)
+#' 
+#' @references{
+#'   \insertRef{urbut2019flexible}{dreamlet}
+#' }
+#' 
+#' @seealso \code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{ mashr::mash_set_data}
+#' @importFrom mashr mash_set_data cov_canonical mash_estimate_corr_em
+#' @export
+run_mash = function( fit, coef){
 
-# # # how many gene-by-celltype are significant
-# # # i.e.  if a gene is significant in 2 celltypes, it is counted twice
-# # table(get_lfsr(m.Vem) < 0.05)
+	if( ! is(fit, 'dreamletResult') ){
+		stop("fit must be of class dreamletResult")
+	}
 
-# # # how many genes are significant in at least one cell type
-# # table( apply(get_lfsr(m.Vem), 1, min) < 0.05)
+	if( ! coef %in% coefNames(fit) ){
+		stop("coef not found in coefNames(fit): ", coef)
+	}
 
-# # # how many genes are significant in each cell type
-# # apply(get_lfsr(m.Vem), 2, function(x) sum(x < 0.05))
-# # ```
+	# get results for each gene and cell type
+	tab = topTable(fit, coef=coef, Inf)
 
-# # # examine top set of genes
-# # ```{r mashr_summary2}
-# # # which genes are significant in at least 1 cell type
-# # sort(names(get_significant_results(m.Vem)))
+	# compute standard error from t-stat and logFC
+	tab$se = tab$logFC / tab$t
 
-# # # Lets examine APOE.
-# # # There is a lot of variation in the raw logFC
-# # B["APOE",]
+	# sort tab results based on assayNames(fit)
+	tab$assay = factor(tab$assay, assayNames(fit))
 
-# # # posterior mean after borrowing across cell type and genes
-# # # There might be too much borrowing!
-# # get_pm(m.Vem)["APOE",]
+	# convert to matricies
+	B = tabToMatrix(tab, "logFC")
+	S = tabToMatrix(tab, "se")
+	
+	# run mashr on these matricies
+	#-----------------------------
+
+	# set up
+	# NA's are replaced with beta = 0 with se = 1e6 
+	data = mash_set_data(B, S)
+
+	# estimate model parameters
+	U.c = cov_canonical(data)
+
+	# Estimate correlation structure 
+	V.em = mash_estimate_corr_em(data, U.c, details = TRUE)
+
+	# copy model to drop NA terms
+	model = V.em$mash.model
+
+	# B has the same ordering as these, so replace corresponding elements with NA
+	# this revents non-sensiccal results for coefficients that were originally NA
+	idx = which(is.na(B))
+	model$result$PosteriorMean[idx] = NA
+	model$result$PosteriorSD[idx] = NA
+	model$result$NegativeProb[idx] = NA
+	model$result$lfsr[idx] = NA
+
+	# format results as new object
+	new("dreamlet_mash_result", list(model = model, logFC.original = B, coef=coef))
+}
+
+
+
+
+
 
 
 

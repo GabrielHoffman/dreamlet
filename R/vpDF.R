@@ -80,10 +80,11 @@ setMethod("assay", signature(x="vpDF"),
 #' # Summarize variance fractions genome-wide for each cell type
 #' plotVarPart( sortCols(vp) )
 #'
+#' @importMethodsFrom variancePartition sortCols
+#' @importFrom stats median
 #' @export
 #' @rdname sortCols-method
 #' @aliases sortCols,vpDF-method
-#' @importFrom stats median
 setMethod("sortCols", "vpDF",
 	function( x, FUN=median, decreasing = TRUE, last=c("Residuals", "Measurement.error"), ... ){
  		

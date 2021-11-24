@@ -2,39 +2,76 @@
 % Please edit documentation in R/zenith_gsa.R
 \name{zenith_gsa}
 \alias{zenith_gsa}
-\alias{zenith_gsa,dreamletResult,ANY,GeneSetCollection-method}
+\alias{zenith_gsa,dreamletResult,GeneSetCollection-method}
+\alias{zenith_gsa,dreamletResult,GeneSetCollection,ANY-method}
+\alias{zenith_gsa,MArrayLM,GeneSetCollection-method}
+\alias{zenith_gsa,MArrayLM,GeneSetCollection,ANY-method}
+\alias{zenith_gsa,dreamlet_mash_result,GeneSetCollection-method}
+\alias{zenith_gsa,dreamlet_mash_result,GeneSetCollection,ANY-method}
 \title{Perform zenith analysis}
 \usage{
 zenith_gsa(
   fit,
-  coefs,
   geneSets,
+  coefs,
+  use.ranks = FALSE,
   n_genes_min = 10,
   inter.gene.cor = 0.01,
-  progressbar = TRUE
+  progressbar = TRUE,
+  ...
 )
 
-\S4method{zenith_gsa}{dreamletResult,ANY,GeneSetCollection}(
+\S4method{zenith_gsa}{dreamletResult,GeneSetCollection}(
   fit,
-  coefs,
   geneSets,
+  coefs,
+  use.ranks = FALSE,
   n_genes_min = 10,
   inter.gene.cor = 0.01,
-  progressbar = TRUE
+  progressbar = TRUE,
+  ...
+)
+
+\S4method{zenith_gsa}{MArrayLM,GeneSetCollection}(
+  fit,
+  geneSets,
+  coefs,
+  use.ranks = FALSE,
+  n_genes_min = 10,
+  inter.gene.cor = 0.01,
+  progressbar = TRUE,
+  ...
+)
+
+\S4method{zenith_gsa}{dreamlet_mash_result,GeneSetCollection}(
+  fit,
+  geneSets,
+  coefs,
+  use.ranks = FALSE,
+  n_genes_min = 10,
+  inter.gene.cor = 0.01,
+  progressbar = TRUE,
+  statistic = c("tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)")
 )
 }
 \arguments{
 \item{fit}{results from \code{dreamlet}}
 
-\item{coefs}{coefficients to test using \code{topTable(fit, coef)}}
-
 \item{geneSets}{a list of gene sets}
+
+\item{coefs}{coefficients to test using \code{topTable(fit, coef=coefs[i])}}
+
+\item{use.ranks}{do a rank-based test \code{TRUE} or a parametric test \code{FALSE}? default: FALSE}
 
 \item{n_genes_min}{minumum number of genes in a geneset}
 
 \item{inter.gene.cor}{if NA, estimate correlation from data.  Otherwise, use specified value}
 
 \item{progressbar}{if TRUE, show progress bar}
+
+\item{...}{other arguments}
+
+\item{statistic}{which statistic to use}
 }
 \value{
 \code{data.frame} of results for each gene set and cell type
@@ -69,7 +106,7 @@ library(zenith)
 go.gs = get_GeneOntology("CC", to="SYMBOL")
    
 # Run zenith gene set analysis on result of dreamlet
-res_zenith = zenith_gsa(res.dl, coef = 'group_idstim', go.gs)
+res_zenith = zenith_gsa(res.dl, go.gs, 'group_idstim' )
 
 # for each cell type select 5 genesets with largest t-statistic
 # and 1 geneset with the lowest
