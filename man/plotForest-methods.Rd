@@ -2,16 +2,22 @@
 % Please edit documentation in R/plotForest.R
 \name{plotForest}
 \alias{plotForest}
+\alias{plotForest,dreamletResult-method}
+\alias{plotForest,dreamlet_mash_result-method}
 \title{Forest plot}
 \usage{
-plotForest(x, coef, gene)
+plotForest(x, gene, coef)
+
+\S4method{plotForest}{dreamletResult}(x, gene, coef)
+
+\S4method{plotForest}{dreamlet_mash_result}(x, gene, coef)
 }
 \arguments{
 \item{x}{result from \code{dreamlet}}
 
-\item{coef}{coefficient to test with \code{topTable}}
-
 \item{gene}{gene to show results for}
+
+\item{coef}{coefficient to test with \code{topTable}}
 }
 \value{
 Plot showing effect sizes
@@ -44,6 +50,6 @@ res.dl = dreamlet( res.proc, ~ group_id)
 coefNames(res.dl)
 
 # Show estimated log fold change with in each cell type
-plotForest(res.dl, coef = "group_idstim", gene = "ISG20")
+plotForest(res.dl, gene = "ISG20", coef = "group_idstim")
 
 }

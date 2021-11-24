@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.17</span>
       </span>
     </div>
 
@@ -113,6 +113,9 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/h5ad_on_disk.html">Loading large-scale H5AD datasets</a>
+    </li>
+    <li>
+      <a href="../articles/mashr.html">Dreamlet analysis followed by mashr</a>
     </li>
   </ul>
 </li>
@@ -185,6 +188,17 @@
   minp <span class='op'>=</span> <span class='fl'>9.99999999999997e-311</span>,
   cutoff <span class='op'>=</span> <span class='fl'>0.05</span>,
   ncol <span class='op'>=</span> <span class='fl'>3</span>
+<span class='op'>)</span>
+
+<span class='co'># S4 method for dreamlet_mash_result</span>
+<span class='fu'>plotVolcano</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>coef</span>,
+  nGenes <span class='op'>=</span> <span class='fl'>5</span>,
+  size <span class='op'>=</span> <span class='fl'>12</span>,
+  minp <span class='op'>=</span> <span class='fl'>1e-16</span>,
+  cutoff <span class='op'>=</span> <span class='fl'>0.05</span>,
+  ncol <span class='op'>=</span> <span class='fl'>3</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -240,11 +254,11 @@
 
 <span class='co'># voom-style normalization</span>
 <span class='va'>res.proc</span> <span class='op'>=</span> <span class='fu'><a href='processAssays.html'>processAssays</a></span><span class='op'>(</span> <span class='va'>pb</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.022 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.023 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.024 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.021 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.023 secs</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.022 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.022 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.023 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.019 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.024 secs</span></div><div class='input'>
 <span class='co'># Differential expression analysis within each assay,</span>
 <span class='co'># evaluated on the voom normalized data </span>
 <span class='va'>res.dl</span> <span class='op'>=</span> <span class='fu'><a href='dreamlet.html'>dreamlet</a></span><span class='op'>(</span> <span class='va'>res.proc</span>, <span class='op'>~</span> <span class='va'>group_id</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.046 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.069 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.049 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.027 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.062 secs</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>  B cells...</span></div><div class='output co'>#&gt; <span class='message'>0.046 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD14+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.066 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD4 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.051 secs</span></div><div class='output co'>#&gt; <span class='message'>  CD8 T cells...</span></div><div class='output co'>#&gt; <span class='message'>0.025 secs</span></div><div class='output co'>#&gt; <span class='message'>  FCGR3A+ Monocytes...</span></div><div class='output co'>#&gt; <span class='message'>0.061 secs</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='input'>
 <span class='co'># show coefficients estimated for each cell type</span>
 <span class='fu'><a href='coefNames.html'>coefNames</a></span><span class='op'>(</span><span class='va'>res.dl</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "(Intercept)"  "group_idstim"</div><div class='input'>

@@ -29,7 +29,7 @@ setMethod("plotViolin", "cellSpecificityValues",
 	# pass R CMD check
 	gene = value = variable = NA
 
-  	df = data.frame(gene = rownames(x), x, check.names=FALSE)
+	df = data.frame(gene = rownames(x), x, check.names=FALSE)
 
 	df_melt = reshape2::melt(df, id.vars="gene")
 
@@ -44,7 +44,8 @@ setMethod("plotViolin", "cellSpecificityValues",
 		scale_y_continuous(limits=c(0,1), expand=c(0,0)) + 
 		ylab("Fraction of gene expression") + 
 		 geom_hline(yintercept=1/ncol(df), color="grey60", linetype="dashed") +
-		ggtitle("Cell type specificity scores")
+		ggtitle("Cell type specificity scores") +
+		xlab('')
 })
 
 

@@ -39,11 +39,19 @@
 #' # Compute the maximum specificity score for each gene
 #' scoreMax = apply(df, 1, max)
 #' head(scoreMax)
+#'
+#' # heatmap of 5 genes that are most cell type specific
+#' genes = rownames(df)[apply(df, 2, which.max)]
+#' dreamlet::plotHeatmap( df, genes = genes)
 #' 
 #' @importFrom edgeR DGEList calcNormFactors cpm
 #' @importFrom S4Vectors DataFrame
 #' @export
 cellTypeSpecificity = function(pb,...){
+
+	if( ! is(pb, 'SingleCellExperiment') ){
+		stop("pb must be of class 'SingleCellExperiment'")
+	}
 
 	# sum counts for each cell type
 	geneExpr = lapply( assayNames(pb), function(key){
@@ -53,6 +61,16 @@ cellTypeSpecificity = function(pb,...){
 		})
 	names(geneExpr) = assayNames(pb)
 	geneExpr = do.call(cbind, geneExpr)
+
+	# identify genes with no reads
+	idx = which(rowSums(geneExpr) == 0)
+
+	if(length(idx) > 0){
+
+		geneExpr = geneExpr[-idx,]
+		txt = paste("There are", length(idx), "genes with no reads in this dataset. They are excluded here")
+		warning(txt)
+	}
 
 	# get total expression counts for each cell,
 	# and peform normalization

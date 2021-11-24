@@ -100,5 +100,5 @@ topTable(res.dl, coef="group_idstim", number=3)
 
 }
 \seealso{
-\code{dream()}, \code{makeContrastsDream()}
+\code{variancePartition::dream()}, \code{variancePartition::makeContrastsDream()}
 }

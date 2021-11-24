@@ -7,6 +7,8 @@
 \alias{plotVolcano,list,list-method}
 \alias{plotVolcano,MArrayLM-method}
 \alias{plotVolcano,MArrayLM,MArrayLM-method}
+\alias{plotVolcano,dreamlet_mash_result-method}
+\alias{plotVolcano,dreamlet_mash_result,dreamlet_mash_result-method}
 \title{Volcano plot for each cell type}
 \usage{
 plotVolcano(
@@ -35,6 +37,16 @@ plotVolcano(
   nGenes = 5,
   size = 12,
   minp = 9.99999999999997e-311,
+  cutoff = 0.05,
+  ncol = 3
+)
+
+\S4method{plotVolcano}{dreamlet_mash_result}(
+  x,
+  coef,
+  nGenes = 5,
+  size = 12,
+  minp = 1e-16,
   cutoff = 0.05,
   ncol = 3
 )

@@ -358,7 +358,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @import BiocParallel  
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
-#' @seealso \code{dream()}, \code{makeContrastsDream()}
+#' @seealso \code{variancePartition::dream()}, \code{variancePartition::makeContrastsDream()}
 #' @export
 setGeneric("dreamlet", 
 	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
@@ -369,7 +369,8 @@ setGeneric("dreamlet",
 
 
 
-#' @importFrom variancePartition getContrast dream
+
+#' @importFrom variancePartition getContrast dream makeContrastsDream
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
 #' @import Rdpack

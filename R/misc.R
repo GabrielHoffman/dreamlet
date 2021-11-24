@@ -117,6 +117,7 @@ equalFormulas = function(formula1, formula2){
 #' # Return list with entry for each assay with for retained samples and genes
 #' resid.lst = residuals(res.dl)
 #' 
+#' @importMethodsFrom BiocGenerics residuals
 #' @rdname residuals-methods
 #' @aliases residuals,dreamletResult,dreamletResult-method
 #' @export

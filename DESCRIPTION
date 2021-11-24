@@ -1,8 +1,8 @@
 Package: dreamlet
 Type: Package
 Title: Perform differential expression analysis on multi-sample single cell datasets using linear (mixed) models
-Version: 0.0.16
-Date: 2021-11-18
+Version: 0.0.17
+Date: 2021-11-21
 Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu")
 Description: Dreamlet performs differential expression analysis on multi-sample single cell datasets using linear (mixed) models. The software is optimized for parallel processing and accessing large datasets using SingleCellExperiment backed by DelayedArray data.
 VignetteBuilder: knitr
@@ -16,8 +16,7 @@ Suggests:
     rmarkdown,
     muscat,
     RUnit,
-    scuttle,
-    BiocGenerics
+    scuttle
 biocViews: RNASeq,
     GeneExpression,
     DifferentialExpression,
@@ -44,9 +43,12 @@ Imports:
     purrr,
     data.table,
     zenith (>= 1.0.2),
+    mashr,
+    ashr,
     BiocParallel,
     S4Vectors,
     limma,
+    BiocGenerics,
     ComplexHeatmap,
     circlize,
     reshape2,

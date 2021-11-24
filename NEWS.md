@@ -1,3 +1,11 @@
+# dreamlet 0.0.17
+ - add `run_mash()`
+   * add `zenith_gsa()`, `plotVolcano()`, `plotForest()` for results
+ - fix bug in `cellTypeSpecificity()` for genes with zero reads across all cell types
+ - order of arguments in `plotForest()` and `zenith_gsa()` changed for consistancy
+ - expand vignettes
+ - bug fix for `removeConstantTerms()` when excluded variable string (i.e. tissue) is also a substring of other variables (i.e. tissueStatus)
+
 # dreamlet 0.0.16
 - add `residuals()` for `dreamlet()` result
 - add `dreamletPairs()`

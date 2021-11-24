@@ -46,4 +46,8 @@ plotPercentBars( df, genes = rownames(df)[1:5])
 scoreMax = apply(df, 1, max)
 head(scoreMax)
 
+# heatmap of 5 genes that are most cell type specific
+genes = rownames(df)[apply(df, 2, which.max)]
+dreamlet::plotHeatmap( df, genes = genes)
+
 }
