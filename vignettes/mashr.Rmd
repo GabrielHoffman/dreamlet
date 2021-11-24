@@ -1,11 +1,11 @@
 ---
-title: "Dreamlet analysis followed by mashr"
+title: "mashr analysis following dreamlet"
 subtitle: '[mashr](https://cran.r-project.org/web/packages/mashr/index.html) borrows information across genes and cell types'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
 vignette: >
-  %\VignetteIndexEntry{Dreamlet analysis of single cell RNA-seq}
+  %\VignetteIndexEntry{mashr analysis following dreamlet}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}
