@@ -165,14 +165,18 @@ setMethod("print", "dreamletProcessedData",
 		df_count = lapply(x, function(obj) dim(obj))
 		df_count = do.call(rbind, df_count)
 
-		cat('Samples:\n min:', min(df_count[,2]), '\n max:', max(df_count[,2]))
-		cat('\nGenes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
+		if( is.null(df_count) ){
+			cat("No assays retained\n")
+		}else{
+			cat('Samples:\n min:', min(df_count[,2]), '\n max:', max(df_count[,2]))
+			cat('\nGenes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
 
-		# metadata
-	    nms <- names(details(x))
-	    if (is.null(nms))
-	        nms <- character(length(metadata(x, withDimnames=FALSE)))
-	    coolcat("details(%d): %s\n", nms)
+			# metadata
+		    nms <- names(details(x))
+		    if (is.null(nms))
+		        nms <- character(length(metadata(x, withDimnames=FALSE)))
+		    coolcat("details(%d): %s\n", nms)
+		}
 	}
 )
 
