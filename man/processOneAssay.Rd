@@ -10,10 +10,12 @@ processOneAssay(
   data,
   n.cells,
   min.cells = 10,
+  min.count = 10,
+  min.samples = 4,
   isCounts = TRUE,
   normalize.method = "TMM",
-  min.count = 10,
   useCountsWeights = TRUE,
+  quiet = TRUE,
   BPPARAM = SerialParam(),
   ...
 )
@@ -29,13 +31,17 @@ processOneAssay(
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 
+\item{min.count}{minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
+
+\item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
+
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
-\item{min.count}{minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
-
 \item{useCountsWeights}{use cell count weights}
+
+\item{quiet}{show messages}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

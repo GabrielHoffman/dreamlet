@@ -9,10 +9,12 @@
 #' @param data metadata used in regression formula
 #' @param n.cells array of cell count for each sample
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
-#' @param useCountsWeights use cell count weights
+#' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
+#' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
-#' @param min.count minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}
+#' @param useCountsWeights use cell count weights
+#' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -26,7 +28,7 @@
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
 #'
-processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts = TRUE, normalize.method = 'TMM', min.count = 10, useCountsWeights = TRUE, BPPARAM = SerialParam(),...){
+processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet = TRUE, BPPARAM = SerialParam(),...){
 
     checkFormula( formula, data)
     if( is.null(n.cells) ){
@@ -47,7 +49,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 	y = y[,include,drop=FALSE] 
 	data = droplevels(data[include,,drop=FALSE])
 
-	if( nrow(data) < 4){
+	# if there are too few remaining samples
+	if( nrow(data) < min.samples ){
 		return( NULL )
 	}
 
@@ -76,7 +79,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 
 		# weights from w_cells are used in calculating residuals that 
 		# voom uses to compute precision weights
-		geneExpr = voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=TRUE)
+		geneExpr = voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=quiet)
 
 		# combine empirical weights from voomWithDreamWeights
 		# with weighting by the number of cells
@@ -121,12 +124,13 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @param formula regression formula for differential expression analysis
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(sceObj)}
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
+#' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
+#' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
-#' @param min.count min.count used by \code{edgeR::filterByExpr}
+#' @param useCountsWeights use cell count weights
 #' @param pmetadata sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula
 #' @param pkeys array of two strings indicating sample identifier and cell type identifier columns in pmetadata
-#' @param useCountsWeights use cell count weights
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
@@ -159,7 +163,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, isCounts 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @export
-processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, pmetadata=NULL, pkeys=NULL, useCountsWeights=TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, pmetadata=NULL, pkeys=NULL, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -213,7 +217,14 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 		data = merge_metadata(data_constant, pmetadata, pkeys, k)
 
 		# processing counts with voom or log2 CPM
-		res = processOneAssay(y, formula, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, useCountsWeights=useCountsWeights, BPPARAM=BPPARAM,...)
+		res = processOneAssay(y, formula, data, n.cells,
+				min.cells = min.cells,
+				min.count = min.count,
+				min.samples = min.samples, 
+				isCounts = isCounts,
+				normalize.method = normalize.method, 
+				useCountsWeights=useCountsWeights, 
+				BPPARAM=BPPARAM,...)
 
 		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
 

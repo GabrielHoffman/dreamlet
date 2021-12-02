@@ -10,10 +10,11 @@ dreamletCompareClusters(
   method = c("random", "fixed", "none"),
   formula = ~1,
   min.cells = 10,
-  useCountsWeights = TRUE,
+  min.count = 10,
+  min.samples = 4,
   isCounts = TRUE,
   normalize.method = "TMM",
-  min.count = 10,
+  useCountsWeights = TRUE,
   robust = FALSE,
   quiet = FALSE,
   BPPARAM = SerialParam(),
@@ -31,13 +32,13 @@ dreamletCompareClusters(
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 
-\item{useCountsWeights}{use cell count weights}
+\item{min.count}{minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
 
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
-\item{min.count}{minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
+\item{useCountsWeights}{use cell count weights}
 
 \item{robust}{logical, use eBayes method that is robust to outlier genes}
 
