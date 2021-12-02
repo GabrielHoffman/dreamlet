@@ -9,12 +9,13 @@ processAssays(
   formula,
   assays = assayNames(sceObj),
   min.cells = 10,
+  min.count = 10,
+  min.samples = 4,
   isCounts = TRUE,
   normalize.method = "TMM",
-  min.count = 10,
+  useCountsWeights = TRUE,
   pmetadata = NULL,
   pkeys = NULL,
-  useCountsWeights = TRUE,
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -29,17 +30,19 @@ processAssays(
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 
+\item{min.count}{minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
+
+\item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
+
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
-\item{min.count}{min.count used by \code{edgeR::filterByExpr}}
+\item{useCountsWeights}{use cell count weights}
 
 \item{pmetadata}{sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula}
 
 \item{pkeys}{array of two strings indicating sample identifier and cell type identifier columns in pmetadata}
-
-\item{useCountsWeights}{use cell count weights}
 
 \item{quiet}{show messages}
 

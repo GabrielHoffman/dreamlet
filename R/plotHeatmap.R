@@ -33,7 +33,7 @@ setMethod("plotHeatmap", "cellSpecificityValues",
 	x = x[rownames(x) %in% unique(genes),]	
 
 	# pass R CMD check
-	value = variable = NA
+	value = variable = gene = NA
 
   df = data.frame(gene = rownames(x), x, check.names=FALSE)
 
@@ -70,7 +70,7 @@ setMethod("plotHeatmap", "matrix",
 	x = x[rownames(x) %in% unique(genes),]	
 
 	# pass R CMD check
-	value = variable = NA
+	value = variable = gene = NA
 
   df = data.frame(gene = rownames(x), x, check.names=FALSE)
 

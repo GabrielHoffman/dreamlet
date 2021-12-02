@@ -22,6 +22,7 @@
 #' @param useCountsWeights use cell count weights
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
+#' @param useCountsWeights use cell count weights
 #' @param min.count minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param robust logical, use eBayes method that is robust to outlier genes
 #' @param quiet show messages
@@ -73,7 +74,7 @@
 #' 
 #' @importFrom variancePartition dream eBayes topTable makeContrastsDream
 #' @export
-dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "none"), formula = ~1, min.cells = 10, useCountsWeights = TRUE, isCounts=TRUE, normalize.method = 'TMM', min.count = 10, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
+dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "none"), formula = ~1, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	method = match.arg(method)
 
@@ -151,7 +152,16 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	n.cells = c(cellCounts(pb)[,unlist(assay.lst)] )
 
 	# processing counts with voom or log2 CPM
-	vobj = processOneAssay(countsMatrix, form, data, n.cells, min.cells, isCounts, normalize.method, min.count = min.count, useCountsWeights=useCountsWeights, BPPARAM=BPPARAM,...)
+	vobj = processOneAssay(countsMatrix, form, data, n.cells, 
+		min.cells = min.cells, 
+		min.count = min.count,
+		min.samples = min.samples,
+		isCounts = isCounts,
+		normalize.method = normalize.method,  
+		robust = robust, 
+		quiet = quiet,
+		useCountsWeights = useCountsWeights, 
+		BPPARAM = BPPARAM,...)
 
 	# specify contrasts
 	test = paste0('(', paste0('`cellCluster', assay.lst$test, '`', collapse=' + '), ') / ', length(assay.lst$test))

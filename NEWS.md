@@ -1,3 +1,8 @@
+# dreamlet 0.0.18
+ - add `min.samples` to `processAssays()`, `processOneAssay()`
+ - add `dreamletCompareClusters()` and `run_mash()`
+
+
 # dreamlet 0.0.17
  - add `run_mash()`
    * add `zenith_gsa()`, `plotVolcano()`, `plotForest()` for results
