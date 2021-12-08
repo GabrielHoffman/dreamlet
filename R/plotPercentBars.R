@@ -126,7 +126,7 @@ setMethod("plotPercentBars", "cellSpecificityValues",
 	  scale_fill_discrete(name = "Cell type") + 
 	  xlab("Gene") + 
 	  ylab("Fraction of gene expression") + 
-	  scale_y_continuous(limits=c(0, 1), expand=c(0,0)) + 
+	  scale_y_continuous(limits=c(0, 1 + 1e-14), expand=c(0,0)) + 
 	 ggtitle("Cell type specificity scores")
 })
 

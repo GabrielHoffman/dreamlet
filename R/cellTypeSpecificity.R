@@ -81,10 +81,11 @@ cellTypeSpecificity = function(pb,...){
 	geneExpr = cpm(dge, log=FALSE)
 
 	# for each gene, compute fraction of expression
-	geneExpr.fract = t(apply(geneExpr, 1, function(x) x/ sum(x)))
+	# geneExpr.fract = t(apply(geneExpr, 1, function(x) x/ sum(x)))
+	# df = DataFrame(geneExpr.fract)
+	# colnames(df) = colnames(geneExpr.fract)
 
-	df = DataFrame(geneExpr.fract)
-	colnames(df) = colnames(geneExpr.fract)
+	df = DataFrame(geneExpr / rowSums(geneExpr))
 
 	new("cellSpecificityValues", df)
 }
