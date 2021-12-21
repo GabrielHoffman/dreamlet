@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/404.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/dreamlet.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/h5ad_on_disk.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/mashr.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/authors.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/index.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/news/index.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/aggregateToPseudoBulk.html</loc>
@@ -34,10 +55,16 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/details-methods.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dot-plotCellComposition.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamlet.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletCompareClusters.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletPairs.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/dreamletProcessedData-class.html</loc>
@@ -58,6 +85,9 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/fitVarPart.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/index.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/logitRatios.html</loc>
   </url>
   <url>
@@ -68,6 +98,9 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest-methods.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotHeatmap-methods.html</loc>
@@ -125,14 +158,5 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/zenith_gsa-methods.html</loc>
-  </url>
-  <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/articles/dreamlet.html</loc>
-  </url>
-  <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/articles/h5ad_on_disk.html</loc>
-  </url>
-  <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/articles/mashr.html</loc>
   </url>
 </urlset>
