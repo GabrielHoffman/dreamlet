@@ -34,6 +34,8 @@ dreamletCompareClusters(
 
 \item{min.count}{minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
 
+\item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
+
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
@@ -54,7 +56,7 @@ Perform differential expression between a pair of assays using linear (mixed) mo
 \examples{
 
 library(muscat)
-library(SingleCellExperiment)
+library(SingleCellExperiment) 
 
 data(example_sce)
 
@@ -85,7 +87,7 @@ res = dreamletCompareClusters( pb, c("B cells", 'rest'), method="fixed")
 head(res)
 
 lst = list( test = c("CD14+ Monocytes", "FCGR3A+ Monocytes"), 
-		baseline = c("CD4 T cells", "CD8 T cells"))
+		baseline= c("CD4 T cells", "CD8 T cells"))
 
 # compare 2 monocyte clusters to two T cell clusters
 res = dreamletCompareClusters( pb, lst, method="fixed")

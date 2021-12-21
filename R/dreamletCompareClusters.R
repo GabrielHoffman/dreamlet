@@ -19,20 +19,20 @@
 #' @param method account for repeated measures from donors using a "random" effect, a "fixed" effect, or "none"
 #' @param formula covariates to include in the analysis.
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
-#' @param useCountsWeights use cell count weights
+#' @param min.count minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}
+#' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param useCountsWeights use cell count weights
-#' @param min.count minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param robust logical, use eBayes method that is robust to outlier genes
-#' @param quiet show messages
+#' @param quiet show messages 
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #' 
 #' @examples
 #' 
 #' library(muscat)
-#' library(SingleCellExperiment)
+#' library(SingleCellExperiment) 
 #' 
 #' data(example_sce)
 #' 
@@ -63,7 +63,7 @@
 #' head(res)
 #'
 #' lst = list( test = c("CD14+ Monocytes", "FCGR3A+ Monocytes"), 
-#'			baseline = c("CD4 T cells", "CD8 T cells"))
+#'			baseline= c("CD4 T cells", "CD8 T cells"))
 #'
 #' # compare 2 monocyte clusters to two T cell clusters
 #' res = dreamletCompareClusters( pb, lst, method="fixed")
@@ -158,10 +158,13 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		min.samples = min.samples,
 		isCounts = isCounts,
 		normalize.method = normalize.method,  
-		robust = robust, 
 		quiet = quiet,
 		useCountsWeights = useCountsWeights, 
 		BPPARAM = BPPARAM,...)
+
+	# since vobj contains a subset of cells, also subset the data
+	idx = match(colnames(vobj), rownames(data))
+	data = data[idx,]
 
 	# specify contrasts
 	test = paste0('(', paste0('`cellCluster', assay.lst$test, '`', collapse=' + '), ') / ', length(assay.lst$test))
@@ -170,8 +173,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	L = makeContrastsDream( form, data, contrasts = c(compare = paste(test, '-', baseline)))
 
 	# perform differential expression regression analysis
-	idx = match(colnames(vobj), rownames(data))
-	fit = dream( vobj, form, data[idx,], L=L, BPPARAM=BPPARAM,..., quiet=TRUE)
+	fit = dream( vobj, form, data, L=L, BPPARAM=BPPARAM,..., quiet=TRUE)
 
 	# borrow information across genes with the Empirical Bayes step
 	fit = eBayes(fit, robust=robust, trend=!vobj$isCounts)
