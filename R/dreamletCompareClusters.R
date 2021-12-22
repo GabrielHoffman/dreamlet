@@ -107,6 +107,9 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		stop("assay.lst must have 2 entries")
 	}
 
+	# convert entries to strings
+	assay.lst = lapply(assay.lst, as.character)
+
 	# check that all are valid assays
 	if( any(!unlist(assay.lst) %in% assayNames(pb)) ){
 		
@@ -161,6 +164,14 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		quiet = quiet,
 		useCountsWeights = useCountsWeights, 
 		BPPARAM = BPPARAM,...)
+
+	if( is.null(vobj) ){
+		stop("No samples passed the filters.\n  Consider looser cutoffs for min.cells, min.count, min.samples")
+	}
+
+	if( nrow(vobj) < 4 ){
+		stop("Only ", nrow(vobj), " samples passed the filters.\n  Consider looser cutoffs for min.cells, min.count, min.samples")
+	}	
 
 	# since vobj contains a subset of cells, also subset the data
 	idx = match(colnames(vobj), rownames(data))
