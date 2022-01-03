@@ -217,9 +217,6 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		}
 		if(i == 100 || n_remaining == 0) stop("No samples remain after filtering")
 
-		# dropped samples
-		browser()
-
 		# retain only these samples
 		idx = match(rownames(data2), rownames(data))
 		data = droplevels(data[idx,])
