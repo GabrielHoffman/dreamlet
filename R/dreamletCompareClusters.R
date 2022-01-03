@@ -197,6 +197,10 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	# If paired analysis is requested, and only one example of a Sample is found
 	if( method %in% c("random", "fixed") ){
 
+		if( ! quiet ){
+			cat("Filtering for paired samples...\n")
+		}
+			
 		# drop Samples and cellCluster with only 1 example, 
 		# 	continue until no more changes are made 
 		data2 = data
@@ -231,7 +235,6 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		n.cellCluster3 = length(unique(data$cellCluster))
 
 		if( ! quiet ){
-			cat("Filtering for paired samples...\n")
 			if( n.samples3 - n.samples2 != 0){
 				cat("  Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
 			}
