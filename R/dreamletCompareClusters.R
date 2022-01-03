@@ -203,7 +203,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 
 		n_remaining = nrow(data2)
 
-		while( 1 ){
+		for(i in 1:100){
 
 			tab = table(data2$Sample) > 1
 			keep = data2$Sample %in% names(tab)[tab]
@@ -215,6 +215,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 			if( nrow(data2) == n_remaining) break
 			n_remaining = nrow(data2)
 		}
+		if(i == 100) stop("No samples remain after filtering")
 
 		# dropped samples
 
@@ -232,7 +233,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		n.cellCluster3 = length(unique(data$cellCluster))
 
 		if( ! quiet ){
-			cat("Filtering for paired samples...")
+			cat("Filtering for paired samples...\n")
 			if( n.samples3 - n.samples2 != 0){
 				cat("Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
 			}
