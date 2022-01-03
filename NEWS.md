@@ -1,3 +1,6 @@
+# dreamlet 0.0.20
+  - Fix bug in `dreamletCompareClusters()`
+
 # dreamlet 0.0.19
   - Fix bug in `dreamletCompareClusters()`
 
