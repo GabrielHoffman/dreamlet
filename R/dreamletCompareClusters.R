@@ -187,10 +187,10 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	if( ! quiet ){
 		cat("Initial filtering...\n")
 		if( n.samples2 - n.samples != 0){
-			cat("Dropped", (n.samples - n.samples2), '/', n.samples, "samples\n")
+			cat("  Dropped", (n.samples - n.samples2), '/', n.samples, "samples\n")
 		}
 		if( n.cellCluster2 - n.cellCluster != 0){
-			cat("Dropped", (n.cellCluster - n.cellCluster2), '/', n.cellCluster, "samples\n")
+			cat("  Dropped", (n.cellCluster - n.cellCluster2), '/', n.cellCluster, "cell clusters\n")
 		}
 	}
 
@@ -215,9 +215,10 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 			if( nrow(data2) == n_remaining) break
 			n_remaining = nrow(data2)
 		}
-		if(i == 100) stop("No samples remain after filtering")
+		if(i == 100 || n_remaining == 0) stop("No samples remain after filtering")
 
 		# dropped samples
+		browser()
 
 		# retain only these samples
 		idx = match(rownames(data2), rownames(data))
@@ -235,10 +236,10 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		if( ! quiet ){
 			cat("Filtering for paired samples...\n")
 			if( n.samples3 - n.samples2 != 0){
-				cat("Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
+				cat("  Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
 			}
 			if( n.cellCluster3 - n.cellCluster2 != 0){
-				cat("Dropped", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, "samples\n")
+				cat("  Dropped", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, "cell clusters\n")
 			}
 		}
 	}
