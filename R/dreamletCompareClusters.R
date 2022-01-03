@@ -185,7 +185,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	n.cellCluster2 = length(unique(data$cellCluster))
 
 	if( ! quiet ){
-		cat("Initial filtering...")
+		cat("Initial filtering...\n")
 		if( n.samples2 - n.samples != 0){
 			cat("Dropped", (n.samples - n.samples2), '/', n.samples, "samples\n")
 		}
@@ -198,7 +198,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	if( method %in% c("random", "fixed") ){
 
 		# drop Samples and cellCluster with only 1 example, 
-		# until no more changes are made 
+		# 	continue until no more changes are made 
 		data2 = data
 
 		n_remaining = nrow(data2)
@@ -213,6 +213,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 			data2 = data2[keep,]
 			
 			if( nrow(data2) == n_remaining) break
+			n_remaining = nrow(data2)
 		}
 
 		# dropped samples
