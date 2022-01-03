@@ -154,6 +154,9 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	# extract cell counts for two specified assays
 	n.cells = c(cellCounts(pb)[,unlist(assay.lst)] )
 
+	n.samples = length(unique(data$Sample))
+	n.cellCluster = length(unique(data$cellCluster))
+
 	# processing counts with voom or log2 CPM
 	vobj = processOneAssay(countsMatrix, form, data, n.cells, 
 		min.cells = min.cells, 
@@ -176,6 +179,67 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	# since vobj contains a subset of cells, also subset the data
 	idx = match(colnames(vobj), rownames(data))
 	data = data[idx,]
+
+	# describe samples dropped by filtering	
+	n.samples2 = length(unique(data$Sample))
+	n.cellCluster2 = length(unique(data$cellCluster))
+
+	if( ! quiet ){
+		cat("Initial filtering...")
+		if( n.samples2 - n.samples != 0){
+			cat("Dropped", (n.samples - n.samples2), '/', n.samples, "samples\n")
+		}
+		if( n.cellCluster2 - n.cellCluster != 0){
+			cat("Dropped", (n.cellCluster - n.cellCluster2), '/', n.cellCluster, "samples\n")
+		}
+	}
+
+	# If paired analysis is requested, and only one example of a Sample is found
+	if( method %in% c("random", "fixed") ){
+
+		# drop Samples and cellCluster with only 1 example, 
+		# until no more changes are made 
+		data2 = data
+
+		n_remaining = nrow(data2)
+
+		while( 1 ){
+
+			tab = table(data2$Sample) > 1
+			keep = data2$Sample %in% names(tab)[tab]
+			data2 = data2[keep,]
+			tab = table(data2$cellCluster) > 1
+			keep = data2$cellCluster %in% names(tab)[tab]
+			data2 = data2[keep,]
+			
+			if( nrow(data2) == n_remaining) break
+		}
+
+		# dropped samples
+
+		# retain only these samples
+		idx = match(rownames(data2), rownames(data))
+		data = droplevels(data[idx,])
+		vobj = vobj[,idx]
+
+		# keep only retained cellCluster
+		assay.lst$test = assay.lst$test[assay.lst$test %in% data$cellCluster]
+		assay.lst$baseline = assay.lst$baseline[assay.lst$baseline %in% data$cellCluster]
+
+		# describe samples dropped by filtering	on pairs
+		n.samples3 = length(unique(data$Sample))
+		n.cellCluster3 = length(unique(data$cellCluster))
+
+		if( ! quiet ){
+			cat("Filtering for paired samples...")
+			if( n.samples3 - n.samples2 != 0){
+				cat("Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
+			}
+			if( n.cellCluster3 - n.cellCluster2 != 0){
+				cat("Dropped", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, "samples\n")
+			}
+		}
+	}
 
 	# specify contrasts
 	test = paste0('(', paste0('`cellCluster', assay.lst$test, '`', collapse=' + '), ') / ', length(assay.lst$test))
