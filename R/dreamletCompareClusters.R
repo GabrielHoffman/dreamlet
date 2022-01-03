@@ -242,6 +242,10 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 				cat("  Dropped", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, "cell clusters\n")
 			}
 		}
+
+		if( min(sapply(assay.lst, length)) == 0 ){
+			stop("Insufficient cellClusters retained after filtering")
+		}
 	}
 
 	# specify contrasts
