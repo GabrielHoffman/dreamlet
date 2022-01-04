@@ -233,7 +233,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	}
 
 	# If paired analysis is requested, and only one example of a Sample is found
-	if( method %in% c("random", "fixed") & ! collapse){
+	if( method %in% c("random", "fixed") ){
 
 		if( ! quiet ){
 			cat("Filtering for paired samples...\n")
@@ -283,7 +283,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			}
 		}
 
-		if( min(sapply(assay.lst, length)) == 0 ){
+		if( collapse & min(sapply(assay.lst, length)) == 0 ){
 			stop("Insufficient cellClusters retained after filtering")
 		}
 	}
