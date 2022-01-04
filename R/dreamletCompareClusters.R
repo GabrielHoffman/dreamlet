@@ -283,7 +283,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			}
 		}
 
-		if( collapse & min(sapply(assay.lst, length)) == 0 ){
+		if( ! collapse & min(sapply(assay.lst, length)) == 0 ){
 			stop("Insufficient cellClusters retained after filtering")
 		}
 	}
