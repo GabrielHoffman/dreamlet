@@ -77,6 +77,9 @@ pb <- aggregateToPseudoBulk(example_sce,
 	sample_id = 'sample_id',
 	verbose=FALSE)
 
+# Evaluate the specificity of each gene for each cluster
+df_cts = cellTypeSpecificity( pb )
+
 # compare first two assays (i.e. cell types)
 ct.pairs =  c("B cells", "CD14+ Monocytes")
 
@@ -88,13 +91,19 @@ res = dreamletCompareClusters( pb, ct.pairs, method="fixed")
 # B cells compared to CD14+ Monocytes
 head(res)
 
+dreamlet::plotHeatmap( df_cts, genes = rownames(res)[1:5])
+
 # compare B cells versus the rest of the cell types
-# 'rest' is a keyword indicator all other assays	
+# 'rest' is a keyword indicating all other assays	
 res = dreamletCompareClusters( pb, c("B cells", 'rest'), method="fixed")
 
 # genes with highest logFC are most highly expressed in 
 # B cells compared to all others
 head(res)
+
+# Get genes upregulated in B cells
+idx = with(res, which(logFC > 0))[1:5]
+dreamlet::plotHeatmap( df_cts, genes = rownames(res)[idx])
 
 lst = list( test = c("CD14+ Monocytes", "FCGR3A+ Monocytes"), 
 		baseline= c("CD4 T cells", "CD8 T cells"))
@@ -105,5 +114,9 @@ res = dreamletCompareClusters( pb, lst, method="fixed")
 # genes with highest logFC are most highly expressed in 
 # monocytes compared to T cells
 head(res)
+
+# Get genes upregulated in monocytes
+idx = with(res, which(logFC > 0))[1:5]
+dreamlet::plotHeatmap( df_cts, genes = rownames(res)[idx])
 
 }

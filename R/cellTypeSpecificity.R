@@ -85,7 +85,7 @@ cellTypeSpecificity = function(pb,...){
 	# df = DataFrame(geneExpr.fract)
 	# colnames(df) = colnames(geneExpr.fract)
 
-	df = DataFrame(geneExpr / rowSums(geneExpr))
+	df = DataFrame(geneExpr / rowSums(geneExpr), check.names=FALSE)
 
 	new("cellSpecificityValues", df)
 }
