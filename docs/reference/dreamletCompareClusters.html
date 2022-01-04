@@ -148,6 +148,9 @@
 <span class="r-in">  sample_id <span class="op">=</span> <span class="st">'sample_id'</span>,</span>
 <span class="r-in">  verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"><span class="co"># Evaluate the specificity of each gene for each cluster</span></span>
+<span class="r-in"><span class="va">df_cts</span> <span class="op">=</span> <span class="fu"><a href="cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span> <span class="va">pb</span> <span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># compare first two assays (i.e. cell types)</span></span>
 <span class="r-in"><span class="va">ct.pairs</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -169,8 +172,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> CD63    -3.888883 10.337664 -19.45422 5.762971e-10 7.295921e-08 13.49395</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.673970 10.097965 -18.67233 8.996651e-10 9.491467e-08 13.05493</span>
 <span class="r-in"></span>
+<span class="r-in"><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="dreamletCompareClusters-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># compare B cells versus the rest of the cell types</span></span>
-<span class="r-in"><span class="co"># 'rest' is a keyword indicator all other assays  </span></span>
+<span class="r-in"><span class="co"># 'rest' is a keyword indicating all other assays  </span></span>
 <span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">'rest'</span><span class="op">)</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
@@ -186,6 +192,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.235512 10.182616 -21.67526 6.800058e-13 1.511313e-10 19.91233</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -3.908627  9.492690 -20.76951 1.279724e-12 2.275350e-10 19.24959</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -3.759699  9.613494 -19.60603 2.997582e-12 4.441418e-10 18.44009</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Get genes upregulated in B cells</span></span>
+<span class="r-in"><span class="va">idx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
+<span class="r-in"><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="dreamletCompareClusters-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD14+ Monocytes"</span>, <span class="st">"FCGR3A+ Monocytes"</span><span class="op">)</span>, </span>
 <span class="r-in">    baseline<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span>
@@ -213,6 +224,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  14.12368</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    13.98677</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SOD2                    13.92513</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Get genes upregulated in monocytes</span></span>
+<span class="r-in"><span class="va">idx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
+<span class="r-in"><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="dreamletCompareClusters-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
