@@ -1,3 +1,6 @@
+# dreamlet 0.0.21
+  - Add `collapse=TRUE` to `dreamletCompareClusters()`
+
 # dreamlet 0.0.20
   - Fix bug in `dreamletCompareClusters()`
 

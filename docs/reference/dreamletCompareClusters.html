@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.20</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.21</span>
       </span>
     </div>
 
@@ -77,8 +77,9 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dreamletCompareClusters</span><span class="op">(</span>
   <span class="va">pb</span>,
   <span class="va">assays</span>,
-  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"random"</span>, <span class="st">"fixed"</span>, <span class="st">"none"</span><span class="op">)</span>,
+  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"none"</span><span class="op">)</span>,
   formula <span class="op">=</span> <span class="op">~</span><span class="fl">1</span>,
+  collapse <span class="op">=</span> <span class="cn">TRUE</span>,
   min.cells <span class="op">=</span> <span class="fl">10</span>,
   min.count <span class="op">=</span> <span class="fl">10</span>,
   min.samples <span class="op">=</span> <span class="fl">4</span>,
@@ -102,6 +103,8 @@
 <dd><p>account for repeated measures from donors using a "random" effect, a "fixed" effect, or "none"</p></dd>
 <dt>formula</dt>
 <dd><p>covariates to include in the analysis.</p></dd>
+<dt>collapse</dt>
+<dd><p>if TRUE (default), combine all cell clusters within the test set, and separately the baseline set. If FALSE, estimate coefficient for each cell cluster and then identify differential expression using linear contrasts with <code>makeContrastsDream()</code></p></dd>
 <dt>min.cells</dt>
 <dd><p>minimum number of observed cells for a sample to be included in the analysis</p></dd>
 <dt>min.count</dt>
@@ -123,6 +126,12 @@
 <dt>...</dt>
 <dd><p>other arguments passed to <code>dream</code></p></dd>
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>Analyze pseudobulk data to identify differential gene expression between two cell clusters or sets of clusters while modeling the cross-donor expression variation and other aspects of the study design.</p>
+<p><code>method</code> indicates the regression method used to test differential expression between sets of cell clusters.  Since the same biosample will usually be represented in both sets of cell clusters, <code>method</code> determines how the paired design is modeled.   For <code>method = "mixed"</code>, the sample is modeled as a random effect: <code>~ (1|Sample) + ...</code>. For <code>method = "fixed"</code>, the sample is modeled as a fixed effect: <code>~ Sample + ...</code>. For <code>method = "none"</code>, the pairing is ignored.</p>
+<p>When <code>collapse=TRUE</code> (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If <code>collapse=FALSE</code>, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with <code>makeContrastsDream()</code>.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -147,43 +156,34 @@
 <span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># genes with highest logFC are most highly expressed in </span></span>
 <span class="r-in"><span class="co"># B cells compared to CD14+ Monocytes</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           logFC   AveExpr        t      P.Value    adj.P.Val         B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CD37   2.868496  8.818581 14.34454 1.530696e-08 8.808458e-07 10.257964</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PTMA   2.470558 11.235493 13.55444 2.791370e-08 1.262098e-06  9.605840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RPSA   2.733516  9.592327 13.27961 3.465659e-08 1.374371e-06  9.411781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RPS5   2.460970 10.801916 12.83588 4.956974e-08 1.743202e-06  9.019371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> EIF4A2 2.757285  7.930468 12.08817 9.293394e-08 2.941359e-06  8.461450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RPS27  2.116130 11.095120 11.64721 1.368121e-07 3.951269e-06  7.961504</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -4.816806  9.879829 -23.63531 6.877513e-11 2.734301e-08 15.43980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -4.564199 14.265849 -23.14857 8.639180e-11 2.734301e-08 15.38182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -4.554573  9.950588 -20.89339 2.649274e-10 5.235895e-08 14.20355</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.691552 10.362616 -20.47182 3.308623e-10 5.235895e-08 14.00639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CD63    -3.888883 10.337664 -19.45422 5.762971e-10 7.295921e-08 13.49395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.673970 10.097965 -18.67233 8.996651e-10 9.491467e-08 13.05493</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># compare B cells versus the rest of the cell types</span></span>
 <span class="r-in"><span class="co"># 'rest' is a keyword indicator all other assays  </span></span>
 <span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">'rest'</span><span class="op">)</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># genes with highest logFC are most highly expressed in </span></span>
 <span class="r-in"><span class="co"># B cells compared to all others</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                             logFC   AveExpr        t      P.Value    adj.P.Val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 2.7280902 10.357105 14.79810 7.842604e-13 7.353463e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CD74                    2.6457081 11.137156 14.79087 7.919114e-13 7.353463e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CD37                    2.0697451  8.471062 13.88351 2.764700e-12 2.246319e-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RPS5                    1.1838012 10.964051 12.22845 3.233798e-11 1.910881e-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HERPUD1                 2.1599823  8.737235 11.43198 1.157861e-10 5.017397e-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RPL18A                  0.9783164 11.963469 10.34409 7.366825e-10 2.660243e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 19.43714</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CD74                    19.36458</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CD37                    18.24811</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RPS5                    15.56219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HERPUD1                 14.46095</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RPL18A                  12.27541</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -3.611668 13.872811 -33.50421 9.981991e-16 8.873990e-13 26.46896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTH1    -2.488733 15.497594 -26.99381 2.576095e-14 1.145074e-11 23.03711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA1   -5.767273  8.777334 -26.00994 4.492584e-14 1.331302e-11 22.22040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.235512 10.182616 -21.67526 6.800058e-13 1.511313e-10 19.91233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -3.908627  9.492690 -20.76951 1.279724e-12 2.275350e-10 19.24959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -3.759699  9.613494 -19.60603 2.997582e-12 4.441418e-10 18.44009</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD14+ Monocytes"</span>, <span class="st">"FCGR3A+ Monocytes"</span><span class="op">)</span>, </span>
 <span class="r-in">    baseline<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span>
@@ -192,18 +192,24 @@
 <span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">lst</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># genes with highest logFC are most highly expressed in </span></span>
 <span class="r-in"><span class="co"># monocytes compared to T cells</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            logFC   AveExpr        t      P.Value    adj.P.Val        B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     4.990465 13.531244 47.94693 1.990977e-19 1.085083e-16 34.81184</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP    3.999305  9.387747 34.69227 4.360136e-17 1.188137e-14 29.30659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1   6.246062 11.155536 29.56940 6.144924e-16 1.116328e-13 26.83808</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   3.853168  9.699822 28.58047 1.077359e-15 1.467901e-13 26.26882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 3.109519 11.225989 25.10643 9.084420e-15 9.902018e-13 24.16311</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  4.227457  9.664401 23.97963 1.927655e-14 1.750953e-12 23.43323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            logFC   AveExpr        t      P.Value    adj.P.Val</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     5.198559 13.603905 50.01440 1.092326e-12 9.470466e-10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   6.210031 11.076844 40.65163 7.542168e-12 3.269530e-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 5.675747  9.655697 30.70867 1.023387e-10 2.957589e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  4.514048  9.249845 26.98984 3.384453e-10 6.042015e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    3.947873  9.342828 26.51227 3.992245e-10 6.042015e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SOD2                    5.688725  9.919582 26.37995 4.181325e-10 6.042015e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     19.78358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   17.76489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 15.13660</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  14.12368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    13.98677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SOD2                    13.92513</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
