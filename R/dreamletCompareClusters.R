@@ -18,6 +18,7 @@
 #' @param assays array of two entries specifying assays (i.e. cell clusters) to compare, of a list of two sets of assays.
 #' @param method account for repeated measures from donors using a "random" effect, a "fixed" effect, or "none"
 #' @param formula covariates to include in the analysis.
+#' @param collapse if TRUE (default), combine all cell clusters within the test set, and separately the baseline set. If FALSE, estimate coefficient for each cell cluster and then identify differential expression using linear contrasts with \link{\code{makeContrastsDream()}}
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param min.count minimum number of reads for a gene to be consider expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
@@ -28,6 +29,13 @@
 #' @param quiet show messages 
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
+#' 
+#' @details
+#' Analyze pseudobulk data to identify differential gene expression between two cell clusters or sets of clusters while modeling the cross-donor expression variation and other aspects of the study design.  
+#'
+#' \code{method} indicates the regression method used to test differential expression between sets of cell clusters.  Since the same biosample will usually be represented in both sets of cell clusters, \code{method} determines how the paired design is modeled.   For \code{method = "mixed"}, the sample is modeled as a random effect: \code{~ (1|Sample) + ...}. For \code{method = "fixed"}, the sample is modeled as a fixed effect: \code{~ Sample + ...}. For \code{method = "none"}, the pairing is ignored.
+#' 
+#' When \code{collapse=TRUE} (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If \code{collapse=FALSE}, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with \link{\code{makeContrastsDream()}}.
 #' 
 #' @examples
 #' 
@@ -74,7 +82,7 @@
 #' 
 #' @importFrom variancePartition dream eBayes topTable makeContrastsDream
 #' @export
-dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "none"), formula = ~1, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
+dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "none"), formula = ~1, collapse = TRUE, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	method = match.arg(method)
 
@@ -128,31 +136,61 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		stop("Specified assays shared between two groups: ", txt)
 	}
 
-    # extract merge pseudobulk counts for specified assays
-	res = lapply( unlist(assay.lst), function(clstr){
-		geneCounts = assay(pb, clstr)
-		colnames(geneCounts) = paste0(clstr[1], '_', colnames(geneCounts))
-		
-		df = as.data.frame(colData(pb))
-		df$cellCluster = clstr
-		df$Sample = rownames(df)
-		rownames(df) = colnames(geneCounts)
+	if( collapse ){
 
-		list(geneCounts = geneCounts, df = df)
+		# for test and baseline
+		res = lapply( names(assay.lst), function(clstrSet){
+			# for each cluster in the set
+			geneCounts = lapply( assay.lst[[clstrSet]], function(clstr){
+				assay(pb, clstr)
+			})			
+			# sum the multiple clusters in the set
+			geneCounts = Reduce("+", geneCounts)
+			colnames(geneCounts) = paste0(clstrSet, '_', colnames(geneCounts))
+
+			df = as.data.frame(colData(pb))
+			df$cellCluster = clstrSet
+			df$Sample = rownames(df)
+			rownames(df) = colnames(geneCounts)
+
+			list(geneCounts = geneCounts, df = df)
 		})
 
-	countsMatrix = do.call(cbind, lapply(res, function(x) x$geneCounts))
-	data = do.call(rbind, lapply(res, function(x) x$df))
-	rownames(data) = colnames(countsMatrix)
+		countsMatrix = do.call(cbind, lapply(res, function(x) x$geneCounts))
+		data = do.call(rbind, lapply(res, function(x) x$df))
+		rownames(data) = colnames(countsMatrix)
+
+		# extract cell counts for specified sets
+		n.cells = c(rowSums(cellCounts(pb)[,unlist(assay.lst[[1]]),drop=FALSE]), 
+					rowSums(cellCounts(pb)[,unlist(assay.lst[[2]]),drop=FALSE]) )
+
+	}else{	
+	    # extract merge pseudobulk counts for specified assays
+		res = lapply( unlist(assay.lst), function(clstr){
+			geneCounts = assay(pb, clstr)
+			colnames(geneCounts) = paste0(clstr[1], '_', colnames(geneCounts))
+			
+			df = as.data.frame(colData(pb))
+			df$cellCluster = clstr
+			df$Sample = rownames(df)
+			rownames(df) = colnames(geneCounts)
+
+			list(geneCounts = geneCounts, df = df)
+			})
+
+		countsMatrix = do.call(cbind, lapply(res, function(x) x$geneCounts))
+		data = do.call(rbind, lapply(res, function(x) x$df))
+		rownames(data) = colnames(countsMatrix)
+
+		# extract cell counts for specified assays
+		n.cells = c(cellCounts(pb)[,unlist(assay.lst)] )
+	}
 
 	# create formula to evalute voom and differential expression
 	form = switch(method, 
 			'random' = {update.formula( formula, ~ 0 + cellCluster + (1|Sample))},
 			'fixed' = {update.formula( formula, ~ 0 + cellCluster + Sample)},
 			'none' = {update.formula( formula, ~ 0 + cellCluster)})
-
-	# extract cell counts for two specified assays
-	n.cells = c(cellCounts(pb)[,unlist(assay.lst)] )
 
 	n.samples = length(unique(data$Sample))
 	n.cellCluster = length(unique(data$cellCluster))
@@ -195,7 +233,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	}
 
 	# If paired analysis is requested, and only one example of a Sample is found
-	if( method %in% c("random", "fixed") ){
+	if( method %in% c("random", "fixed") & ! collapse){
 
 		if( ! quiet ){
 			cat("Filtering for paired samples...\n")
@@ -226,9 +264,11 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		data = droplevels(data[idx,])
 		vobj = vobj[,idx]
 
-		# keep only retained cellCluster
-		assay.lst$test = assay.lst$test[assay.lst$test %in% data$cellCluster]
-		assay.lst$baseline = assay.lst$baseline[assay.lst$baseline %in% data$cellCluster]
+		if( collapse){
+			# keep only retained cellCluster
+			assay.lst$test = assay.lst$test[assay.lst$test %in% data$cellCluster]
+			assay.lst$baseline = assay.lst$baseline[assay.lst$baseline %in% data$cellCluster]
+		}
 
 		# describe samples dropped by filtering	on pairs
 		n.samples3 = length(unique(data$Sample))
@@ -248,11 +288,16 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 		}
 	}
 
-	# specify contrasts
-	test = paste0('(', paste0('`cellCluster', assay.lst$test, '`', collapse=' + '), ') / ', length(assay.lst$test))
-	baseline = 	paste0('(', paste0('`cellCluster', assay.lst$baseline, '`', collapse=' + '), ') / ', length(assay.lst$baseline))
+	if( collapse ){
+		L = makeContrastsDream( form, data, contrasts = c(compare = paste('cellClustertest - cellClusterbaseline')))
 
-	L = makeContrastsDream( form, data, contrasts = c(compare = paste(test, '-', baseline)))
+	}else{
+		# specify contrasts
+		test = paste0('(', paste0('`cellCluster', assay.lst$test, '`', collapse=' + '), ') / ', length(assay.lst$test))
+		baseline = 	paste0('(', paste0('`cellCluster', assay.lst$baseline, '`', collapse=' + '), ') / ', length(assay.lst$baseline))
+
+		L = makeContrastsDream( form, data, contrasts = c(compare = paste(test, '-', baseline)))
+	}
 
 	# perform differential expression regression analysis
 	fit = dream( vobj, form, data, L=L, BPPARAM=BPPARAM,..., quiet=TRUE)
@@ -263,7 +308,7 @@ dreamletCompareClusters = function( pb, assays, method = c("random", "fixed", "n
 	# extract results
 	res = topTable(fit, coef='compare', number=Inf)
 
-	res[order(res$t, decreasing=TRUE),]
+	res[order(res$P.Value),]
 }
 
 # debug(compareClusterPairs)

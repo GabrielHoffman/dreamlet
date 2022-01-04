@@ -7,8 +7,9 @@
 dreamletCompareClusters(
   pb,
   assays,
-  method = c("random", "fixed", "none"),
+  method = c("fixed", "random", "none"),
   formula = ~1,
+  collapse = TRUE,
   min.cells = 10,
   min.count = 10,
   min.samples = 4,
@@ -29,6 +30,8 @@ dreamletCompareClusters(
 \item{method}{account for repeated measures from donors using a "random" effect, a "fixed" effect, or "none"}
 
 \item{formula}{covariates to include in the analysis.}
+
+\item{collapse}{if TRUE (default), combine all cell clusters within the test set, and separately the baseline set. If FALSE, estimate coefficient for each cell cluster and then identify differential expression using linear contrasts with \link{\code{makeContrastsDream()}}}
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 
@@ -52,6 +55,13 @@ dreamletCompareClusters(
 }
 \description{
 Perform differential expression between a pair of assays using linear (mixed) models
+}
+\details{
+Analyze pseudobulk data to identify differential gene expression between two cell clusters or sets of clusters while modeling the cross-donor expression variation and other aspects of the study design.  
+
+\code{method} indicates the regression method used to test differential expression between sets of cell clusters.  Since the same biosample will usually be represented in both sets of cell clusters, \code{method} determines how the paired design is modeled.   For \code{method = "mixed"}, the sample is modeled as a random effect: \code{~ (1|Sample) + ...}. For \code{method = "fixed"}, the sample is modeled as a fixed effect: \code{~ Sample + ...}. For \code{method = "none"}, the pairing is ignored.
+
+When \code{collapse=TRUE} (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If \code{collapse=FALSE}, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with \link{\code{makeContrastsDream()}}.
 }
 \examples{
 
