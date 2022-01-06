@@ -264,6 +264,8 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
+#' @importFrom sparseMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
+#' @importFrom MatrixGenerics rowMeans2 rowSums2 rowCounts rowMedians
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
     if (!is.null(subset.row)) {
@@ -283,42 +285,101 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     # frequency of each cluster type
     freq <- lengths(by.group)
 
-    # Original version uses rowBlockApply() and is slow
-    # Use matrixStats and DelayedMatrixStats 
+    # method for aggregation depends on datatype    
+    if( is(x, "DelayedMatrix") ){
+        
+        # Original version uses rowBlockApply() and is slow
+        # Use DelayedMatrixStats dramatically increases speed
+        resCombine = bplapply( by.group, function(idx, data){
 
-    resCombine = bplapply( by.group, function(idx, data){
-
-        # when run in parallel, each thread loads packages.  So suppress
-        suppressPackageStartupMessages({ 
-            # subset data by column
-            dataSub = data[,idx,drop=FALSE]
+            # when run in parallel, each thread loads packages.  So suppress
+            suppressPackageStartupMessages({ 
 
             resLst = list()
 
             # evaluate statistics       
             if( "mean" %in% statistics ){
-                resLst[["mean"]] = rowMeans(dataSub)
+                resLst[["mean"]] = DelayedMatrixStats::rowMeans2(data, cols=idx)
             }
 
             if( "sum" %in% statistics ){
-                resLst[["sum"]] = rowSums2(dataSub)
+                resLst[["sum"]] = DelayedMatrixStats::rowSums2(data, cols=idx)
             }
 
             if( "num.detected" %in% statistics ){
-                resLst[["num.detected"]] = rowSums2(dataSub > threshold)
+                resLst[["num.detected"]] = DelayedMatrixStats::rowSums2(data[,idx,drop=FALSE] > threshold)
             }
 
             if( "prop.detected" %in% statistics ){          
-                resLst[["prop.detected"]] = (ncol(dataSub) - rowCounts(dataSub, value=0)) / ncol(dataSub)
+                resLst[["prop.detected"]] = (length(idx) - DelayedMatrixStats::rowCounts(data, value=0, cols=idx)) / length(idx)
             }
 
             if( "median" %in% statistics ){
-                resLst[["median"]] = rowMedians(dataSub)
+                resLst[["median"]] = DelayedMatrixStats::rowMedians(data, cols=idx)
             }
-        })
+            })
 
-        resLst
-    }, data=x, BPPARAM=BPPARAM)
+            resLst
+        }, data=x, BPPARAM=BPPARAM)
+
+    }else if( is(x, "sparseMatrix") ){
+        # Avoid repeated garbage collection steps in bclapply()
+        resCombine = lapply( by.group, function(idx){
+
+            resLst = list()
+
+            # evaluate statistics       
+            if( "mean" %in% statistics ){
+                resLst[["mean"]] = sparseMatrixStats::rowMeans2(x, cols=idx)
+            }
+
+            if( "sum" %in% statistics ){
+                resLst[["sum"]] = sparseMatrixStats::rowSums2(x, cols=idx)
+            }
+
+            if( "num.detected" %in% statistics ){
+                resLst[["num.detected"]] = sparseMatrixStats::rowSums2(x[,idx,drop=FALSE] > threshold)
+            }
+
+            if( "prop.detected" %in% statistics ){          
+                resLst[["prop.detected"]] = (length(idx) - sparseMatrixStats::rowCounts(x, value=0, cols=idx)) / length(idx)
+            }
+
+            if( "median" %in% statistics ){
+                resLst[["median"]] = sparseMatrixStats::rowMedians(x, cols=idx)
+            }
+
+            resLst
+        })
+    }else{
+        resCombine = lapply( by.group, function(idx){
+
+            resLst = list()
+
+            # evaluate statistics       
+            if( "mean" %in% statistics ){
+                resLst[["mean"]] = rowMeans(x[,idx,drop=FALSE])
+            }
+
+            if( "sum" %in% statistics ){
+                resLst[["sum"]] = rowSums2(x[,idx,drop=FALSE])
+            }
+
+            if( "num.detected" %in% statistics ){
+                resLst[["num.detected"]] = rowSums2(x[,idx,drop=FALSE] > threshold)
+            }
+
+            if( "prop.detected" %in% statistics ){          
+                resLst[["prop.detected"]] = (length(idx) - rowCounts(x[,idx,drop=FALSE])) / length(idx)
+            }
+
+            if( "median" %in% statistics ){
+                resLst[["median"]] = rowMedians(x[,idx,drop=FALSE])
+            }
+
+            resLst
+        })
+    }
 
     # Create list of merged values for each statistic
     collected = lapply(statistics, function(stat){
