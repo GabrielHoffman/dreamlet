@@ -98,7 +98,7 @@
 #' @author Gabriel Hoffman, Helena L Crowell & Mark D Robinson
 #'
 #' @details 
-#' Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  But can be much faster in for \code{SingleCellExperiment} backed by H5AD files because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.
+#' Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{\link[sparseMatrixStats]{sparseMatrixStats}}.
 #' 
 #' @references 
 #' Crowell, HL, Soneson, C, Germain, P-L, Calini, D, 
