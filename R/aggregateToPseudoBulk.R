@@ -370,7 +370,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
             }
 
             if( "prop.detected" %in% statistics ){          
-                resLst[["prop.detected"]] = (length(idx) - rowCounts(x[,idx,drop=FALSE])) / length(idx)
+                resLst[["prop.detected"]] = (length(idx) - rowCounts(x[,idx,drop=FALSE], value=0)) / length(idx)
             }
 
             if( "median" %in% statistics ){
