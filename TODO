@@ -1,10 +1,15 @@
 
+Jan 06
+	When dreamletCompareClusters() fails, return empty table.
+		instead of stop()
+
+
 Nov 21	
 	DONE - Make sure that gene set enrichments make sense for mashr
 	- vignette about importing Seurat data and casting to SCE with file-backing
 	DONE - mashr example
 	DONE - Dreamlet for one cell type vs list
-	- topTreat
+	DONE - topTreat
 
 
 

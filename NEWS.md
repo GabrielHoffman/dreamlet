@@ -1,5 +1,5 @@
 # dreamlet 0.0.22
-  - Speed of`aggregateToPseudoBulk()` when a Seurat object is used
+  - Speed up `aggregateToPseudoBulk()` when a Seurat object is used
 
 # dreamlet 0.0.21
   - Add `collapse=TRUE` to `dreamletCompareClusters()`
