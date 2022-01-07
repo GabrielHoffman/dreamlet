@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.23</span>
       </span>
     </div>
 
@@ -122,13 +122,26 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 
 
 --->
-<p>As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory if often impractical. Dreamlet can take advantage of on-disk data access to dramatically reduce memory usage.</p>
-<p>Storing 18K genes across 2M cells with double precision would require 288 Gb memory. Even if the dataset is sparse so that 80% of the entires are zero, loading the entire dataset requires 58 Gb of data. Since <code>R</code> uses copy-by-value, data duplication quickly becomes a problem even for a high memory machine.</p>
-<p>Instead of loading the entire dataset into memory, we adopt an on-disk approach that takes advantage of the <a href="https://anndata.readthedocs.io/en/latest/fileformat-prose.html" class="external-link">H5AD</a> file format built on the <a href="https://en.wikipedia.org/wiki/Hierarchical_Data_Format" class="external-link">HDF5</a> format in order to dramatically reduce memory usage while still retaining high performance. The <a href="https://github.com/theislab/zellkonverter" class="external-link">zellkonverter</a> package uses a <a href="https://bioconductor.org/packages/DelayedArray/" class="external-link">DelayedArray</a> backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> class. SingleCellExperiment is <a href="https://bioconductor.org" class="external-link">Bioconductor’s</a> core data class for single cell data, and data from other formats (i.e. <a href="https://cran.r-project.org/web/packages/Seurat/index.html" class="external-link">Seurat</a>) can easily be <a href="https://rdrr.io/cran/Seurat/man/as.SingleCellExperiment.html" class="external-link">converted</a> to it. Importantly, <code>R</code>’s copy-by-value is no longer an issue because the data is not duplicated when it is passed to another function, since it remains on-disk.</p>
-<p>This enables any analysis designed for the <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> class to take advantage of seamless on-disk access to large-scale datasets.</p>
-<div class="section level1">
-<h1 id="using-zellkonverter">Using zellkonverter<a class="anchor" aria-label="anchor" href="#using-zellkonverter"></a>
+<p>As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory if often impractical. Dreamlet can take advantage of efficient data storage through the <a href="https://bioconductor.org" class="external-link">Bioconductors</a> <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> interface to dramatically reduce memory usage. There are two general methods for storing large single-cell datasets. <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a>, and therefore <code>dreamlet</code>, are compatible with both:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>On-disk storage</strong>: The data remains on the physical disk and is only read into memory when requested. In R there is little data duplication in memory since operations are delayed until the result is requested using <code>DelayedMatrix</code>. Memory usage is minimized at the cost of performance since disk access can be slow.</p></li>
+<li><p><strong>In-memory storage</strong>: Single cell read counts are generally sprase with, say, 20% of read counts being non-zero. The counts can be stored as a <code>sparseMatrix</code> that stores only non-zero entries. Performance is higher since data is in memory, but excessive memory usage can be a problem.</p></li>
+</ol>
+<!---
+on-disk data access to dramatically reduce memory usage.
+
+
+
+Storing 18K genes across 2M cells with double precision would require 288 Gb memory.  Even if the dataset is sparse so that 80\% of the entires are zero, loading the entire dataset requires 58 Gb of data.  Since `R` uses copy-by-value, data duplication quickly becomes a problem even for a high memory machine.   
+
+Instead of loading the entire dataset into memory, we adopt an on-disk approach that takes advantage of the [H5AD](https://anndata.readthedocs.io/en/latest/fileformat-prose.html) file format built on the [HDF5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) format in order to dramatically reduce memory usage while still retaining high performance.  The [zellkonverter](https://github.com/theislab/zellkonverter) package uses a [DelayedArray](https://bioconductor.org/packages/DelayedArray/) backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class.  SingleCellExperiment is [Bioconductor's](https://bioconductor.org) core data class for single cell data, and data from other formats (i.e. [Seurat](https://cran.r-project.org/web/packages/Seurat/index.html)) can easily be [converted](https://rdrr.io/cran/Seurat/man/as.SingleCellExperiment.html) to it.  Importantly,  `R`'s copy-by-value is no longer an issue because the data is not duplicated when it is passed to another function, since it remains on-disk.      
+
+This enables any analysis designed for the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class to take advantage of seamless on-disk access to large-scale datasets.
+
+---><div class="section level1">
+<h1 id="on-disk-storage-using-zellkonverter">On-disk storage using zellkonverter<a class="anchor" aria-label="anchor" href="#on-disk-storage-using-zellkonverter"></a>
 </h1>
+<p><a href="https://github.com/theislab/zellkonverter" class="external-link">zellkonverter</a> takes advantage of the <a href="https://anndata.readthedocs.io/en/latest/fileformat-prose.html" class="external-link">H5AD</a> file format built on the <a href="https://en.wikipedia.org/wiki/Hierarchical_Data_Format" class="external-link">HDF5</a> format in order to dramatically reduce memory usage while still retaining performance. The <a href="https://github.com/theislab/zellkonverter" class="external-link">zellkonverter</a> package uses a <a href="https://bioconductor.org/packages/DelayedArray/" class="external-link">DelayedArray</a> backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> class.</p>
 <p><code>zellkonverter</code> &gt;=1.3.0 is required in general and &gt;=1.3.3 is required for the last example below. <code>zellkonverter</code> is an interface for python code. Note that the python dependencies are installed the first time <code><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD()</a></code> is run, rather than when the package is installed. So the first run of <code><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD()</a></code> can take a few minutes, but subsequent runs will be fast.</p>
 <div class="section level2">
 <h2 id="standard-usage">Standard usage<a class="anchor" aria-label="anchor" href="#standard-usage"></a>
@@ -146,10 +159,10 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read a series of H5AD files into a list</span>
 <span class="co"># then combine them into a single merged SingleCellExperiment</span>
-<span class="va">sce.lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span>
+<span class="va">sce.lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">file</span>, use_hdf5<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>
-<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></code></pre></div>
+<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="access-alternative-data">Access alternative data<a class="anchor" aria-label="anchor" href="#access-alternative-data"></a>
@@ -166,7 +179,7 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 <span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/altExps.html" class="external-link">altExp</a></span><span class="op">(</span> <span class="va">sce_in</span>, <span class="st">"raw"</span>, withDimnames<span class="op">=</span><span class="cn">TRUE</span>, withColData<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># convert these alternative data to SingleCellExperiment</span>
-<span class="va">sce</span> <span class="op">=</span> <span class="fu">as</span><span class="op">(</span><span class="va">sce</span>, <span class="st">"SingleCellExperiment"</span><span class="op">)</span>
+<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"SingleCellExperiment"</span><span class="op">)</span>
 
 <span class="co"># Copy over reducedDims too</span>
 <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">reducedDims</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">reducedDims</a></span><span class="op">(</span><span class="va">sce_in</span><span class="op">)</span></code></pre></div>
@@ -175,7 +188,7 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 <div class="section level1">
 <h1 id="using-seurat">Using Seurat<a class="anchor" aria-label="anchor" href="#using-seurat"></a>
 </h1>
-<p><a href="https://satijalab.org/seurat" class="external-link">Seurat</a> can also convert and import H5AD files, and then convert to <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a>:</p>
+<p><a href="https://satijalab.org/seurat" class="external-link">Seurat</a> can also convert and import H5AD files, and then convert to <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a>. The resulting <code>SingleCellExperiment</code> object stores data as a <code>sparseMatrix</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mojaveazure.github.io/seurat-disk/" class="external-link">SeuratDisk</a></span><span class="op">)</span>
@@ -186,14 +199,18 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 <span class="co"># load Seurat file</span>
 <span class="va">obj</span> <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-disk/reference/LoadH5Seurat.html" class="external-link">LoadH5Seurat</a></span><span class="op">(</span><span class="va">h5seurat_file</span><span class="op">)</span>
 
-<span class="co"># Convert Seurat object to SingleCellExperiment(</span>
+<span class="co"># Convert Seurat object to SingleCellExperiment</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="comparing-interfaces">Comparing interfaces<a class="anchor" aria-label="anchor" href="#comparing-interfaces"></a>
 </h1>
-<p>Note that a <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> created by <a href="https://github.com/theislab/zellkonverter" class="external-link">zellkonverter</a> stores the counts as a <code>DelayedMatrix</code> so the data remains on disk and are only accessed as needed. This reduces memory usage substantailly, and <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> uses methods optimized for this data structure.</p>
-<p>On the other hand, a <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> created using <a href="https://satijalab.org/seurat" class="external-link">Seurat</a> and then <code>as.SingleCellExperiment()</code> stores count data in memory as a <code>sparseMatrix</code>. This uses less memory than a dense matrix, but substantailly more than a <code>DelayedMatrix</code>. While <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> has been developed to speed up analysis of <code>sparseMatrix</code> data, it can be considerablely slower then using the <code>DelayedMatrix</code> above.</p>
+<p>The <code>SingleCellExperiment</code> interface to <code>zellkonverter</code> and <code>Seurat</code> hides the backend differences from the typical R user. The usage of <code>dreamlet</code> is the same in both cases. For small to medium datasets, the performance differences should be minimal. However, for large datasets there can be a substantial difference in performance. Use of <code>zellkonverter</code> and <code>DelayedMatrix</code> minimize memory usage at the cost of computationl performance. Use of <code>Seurat</code> and <code>sparseMatrix</code> can be faster if there is sufficent memory.</p>
+<!---
+Note that a [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) created by [zellkonverter](https://github.com/theislab/zellkonverter) stores the counts as a `DelayedMatrix` so the data remains on disk and are only accessed as needed.  This reduces memory usage substantailly, and `aggregateToPseudoBulk()` uses methods optimized for this data structure.
+
+On the other hand, a [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) created using [Seurat](https://satijalab.org/seurat) and then `as.SingleCellExperiment()` stores count data in memory as a `sparseMatrix`.  This uses less memory than a dense matrix, but substantailly more than a `DelayedMatrix`.  While `aggregateToPseudoBulk()` has been developed to speed up analysis of `sparseMatrix` data, it can be considerablely slower then using the `DelayedMatrix` above.  
+--->
 </div>
   </div>
 
