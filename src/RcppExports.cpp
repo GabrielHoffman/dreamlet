@@ -12,33 +12,35 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // rowSums_by_chunk_sparse
-Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double>& data, Rcpp::List idxlst);
-RcppExport SEXP _dreamlet_rowSums_by_chunk_sparse(SEXP dataSEXP, SEXP idxlstSEXP) {
+Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double>& data, Rcpp::List idxlst, bool verbose);
+RcppExport SEXP _dreamlet_rowSums_by_chunk_sparse(SEXP dataSEXP, SEXP idxlstSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double>& >::type data(dataSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type idxlst(idxlstSEXP);
-    rcpp_result_gen = Rcpp::wrap(rowSums_by_chunk_sparse(data, idxlst));
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(rowSums_by_chunk_sparse(data, idxlst, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // rowSums_by_chunk
-Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix& data, Rcpp::List idxlst);
-RcppExport SEXP _dreamlet_rowSums_by_chunk(SEXP dataSEXP, SEXP idxlstSEXP) {
+Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix& data, Rcpp::List idxlst, bool verbose);
+RcppExport SEXP _dreamlet_rowSums_by_chunk(SEXP dataSEXP, SEXP idxlstSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix& >::type data(dataSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type idxlst(idxlstSEXP);
-    rcpp_result_gen = Rcpp::wrap(rowSums_by_chunk(data, idxlst));
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(rowSums_by_chunk(data, idxlst, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_dreamlet_rowSums_by_chunk_sparse", (DL_FUNC) &_dreamlet_rowSums_by_chunk_sparse, 2},
-    {"_dreamlet_rowSums_by_chunk", (DL_FUNC) &_dreamlet_rowSums_by_chunk, 2},
+    {"_dreamlet_rowSums_by_chunk_sparse", (DL_FUNC) &_dreamlet_rowSums_by_chunk_sparse, 3},
+    {"_dreamlet_rowSums_by_chunk", (DL_FUNC) &_dreamlet_rowSums_by_chunk, 3},
     {NULL, NULL, 0}
 };
 

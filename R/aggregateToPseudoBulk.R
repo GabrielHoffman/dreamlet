@@ -98,7 +98,7 @@
 #' @author Gabriel Hoffman, Helena L Crowell & Mark D Robinson
 #'
 #' @details 
-#' Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{\link[sparseMatrixStats]{sparseMatrixStats}}.
+#' Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
 #' 
 #' @references 
 #' Crowell, HL, Soneson, C, Germain, P-L, Calini, D, 
@@ -264,6 +264,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @useDynLib dreamlet
+#' @import Rcpp RcppEigen
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
     if (!is.null(subset.row)) {
@@ -286,12 +287,12 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     # method for aggregation depends on datatype    
     #  I used RcppEigen to speed up rowSums for sparseMatrix and matrix
     if( (statistics == "sum") & is(x, "sparseMatrix") ){
-        countsMatrix = rowSums_by_chunk_sparse(x, by.group)
+        countsMatrix = rowSums_by_chunk_sparse(x, by.group, verbose=BPPARAM$progressbar)
         rownames(countsMatrix) = rownames(x)
         colnames(countsMatrix) = names(by.group)
         collected = list(sum = countsMatrix)
     }else if( (statistics == "sum") & is(x, "matrix") ){
-        countsMatrix = rowSums_by_chunk(x, by.group)
+        countsMatrix = rowSums_by_chunk(x, by.group, verbose=BPPARAM$progressbar)
         rownames(countsMatrix) = rownames(x)
         colnames(countsMatrix) = names(by.group)
         collected = list(sum = countsMatrix)
