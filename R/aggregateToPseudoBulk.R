@@ -264,7 +264,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @useDynLib dreamlet
-#' @import Rcpp RcppEigen
+#' @import Rcpp RcppEigen RcppProgress
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
     if (!is.null(subset.row)) {
@@ -286,12 +286,12 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
     # method for aggregation depends on datatype    
     #  I used RcppEigen to speed up rowSums for sparseMatrix and matrix
-    if( (statistics == "sum") & is(x, "sparseMatrix") ){
+    if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "sparseMatrix") ){
         countsMatrix = rowSums_by_chunk_sparse(x, by.group, verbose=BPPARAM$progressbar)
         rownames(countsMatrix) = rownames(x)
         colnames(countsMatrix) = names(by.group)
         collected = list(sum = countsMatrix)
-    }else if( (statistics == "sum") & is(x, "matrix") ){
+    }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "matrix") ){
         countsMatrix = rowSums_by_chunk(x, by.group, verbose=BPPARAM$progressbar)
         rownames(countsMatrix) = rownames(x)
         colnames(countsMatrix) = names(by.group)
