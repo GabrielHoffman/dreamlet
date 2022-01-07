@@ -8,11 +8,17 @@
 //
 // [[Rcpp::depends(RcppEigen)]]
 
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
+
 // [[Rcpp::export]]
-Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &data, Rcpp::List idxlst) { 
+Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &data, Rcpp::List idxlst, bool verbose) { 
 
     // initialize NumericMatrix with zero values
     Rcpp::NumericMatrix result(data.rows(), idxlst.size()); 
+
+    Progress progbar(idxlst.size(), verbose);
 
     // loop thru list
     for(int i=0; i < idxlst.size(); i++){
@@ -33,6 +39,7 @@ Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &d
                 if( value != 0 ) result(k,i) += value;
             }
         }
+        progbar.increment(); 
     }
 
     return result;
@@ -40,10 +47,12 @@ Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &d
 
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix &data, Rcpp::List idxlst) { 
+Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix &data, Rcpp::List idxlst, bool verbose) { 
 
     // initialize NumericMatrix with zero values
     Rcpp::NumericMatrix result(data.rows(), idxlst.size()); 
+
+    Progress progbar(idxlst.size(), verbose);
 
     // loop thru list
     for(int i=0; i < idxlst.size(); i++){
@@ -64,8 +73,8 @@ Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix &data, Rcpp::List idxls
                 if( value != 0 ) result(k,i) += value;
             }
         }
+        progbar.increment(); 
     }
 
     return result;
 }
-

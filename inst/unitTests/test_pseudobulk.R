@@ -60,6 +60,7 @@ test_aggregateData = function(){
 test_aggregateToPseudoBulk_datatype = function(){
 
 	# compare pseudobulk by rowSums from DelayedMatrix, matrix, and sparseMatrix
+	library(muscat)
 	library(SingleCellExperiment)
 	library(DelayedArray)
 
@@ -78,7 +79,6 @@ test_aggregateToPseudoBulk_datatype = function(){
 	pb_matrix <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "counts",
 			cluster_id = "cluster_id",
 			sample_id = "sample_id") 
-
 
 	# matrix
 	assay(example_sce, "counts") = DelayedArray(assay(example_sce, "counts"))

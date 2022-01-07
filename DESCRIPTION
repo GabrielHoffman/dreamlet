@@ -52,6 +52,7 @@ Imports:
     limma,
     BiocGenerics,
     ComplexHeatmap,
+    RcppProgress,
     circlize,
     reshape2,
     gtools,
@@ -67,7 +68,8 @@ RoxygenNote: 7.1.2
 RdMacros: Rdpack
 LinkingTo: 
     Rcpp,
-    RcppEigen
+    RcppEigen,
+    RcppProgress
 Remotes: 
     github::GabrielHoffman/variancePartition,
     github::GabrielHoffman/zenith,
