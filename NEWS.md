@@ -1,3 +1,7 @@
+# dreamlet 0.0.23
+  - dramatic speed up `aggregateToPseudoBulk()` when a Seurat object is used
+    - uses RcppEigen
+
 # dreamlet 0.0.22
   - Speed up `aggregateToPseudoBulk()` when a Seurat object is used
 

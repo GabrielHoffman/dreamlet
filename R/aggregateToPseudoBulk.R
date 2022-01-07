@@ -263,9 +263,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 }
 
 #' @importFrom BiocParallel SerialParam bplapply
-#' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
-#' @importFrom sparseMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
-#' @importFrom MatrixGenerics rowMeans2 rowSums2 rowCounts rowMedians
+#' @useDynLib dreamlet
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
     if (!is.null(subset.row)) {
@@ -286,6 +284,31 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     freq <- lengths(by.group)
 
     # method for aggregation depends on datatype    
+    #  I used RcppEigen to speed up rowSums for sparseMatrix and matrix
+    if( (statistics == "sum") & is(x, "sparseMatrix") ){
+        countsMatrix = rowSums_by_chunk_sparse(x, by.group)
+        rownames(countsMatrix) = rownames(x)
+        colnames(countsMatrix) = names(by.group)
+        collected = list(sum = countsMatrix)
+    }else if( (statistics == "sum") & is(x, "matrix") ){
+        countsMatrix = rowSums_by_chunk(x, by.group)
+        rownames(countsMatrix) = rownames(x)
+        colnames(countsMatrix) = names(by.group)
+        collected = list(sum = countsMatrix)
+    }else{
+        collected = .pb_summary(x, by.group, statistics, threshold, BPPARAM)
+    }
+
+    list(summary=collected, freq=freq)
+}
+
+
+# method for aggregation depends on datatype    
+#' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
+#' @importFrom sparseMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
+#' @importFrom MatrixGenerics rowMeans2 rowSums2 rowCounts rowMedians
+.pb_summary = function(x, by.group, statistics, threshold, BPPARAM){
+
     if( is(x, "DelayedMatrix") ){
         
         # Original version uses rowBlockApply() and is slow
@@ -351,6 +374,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
             resLst
         })
+          
     }else{
         resCombine = lapply( by.group, function(idx){
 
@@ -391,9 +415,12 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         tmpMat
         })
     names(collected) = statistics
-
-    list(summary=collected, freq=freq)
+    
+    collected
 }
+
+
+
 
 # #' @importFrom Matrix rowSums
 # #' @importFrom DelayedMatrixStats rowMedians 

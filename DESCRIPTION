@@ -1,8 +1,8 @@
 Package: dreamlet
 Type: Package
 Title: Perform differential expression analysis on multi-sample single cell datasets using linear (mixed) models
-Version: 0.0.22
-Date: 2021-01-06
+Version: 0.0.23
+Date: 2021-01-07
 Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu")
 Description: Dreamlet performs differential expression analysis on multi-sample single cell datasets using linear (mixed) models. The software is optimized for parallel processing and accessing large datasets using SingleCellExperiment backed by DelayedArray data.
 VignetteBuilder: knitr
@@ -57,12 +57,17 @@ Imports:
     gtools,
     ggrepel,
     lme4,
+    Rcpp (>= 1.0.7),
+    RcppEigen,
     Rdpack,
     utils,
     grid,
     stats
 RoxygenNote: 7.1.2
 RdMacros: Rdpack
+LinkingTo: 
+    Rcpp,
+    RcppEigen
 Remotes: 
     github::GabrielHoffman/variancePartition,
     github::GabrielHoffman/zenith,
