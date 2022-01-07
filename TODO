@@ -3,6 +3,12 @@ Jan 06
 	When dreamletCompareClusters() fails, return empty table.
 		instead of stop()
 
+	Aggregation on Seurat's sparseMatrix is now faster, but still slow.
+		Can I adapt sparseMatrixStats::rowSums2
+
+		https://github.com/const-ae/sparseMatrixStats/blob/ed73ffe97b39a7ed47963a3a771313e18e84f554/R/methods_row.R#L7
+
+		https://github.com/zdebruine/RcppSparse	
 
 Nov 21	
 	DONE - Make sure that gene set enrichments make sense for mashr

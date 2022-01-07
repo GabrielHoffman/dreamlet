@@ -57,6 +57,38 @@ test_aggregateData = function(){
 	check1 & checkEquals(pb, pb2)
 }
 
+test_aggregateToPseudoBulk_datatype = function(){
+
+	# compare pseudobulk by rowSums from DelayedMatrix, matrix, and sparseMatrix
+	library(SingleCellExperiment)
+	library(DelayedArray)
+
+	# pseudobulk counts by cluster-sample
+	data(example_sce)
+
+	is(assay(example_sce, "counts"))
+
+	# sparseMatrix
+	pb_sparseMatrix <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "counts",
+			cluster_id = "cluster_id",
+			sample_id = "sample_id") 
+
+	# matrix
+	assay(example_sce, "counts") = as.matrix(assay(example_sce, "counts"))
+	pb_matrix <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "counts",
+			cluster_id = "cluster_id",
+			sample_id = "sample_id") 
+
+
+	# matrix
+	assay(example_sce, "counts") = DelayedArray(assay(example_sce, "counts"))
+	pb_delayedMatrix <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "counts",
+			cluster_id = "cluster_id",
+			sample_id = "sample_id") 
+
+	checkEquals(pb_sparseMatrix, pb_matrix ) & checkEquals(pb_sparseMatrix, pb_delayedMatrix ) 
+}
+
 
 test_pmetadata = function(){
 
