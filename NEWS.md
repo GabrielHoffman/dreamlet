@@ -1,4 +1,9 @@
-# dreamlet 0.0.23
+# dreamlet 0.0.24
+  - additional speed up `aggregateToPseudoBulk()` when a Seurat object is used
+    - uses RcppEigen sparse matrix iterator
+
+
+  # dreamlet 0.0.23
   - dramatic speed up `aggregateToPseudoBulk()` when a Seurat object is used
     - uses RcppEigen
 

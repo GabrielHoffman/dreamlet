@@ -12,6 +12,10 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 
+
+typedef Eigen::MappedSparseMatrix<double> MSpMat;
+typedef MSpMat::InnerIterator InIterMat;
+
 // [[Rcpp::export]]
 Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &data, Rcpp::List idxlst, bool verbose) { 
 
@@ -29,21 +33,28 @@ Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &d
         for(int j=0; j < idx.size(); j++){
 
             // loop thru genes (i.e. rows)
-            for(int k=0; k< data.rows(); k++){
-
-                // Note that these indecies are zero-based
-                // Importantly, never create a subset of the matrix
-                //  just extract one element at a time
-                double value = (double) data.coeff(k,idx(j)-1);
-
-                if( value != 0 ) result(k,i) += value;
+            // Iteratator only accesses non-zero elements, and is much faster
+            for (InIterMat g_(data, idx(j)-1); g_; ++g_){
+                result(g_.index(),i) += g_.value();
             }
+
+            // old version access every element
+            // for(int k=0; k< data.rows(); k++){
+
+            //     // Note that these indecies are zero-based
+            //     // Importantly, never create a subset of the matrix
+            //     //  just extract one element at a time
+            //     double value = (double) data.coeff(k,idx(j)-1);
+
+            //     if( value != 0 ) result(k,i) += value;
+            // }
         }
         progbar.increment(); 
     }
 
     return result;
 }
+
 
 
 // [[Rcpp::export]]
