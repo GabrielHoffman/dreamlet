@@ -18,6 +18,23 @@ test_pseudobulk_example = function(){
 	checkEquals(out, out2)
 }
 
+test_rowSums_by_chunk = function()
+
+
+	set.seed(17)# to be reproducible
+	n = 400
+	p = 1000
+	M <- Matrix::rsparsematrix(n, p, density=.1)
+
+	idxlist = list(1:p)
+
+	res = dreamlet:::rowSums_by_chunk(as.matrix(M), idxlist, FALSE)
+	res2 = dreamlet:::rowSums_by_chunk_sparse(M, idxlist, FALSE)
+
+	checkEqualsNumeric(res, res2)
+}
+
+
 
 # Check dreamlet::aggregateToPseudoBulk()
 # compared to muscat::aggregateData
