@@ -18,7 +18,7 @@ test_pseudobulk_example = function(){
 	checkEquals(out, out2)
 }
 
-test_rowSums_by_chunk = function()
+test_rowSums_by_chunk = function(){
 
 
 	set.seed(17)# to be reproducible
