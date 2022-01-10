@@ -5,13 +5,14 @@
 
 
 
-create_idxlist = function(a){
+create_idxlist = function(fct){
 
-	unique_a = unique(a)
-	res = lapply(unique_a, function(key){
-		which(a == key)
+	fct = droplevels(fct)
+
+	res = lapply(levels(fct), function(key){
+		which(fct == key)
 		})
-	names(res) = unique_a
+	names(res) = levels(fct)
 	res
 }
 
@@ -26,10 +27,14 @@ create_idxlist = function(a){
 
 
 #' @import BiocParallel DelayedArray
-fast_pb = function(x, group, BPPARAM=SerialParam()){
+fast_pb = function(x, group, grid=NULL, BPPARAM=SerialParam()){
+
+	if( ! is.factor(group) ){
+		group = factor(group, unique(group))
+	}
 
 	# get 2D grid of the DelayedArray
-	grid <- DelayedArray:::normarg_grid(NULL, x)
+	grid <- DelayedArray:::normarg_grid(grid, x)
 
 	# loop over chunks of columns
 	result = bplapply( seq(1,ncol(grid)),function(j,x, grid, group){
@@ -59,22 +64,41 @@ fast_pb = function(x, group, BPPARAM=SerialParam()){
 
 			# Use RcppEigen to summarize data
 			if( is(block, "sparseMatrix") ){	
-				res3 = rowSums_by_chunk_sparse(block, idxlst, FALSE)
+				res3 = dreamlet:::rowSums_by_chunk_sparse(block, idxlst, FALSE)
 			}else{
-				res3 = rowSums_by_chunk(block, idxlst, FALSE)
+				res3 = dreamlet:::rowSums_by_chunk(block, idxlst, FALSE)
 			}
 			colnames(res3) = names(idxlst)
 
 			# ensure that all chunks have same column sorting
 			res3[,sort(colnames(res3))]
 		}, x=x, grid=grid)
-		# Aggregate row chunks, and convert to sparseMatrix
-		as(do.call(rbind, res), "sparseMatrix")
+		# Aggregate row chunks
+		res = do.call(rbind, res)
+		# convert to sparseMatrix
+		as(res, "sparseMatrix")
 	}, x=x, grid=grid, group=group, BPPARAM=BPPARAM)
 
-	# Aggregate colums chunks by summing
-	Reduce('+', result )
+
+	# Aggregate colums chunks by summing over column chunks
+	# aggrResult = sparseMatrix(i=1, j=1, x=0, dims=c(nrow(x), nlevels(group)))
+	# colnames(aggrResult) = levels(group)
+	# rownames(aggrResult) = rownames(x)
+
+	# for(batchResult in result){
+
+	# 	idx = match(colnames(batchResult), colnames(aggrResult))
+
+	# 	aggrResult[,idx] = aggrResult[,idx] + batchResult
+	# }
+
+	# aggrResult
 }
+
+
+
+
+
 
 
 
