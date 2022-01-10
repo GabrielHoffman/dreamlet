@@ -20,7 +20,6 @@ test_pseudobulk_example = function(){
 
 test_rowSums_by_chunk = function(){
 
-
 	set.seed(17)# to be reproducible
 	n = 400
 	p = 1000
@@ -28,8 +27,8 @@ test_rowSums_by_chunk = function(){
 
 	idxlist = list(1:p)
 
-	res = dreamlet:::rowSums_by_chunk(as.matrix(M), idxlist, FALSE)
-	res2 = dreamlet:::rowSums_by_chunk_sparse(M, idxlist, FALSE)
+	res = dreamlet:::rowSums_by_chunk(as.matrix(M), idxlist, TRUE)
+	res2 = dreamlet:::rowSums_by_chunk_sparse(M, idxlist, TRUE)
 
 	checkEqualsNumeric(res, res2)
 }

@@ -21,6 +21,7 @@ Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &d
 
     // initialize NumericMatrix with zero values
     Rcpp::NumericMatrix result(data.rows(), idxlst.size()); 
+    Eigen::SparseMatrix<double> res(data.rows(), idxlst.size());
 
     Progress progbar(idxlst.size(), verbose);
 
