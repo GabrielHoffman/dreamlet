@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.23</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.25</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-01-07 15:52:23</h4>
+            <h4 data-toc-skip class="date">Run on 2022-01-10 16:11:57</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="hidden name"><code>dreamlet.Rmd</code></div>
@@ -153,7 +153,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 
 <span class="co"># only keep singlet cells with sufficient reads</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span>
 
 <span class="co"># compute QC metrics</span>
 <span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
@@ -191,7 +191,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
     verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># one 'assay' per cell type</span>
-<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></code></pre></div>
+<span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "B cells"           "CD14+ Monocytes"   "CD4 T cells"      </span>
 <span class="co">## [4] "CD8 T cells"       "Dendritic cells"   "FCGR3A+ Monocytes"</span>
 <span class="co">## [7] "Megakaryocytes"    "NK cells"</span></code></pre>
@@ -427,7 +427,7 @@ Here, compare fraction of each cell type bewteen simulated and unstimulated samp
 <span class="va">cobj</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/crumblr/man/crumblr.html" class="external-link">crumblr</a></span><span class="op">(</span> <span class="fu"><a href="../reference/cellCounts.html">cellCounts</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span> <span class="op">)</span>
 
 <span class="co"># perform standard dream analysis</span>
-<span class="va">fit</span> <span class="op">=</span> <span class="fu">dream</span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">fit</span> <span class="op">=</span> <span class="fu">dream</span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">'StimStatusstim'</span>, sort.by<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></code></pre></div>
@@ -451,7 +451,7 @@ Here, compare fraction of each cell type bewteen simulated and unstimulated samp
 <span class="co">## NK cells          -4.754474</span></code></pre>
 <p>Variance partioning analysis quantifies the contribution of multiple sources of variation in cell type composition differences.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vp</span> <span class="op">=</span> <span class="fu">fitExtractVarPartModel</span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">vp</span> <span class="op">=</span> <span class="fu">fitExtractVarPartModel</span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/ctc.crumblr.cp-1.png" width="700"></p>
@@ -463,24 +463,21 @@ Here, compare fraction of each cell type bewteen simulated and unstimulated samp
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># test differential expression between B cells and the rest of the cell clusters</span>
 <span class="va">ct.pairs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">"rest"</span><span class="op">)</span>
+ 
+<span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span>
 
-<span class="va">df_Bcell</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"random"</span><span class="op">)</span>
+<span class="co"># The coefficient 'compare' is the value logFC between test and baseline:</span>
+<span class="co"># compare = cellClustertest - cellClusterbaseline </span>
+<span class="va">df_Bcell</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"compare"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_Bcell</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##                            logFC   AveExpr        t      P.Value    adj.P.Val</span>
-<span class="co">## CD74                    2.504512 10.733691 24.20509 1.202273e-43 4.953366e-41</span>
-<span class="co">## HLA-DRA_ENSG00000204287 2.714833  9.647900 20.81930 3.633298e-38 5.987676e-36</span>
-<span class="co">## RPS5                    1.391233 10.656255 19.19339 3.384529e-35 3.984074e-33</span>
-<span class="co">## CD37                    2.081230  8.280893 19.01155 7.306134e-35 7.525318e-33</span>
-<span class="co">## RPL18A                  1.147747 11.811362 17.49652 5.178633e-32 4.741326e-30</span>
-<span class="co">## RPSA                    1.294866  9.678130 17.32769 8.906262e-32 7.338760e-30</span>
-<span class="co">##                                B    z.std</span>
-<span class="co">## CD74                    89.57681 13.85406</span>
-<span class="co">## HLA-DRA_ENSG00000204287 77.67880 12.91649</span>
-<span class="co">## RPS5                    69.73250 12.37926</span>
-<span class="co">## CD37                    69.98044 12.31734</span>
-<span class="co">## RPL18A                  62.52715 11.77618</span>
-<span class="co">## RPSA                    61.83624 11.73038</span></code></pre>
+<pre><code><span class="co">##              logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
+<span class="co">## C15orf48 -6.635081  8.200179 -52.73567 7.166069e-26 1.949171e-22 48.48023</span>
+<span class="co">## TIMP1    -6.664147  9.326366 -48.94376 4.060244e-25 5.521932e-22 47.17369</span>
+<span class="co">## ANXA1    -5.596470  8.477805 -36.83076 2.936001e-22 2.661975e-19 40.90691</span>
+<span class="co">## CCL2     -6.532150  8.564950 -36.29678 4.111548e-22 2.795853e-19 40.60157</span>
+<span class="co">## FTL      -3.434776 13.363302 -33.18651 3.232134e-21 1.758281e-18 38.66849</span>
+<span class="co">## S100A10  -4.040431  8.873840 -27.35835 2.680319e-19 1.215078e-16 34.29294</span></code></pre>
 </div>
 <div class="section level1">
 <h1 id="gene-cluster-specificity">Gene-cluster specificity<a class="anchor" aria-label="anchor" href="#gene-cluster-specificity"></a>
