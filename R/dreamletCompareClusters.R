@@ -27,6 +27,7 @@
 #' @param useCountsWeights use cell count weights
 #' @param robust logical, use eBayes method that is robust to outlier genes
 #' @param quiet show messages 
+#' @param contrasts specify contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #' 
@@ -104,7 +105,7 @@
 #' 
 #' @importFrom variancePartition dream eBayes topTable makeContrastsDream
 #' @export
-dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "none"), formula = ~1, collapse = TRUE, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(),...){
+dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "none"), formula = ~ 0, collapse = TRUE, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, contrasts = c(compare = paste('cellClustertest - cellClusterbaseline')), BPPARAM = SerialParam(),...){
 
 	method = match.arg(method)
 
@@ -210,9 +211,9 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 	# create formula to evalute voom and differential expression
 	form = switch(method, 
-			'random' = {update.formula( formula, ~ . + 0 + cellCluster + (1|Sample))},
-			'fixed' = {update.formula( formula, ~  . + 0 + cellCluster + Sample)},
-			'none' = {update.formula( formula, ~  . + 0 + cellCluster)})
+			'random' = {update.formula( formula, ~ 0 + cellCluster + (1|Sample) + .)},
+			'fixed' = {update.formula( formula, ~ 0 + cellCluster + Sample + .)},
+			'none' = {update.formula( formula, ~ 0 + cellCluster + .)})
 
 	n.samples = length(unique(data$Sample))
 	n.cellCluster = length(unique(data$cellCluster))
@@ -245,12 +246,12 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	n.cellCluster2 = length(unique(data$cellCluster))
 
 	if( ! quiet ){
-		cat("Initial filtering...\n")
+		message("Initial filtering...\n")
 		if( n.samples2 - n.samples != 0){
-			cat("  Dropped", (n.samples - n.samples2), '/', n.samples, "samples\n")
+			message("  Dropped", (n.samples - n.samples2), '/', n.samples, "samples\n")
 		}
 		if( n.cellCluster2 - n.cellCluster != 0){
-			cat("  Dropped", (n.cellCluster - n.cellCluster2), '/', n.cellCluster, "cell clusters\n")
+			message("  Dropped", (n.cellCluster - n.cellCluster2), '/', n.cellCluster, "cell clusters\n")
 		}
 	}
 
@@ -258,7 +259,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	if( method %in% c("random", "fixed") ){
 
 		if( ! quiet ){
-			cat("Filtering for paired samples...\n")
+			message("Filtering for paired samples...\n")
 		}
 			
 		# drop Samples and cellCluster with only 1 example, 
@@ -298,10 +299,10 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 		if( ! quiet ){
 			if( n.samples3 - n.samples2 != 0){
-				cat("  Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
+				message("  Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
 			}
 			if( n.cellCluster3 - n.cellCluster2 != 0){
-				cat("  Dropped", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, "cell clusters\n")
+				message("  Dropped", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, "cell clusters\n")
 			}
 		}
 
@@ -311,7 +312,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	}
 
 	if( collapse ){
-		L = makeContrastsDream( form, data, contrasts = c(compare = paste('cellClustertest - cellClusterbaseline')))
+		L = makeContrastsDream( form, data, contrasts = contrasts)
 
 	}else{
 		# specify contrasts

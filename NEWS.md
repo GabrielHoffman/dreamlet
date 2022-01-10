@@ -1,7 +1,8 @@
 # dreamlet 0.0.25
   - change return value for `dreamletCompareClusters()` to be compatible with `zenith_gsa()`
+  - fix usage of `formula` in `dreamletCompareClusters()`
 
-  # dreamlet 0.0.24
+# dreamlet 0.0.24
   - additional speed up `aggregateToPseudoBulk()` when a Seurat object is used
     - uses RcppEigen sparse matrix iterator
 

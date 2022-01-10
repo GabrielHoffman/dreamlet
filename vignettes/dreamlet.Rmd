@@ -306,8 +306,12 @@ Identifying genes that are differentially expressed between cell clusters incorp
 ```{r dreamletCompareClusters}
 # test differential expression between B cells and the rest of the cell clusters
 ct.pairs = c("B cells", "rest")
+ 
+fit = dreamletCompareClusters( pb, ct.pairs, method="fixed")
 
-df_Bcell = dreamletCompareClusters( pb, ct.pairs, method="random")
+# The coefficient 'compare' is the value logFC between test and baseline:
+# compare = cellClustertest - cellClusterbaseline 
+df_Bcell = topTable(fit, coef="compare")
 
 head(df_Bcell)
 ```

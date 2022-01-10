@@ -8,7 +8,7 @@ dreamletCompareClusters(
   pb,
   assays,
   method = c("fixed", "random", "none"),
-  formula = ~1,
+  formula = ~0,
   collapse = TRUE,
   min.cells = 10,
   min.count = 10,
@@ -18,6 +18,7 @@ dreamletCompareClusters(
   useCountsWeights = TRUE,
   robust = FALSE,
   quiet = FALSE,
+  contrasts = c(compare = paste("cellClustertest - cellClusterbaseline")),
   BPPARAM = SerialParam(),
   ...
 )
@@ -48,6 +49,8 @@ dreamletCompareClusters(
 \item{robust}{logical, use eBayes method that is robust to outlier genes}
 
 \item{quiet}{show messages}
+
+\item{contrasts}{specify contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
