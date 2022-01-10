@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.23</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.25</span>
       </span>
     </div>
 
@@ -156,10 +156,15 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># run comparison</span></span>
 <span class="r-in"><span class="co"># use method = 'fixed' here since it is faster</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Extract top 10 differentially expressed genes</span></span>
+<span class="r-in"><span class="co"># The coefficient 'compare' is the value logFC between test and baseline:</span></span>
+<span class="r-in"><span class="co"># compare = cellClustertest - cellClusterbaseline </span></span>
+<span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">'compare'</span>, number<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># genes with highest logFC are most highly expressed in </span></span>
 <span class="r-in"><span class="co"># B cells compared to CD14+ Monocytes</span></span>
@@ -177,10 +182,12 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># compare B cells versus the rest of the cell types</span></span>
 <span class="r-in"><span class="co"># 'rest' is a keyword indicating all other assays  </span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">'rest'</span><span class="op">)</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">'rest'</span><span class="op">)</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">'compare'</span>, number<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># genes with highest logFC are most highly expressed in </span></span>
 <span class="r-in"><span class="co"># B cells compared to all others</span></span>
@@ -202,10 +209,12 @@
 <span class="r-in">    baseline<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># compare 2 monocyte clusters to two T cell clusters</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">lst</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">lst</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">res</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">'compare'</span>, number<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># genes with highest logFC are most highly expressed in </span></span>
 <span class="r-in"><span class="co"># monocytes compared to T cells</span></span>

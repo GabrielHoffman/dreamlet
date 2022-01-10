@@ -85,7 +85,12 @@ ct.pairs =  c("B cells", "CD14+ Monocytes")
 
 # run comparison
 # use method = 'fixed' here since it is faster
-res = dreamletCompareClusters( pb, ct.pairs, method="fixed")
+fit = dreamletCompareClusters( pb, ct.pairs, method="fixed")
+
+# Extract top 10 differentially expressed genes
+# The coefficient 'compare' is the value logFC between test and baseline:
+# compare = cellClustertest - cellClusterbaseline 
+res = topTable(fit, coef='compare', number=10)
 
 # genes with highest logFC are most highly expressed in 
 # B cells compared to CD14+ Monocytes
@@ -95,7 +100,9 @@ dreamlet::plotHeatmap( df_cts, genes = rownames(res)[1:5])
 
 # compare B cells versus the rest of the cell types
 # 'rest' is a keyword indicating all other assays	
-res = dreamletCompareClusters( pb, c("B cells", 'rest'), method="fixed")
+fit = dreamletCompareClusters( pb, c("B cells", 'rest'), method="fixed")
+
+res = topTable(fit, coef='compare', number=10)
 
 # genes with highest logFC are most highly expressed in 
 # B cells compared to all others
@@ -109,7 +116,9 @@ lst = list( test = c("CD14+ Monocytes", "FCGR3A+ Monocytes"),
 		baseline= c("CD4 T cells", "CD8 T cells"))
 
 # compare 2 monocyte clusters to two T cell clusters
-res = dreamletCompareClusters( pb, lst, method="fixed")
+fit = dreamletCompareClusters( pb, lst, method="fixed")
+
+res = topTable(fit, coef='compare', number=10)
 
 # genes with highest logFC are most highly expressed in 
 # monocytes compared to T cells

@@ -59,7 +59,12 @@
 #' 
 #' # run comparison
 #' # use method = 'fixed' here since it is faster
-#' res = dreamletCompareClusters( pb, ct.pairs, method="fixed")
+#' fit = dreamletCompareClusters( pb, ct.pairs, method="fixed")
+#'
+#' # Extract top 10 differentially expressed genes
+#' # The coefficient 'compare' is the value logFC between test and baseline:
+#' # compare = cellClustertest - cellClusterbaseline 
+#' res = topTable(fit, coef='compare', number=10)
 #' 
 #' # genes with highest logFC are most highly expressed in 
 #' # B cells compared to CD14+ Monocytes
@@ -69,8 +74,10 @@
 #'
 #' # compare B cells versus the rest of the cell types
 #' # 'rest' is a keyword indicating all other assays	
-#' res = dreamletCompareClusters( pb, c("B cells", 'rest'), method="fixed")
+#' fit = dreamletCompareClusters( pb, c("B cells", 'rest'), method="fixed")
 #' 
+#' res = topTable(fit, coef='compare', number=10)
+#'
 #' # genes with highest logFC are most highly expressed in 
 #' # B cells compared to all others
 #' head(res)
@@ -83,7 +90,9 @@
 #'			baseline= c("CD4 T cells", "CD8 T cells"))
 #'
 #' # compare 2 monocyte clusters to two T cell clusters
-#' res = dreamletCompareClusters( pb, lst, method="fixed")
+#' fit = dreamletCompareClusters( pb, lst, method="fixed")
+#' 
+#' res = topTable(fit, coef='compare', number=10)
 #' 
 #' # genes with highest logFC are most highly expressed in 
 #' # monocytes compared to T cells
@@ -201,9 +210,9 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 	# create formula to evalute voom and differential expression
 	form = switch(method, 
-			'random' = {update.formula( formula, ~ 0 + cellCluster + (1|Sample))},
-			'fixed' = {update.formula( formula, ~ 0 + cellCluster + Sample)},
-			'none' = {update.formula( formula, ~ 0 + cellCluster)})
+			'random' = {update.formula( formula, ~ . + 0 + cellCluster + (1|Sample))},
+			'fixed' = {update.formula( formula, ~  . + 0 + cellCluster + Sample)},
+			'none' = {update.formula( formula, ~  . + 0 + cellCluster)})
 
 	n.samples = length(unique(data$Sample))
 	n.cellCluster = length(unique(data$cellCluster))
@@ -318,11 +327,16 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	# borrow information across genes with the Empirical Bayes step
 	fit = eBayes(fit, robust=robust, trend=!vobj$isCounts)
 
-	# extract results
-	res = topTable(fit, coef='compare', number=Inf)
-
-	res[order(res$P.Value),]
+	# return fit
+	fit
 }
+
+
+	# extract results
+#	 res = topTable(fit, coef='compare', number=Inf)
+
+# 	res[order(res$P.Value),]
+
 
 # debug(compareClusterPairs)
 
