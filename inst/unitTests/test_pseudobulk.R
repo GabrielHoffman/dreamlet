@@ -102,6 +102,14 @@ test_aggregateToPseudoBulk_datatype = function(){
 			cluster_id = "cluster_id",
 			sample_id = "sample_id") 
 
+	# convert from sparseMatrix to matrix just for comparing to expectation
+	for(id in assayNames(pb_delayedMatrix)){
+		assay(pb_delayedMatrix, id) = as.matrix(assay(pb_delayedMatrix, id))
+	}
+
+	assay(pb_matrix, 1)[1:3, 1:3]
+	assay(pb_delayedMatrix, 1)[1:3, 1:3]
+
 	checkEquals(pb_sparseMatrix, pb_matrix ) & checkEquals(pb_sparseMatrix, pb_delayedMatrix ) 
 }
 
