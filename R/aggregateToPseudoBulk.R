@@ -296,7 +296,13 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         rownames(countsMatrix) = rownames(x)
         colnames(countsMatrix) = names(by.group)
         collected = list(sum = countsMatrix)
-    }else{
+    }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "DelayedMatrix") ){
+
+        countsMatrix = colsum_fast(x, ids)
+
+        
+        collected = list(sum = countsMatrix)
+    }else{    
         collected = .pb_summary(x, by.group, statistics, threshold, BPPARAM)
     }
 

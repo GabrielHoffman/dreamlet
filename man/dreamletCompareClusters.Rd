@@ -20,6 +20,7 @@ dreamletCompareClusters(
   quiet = FALSE,
   contrasts = c(compare = paste("cellClustertest - cellClusterbaseline")),
   BPPARAM = SerialParam(),
+  errorsAsWarnings = FALSE,
   ...
 )
 }
@@ -53,6 +54,8 @@ dreamletCompareClusters(
 \item{contrasts}{specify contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.}
 
 \item{BPPARAM}{parameters for parallel evaluation}
+
+\item{errorsAsWarnings}{if \code{TRUE}, convert error to a warning and return \code{NULL}}
 
 \item{...}{other arguments passed to \code{dream}}
 }

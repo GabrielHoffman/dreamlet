@@ -29,6 +29,7 @@
 #' @param quiet show messages 
 #' @param contrasts specify contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.
 #' @param BPPARAM parameters for parallel evaluation
+#' @param errorsAsWarnings if \code{TRUE}, convert error to a warning and return \code{NULL}
 #' @param ... other arguments passed to \code{dream}
 #' 
 #' @details
@@ -105,7 +106,7 @@
 #' 
 #' @importFrom variancePartition dream eBayes topTable makeContrastsDream
 #' @export
-dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "none"), formula = ~ 0, collapse = TRUE, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, contrasts = c(compare = paste('cellClustertest - cellClusterbaseline')), BPPARAM = SerialParam(),...){
+dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "none"), formula = ~ 0, collapse = TRUE, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, contrasts = c(compare = paste('cellClustertest - cellClusterbaseline')), BPPARAM = SerialParam(), errorsAsWarnings=FALSE,...){
 
 	method = match.arg(method)
 
@@ -113,11 +114,23 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 		# check that assays has two entries
 		if( length(assays) != 2){
-			stop("assays must have 2 entries")
+			txt = "assays must have 2 entries"
+			if( errorsAsWarnings ){
+				warning(txt)
+				return(NULL)
+			}else{
+				stop(txt)
+			}
 		}
 
 		if( assays[1] == "rest" ){
-			stop("assay 'rest' is only valid as the second entry")
+			txt = "assay 'rest' is only valid as the second entry"
+			if( errorsAsWarnings ){
+				warning(txt)
+				return(NULL)
+			}else{
+				stop(txt)
+			}
 		}
 
 		# convert array to list with two entries
@@ -130,12 +143,24 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	}else if( is.list(assays) ){
 		assay.lst = assays
 	}else{
-		stop("assays argument must be vector or list")
+		txt = "assays argument must be vector or list"
+		if( errorsAsWarnings ){
+			warning(txt)
+			return(NULL)
+		}else{
+			stop(txt)
+		}
 	}
 
 	# check that assay.lst has two entries
 	if( length(assay.lst) != 2){
-		stop("assay.lst must have 2 entries")
+		txt = "assay.lst must have 2 entries"
+		if( errorsAsWarnings ){
+			warning(txt)
+			return(NULL)
+		}else{
+			stop(txt)
+		}
 	}
 
 	# convert entries to strings
@@ -147,7 +172,14 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 		i = unlist(assay.lst) %in% assayNames(pb)
 
 		txt = paste(unlist(assay.lst)[!i], collapse=', ')
-		stop("Specified assays are not valid: ", txt)
+		txt = paste("Specified assays are not valid: ", txt)
+
+		if( errorsAsWarnings ){
+			warning(txt)
+			return(NULL)
+		}else{
+			stop(txt)
+		}
 	}
 
 	# check that there are no overlapping assays
@@ -155,8 +187,14 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	if( length(shared) > 0 ){
 
 		txt = paste(shared, collapse=', ')
+		txt = paste("Specified assays shared between two groups: ", txt)
 
-		stop("Specified assays shared between two groups: ", txt)
+		if( errorsAsWarnings ){
+			warning(txt)
+			return(NULL)
+		}else{
+			stop(txt)
+		}
 	}
 
 	if( collapse ){
@@ -230,11 +268,24 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 		BPPARAM = BPPARAM,...)
 
 	if( is.null(vobj) ){
-		stop("No samples passed the filters.\n  Consider looser cutoffs for min.cells, min.count, min.samples")
+		txt = "No samples passed the filters.\n  Consider looser cutoffs for min.cells, min.count, min.samples"
+		if( errorsAsWarnings ){
+			warning(txt)
+			return(NULL)
+		}else{
+			stop(txt)
+		}
 	}
 
 	if( nrow(vobj) < 4 ){
-		stop("Only ", nrow(vobj), " samples passed the filters.\n  Consider looser cutoffs for min.cells, min.count, min.samples")
+		txt = paste("Only ", nrow(vobj), " samples passed the filters.\n  Consider looser cutoffs for min.cells, min.count, min.samples")
+
+		if( errorsAsWarnings ){
+			warning(txt)
+			return(NULL)
+		}else{
+			stop(txt)
+		}
 	}	
 
 	# since vobj contains a subset of cells, also subset the data
@@ -280,8 +331,16 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			if( nrow(data2) == n_remaining) break
 			n_remaining = nrow(data2)
 		}
-		if(i == 100 || n_remaining == 0) stop("No samples remain after filtering")
+		if(i == 100 || n_remaining == 0){
+			txt = "No samples remain after filtering"
 
+			if( errorsAsWarnings ){
+				warning(txt)
+				return(NULL)
+			}else{
+				stop(txt)
+			}
+		}
 		# retain only these samples
 		idx = match(rownames(data2), rownames(data))
 		data = droplevels(data[idx,])
@@ -307,7 +366,14 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 		}
 
 		if( ! collapse & min(sapply(assay.lst, length)) == 0 ){
-			stop("Insufficient cellClusters retained after filtering")
+			txt = "Insufficient cellClusters retained after filtering"
+
+			if( errorsAsWarnings ){
+				warning(txt)
+				return(NULL)
+			}else{
+				stop(txt)
+			}
 		}
 	}
 

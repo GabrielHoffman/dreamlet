@@ -1,3 +1,8 @@
+# dreamlet 0.0.26
+  - update `dreamletCompareClusters()`:
+   - now compatable with `plotZenithResults()`
+   - include flag `errorsAsWarnings`.  If `TRUE` warns and returns NULL. 
+
 # dreamlet 0.0.25
   - change return value for `dreamletCompareClusters()` to be compatible with `zenith_gsa()`
   - fix usage of `formula` in `dreamletCompareClusters()`
