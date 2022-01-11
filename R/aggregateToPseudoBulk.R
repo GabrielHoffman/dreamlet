@@ -300,7 +300,6 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
         countsMatrix = colsum_fast(x, ids)
 
-        
         collected = list(sum = countsMatrix)
     }else{    
         collected = .pb_summary(x, by.group, statistics, threshold, BPPARAM)

@@ -22,14 +22,14 @@ create_idxlist = function(fct){
 
 # DelayedArray::colsum can be slow due to data manipulation in R
 #  Uses a lot of memory when `group` has many levels
-# Here, colsums_fast() reads DelayedMatrix into memory 
+# Here, colsum_fast() reads DelayedMatrix into memory 
 # 	but does manipulation and processing in Rcpp 
 #   Data is stored and return as a sparseMatrix to reduce memory usage
 
 #' @import DelayedArray
 #' @importFrom BiocParallel bplapply
 #' @importFrom methods as
-colsums_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
+colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 
 	if( ! is.factor(group) ){
 		group = factor(group, unique(group))
