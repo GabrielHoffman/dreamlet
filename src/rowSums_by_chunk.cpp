@@ -91,53 +91,98 @@ Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix &data, Rcpp::List idxls
     return result;
 }
 
+// // [[Rcpp::export]]
+// Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List idLst, Rcpp::StringVector grpUniq) { 
+
+//     MSpMat spM_tmp = resList(0);
+
+//     int ngenes = spM_tmp.rows();
+
+//     // initialize return value
+//     SpMat spMatFinal(ngenes, grpUniq.size());
+   
+//     // for each group
+//     #if defined(_OPENMP)
+//     #pragma omp parallel for num_threads(omp_get_thread_num())
+//     #endif
+//     for(int i=0; i<grpUniq.size(); i++){
+        
+//         if(i % 100 == 0) Rcpp::Rcout << i << std::endl;                
+
+//         Rcpp::NumericVector grpResult(ngenes);
+
+//          // for each batch of columns
+//         for(int j=0; j<resList.size(); j++){
+//             MSpMat spM = resList(j);
+//             Rcpp::StringVector colNames = idLst(j);
+
+//             // for each column in spM
+//             for(int h=0; h<colNames.size(); h++){
+//                 if( colNames(h) == grpUniq(i)){
+//                     // loop thru genes (i.e. rows)
+//                     for (InIterMat g_(spM, h); g_; ++g_){
+//                         grpResult(g_.index()) += g_.value();
+//                     }
+//                     break;
+//                 }                    
+//             }
+//         }
+//         double value;
+//         #pragma omp critical
+//         for(int k=0; k<grpResult.size(); k++){
+//             value = grpResult(k);
+//             if( value != 0) spMatFinal.insert(k,i) = value;
+//         }
+//     }
+
+//     Rcpp::Rcout << "makeCompressed" << std::endl; 
+
+//     spMatFinal.makeCompressed();
+//     return spMatFinal;
+// }
+
+typedef Eigen::Triplet<double> T;
+
 // [[Rcpp::export]]
 Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List idLst, Rcpp::StringVector grpUniq) { 
 
-    MSpMat spM_tmp = resList(0);
-
-    int ngenes = spM_tmp.rows();
-
-    // initialize return value
-    SpMat spMatFinal(ngenes, grpUniq.size());
+    int ngenes;
+    std::vector<T> tripletList;
    
-    // for each group
-    #if defined(_OPENMP)
-    #pragma omp parallel for num_threads(omp_get_thread_num())
-    #endif
-    for(int i=0; i<grpUniq.size(); i++){
-        
-        if(i % 100 == 0) Rcpp::Rcout << i << std::endl;                
+    // for each batch of columns
+    for(int j=0; j<resList.size(); j++){
+        MSpMat spM = resList(j);
+        Rcpp::StringVector colNames = idLst(j);
+        if( j==0 ) ngenes = spM.rows();
 
-        Rcpp::NumericVector grpResult(ngenes);
-
-         // for each batch of columns
-        for(int j=0; j<resList.size(); j++){
-            MSpMat spM = resList(j);
-            Rcpp::StringVector colNames = idLst(j);
-
+        // for each group
+        for(int i=0; i<grpUniq.size(); i++){
+            double value;
             // for each column in spM
             for(int h=0; h<colNames.size(); h++){
                 if( colNames(h) == grpUniq(i)){
                     // loop thru genes (i.e. rows)
                     for (InIterMat g_(spM, h); g_; ++g_){
-                        grpResult(g_.index()) += g_.value();
+                        value = g_.value();
+                        if( value != 0){
+                            // store i,j,value triplet for sparseMatrix
+                            tripletList.push_back(T(g_.index(),i, value) );
+                            //Rcpp::Rcout << g_.index() << " " << i << " " << value << std::endl;
+                        }
                     }
-                    break;
                 }                    
             }
         }
-        double value;
-        #pragma omp critical
-        for(int k=0; k<grpResult.size(); k++){
-            value = grpResult(k);
-            if( value != 0) spMatFinal.insert(k,i) = value;
-        }
     }
 
-    Rcpp::Rcout << "makeCompressed" << std::endl; 
+    // populate sparse matrix for return
+    // values are added for repeated entries
+    SpMat spMatFinal(ngenes, grpUniq.size());
+    spMatFinal.setFromTriplets(tripletList.begin(), tripletList.end());
 
+    // convert format for return to R
     spMatFinal.makeCompressed();
+
     return spMatFinal;
 }
 

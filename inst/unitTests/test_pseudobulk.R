@@ -73,6 +73,25 @@ test_aggregateData = function(){
 	check1 & checkEquals(pb, pb2)
 }
 
+test_colsum_fast = function(){
+
+	library(Matrix)
+	library(DelayedArray)
+
+	set.seed(17)# to be reproducible
+	n = 400
+	p = 500
+	M <- rsparsematrix(n, p, nnz = n*p*.1)
+	M[] = 1L
+
+	group = as.character(sample.int(200, p, replace=TRUE))
+
+	res1 = dreamlet:::colsum_fast(DelayedArray(M), group)
+	res2 = DelayedArray::colsum(DelayedArray(M), group)
+
+	RUnit::checkEquals(as.matrix(res1), res2 )
+}
+
 test_aggregateToPseudoBulk_datatype = function(){
 
 	# compare pseudobulk by rowSums from DelayedMatrix, matrix, and sparseMatrix
@@ -103,10 +122,12 @@ test_aggregateToPseudoBulk_datatype = function(){
 			sample_id = "sample_id") 
 
 	# convert from sparseMatrix to matrix just for comparing to expectation
-	for(id in assayNames(pb_delayedMatrix)){
-		assay(pb_delayedMatrix, id) = as.matrix(assay(pb_delayedMatrix, id))
-	}
+	# for(id in assayNames(pb_delayedMatrix)){
+	# 	assay(pb_delayedMatrix, id) = as.matrix(assay(pb_delayedMatrix, id))
+	# 	assay(pb_matrix, id) = as.matrix(assay(pb_matrix, id))
+	# }
 
+	assay(pb_sparseMatrix, 1)[1:3, 1:3]
 	assay(pb_matrix, 1)[1:3, 1:3]
 	assay(pb_delayedMatrix, 1)[1:3, 1:3]
 
