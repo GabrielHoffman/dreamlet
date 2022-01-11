@@ -92,7 +92,7 @@ Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix &data, Rcpp::List idxls
 }
 
 // [[Rcpp::export]]
-Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List &resList, Rcpp::List &idLst, Rcpp::StringVector &grpUniq, const int nthreads) { 
+Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List idLst, Rcpp::StringVector grpUniq) { 
 
     MSpMat spM_tmp = resList(0);
 
@@ -103,7 +103,7 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List &resList, Rcpp::List 
    
     // for each group
     #if defined(_OPENMP)
-    #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(omp_get_thread_num())
     #endif
     for(int i=0; i<grpUniq.size(); i++){
         
