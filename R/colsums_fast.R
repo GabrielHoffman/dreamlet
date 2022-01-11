@@ -1,9 +1,5 @@
-
-
-
-
-
-
+# Gabriel Hoffman
+# Jan 10, 2021
 
 create_idxlist = function(fct){
 
@@ -24,24 +20,33 @@ create_idxlist = function(fct){
     block
 }
 
+# DelayedArray::colsum can be slow due to data manipulation in R
+#  Uses a lot of memory when `group` has many levels
+# Here, colsums_fast() reads DelayedMatrix into memory 
+# 	but does manipulation and processing in Rcpp 
+#   Data is stored and return as a sparseMatrix to reduce memory usage
 
-
-#' @import BiocParallel DelayedArray
-fast_pb = function(x, group, grid=NULL, BPPARAM=SerialParam()){
+#' @import DelayedArray
+#' @importFrom BiocParallel bplapply
+#' @importFrom methods as
+colsums_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 
 	if( ! is.factor(group) ){
 		group = factor(group, unique(group))
 	}
 
 	# get 2D grid of the DelayedArray
-	grid <- DelayedArray:::normarg_grid(grid, x)
+	# grid <- DelayedArray:::normarg_grid(grid, x)
+	if( is.null(grid) ){
+		grid = defaultAutoGrid(x)
+	}	
 
 	# loop over chunks of columns
 	result = bplapply( seq(1,ncol(grid)),function(j,x, grid, group){
 		cat("\r", j, '/', ncol(grid),'   ')
 
 		# load within bplapply 
-	    suppressPackageStartupMessages(library("DelayedArray"))
+	    #suppressPackageStartupMessages(library("DelayedArray"))
 
 	    # get indecies of column chunk to extract
 		vp = grid[[1L, as.integer(j)]]
@@ -65,9 +70,9 @@ fast_pb = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 
 			# Use RcppEigen to summarize data
 			if( is(block, "sparseMatrix") ){	
-				res3 = dreamlet:::rowSums_by_chunk_sparse(block, idxlst, FALSE)
+				res3 = rowSums_by_chunk_sparse(block, idxlst, FALSE)
 			}else{
-				res3 = dreamlet:::rowSums_by_chunk(block, idxlst, FALSE)
+				res3 = rowSums_by_chunk(block, idxlst, FALSE)
 			}
 			colnames(res3) = names(idxlst)
 
@@ -83,6 +88,15 @@ fast_pb = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 		# convert to sparseMatrix
 		as(res, "sparseMatrix")
 	}, x=x, grid=grid, group=group, BPPARAM=BPPARAM)
+
+	# aggregate batches together as a sparseMatrix
+	idLst = lapply(result, colnames)
+
+	spMat = aggregateByColnames(result, idLst, levels(group))
+	rownames(spMat) = rownames(x)
+	colnames(spMat) = levels(group)
+
+	spMat
 }
 
 

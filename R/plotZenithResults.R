@@ -68,6 +68,11 @@ plotZenithResults = function(df, ntop=5, nbottom=5){
 		df$tstat = df$tstat * ifelse(df$Direction == "Up", 1, -1)
 	}
 
+	# if 'assay' is not found
+	if( is.na(match("assay", colnames(df))) ){
+		df$assay = df$coef
+	}
+
 	# for each assay, return top and bottom genesets
 	gs = lapply( unique(df$assay), function(assay){
 
