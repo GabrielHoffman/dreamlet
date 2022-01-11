@@ -38,15 +38,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // aggregateByColnames
-Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List idLst, Rcpp::StringVector grpUniq);
-RcppExport SEXP _dreamlet_aggregateByColnames(SEXP resListSEXP, SEXP idLstSEXP, SEXP grpUniqSEXP) {
+Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List& resList, Rcpp::List& idLst, Rcpp::StringVector& grpUniq, const int nthreads);
+RcppExport SEXP _dreamlet_aggregateByColnames(SEXP resListSEXP, SEXP idLstSEXP, SEXP grpUniqSEXP, SEXP nthreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type resList(resListSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type idLst(idLstSEXP);
-    Rcpp::traits::input_parameter< Rcpp::StringVector >::type grpUniq(grpUniqSEXP);
-    rcpp_result_gen = Rcpp::wrap(aggregateByColnames(resList, idLst, grpUniq));
+    Rcpp::traits::input_parameter< Rcpp::List& >::type resList(resListSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List& >::type idLst(idLstSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector& >::type grpUniq(grpUniqSEXP);
+    Rcpp::traits::input_parameter< const int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(aggregateByColnames(resList, idLst, grpUniq, nthreads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -54,7 +55,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_dreamlet_rowSums_by_chunk_sparse", (DL_FUNC) &_dreamlet_rowSums_by_chunk_sparse, 3},
     {"_dreamlet_rowSums_by_chunk", (DL_FUNC) &_dreamlet_rowSums_by_chunk, 3},
-    {"_dreamlet_aggregateByColnames", (DL_FUNC) &_dreamlet_aggregateByColnames, 3},
+    {"_dreamlet_aggregateByColnames", (DL_FUNC) &_dreamlet_aggregateByColnames, 4},
     {NULL, NULL, 0}
 };
 

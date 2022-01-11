@@ -9,7 +9,7 @@ rowSums_by_chunk <- function(data, idxlst, verbose) {
     .Call('_dreamlet_rowSums_by_chunk', PACKAGE = 'dreamlet', data, idxlst, verbose)
 }
 
-aggregateByColnames <- function(resList, idLst, grpUniq) {
-    .Call('_dreamlet_aggregateByColnames', PACKAGE = 'dreamlet', resList, idLst, grpUniq)
+aggregateByColnames <- function(resList, idLst, grpUniq, nthreads) {
+    .Call('_dreamlet_aggregateByColnames', PACKAGE = 'dreamlet', resList, idLst, grpUniq, nthreads)
 }
 
