@@ -32,7 +32,7 @@ create_idxlist = function(fct){
 colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 
 	if( ! is.factor(group) ){
-		group = factor(group, unique(group))
+		group = factor(group, sort(unique(group)))
 	}
 
 	# get 2D grid of the DelayedArray
