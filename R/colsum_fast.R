@@ -92,7 +92,7 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 	# aggregate batches together as a sparseMatrix
 	idLst = lapply(result, colnames)
 
-	spMat = aggregateByColnames(result, idLst, levels(group))
+	spMat = aggregateByColnames(result, idLst, levels(group), BPPARAM$workers)
 	rownames(spMat) = rownames(x)
 	colnames(spMat) = levels(group)
 

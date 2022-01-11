@@ -92,7 +92,7 @@ Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix &data, Rcpp::List idxls
 }
 
 // [[Rcpp::export]]
-Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List idLst, Rcpp::StringVector grpUniq) { 
+Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List &resList, Rcpp::List &idLst, Rcpp::StringVector &grpUniq, const int nthreads) { 
 
     MSpMat spM_tmp = resList(0);
 
@@ -103,7 +103,7 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
    
     // for each group
     #if defined(_OPENMP)
-    #pragma omp parallel for num_threads(3)
+    #pragma omp parallel for num_threads(nthreads)
     #endif
     for(int i=0; i<grpUniq.size(); i++){
         
@@ -134,6 +134,14 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
             if( value != 0) spMatFinal.insert(k,i) = value;
         }
     }
+
+    Rcpp::Rcout << "makeCompressed" << std::endl; 
+
     spMatFinal.makeCompressed();
     return spMatFinal;
 }
+
+
+
+
+
