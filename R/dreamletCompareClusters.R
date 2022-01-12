@@ -27,7 +27,7 @@
 #' @param useCountsWeights use cell count weights
 #' @param robust logical, use eBayes method that is robust to outlier genes
 #' @param quiet show messages 
-#' @param contrasts specify contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.
+#' @param contrasts cell type is encoded in variable \code{cellCluster} with levels \code{test} and \code{baseline}. \code{contrasts} specifies contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.
 #' @param BPPARAM parameters for parallel evaluation
 #' @param errorsAsWarnings if \code{TRUE}, convert error to a warning and return \code{NULL}
 #' @param ... other arguments passed to \code{dream}
@@ -256,16 +256,23 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	n.samples = length(unique(data$Sample))
 	n.cellCluster = length(unique(data$cellCluster))
 
-	# processing counts with voom or log2 CPM
-	vobj = processOneAssay(countsMatrix, form, data, n.cells, 
-		min.cells = min.cells, 
-		min.count = min.count,
-		min.samples = min.samples,
-		isCounts = isCounts,
-		normalize.method = normalize.method,  
-		quiet = quiet,
-		useCountsWeights = useCountsWeights, 
-		BPPARAM = BPPARAM,...)
+	# catch error according to errorsAsWarnings
+	vobj = tryCatch({
+		# processing counts with voom or log2 CPM
+		processOneAssay(countsMatrix, form, data, n.cells, 
+			min.cells = min.cells, 
+			min.count = min.count,
+			min.samples = min.samples,
+			isCounts = isCounts,
+			normalize.method = normalize.method,  
+			quiet = quiet,
+			useCountsWeights = useCountsWeights, 
+			BPPARAM = BPPARAM,...)
+		}, error = function(e){
+			if( errorsAsWarnings ) warning(e$message)
+			else stop(e$message)	
+			NULL		
+			})
 
 	if( is.null(vobj) ){
 		txt = "No samples passed the filters.\n  Consider looser cutoffs for min.cells, min.count, min.samples"
@@ -388,8 +395,18 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 		L = makeContrastsDream( form, data, contrasts = c(compare = paste(test, '-', baseline)))
 	}
 
-	# perform differential expression regression analysis
-	fit = dream( vobj, form, data, L=L, BPPARAM=BPPARAM,..., quiet=TRUE)
+	# catch error according to errorsAsWarnings
+	fit = tryCatch({		
+		# perform differential expression regression analysis
+		dream( vobj, form, data, L=L, BPPARAM=BPPARAM,..., quiet=TRUE)
+		}, error = function(e){
+			if( errorsAsWarnings ) warning(e$message)
+			else stop(e$message)	
+			NULL		
+			})
+	if( is.null(fit) ){
+		return( NULL )
+	}
 
 	# borrow information across genes with the Empirical Bayes step
 	fit = eBayes(fit, robust=robust, trend=!vobj$isCounts)

@@ -51,7 +51,7 @@ dreamletCompareClusters(
 
 \item{quiet}{show messages}
 
-\item{contrasts}{specify contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.}
+\item{contrasts}{cell type is encoded in variable \code{cellCluster} with levels \code{test} and \code{baseline}. \code{contrasts} specifies contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

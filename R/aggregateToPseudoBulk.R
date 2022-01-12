@@ -18,7 +18,7 @@
 # @import Matrix
 .pb = function (x, by, assay, fun, BPPARAM = SerialParam()) 
 {
-    y <- dreamlet:::summarizeAssayByGroup2(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
+    y <- summarizeAssayByGroup2(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
         statistics = fun, BPPARAM = BPPARAM)
     colnames(y) <- y[[by[length(by)]]]
     if (length(by) == 1) 
