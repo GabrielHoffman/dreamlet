@@ -15,9 +15,10 @@
 #' @importFrom purrr map
 # @importFrom scuttle summarizeAssayByGroup
 #' @importFrom SummarizedExperiment assay colData
+# @import Matrix
 .pb = function (x, by, assay, fun, BPPARAM = SerialParam()) 
 {
-    y <- summarizeAssayByGroup2(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
+    y <- dreamlet:::summarizeAssayByGroup2(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
         statistics = fun, BPPARAM = BPPARAM)
     colnames(y) <- y[[by[length(by)]]]
     if (length(by) == 1) 
@@ -27,9 +28,11 @@
     is <- split(seq_len(ncol(y)), ids)
     ys <- purrr::map(is, ~assay(y)[, .])
     for (i in seq_along(ys)) {
+        #message(i)
         fill <- setdiff(unique(y[[by[2]]]), colnames(ys[[i]]))
         if (length(fill != 0)) {
-            foo <- matrix(0, nrow(x), length(fill))
+            #foo <- matrix(0, nrow(x), length(fill))
+            foo <- sparseMatrix(i=1, j=1, x=0, dims=c(nrow(x), length(fill)))
             colnames(foo) <- fill
             foo <- cbind(ys[[i]], foo)
             o <- paste(sort(unique(y[[by[2]]])))
@@ -38,6 +41,9 @@
     }
     return(ys)
 }
+
+
+# assignInNamespace(".pb", .pb, ns="dreamlet")
 
 
 #' Aggregation of single-cell to pseudobulk data
