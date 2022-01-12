@@ -175,10 +175,14 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
         }
     }
 
+    Rcpp::Rcout << "Add triplets" << std::endl;
+
     // populate sparse matrix for return
     // values are added for repeated entries
     SpMat spMatFinal(ngenes, grpUniq.size());
     spMatFinal.setFromTriplets(tripletList.begin(), tripletList.end());
+
+    Rcpp::Rcout << "makeCompressed" << std::endl;
 
     // convert format for return to R
     spMatFinal.makeCompressed();
