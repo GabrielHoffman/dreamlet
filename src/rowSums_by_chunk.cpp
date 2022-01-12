@@ -182,10 +182,11 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
     SpMat spMatFinal(ngenes, grpUniq.size());
     spMatFinal.setFromTriplets(tripletList.begin(), tripletList.end());
 
-    Rcpp::Rcout << "makeCompressed" << std::endl;
+    Rcpp::Rcout << "makeCompressed...";
 
     // convert format for return to R
     spMatFinal.makeCompressed();
+    Rcpp::Rcout << "done" << std::endl;
 
     return spMatFinal;
 }
