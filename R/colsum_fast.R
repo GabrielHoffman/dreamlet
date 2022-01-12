@@ -43,7 +43,7 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 
 	# loop over chunks of columns
 	result = bplapply( seq(1,ncol(grid)),function(j,x, grid, group){
-		cat("\r", j, '/', ncol(grid),'   ')
+		#cat("\r", j, '/', ncol(grid),'   ')
 
 		# load within bplapply 
 	    #suppressPackageStartupMessages(library("DelayedArray"))
