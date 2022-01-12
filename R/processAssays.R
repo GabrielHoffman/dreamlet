@@ -34,6 +34,9 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
     if( is.null(n.cells) ){
     	stop("n_cells must not be NULL")
     }
+    if( !is.matrix(y) ){
+    	y = as.matrix(y)
+    }
 
 	# nCells = extract from y
 
