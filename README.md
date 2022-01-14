@@ -10,9 +10,9 @@ Major functionality of `dreamlet` package using the [Bioconductor](https://www.b
 + [`aggregateToPseudoBulk()`](https://gabrielhoffman.github.io/dreamlet/reference/aggregateToPseudoBulk.html)      Computationally scalable evaluation of pseudobulk from raw counts
 + [`processAssays()`](https://gabrielhoffman.github.io/dreamlet/reference/processAssays.html)                      Normalize counts, compute precision weights
 + [`fitVarPart()`](https://gabrielhoffman.github.io/dreamlet/reference/fitVarPart.html)                            Variance partitioning analysis
-+ [`dreamlet()`](https://gabrielhoffman.github.io/dreamlet/reference/dreamlet.html)                                Differential expression analysis across samples accounting for study design
-+ [`dreamletCompareClusters()`](https://gabrielhoffman.github.io/dreamlet/reference/dreamletCompareClusters.html)  Differential expression analysis across cell clusters  for study design
-+ [`zenith_gsa()`](https://gabrielhoffman.github.io/dreamlet/reference/zenith_gsa.html)                            Gene set analysis using full spectrum of tests statistics
++ [`dreamlet()`](https://gabrielhoffman.github.io/dreamlet/reference/dreamlet.html)                                Differential expression analysis across <u>samples</u> using linear (mixed) models
++ [`dreamletCompareClusters()`](https://gabrielhoffman.github.io/dreamlet/reference/dreamletCompareClusters.html)  Differential expression analysis across <u>cell clusters</u> using linear (mixed) models
++ [`zenith_gsa()`](https://gabrielhoffman.github.io/dreamlet/reference/zenith_gsa.html)                            Gene set analysis using full spectrum of differential expression test statistics
 
 
 ### Install
