@@ -22,7 +22,7 @@ devtools::install_github("GabrielHoffman/dreamlet", auth_token=XXXXX)
 ```
 
 #### Dependencies
-In case code above doesn't install these automatically
+In case code above doesn't install these automatically:
 ```r
 devtools::install_github("GabrielHoffman/variancePartition")
 devtools::install_github("GabrielHoffman/zenith")
