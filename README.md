@@ -5,7 +5,7 @@
 
 The `dreamlet` package enables differential expression analysis on multi-sample single cell datasets using linear (mixed) models with precision weights.
 
-Major functionality of `dreamlet` package using `SingleCellExperiment` interface.
+Major functionality of `dreamlet` package using `SingleCellExperiment` interface:
 
 + [`aggregateToPseudoBulk()`](https://gabrielhoffman.github.io/dreamlet/reference/aggregateToPseudoBulk.html)      Computationally scalable evaluation of pseudobulk from raw counts
 + [`processAssays()`](https://gabrielhoffman.github.io/dreamlet/reference/processAssays.html)                      Normalize counts, compute precision weights
@@ -22,10 +22,11 @@ devtools::install_github("GabrielHoffman/dreamlet", auth_token=XXXXX)
 ```
 
 #### Dependencies
-In case code aboves doesn't install these automatically
+In case code above doesn't install these automatically
 ```r
 devtools::install_github("GabrielHoffman/variancePartition")
 devtools::install_github("GabrielHoffman/zenith")
+devtools::install_github("stephenslab/mashr")
 ```
 
 
