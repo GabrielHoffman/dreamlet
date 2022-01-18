@@ -11,6 +11,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// cbind_list_of_sparseMatrix
+Eigen::SparseMatrix<double> cbind_list_of_sparseMatrix(Rcpp::List resList, bool verbose);
+RcppExport SEXP _dreamlet_cbind_list_of_sparseMatrix(SEXP resListSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type resList(resListSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(cbind_list_of_sparseMatrix(resList, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rowSums_by_chunk_sparse
 Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double>& data, Rcpp::List idxlst, bool verbose);
 RcppExport SEXP _dreamlet_rowSums_by_chunk_sparse(SEXP dataSEXP, SEXP idxlstSEXP, SEXP verboseSEXP) {
@@ -52,6 +64,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_dreamlet_cbind_list_of_sparseMatrix", (DL_FUNC) &_dreamlet_cbind_list_of_sparseMatrix, 2},
     {"_dreamlet_rowSums_by_chunk_sparse", (DL_FUNC) &_dreamlet_rowSums_by_chunk_sparse, 3},
     {"_dreamlet_rowSums_by_chunk", (DL_FUNC) &_dreamlet_rowSums_by_chunk, 3},
     {"_dreamlet_aggregateByColnames", (DL_FUNC) &_dreamlet_aggregateByColnames, 3},
