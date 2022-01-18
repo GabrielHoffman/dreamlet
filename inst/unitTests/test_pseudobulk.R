@@ -167,6 +167,26 @@ test_pmetadata = function(){
 	TRUE
 }
 
+test_da_to_sparseMatrix = function() {
+
+	library(muscat)
+	library(SingleCellExperiment)
+	library(DelayedArray)
+
+	# pseudobulk counts by cluster-sample
+	data(example_sce)
+
+	is(assay(example_sce, "counts"))
+
+	setAutoBlockSize(5e4)
+
+	da = DelayedArray(assay(example_sce, "counts"))
+
+	# converto DelayedMatrix to sparseMatrix
+	spMat = dreamlet:::da_to_sparseMatrix(da, TRUE)
+
+	checkEquals(as.matrix(da), as.matrix(spMat))
+}
 
 # devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
 

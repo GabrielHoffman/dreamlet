@@ -1,3 +1,6 @@
+# dreamlet 0.0.28
+ - add `da_to_sparseMatrix()`
+
 # dreamlet 0.0.27
  - `aggregateToPseudoBulk()` for `DelayedArray` now uses `colsum_fast()`
    - this is faster then the previous version for `DelayedArray`
