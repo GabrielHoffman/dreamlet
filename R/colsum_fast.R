@@ -77,7 +77,7 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 			colnames(res3) = names(idxlst)
 
 			# ensure that all chunks have same column sorting
-			res3[,sort(colnames(res3))]
+			res3[,sort(colnames(res3)),drop=FALSE]
 		}, x=x, grid=grid)
 		if( length(res) > 1){
 			# Aggregate row chunks

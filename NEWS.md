@@ -1,3 +1,6 @@
+# dreamlet 0.0.29
+ - fix bug in `dreamlet::colsum_fast()` used in pseudobulk
+
 # dreamlet 0.0.28
  - add `da_to_sparseMatrix()`
 
