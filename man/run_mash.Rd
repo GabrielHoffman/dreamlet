@@ -4,12 +4,12 @@
 \alias{run_mash}
 \title{Run mash analysis on dreamlet results}
 \usage{
-run_mash(fit, coef)
+run_mash(fit, coefList)
 }
 \arguments{
 \item{fit}{result from \code{dreamlet()}}
 
-\item{coef}{coefficient to be analyzed}
+\item{coefList}{coefficient to be analyzed}
 }
 \value{
 a list storing the \code{mashr} model as \code{model} and the original coefficients as \code{logFC.original}
@@ -18,9 +18,11 @@ a list storing the \code{mashr} model as \code{model} and the original coefficie
 Run mash analysis on dreamlet results
 }
 \details{
-Apply mashr analysis (Urbut, et al. 2019) on the joint set of coefficients for each gene and cell type.  Mashr is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
+Apply \code{\href{https://cran.r-project.org/web/packages/mashr/index.html}{mashr}} analysis \insertCite{urbut2019flexible}{dreamlet} on the joint set of coefficients for each gene and cell type.  \code{mashr} is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
 
-In single cell data, a given gene is often not sufficiently expressed in all cell types.  So it is not evaluated in a subsets of cell types, and its coefficient value is NA. Since mashr assumes coefficients and standard errors for every gene and cell type pair, entries with these missing values are set to have \code{coef = 0}, and \code{se = 1e6}.  The output of mashr is then modified to set the corresponding values to NA, to avoid nonsensical results downstream.
+\code{mashr} has been previously applied to differential expression in \href{https://www.gtexportal.org}{GTEx} data using multiple tissues from the same set of donors \insertCite{oliva2020impact}{dreamlet}.
+
+In single cell data, a given gene is often not sufficiently expressed in all cell types.  So it is not evaluated in a subsets of cell types, and its coefficient value is \code{NA}. Since mashr assumes coefficients and standard errors for every gene and cell type pair, entries with these missing values are set to have \code{coef = 0}, and \code{se = 1e6}.  The output of mashr is then modified to set the corresponding values to \code{NA}, to avoid nonsensical results downstream.
 }
 \examples{
 library(muscat)
@@ -99,7 +101,7 @@ plotVolcano(res_mash)
 }
 \references{
 {
-  \insertRef{urbut2019flexible}{dreamlet}
+\insertAllCited{}
 }
 }
 \seealso{

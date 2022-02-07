@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dreamlet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.30</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-01-25 09:58:36</h4>
+            <h4 data-toc-skip class="date">Run on 2022-02-07 15:57:15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/HEAD/vignettes/mashr.Rmd" class="external-link"><code>vignettes/mashr.Rmd</code></a></small>
       <div class="hidden name"><code>mashr.Rmd</code></div>
@@ -130,12 +130,12 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 
 
 --->
-<div class="section level1">
-<h1 id="standard-dreamlet-analysis">Standard <code>dreamlet</code> analysis<a class="anchor" aria-label="anchor" href="#standard-dreamlet-analysis"></a>
-</h1>
 <div class="section level2">
-<h2 id="preprocess-data">Preprocess data<a class="anchor" aria-label="anchor" href="#preprocess-data"></a>
+<h2 id="standard-dreamlet-analysis">Standard <code>dreamlet</code> analysis<a class="anchor" aria-label="anchor" href="#standard-dreamlet-analysis"></a>
 </h2>
+<div class="section level3">
+<h3 id="preprocess-data">Preprocess data<a class="anchor" aria-label="anchor" href="#preprocess-data"></a>
+</h3>
 <p>Here single cell RNA-seq data is downloaded from <a href="https://bioconductor.org/packages/ExperimentHub/" class="external-link">ExperimentHub</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/GabrielHoffman/dreamlet" class="external-link">dreamlet</a></span><span class="op">)</span>
@@ -152,23 +152,23 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span>
 
 <span class="co"># compute QC metrics</span>
-<span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
+<span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu">perCellQCMetrics</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 
 <span class="co"># remove cells with few or many detected genes</span>
-<span class="va">ol</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/isOutlier.html" class="external-link">isOutlier</a></span><span class="op">(</span>metric <span class="op">=</span> <span class="va">qc</span><span class="op">$</span><span class="va">detected</span>, nmads <span class="op">=</span> <span class="fl">2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">ol</span> <span class="op">&lt;-</span> <span class="fu">isOutlier</span><span class="op">(</span>metric <span class="op">=</span> <span class="va">qc</span><span class="op">$</span><span class="va">detected</span>, nmads <span class="op">=</span> <span class="fl">2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="op">!</span><span class="va">ol</span><span class="op">]</span>
 
 <span class="co"># compute normalized data</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">10</span>, <span class="op">]</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/librarySizeFactors.html" class="external-link">computeLibraryFactors</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/logNormCounts.html" class="external-link">logNormCounts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">computeLibraryFactors</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">logNormCounts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 
 <span class="co"># set variable indicating stimulated (stim) or control (ctrl)</span>
 <span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">=</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="aggregate-to-pseudobulk">Aggregate to pseudobulk<a class="anchor" aria-label="anchor" href="#aggregate-to-pseudobulk"></a>
-</h2>
+<div class="section level3">
+<h3 id="aggregate-to-pseudobulk">Aggregate to pseudobulk<a class="anchor" aria-label="anchor" href="#aggregate-to-pseudobulk"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Since 'ind' is the individual and 'StimStatus' is the stimulus status,</span>
 <span class="co"># create unique identifier for each sample</span>
@@ -185,10 +185,10 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
     sample_id <span class="op">=</span> <span class="st">"id"</span>,
     verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="dreamlet-for-pseudobulk">
+<div class="section level3">
+<h3 id="dreamlet-for-pseudobulk">
 <code>dreamlet</code> for pseudobulk<a class="anchor" aria-label="anchor" href="#dreamlet-for-pseudobulk"></a>
-</h2>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Normalize and apply voom/voomWithDreamWeights</span>
 <span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">StimStatus</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span>
@@ -198,16 +198,16 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">StimStatus</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="run-mashr-analysis">Run <code>mashr</code> analysis<a class="anchor" aria-label="anchor" href="#run-mashr-analysis"></a>
-</h1>
+<div class="section level2">
+<h2 id="run-mashr-analysis">Run <code>mashr</code> analysis<a class="anchor" aria-label="anchor" href="#run-mashr-analysis"></a>
+</h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># run mashr model to borrow information across genes and</span>
 <span class="co"># cell types in estimating coefficients' posterior distribution</span>
 <span class="va">res_mash</span> <span class="op">=</span> <span class="fu"><a href="../reference/run_mash.html">run_mash</a></span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">'StimStatusstim'</span><span class="op">)</span></code></pre></div>
-<div class="section level3">
-<h3 id="summarize-mashr-results">Summarize <code>mashr</code> results<a class="anchor" aria-label="anchor" href="#summarize-mashr-results"></a>
-</h3>
+<div class="section level4">
+<h4 id="summarize-mashr-results">Summarize <code>mashr</code> results<a class="anchor" aria-label="anchor" href="#summarize-mashr-results"></a>
+</h4>
 <p>Compute summary of mashr posterior distributions</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephenslab/mashr" class="external-link">mashr</a></span><span class="op">)</span>
@@ -274,9 +274,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 <span class="co">##   Dendritic cells FCGR3A+ Monocytes    Megakaryocytes          NK cells </span>
 <span class="co">##          2.601948          4.377213          3.080353          3.657437</span></code></pre>
 </div>
-<div class="section level3">
-<h3 id="gene-set-analysis">Gene set analysis<a class="anchor" aria-label="anchor" href="#gene-set-analysis"></a>
-</h3>
+<div class="section level4">
+<h4 id="gene-set-analysis">Gene set analysis<a class="anchor" aria-label="anchor" href="#gene-set-analysis"></a>
+</h4>
 <p>Perform gene set analysis with <code>zenith</code> using posterior mean for each coefficient</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># gene set analysis using mashr results</span>
@@ -325,7 +325,7 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

@@ -108,10 +108,10 @@ go.gs = get_GeneOntology("CC", to="SYMBOL")
 # Run zenith gene set analysis on result of dreamlet
 res_zenith = zenith_gsa(res.dl, go.gs, 'group_idstim' )
 
-# for each cell type select 5 genesets with largest t-statistic
+# for each cell type select 3 genesets with largest t-statistic
 # and 1 geneset with the lowest
 # Grey boxes indicate the gene set could not be evaluted because
 #    to few genes were represented
-plotZenithResults(res_zenith, 5, 1)
+plotZenithResults(res_zenith, 3, 1)
 
 }

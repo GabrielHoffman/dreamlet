@@ -47,12 +47,14 @@ tabToMatrix = function(tab, col, rn, cn){
 #' Run mash analysis on dreamlet results
 #' 
 #' @param fit result from \code{dreamlet()}
-#' @param coef coefficient to be analyzed
+#' @param coefList coefficient to be analyzed
 #'
 #' @details
-#' Apply mashr analysis (Urbut, et al. 2019) on the joint set of coefficients for each gene and cell type.  Mashr is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
+#' Apply \code{\href{https://cran.r-project.org/web/packages/mashr/index.html}{mashr}} analysis \insertCite{urbut2019flexible}{dreamlet} on the joint set of coefficients for each gene and cell type.  \code{mashr} is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
 #'
-#' In single cell data, a given gene is often not sufficiently expressed in all cell types.  So it is not evaluated in a subsets of cell types, and its coefficient value is NA. Since mashr assumes coefficients and standard errors for every gene and cell type pair, entries with these missing values are set to have \code{coef = 0}, and \code{se = 1e6}.  The output of mashr is then modified to set the corresponding values to NA, to avoid nonsensical results downstream.
+#' \code{mashr} has been previously applied to differential expression in \href{https://www.gtexportal.org}{GTEx} data using multiple tissues from the same set of donors \insertCite{oliva2020impact}{dreamlet}.
+#'
+#' In single cell data, a given gene is often not sufficiently expressed in all cell types.  So it is not evaluated in a subsets of cell types, and its coefficient value is \code{NA}. Since mashr assumes coefficients and standard errors for every gene and cell type pair, entries with these missing values are set to have \code{coef = 0}, and \code{se = 1e6}.  The output of mashr is then modified to set the corresponding values to \code{NA}, to avoid nonsensical results downstream.
 #' 
 #' @return a list storing the \code{mashr} model as \code{model} and the original coefficients as \code{logFC.original}
 #' 
@@ -131,30 +133,43 @@ tabToMatrix = function(tab, col, rn, cn){
 #' plotVolcano(res_mash)
 #' 
 #' @references{
-#'   \insertRef{urbut2019flexible}{dreamlet}
+#' \insertAllCited{}
 #' }
 #' 
 #' @seealso \code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{ mashr::mash_set_data}
 #' @importFrom mashr mash_set_data cov_canonical mash_estimate_corr_em
 #' @export
-run_mash = function( fit, coef){
+run_mash = function( fit, coefList){
 
 	if( ! is(fit, 'dreamletResult') ){
 		stop("fit must be of class dreamletResult")
 	}
 
-	if( ! coef %in% coefNames(fit) ){
-		stop("coef not found in coefNames(fit): ", coef)
+	if( ! coefList %in% coefNames(fit) ){
+		stop("coef not found in coefNames(fit): ", coefList)
 	}
 
-	# get results for each gene and cell type
-	tab = topTable(fit, coef=coef, Inf)
+	tab = lapply(coefList, function(coef){
+
+		# get results for each gene and cell type
+		tab = topTable(fit, coef=coef, Inf)
+		tab$coef = coef
+		tab
+	})
+	tab = do.call(rbind, tab)
+
+	if( length(coefList) > 1){
+		tab$assay = paste(tab$assay, tab$coef, sep='.')
+		lvls = c(sapply(assayNames(fit), function(x) paste(x, coefList, sep='.')))
+	}else{
+		lvls = assayNames(fit)
+	}
 
 	# compute standard error from t-stat and logFC
 	tab$se = tab$logFC / tab$t
 
 	# sort tab results based on assayNames(fit)
-	tab$assay = factor(tab$assay, assayNames(fit))
+	tab$assay = factor(tab$assay, lvls)
 
 	# convert to matricies
 	B = tabToMatrix(tab, "logFC")
@@ -185,8 +200,18 @@ run_mash = function( fit, coef){
 	model$result$lfsr[idx] = NA
 
 	# format results as new object
-	new("dreamlet_mash_result", list(model = model, logFC.original = B, coef=coef))
+	new("dreamlet_mash_result", list(model = model, logFC.original = B, coefList=coefList))
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
