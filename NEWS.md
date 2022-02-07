@@ -1,3 +1,6 @@
+# dreamlet 0.0.30
+ - update `run_mash()` to combine results across coefs
+
 # dreamlet 0.0.29
  - fix bug in `dreamlet::colsum_fast()` used in pseudobulk
 

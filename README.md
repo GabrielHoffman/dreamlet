@@ -1,7 +1,8 @@
 
-<img src="man/figures/logo.png" align="right" alt="" width="160" />
+<img src="man/figures/logo.png" align="right" alt="" width="160" style="padding-left:10px;" />
 
-### Scalable differential expression analysis of single cell transcriptomics datasets with complex study designs
+
+## Scalable differential expression analysis of single cell transcriptomics datasets with complex study designs
 
 
 The `dreamlet` package enables differential expression analysis on multi-sample single cell datasets using linear (mixed) models with precision weights.
