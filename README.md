@@ -28,15 +28,14 @@ The dreamlet workflow easily integrates into the [Bioconductor](https://www.bioc
 
 Dreamlet builds on previous work on variance partitioning and differential expression using precision-weighted linear mixed models in the [variancePartition](https://bioconductor.org/packages/variancePartition/) package.  The dreamlet package is designed to be easily adopted by users of [variancePartition](https://bioconductor.org/packages/variancePartition/) and [limma](https://bioconductor.org/packages/limma/).
 
-
-
- </div>
+</div>
 
 ## Install
 ```r
-# repo is currently private, so need to include your userid and password
-devtools::install_github("GabrielHoffman/dreamlet", auth_token=XXXXX)
+# this should install dependencies too
+devtools::install_github("GabrielHoffman/dreamlet")
 ```
+
 
 ### Dependencies
 In case code above doesn't install these automatically:

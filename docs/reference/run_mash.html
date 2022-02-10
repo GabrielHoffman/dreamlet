@@ -98,7 +98,7 @@
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Oliva M, Muñoz-Aguirre M, Kim-Hellmuth S, Wucher V, Gewirtz AD, Cotter DJ, Parsana P, Kasela S, Balliu B, Viñuela A, others (2020).
+    <p>Oliva M, Munoz-Aguirre M, Kim-Hellmuth S, Wucher V, Gewirtz AD, Cotter DJ, Parsana P, Kasela S, Balliu B, Viñuela A, others (2020).
 “The impact of sex on gene expression across human tissues.”
 <em>Science</em>, <b>369</b>(6509), eaba3066.
 <a href="https://doi.org/10.1126/science.aba3066" class="external-link">https://doi.org/10.1126/science.aba3066</a>.<br><br> Urbut SM, Wang G, Carbonetto P, Stephens M (2019).
@@ -130,29 +130,29 @@
 <span class="r-in"><span class="co"># voom-style normalization</span></span>
 <span class="r-in"><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.066 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.031 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.067 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.026 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.029 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.027 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.031 secs</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Differential expression analysis within each assay,</span></span>
 <span class="r-in"><span class="co"># evaluated on the voom normalized data </span></span>
 <span class="r-in"><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.053 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.067 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.094 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.11 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.073 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.038 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.061 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># run MASH model</span></span>
@@ -230,7 +230,6 @@
 <span class="r-in"><span class="co"># gene set analysis using mashr results</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">zenith</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zenith/man/get_GeneOntology.html" class="external-link">get_GeneOntology</a></span><span class="op">(</span><span class="st">"CC"</span>, to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="co"># valid values for statistic: </span></span>
 <span class="r-in"><span class="co"># "tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)"</span></span>
 <span class="r-in"><span class="va">df_gs</span> <span class="op">=</span> <span class="fu"><a href="zenith_gsa-methods.html">zenith_gsa</a></span><span class="op">(</span><span class="va">res_mash</span>, <span class="va">go.gs</span><span class="op">)</span></span>
