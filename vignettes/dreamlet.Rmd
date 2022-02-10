@@ -47,7 +47,7 @@ knitr::opts_chunk$set(
 
  As the scale of single cell/nucleus RNA-seq has increased, so has the complexity of study designs.  Analysis of datasets with simple study designs can be performed using linear model as in the [muscat package](https://bioconductor.org/packages/muscat).  Yet analysis of datsets with complex study designs such as repeated measures or many technical batches can benefit from linear mixed model analysis to model to correlation structure between samples.  We previously developed [dream](https://doi.org/10.1093/bioinformatics/btaa687) to apply linear mixed models to bulk RNA-seq data using a [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)-style workflow.  Dreamlet extends the previous work of dream and [muscat](https://www.nature.com/articles/s41467-020-19894-4) to apply linear mixed models to pseudobulk data.  Dreamlet also supports linear models and facilitates application of 1) [variancePartition](https://bioconductor.org/packages/variancePartition) to quantify the contribution of multiple variables to expression variation, and 2) [zenith](https://github.com/GabrielHoffman/zenith) to perform gene set analysis on the differential expression signatures. 
 
-# Process single cell counts
+# Process single cell count data
 
 Here we perform analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).  This is a small dataset that does not have repeated measures or high dimensional batch effects, so the sophisticated features of dreamlet are not strictly necessary.  But this gives us a oppurtunity to walk through a standard dreamlet workflow.
 
@@ -269,7 +269,7 @@ plotZenithResults(df, Inf, Inf)
 ```
 
 
-
+<!---
 # Variation in cell counts
 The number of cells observed in of each type varies across samples.  Visualizing these difference and evaluating weither these differences are explained by other measured variables can give insight into the biology of this variation in cell type composition.    
 Here, compare fraction of each cell type bewteen simulated and unstimulated samples
@@ -298,7 +298,7 @@ vp = fitExtractVarPartModel(cobj, ~ StimStatus, as.data.frame(colData(pb)))
 
 plotPercentBars(vp)
 ```
-
+--->
 
 # Comparing expression in clusters
 Identifying genes that are differentially expressed between cell clusters incorporates a paired analysis design, since each individual is observed for each cell cluster.    

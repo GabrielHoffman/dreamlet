@@ -1,4 +1,7 @@
 
+Feb 10
+	Restore crumblr use in dreamlet.Rmd
+
 Jan 06
 	When dreamletCompareClusters() fails, return empty table.
 		instead of stop()
