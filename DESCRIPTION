@@ -45,7 +45,7 @@ Imports:
     purrr,
     data.table,
     zenith (>= 1.0.2),
-    mashr (>= 0.2.51),
+    mashr (>= 0.2.52),
     ashr,
     BiocParallel,
     S4Vectors,
@@ -73,5 +73,4 @@ LinkingTo:
     RcppProgress
 Remotes: 
     github::GabrielHoffman/variancePartition,
-    github::GabrielHoffman/zenith,
-    github::stephenslab/mashr
+    github::GabrielHoffman/zenith

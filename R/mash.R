@@ -11,7 +11,6 @@
 setClass("dreamlet_mash_result", contains="list")
 
 
-#' Show object
 
 #' Convert results table to matrix
 #' 
