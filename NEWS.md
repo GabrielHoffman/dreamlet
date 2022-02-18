@@ -1,3 +1,7 @@
+# dreamlet 0.0.31
+ - reduce memory usage in `aggregateToPseudoBulk()` by fixing `aggregateByColnames()
+
+
 # dreamlet 0.0.30
  - update `run_mash()` to combine results across coefs
 
