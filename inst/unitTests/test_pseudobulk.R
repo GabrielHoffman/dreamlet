@@ -82,11 +82,15 @@ test_colsum_fast = function(){
 	n = 400
 	p = 500
 	M <- rsparsematrix(n, p, nnz = n*p*.1)
-	M[] = 1L
+	# M[] = 1L
 
 	group = as.character(sample.int(200, p, replace=TRUE))
 
+
+	devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
+
 	res1 = dreamlet:::colsum_fast(DelayedArray(M), group)
+	
 	res2 = DelayedArray::colsum(DelayedArray(M), group)
 
 	RUnit::checkEquals(as.matrix(res1), res2 )
