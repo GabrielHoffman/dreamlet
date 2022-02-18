@@ -193,7 +193,7 @@ Eigen::SparseMatrix<double> aggregateByColnames1(Eigen::MappedSparseMatrix<doubl
 
 // sum list of sparse matrices
 // [[Rcpp::export]]
-Eigen::SparseMatrix<double> sumSpMatList(Rcpp::List resList) { 
+Eigen::SparseMatrix<double> sumSpMatList(Rcpp::List resList, bool verbose) { 
     
     MSpMat tmp = resList(0);
     int nrow = tmp.rows();
@@ -201,9 +201,13 @@ Eigen::SparseMatrix<double> sumSpMatList(Rcpp::List resList) {
 
     SpMat spMatFinal(nrow, ncol);
 
+    Progress progbar(resList.size(), verbose);
+
     for(int j=0; j<resList.size(); j++){
         MSpMat spM = resList(j);
         spMatFinal += spM;
+        
+        progbar.increment(); 
     }
 
     return spMatFinal;
