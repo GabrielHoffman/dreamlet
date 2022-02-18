@@ -21,7 +21,7 @@ aggregateByColnames1 <- function(spM, colNames, grpUniq) {
     .Call('_dreamlet_aggregateByColnames1', PACKAGE = 'dreamlet', spM, colNames, grpUniq)
 }
 
-sumSpMatList <- function(resList) {
-    .Call('_dreamlet_sumSpMatList', PACKAGE = 'dreamlet', resList)
+sumSpMatList <- function(resList, verbose) {
+    .Call('_dreamlet_sumSpMatList', PACKAGE = 'dreamlet', resList, verbose)
 }
 

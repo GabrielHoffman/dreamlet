@@ -41,6 +41,10 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 		grid = defaultAutoGrid(x)
 	}	
 
+	if( BPPARAM$progressbar ){
+		message("Processing each block...")
+	}
+
 	# loop over chunks of columns
 	result = bplapply( seq(1,ncol(grid)),function(j,x, grid, group){
 		#cat("\r", j, '/', ncol(grid),'   ')
@@ -101,8 +105,12 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 
 	}, x=x, grid=grid, group=group, BPPARAM=BPPARAM)
 
+	if( BPPARAM$progressbar ){
+		message("Summing results from each block...")
+	}
+
 	# sum list of sparse matricies
-	matSum = sumSpMatList(result)
+	matSum = sumSpMatList(result, BPPARAM$progressbar)
 	rownames(matSum) = rownames(result[[1]])
 	colnames(matSum) = colnames(result[[1]])
 

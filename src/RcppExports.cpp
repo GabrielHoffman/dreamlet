@@ -76,13 +76,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // sumSpMatList
-Eigen::SparseMatrix<double> sumSpMatList(Rcpp::List resList);
-RcppExport SEXP _dreamlet_sumSpMatList(SEXP resListSEXP) {
+Eigen::SparseMatrix<double> sumSpMatList(Rcpp::List resList, bool verbose);
+RcppExport SEXP _dreamlet_sumSpMatList(SEXP resListSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type resList(resListSEXP);
-    rcpp_result_gen = Rcpp::wrap(sumSpMatList(resList));
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(sumSpMatList(resList, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -93,7 +94,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dreamlet_rowSums_by_chunk", (DL_FUNC) &_dreamlet_rowSums_by_chunk, 3},
     {"_dreamlet_aggregateByColnames", (DL_FUNC) &_dreamlet_aggregateByColnames, 3},
     {"_dreamlet_aggregateByColnames1", (DL_FUNC) &_dreamlet_aggregateByColnames1, 3},
-    {"_dreamlet_sumSpMatList", (DL_FUNC) &_dreamlet_sumSpMatList, 1},
+    {"_dreamlet_sumSpMatList", (DL_FUNC) &_dreamlet_sumSpMatList, 2},
     {NULL, NULL, 0}
 };
 
