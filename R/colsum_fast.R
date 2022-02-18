@@ -89,6 +89,8 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 		res = as(res, "sparseMatrix")
 
 		# create fully expanded sparseMatrix
+		# In the future, might be worth doing this trasnform inside 
+		#    rowSums_by_chunk_sparse() to avoid passing data back to R
 		# spMat = aggregateByColnames(list(res), list(colnames(res)), levels(group))
 		spMat = aggregateByColnames1(res, colnames(res), levels(group))
 		rownames(spMat) = rownames(x)
