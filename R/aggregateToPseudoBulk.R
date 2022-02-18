@@ -143,7 +143,10 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
     # store metdata
     md <- metadata(x)
-    metadata(x) = list() # set to empty so not passed to downstream functions
+
+    # set to empty so not passed to downstream functions
+    metadata(x) = list() 
+    reducedDims(x) = list()
         
     suppressPackageStartupMessages({ 
         pb <- .pb(x, by, assay, fun, BPPARAM)

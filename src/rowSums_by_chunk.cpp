@@ -21,7 +21,7 @@ Rcpp::NumericMatrix rowSums_by_chunk_sparse(Eigen::MappedSparseMatrix<double> &d
 
     // initialize NumericMatrix with zero values
     Rcpp::NumericMatrix result(data.rows(), idxlst.size()); 
-    Eigen::SparseMatrix<double> res(data.rows(), idxlst.size());
+    // Eigen::SparseMatrix<double> res(data.rows(), idxlst.size());
 
     Progress progbar(idxlst.size(), verbose);
 
@@ -141,52 +141,62 @@ Rcpp::NumericMatrix rowSums_by_chunk(Rcpp::NumericMatrix &data, Rcpp::List idxls
 //     return spMatFinal;
 // }
 
-typedef Eigen::Triplet<double> T;
+typedef Eigen::Triplet<int> T;
 
 // [[Rcpp::export]]
 Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List idLst, Rcpp::StringVector grpUniq) { 
 
-    int ngenes;
+    int ngenes, i;
+    double value;
     std::vector<T> tripletList;
-   
+    tripletList.reserve(1000000);
+
+    // create and populate hash table storing entries of grpUniq and index   
+    std::unordered_map<std::string, int> grpUniqHash;
+
+    for(int i=0; i<grpUniq.size(); i++){    
+        grpUniqHash[as<std::string>(grpUniq(i))] = i;
+    } 
+
     // for each batch of columns
     for(int j=0; j<resList.size(); j++){
         MSpMat spM = resList(j);
         Rcpp::StringVector colNames = idLst(j);
         if( j==0 ) ngenes = spM.rows();
 
-        // for each group
-        for(int i=0; i<grpUniq.size(); i++){
-            double value;
-            // for each column in spM
-            for(int h=0; h<colNames.size(); h++){
-                if( colNames(h) == grpUniq(i)){
-                    // loop thru genes (i.e. rows)
-                    for (InIterMat g_(spM, h); g_; ++g_){
-                        value = g_.value();
-                        if( value != 0){
-                            // store i,j,value triplet for sparseMatrix
-                            tripletList.push_back(T(g_.index(),i, value) );
-                            //Rcpp::Rcout << g_.index() << " " << i << " " << value << std::endl;
-                        }
-                    }
-                }                    
+        //Rcpp::Rcout << \"j=\" << j << std::endl;
+           
+        // for each column in spM
+        for(int h=0; h<colNames.size(); h++){
+            i = grpUniqHash[as<std::string>(colNames(h))];
+
+            // loop thru genes (i.e. rows)
+            for (InIterMat g_(spM, h); g_; ++g_){
+                value = g_.value();
+                if( value != 0){
+                    // store i,j,value triplet for sparseMatrix
+                    tripletList.push_back(T(g_.index(),i, value) );
+                    //Rcpp::Rcout << g_.index() << \" \" << i << \" \" << value << std::endl;
+                }
             }
         }
     }
 
-    //Rcpp::Rcout << "Add triplets" << std::endl;
+   //Rcpp::Rcout << \"Add triplets\" << std::endl;
 
     // populate sparse matrix for return
     // values are added for repeated entries
     SpMat spMatFinal(ngenes, grpUniq.size());
     spMatFinal.setFromTriplets(tripletList.begin(), tripletList.end());
 
-    //Rcpp::Rcout << "makeCompressed...";
+    // clear here to free memory
+    tripletList.clear();
+
+    //Rcpp::Rcout << \"makeCompressed...\";
 
     // convert format for return to R
     spMatFinal.makeCompressed();
-    //Rcpp::Rcout << "done" << std::endl;
+    // Rcpp::Rcout << \"done\" << std::endl;
 
     return spMatFinal;
 }

@@ -46,9 +46,9 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 		#cat("\r", j, '/', ncol(grid),'   ')
 
 		# load within bplapply 
-	    #suppressPackageStartupMessages(library("DelayedArray"))
+		#suppressPackageStartupMessages(library("DelayedArray"))
 
-	    # get indecies of column chunk to extract
+		# get indecies of column chunk to extract
 		vp = grid[[1L, as.integer(j)]]
 		# vp = DelayedArray:::getArrayElement(grid, c(1L, as.integer(j)))
 		idx1 = start(vp@ranges)[2]
@@ -61,7 +61,7 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 		res = lapply( seq(1,nrow(grid)),function(i, x, grid){
 
 			# get chunk of data
-	    	viewport <- grid[[as.integer(i), as.integer(j)]]
+			viewport <- grid[[as.integer(i), as.integer(j)]]
 			# viewport = DelayedArray:::getArrayElement(grid, c(1L, as.integer(j)))
 			block = .read_matrix_block(x, viewport)
 
