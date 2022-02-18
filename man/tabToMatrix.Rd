@@ -2,8 +2,7 @@
 % Please edit documentation in R/mash.R
 \name{tabToMatrix}
 \alias{tabToMatrix}
-\title{Show object
-Convert results table to matrix}
+\title{Convert results table to matrix}
 \usage{
 tabToMatrix(tab, col, rn, cn)
 }

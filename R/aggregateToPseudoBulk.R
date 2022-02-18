@@ -117,7 +117,7 @@
 #' @importFrom Matrix colSums
 #' @importFrom purrr map
 #' @importFrom S4Vectors DataFrame metadata metadata<-
-#' @importFrom SingleCellExperiment SingleCellExperiment int_colData<-
+#' @importFrom SingleCellExperiment SingleCellExperiment reducedDims int_colData<-
 #' @importFrom SummarizedExperiment rowData colData colData<-
 #' @export
 aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id = NULL,
