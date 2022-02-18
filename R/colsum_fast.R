@@ -46,7 +46,7 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 		#cat("\r", j, '/', ncol(grid),'   ')
 
 		# load within bplapply 
-		#suppressPackageStartupMessages(library("DelayedArray"))
+		suppressPackageStartupMessages(library("DelayedArray"))
 
 		# get indecies of column chunk to extract
 		vp = grid[[1L, as.integer(j)]]
