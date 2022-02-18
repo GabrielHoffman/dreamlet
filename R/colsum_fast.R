@@ -86,17 +86,24 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 			res = res[[1]]
 		}
 		# convert to sparseMatrix
-		as(res, "sparseMatrix")
+		res = as(res, "sparseMatrix")
+
+		# create fully expanded sparseMatrix
+		# spMat = aggregateByColnames(list(res), list(colnames(res)), levels(group))
+		spMat = aggregateByColnames1(res, colnames(res), levels(group))
+		rownames(spMat) = rownames(x)
+		colnames(spMat) = levels(group)
+
+		spMat
+
 	}, x=x, grid=grid, group=group, BPPARAM=BPPARAM)
 
-	# aggregate batches together as a sparseMatrix
-	idLst = lapply(result, colnames)
+	# sum list of sparse matricies
+	matSum = sumSpMatList(result)
+	rownames(matSum) = rownames(result[[1]])
+	colnames(matSum) = colnames(result[[1]])
 
-	spMat = aggregateByColnames(result, idLst, levels(group))
-	rownames(spMat) = rownames(x)
-	colnames(spMat) = levels(group)
-
-	spMat
+	matSum
 }
 
 

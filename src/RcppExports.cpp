@@ -62,12 +62,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// aggregateByColnames1
+Eigen::SparseMatrix<double> aggregateByColnames1(Eigen::MappedSparseMatrix<double>& spM, Rcpp::StringVector& colNames, Rcpp::StringVector& grpUniq);
+RcppExport SEXP _dreamlet_aggregateByColnames1(SEXP spMSEXP, SEXP colNamesSEXP, SEXP grpUniqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double>& >::type spM(spMSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector& >::type colNames(colNamesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector& >::type grpUniq(grpUniqSEXP);
+    rcpp_result_gen = Rcpp::wrap(aggregateByColnames1(spM, colNames, grpUniq));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sumSpMatList
+Eigen::SparseMatrix<double> sumSpMatList(Rcpp::List resList);
+RcppExport SEXP _dreamlet_sumSpMatList(SEXP resListSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type resList(resListSEXP);
+    rcpp_result_gen = Rcpp::wrap(sumSpMatList(resList));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dreamlet_cbind_list_of_sparseMatrix", (DL_FUNC) &_dreamlet_cbind_list_of_sparseMatrix, 2},
     {"_dreamlet_rowSums_by_chunk_sparse", (DL_FUNC) &_dreamlet_rowSums_by_chunk_sparse, 3},
     {"_dreamlet_rowSums_by_chunk", (DL_FUNC) &_dreamlet_rowSums_by_chunk, 3},
     {"_dreamlet_aggregateByColnames", (DL_FUNC) &_dreamlet_aggregateByColnames, 3},
+    {"_dreamlet_aggregateByColnames1", (DL_FUNC) &_dreamlet_aggregateByColnames1, 3},
+    {"_dreamlet_sumSpMatList", (DL_FUNC) &_dreamlet_sumSpMatList, 1},
     {NULL, NULL, 0}
 };
 
