@@ -155,7 +155,7 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
     std::unordered_map<std::string, int> grpUniqHash;
 
     for(int i=0; i<grpUniq.size(); i++){    
-        grpUniqHash[std::as<std::string>(grpUniq(i))] = i;
+        grpUniqHash[as<std::string>(grpUniq(i))] = i;
     } 
 
     // for each batch of columns
@@ -168,7 +168,7 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
            
         // for each column in spM
         for(int h=0; h<colNames.size(); h++){
-            i = grpUniqHash[std::as<std::string>(colNames(h))];
+            i = grpUniqHash[as<std::string>(colNames(h))];
 
             // loop thru genes (i.e. rows)
             for (InIterMat g_(spM, h); g_; ++g_){
