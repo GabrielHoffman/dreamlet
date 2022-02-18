@@ -12,6 +12,9 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 
+#include <unordered_map>
+#include <string>
+
 typedef Eigen::MappedSparseMatrix<double> MSpMat;
 typedef MSpMat::InnerIterator InIterMat;
 typedef Eigen::SparseMatrix<double> SpMat;
@@ -155,7 +158,7 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
     std::unordered_map<std::string, int> grpUniqHash;
 
     for(int i=0; i<grpUniq.size(); i++){    
-        grpUniqHash[as<std::string>(grpUniq(i))] = i;
+        grpUniqHash[Rcpp::as<std::string>(grpUniq(i))] = i;
     } 
 
     // for each batch of columns
@@ -168,7 +171,7 @@ Eigen::SparseMatrix<double> aggregateByColnames(Rcpp::List resList, Rcpp::List i
            
         // for each column in spM
         for(int h=0; h<colNames.size(); h++){
-            i = grpUniqHash[as<std::string>(colNames(h))];
+            i = grpUniqHash[Rcpp::as<std::string>(colNames(h))];
 
             // loop thru genes (i.e. rows)
             for (InIterMat g_(spM, h); g_; ++g_){
