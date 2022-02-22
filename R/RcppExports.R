@@ -25,3 +25,11 @@ sumSpMatList <- function(resList, verbose) {
     .Call('_dreamlet_sumSpMatList', PACKAGE = 'dreamlet', resList, verbose)
 }
 
+colsum_beachmat_matrix <- function(mat, groupHsh, grpUnq) {
+    .Call('_dreamlet_colsum_beachmat_matrix', PACKAGE = 'dreamlet', mat, groupHsh, grpUnq)
+}
+
+colsum_beachmat_sparseMatrix <- function(mat, groupHsh, grpUnq) {
+    .Call('_dreamlet_colsum_beachmat_sparseMatrix', PACKAGE = 'dreamlet', mat, groupHsh, grpUnq)
+}
+

@@ -18,7 +18,7 @@ a list storing the \code{mashr} model as \code{model} and the original coefficie
 Run mash analysis on dreamlet results
 }
 \details{
-Apply \code{\href{https://cran.r-project.org/web/packages/mashr/index.html}{mashr}} analysis \insertCite{urbut2019flexible}{dreamlet} on the joint set of coefficients for each gene and cell type.  \code{mashr} is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
+Apply \href{https://cran.r-project.org/web/packages/mashr/index.html}{mashr} analysis \insertCite{urbut2019flexible}{dreamlet} on the joint set of coefficients for each gene and cell type.  \code{mashr} is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
 
 \code{mashr} has been previously applied to differential expression in \href{https://www.gtexportal.org}{GTEx} data using multiple tissues from the same set of donors \insertCite{oliva2020impact}{dreamlet}.
 
@@ -105,5 +105,5 @@ plotVolcano(res_mash)
 }
 }
 \seealso{
-\code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{ mashr::mash_set_data}
+\code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{mashr::mash_set_data}
 }

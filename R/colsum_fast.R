@@ -26,7 +26,7 @@ create_idxlist = function(fct){
 # 	but does manipulation and processing in Rcpp 
 #   Data is stored and return as a sparseMatrix to reduce memory usage
 
-#' @import DelayedArray
+#' @import DelayedArray HDF5Array
 #' @importFrom BiocParallel bplapply
 #' @importFrom methods as
 colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
@@ -50,8 +50,8 @@ colsum_fast = function(x, group, grid=NULL, BPPARAM=SerialParam()){
 		#cat("\r", j, '/', ncol(grid),'   ')
 
 		# load within bplapply 
-		suppressPackageStartupMessages(library("DelayedArray"))
-		suppressPackageStartupMessages(library("HDF5Array"))
+		suppressPackageStartupMessages(requireNamespace("DelayedArray"))
+		suppressPackageStartupMessages(requireNamespace("HDF5Array"))
 
 		# get indecies of column chunk to extract
 		vp = grid[[1L, as.integer(j)]]
