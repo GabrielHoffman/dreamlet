@@ -318,7 +318,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
          # countsMatrix <- colsum_fast(x, ids, BPPARAM=BPPARAM)
         verbose = BPPARAM$progressbar
         BPPARAM$progressbar = FALSE
-        countsMatrix <- colsum2(x, ids, BPPARAM=BPPARAM, verbose=BPPARAM$progressbar)        
+        countsMatrix <- colsum2(x, ids, BPPARAM=BPPARAM, verbose=verbose)        
 
         collected = list(sum = as(countsMatrix, "sparseMatrix"))
     }else{    
