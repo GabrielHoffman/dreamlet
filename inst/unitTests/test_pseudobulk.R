@@ -121,7 +121,7 @@ test_aggregateToPseudoBulk_datatype = function(){
 	pb_delayedMatrix <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "counts",
 			cluster_id = "cluster_id",
 			sample_id = "sample_id",
-			BPPARAM=SnowParam(2, progressbar=TRUE)) 
+			BPPARAM=SnowParam(1, progressbar=TRUE)) 
 
 	# convert from sparseMatrix to matrix just for comparing to expectation
 	for(id in assayNames(pb_delayedMatrix)){
