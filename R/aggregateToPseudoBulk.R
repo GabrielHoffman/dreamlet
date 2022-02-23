@@ -297,21 +297,27 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     # method for aggregation depends on datatype    
     #  I used RcppEigen to speed up rowSums for sparseMatrix and matrix
     if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "sparseMatrix") ){
-        countsMatrix = rowSums_by_chunk_sparse(x, by.group, verbose=BPPARAM$progressbar)
-        rownames(countsMatrix) = rownames(x)
-        colnames(countsMatrix) = names(by.group)
-        collected = list(sum = countsMatrix)
+        # countsMatrix = rowSums_by_chunk_sparse(x, by.group, verbose=BPPARAM$progressbar)
+        # rownames(countsMatrix) = rownames(x)
+        # colnames(countsMatrix) = names(by.group)
+
+        countsMatrix = colsum_beachmat(x, by.group)    
+
+        collected = list(sum = as(countsMatrix, "sparseMatrix"))
     }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "matrix") ){
-        countsMatrix = rowSums_by_chunk(x, by.group, verbose=BPPARAM$progressbar)
-        rownames(countsMatrix) = rownames(x)
-        colnames(countsMatrix) = names(by.group)
+        # countsMatrix = rowSums_by_chunk(x, by.group, verbose=BPPARAM$progressbar)
+        # rownames(countsMatrix) = rownames(x)
+        # colnames(countsMatrix) = names(by.group)
+
+        countsMatrix = colsum_beachmat(x, by.group)          
+            
         collected = list(sum = countsMatrix)
     }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "DelayedMatrix") ){
 
          # countsMatrix <- colsum_fast(x, ids, BPPARAM=BPPARAM)
-        countsMatrix <- colsum(x, ids)        
+        countsMatrix <- colsum2(x, ids, BPPARAM=BPPARAM)        
 
-        collected = list(sum = countsMatrix)
+        collected = list(sum = as(countsMatrix, "sparseMatrix"))
     }else{    
         collected = .pb_summary(x, by.group, statistics, threshold, BPPARAM)
     }
