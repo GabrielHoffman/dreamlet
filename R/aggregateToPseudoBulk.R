@@ -316,7 +316,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "DelayedMatrix") ){
 
          # countsMatrix <- colsum_fast(x, ids, BPPARAM=BPPARAM)
-        countsMatrix <- colsum2(x, ids, BPPARAM=BPPARAM, verbose=, verbose=BPPARAM$progressbar)        
+        countsMatrix <- colsum2(x, ids, BPPARAM=BPPARAM, verbose=BPPARAM$progressbar)        
 
         collected = list(sum = as(countsMatrix, "sparseMatrix"))
     }else{    
