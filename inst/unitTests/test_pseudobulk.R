@@ -18,20 +18,20 @@ test_pseudobulk_example = function(){
 	checkEquals(out, out2)
 }
 
-test_rowSums_by_chunk = function(){
+# test_rowSums_by_chunk = function(){
 
-	set.seed(17)# to be reproducible
-	n = 400
-	p = 1000
-	M <- Matrix::rsparsematrix(n, p, density=.1)
+# 	set.seed(17)# to be reproducible
+# 	n = 400
+# 	p = 1000
+# 	M <- Matrix::rsparsematrix(n, p, density=.1)
 
-	idxlist = list(1:p)
+# 	idxlist = list(1:p)
 
-	res = dreamlet:::rowSums_by_chunk(as.matrix(M), idxlist, TRUE)
-	res2 = dreamlet:::rowSums_by_chunk_sparse(M, idxlist, TRUE)
+# 	res = dreamlet:::rowSums_by_chunk(as.matrix(M), idxlist, TRUE)
+# 	res2 = dreamlet:::rowSums_by_chunk_sparse(M, idxlist, TRUE)
 
-	checkEqualsNumeric(res, res2)
-}
+# 	checkEqualsNumeric(res, res2)
+# }
 
 
 
@@ -61,6 +61,11 @@ test_aggregateData = function(){
 			sample_id = "sample_id", 
 			scale = TRUE) 
 	
+	# convert from sparseMatrix to matrix just for comparing to expectation
+	for(id in assayNames(pb2)){
+		assay(pb2, id) = as.matrix(assay(pb2, id))
+	}
+	
 	check1 = checkEquals(pb, pb2)
 
 	# aggregate by cluster only
@@ -69,6 +74,7 @@ test_aggregateData = function(){
 	# head(assay(pb))    # n_genes x n_clusters
 
 	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id")
+	assays(pb2)[[1]] = as.matrix(assays(pb2)[[1]])
 
 	check1 & checkEquals(pb, pb2)
 }
@@ -86,7 +92,7 @@ test_colsum_fast = function(){
 
 	group = as.character(sample.int(200, p, replace=TRUE))
 
-	res1 = dreamlet:::colsum_fast(DelayedArray(M), group)
+	res1 = dreamlet:::colsum2(DelayedArray(M), group)
 
 	res2 = DelayedArray::colsum(DelayedArray(M), group)
 
@@ -121,12 +127,12 @@ test_aggregateToPseudoBulk_datatype = function(){
 	pb_delayedMatrix <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "counts",
 			cluster_id = "cluster_id",
 			sample_id = "sample_id",
-			BPPARAM=SnowParam(1, progressbar=TRUE)) 
+			BPPARAM=SnowParam(2, progressbar=TRUE)) 
 
 	# convert from sparseMatrix to matrix just for comparing to expectation
-	for(id in assayNames(pb_delayedMatrix)){
-		assay(pb_delayedMatrix, id) = as.matrix(assay(pb_delayedMatrix, id))
-	}
+	# for(id in assayNames(pb_delayedMatrix)){
+	# 	assay(pb_delayedMatrix, id) = as.matrix(assay(pb_delayedMatrix, id))
+	# }
 
 	assay(pb_sparseMatrix, 1)[1:3, 1:3]
 	assay(pb_matrix, 1)[1:3, 1:3]
@@ -169,26 +175,26 @@ test_pmetadata = function(){
 	TRUE
 }
 
-test_da_to_sparseMatrix = function() {
+# test_da_to_sparseMatrix = function() {
 
-	library(muscat)
-	library(SingleCellExperiment)
-	library(DelayedArray)
+# 	library(muscat)
+# 	library(SingleCellExperiment)
+# 	library(DelayedArray)
 
-	# pseudobulk counts by cluster-sample
-	data(example_sce)
+# 	# pseudobulk counts by cluster-sample
+# 	data(example_sce)
 
-	is(assay(example_sce, "counts"))
+# 	is(assay(example_sce, "counts"))
 
-	setAutoBlockSize(5e4)
+# 	setAutoBlockSize(5e4)
 
-	da = DelayedArray(assay(example_sce, "counts"))
+# 	da = DelayedArray(assay(example_sce, "counts"))
 
-	# converto DelayedMatrix to sparseMatrix
-	spMat = dreamlet:::da_to_sparseMatrix(da, TRUE)
+# 	# converto DelayedMatrix to sparseMatrix
+# 	spMat = dreamlet:::da_to_sparseMatrix(da, TRUE)
 
-	checkEquals(as.matrix(da), as.matrix(spMat))
-}
+# 	checkEquals(as.matrix(da), as.matrix(spMat))
+# }
 
 # devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
 
