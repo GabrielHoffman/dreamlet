@@ -11,15 +11,27 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// cbind_list_of_sparseMatrix
-Eigen::SparseMatrix<double> cbind_list_of_sparseMatrix(Rcpp::List resList, bool verbose);
-RcppExport SEXP _dreamlet_cbind_list_of_sparseMatrix(SEXP resListSEXP, SEXP verboseSEXP) {
+// colsum_beachmat_matrix
+NumericMatrix colsum_beachmat_matrix(RObject mat, IntegerVector groupHsh, IntegerVector grpUnq);
+RcppExport SEXP _dreamlet_colsum_beachmat_matrix(SEXP matSEXP, SEXP groupHshSEXP, SEXP grpUnqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type resList(resListSEXP);
-    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(cbind_list_of_sparseMatrix(resList, verbose));
+    Rcpp::traits::input_parameter< RObject >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type groupHsh(groupHshSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type grpUnq(grpUnqSEXP);
+    rcpp_result_gen = Rcpp::wrap(colsum_beachmat_matrix(mat, groupHsh, grpUnq));
+    return rcpp_result_gen;
+END_RCPP
+}
+// colsum_beachmat_sparseMatrix
+NumericMatrix colsum_beachmat_sparseMatrix(RObject mat, IntegerVector groupHsh, IntegerVector grpUnq);
+RcppExport SEXP _dreamlet_colsum_beachmat_sparseMatrix(SEXP matSEXP, SEXP groupHshSEXP, SEXP grpUnqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< RObject >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type groupHsh(groupHshSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type grpUnq(grpUnqSEXP);
+    rcpp_result_gen = Rcpp::wrap(colsum_beachmat_sparseMatrix(mat, groupHsh, grpUnq));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -87,40 +99,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// colsum_beachmat_matrix
-NumericMatrix colsum_beachmat_matrix(RObject mat, IntegerVector groupHsh, IntegerVector grpUnq);
-RcppExport SEXP _dreamlet_colsum_beachmat_matrix(SEXP matSEXP, SEXP groupHshSEXP, SEXP grpUnqSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< RObject >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type groupHsh(groupHshSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type grpUnq(grpUnqSEXP);
-    rcpp_result_gen = Rcpp::wrap(colsum_beachmat_matrix(mat, groupHsh, grpUnq));
-    return rcpp_result_gen;
-END_RCPP
-}
-// colsum_beachmat_sparseMatrix
-NumericMatrix colsum_beachmat_sparseMatrix(RObject mat, IntegerVector groupHsh, IntegerVector grpUnq);
-RcppExport SEXP _dreamlet_colsum_beachmat_sparseMatrix(SEXP matSEXP, SEXP groupHshSEXP, SEXP grpUnqSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< RObject >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type groupHsh(groupHshSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type grpUnq(grpUnqSEXP);
-    rcpp_result_gen = Rcpp::wrap(colsum_beachmat_sparseMatrix(mat, groupHsh, grpUnq));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_dreamlet_cbind_list_of_sparseMatrix", (DL_FUNC) &_dreamlet_cbind_list_of_sparseMatrix, 2},
+    {"_dreamlet_colsum_beachmat_matrix", (DL_FUNC) &_dreamlet_colsum_beachmat_matrix, 3},
+    {"_dreamlet_colsum_beachmat_sparseMatrix", (DL_FUNC) &_dreamlet_colsum_beachmat_sparseMatrix, 3},
     {"_dreamlet_rowSums_by_chunk_sparse", (DL_FUNC) &_dreamlet_rowSums_by_chunk_sparse, 3},
     {"_dreamlet_rowSums_by_chunk", (DL_FUNC) &_dreamlet_rowSums_by_chunk, 3},
     {"_dreamlet_aggregateByColnames", (DL_FUNC) &_dreamlet_aggregateByColnames, 3},
     {"_dreamlet_aggregateByColnames1", (DL_FUNC) &_dreamlet_aggregateByColnames1, 3},
     {"_dreamlet_sumSpMatList", (DL_FUNC) &_dreamlet_sumSpMatList, 2},
-    {"_dreamlet_colsum_beachmat_matrix", (DL_FUNC) &_dreamlet_colsum_beachmat_matrix, 3},
-    {"_dreamlet_colsum_beachmat_sparseMatrix", (DL_FUNC) &_dreamlet_colsum_beachmat_sparseMatrix, 3},
     {NULL, NULL, 0}
 };
 

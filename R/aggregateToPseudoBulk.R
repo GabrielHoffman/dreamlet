@@ -275,6 +275,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 #' @useDynLib dreamlet
 #' @import Rcpp RcppEigen RcppProgress
 #' @importFrom DelayedArray colsum
+#' @importFrom methods as
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
     if (!is.null(subset.row)) {
@@ -301,7 +302,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         # rownames(countsMatrix) = rownames(x)
         # colnames(countsMatrix) = names(by.group)
 
-        countsMatrix = colsum_beachmat(x, by.group)    
+        countsMatrix = colsum_beachmat(x, ids)    
 
         collected = list(sum = as(countsMatrix, "sparseMatrix"))
     }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "matrix") ){
@@ -309,9 +310,9 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         # rownames(countsMatrix) = rownames(x)
         # colnames(countsMatrix) = names(by.group)
 
-        countsMatrix = colsum_beachmat(x, by.group)          
+        countsMatrix = colsum_beachmat(x, ids)          
             
-        collected = list(sum = countsMatrix)
+        collected = list(sum = as(countsMatrix, "sparseMatrix"))
     }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "DelayedMatrix") ){
 
          # countsMatrix <- colsum_fast(x, ids, BPPARAM=BPPARAM)
