@@ -274,6 +274,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @useDynLib dreamlet
 #' @import Rcpp RcppEigen RcppProgress
+#' @importFrom DelayedArray colsum
 .summarize_assay <- function(x, ids, statistics, threshold=0, subset.row=NULL, BPPARAM=SerialParam()) {
 
     if (!is.null(subset.row)) {
@@ -307,9 +308,8 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         collected = list(sum = countsMatrix)
     }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "DelayedMatrix") ){
 
-        suppressPackageStartupMessages({
-            countsMatrix <- colsum_fast(x, ids, BPPARAM=BPPARAM)
-        })
+         # countsMatrix <- colsum_fast(x, ids, BPPARAM=BPPARAM)
+        countsMatrix <- colsum(x, ids)        
 
         collected = list(sum = countsMatrix)
     }else{    
