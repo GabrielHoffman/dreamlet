@@ -306,10 +306,10 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	if( ! quiet ){
 		message("Initial filtering...\n")
 		if( n.samples2 - n.samples != 0){
-			message("  Dropped", (n.samples - n.samples2), '/', n.samples, "samples\n")
+			message("  Dropped ", (n.samples - n.samples2), '/', n.samples, " samples\n")
 		}
 		if( n.cellCluster2 - n.cellCluster != 0){
-			message("  Dropped", (n.cellCluster - n.cellCluster2), '/', n.cellCluster, "cell clusters\n")
+			message("  Dropped ", (n.cellCluster - n.cellCluster2), '/', n.cellCluster, " cell clusters\n")
 		}
 	}
 
@@ -365,10 +365,10 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 		if( ! quiet ){
 			if( n.samples3 - n.samples2 != 0){
-				message("  Dropped", (n.samples2 - n.samples3), '/', n.samples2, "samples\n")
+				message("  Dropped ", (n.samples2 - n.samples3), '/', n.samples2, " samples\n")
 			}
 			if( n.cellCluster3 - n.cellCluster2 != 0){
-				message("  Dropped", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, "cell clusters\n")
+				message("  Dropped ", (n.cellCluster2 - n.cellCluster3), '/', n.cellCluster2, " cell clusters\n")
 			}
 		}
 
