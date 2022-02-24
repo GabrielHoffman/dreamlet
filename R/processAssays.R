@@ -30,13 +30,13 @@
 #'
 processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet = TRUE, BPPARAM = SerialParam(),...){
 
-    checkFormula( formula, data)
-    if( is.null(n.cells) ){
-    	stop("n_cells must not be NULL")
-    }
-    if( !is.matrix(y) ){
-    	y = as.matrix(y)
-    }
+	checkFormula( formula, data)
+	if( is.null(n.cells) ){
+		stop("n_cells must not be NULL")
+	}
+	if( !is.matrix(y) ){
+		y = as.matrix(y)
+	}
 
 	# nCells = extract from y
 
@@ -67,10 +67,10 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 	if( isCounts ){
 
 		# Get count data and normalize
-    	y = suppressMessages(DGEList(y, remove.zeros = TRUE))
-    	y = calcNormFactors(y, method = normalize.method )
+		y = suppressMessages(DGEList(y, remove.zeros = TRUE))
+		y = calcNormFactors(y, method = normalize.method )
 
-    	# drop any constant terms from the formula
+		# drop any constant terms from the formula
 		formula = removeConstantTerms(formula, data)
 
 		# get samples with enough cells
