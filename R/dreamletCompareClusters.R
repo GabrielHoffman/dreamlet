@@ -110,6 +110,10 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 	method = match.arg(method)
 
+	if( ! is(pb, "SingleCellExperiment") ){
+		step("pb must be a SingleCellExperiment")
+	}
+
 	if( is.vector(assays) & ! is.list(assays) ){
 
 		# check that assays has two entries
@@ -207,11 +211,8 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			})			
 			# sum the multiple clusters in the set
 			geneCounts = Reduce("+", geneCounts)
-
-			# colIds = colnames(geneCounts)
 			colnames(geneCounts) = paste0(clstrSet, '_', colnames(geneCounts))
 
-			# df = as.data.frame(colData(pb)[colIds,,drop=FALSE])
 			df = as.data.frame(colData(pb))
 			df$cellCluster = clstrSet
 			df$Sample = rownames(df)
