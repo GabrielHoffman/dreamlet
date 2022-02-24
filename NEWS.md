@@ -1,3 +1,6 @@
+# dreamlet 0.0.33
+ - bug fix for `dreamletCompareClusters()`
+
 # dreamlet 0.0.32
  - add `colsum2()` using beachmat code.
 
