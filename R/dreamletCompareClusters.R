@@ -207,9 +207,11 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			})			
 			# sum the multiple clusters in the set
 			geneCounts = Reduce("+", geneCounts)
+
+			colIds = colnames(geneCounts)
 			colnames(geneCounts) = paste0(clstrSet, '_', colnames(geneCounts))
 
-			df = as.data.frame(colData(pb))
+			df = as.data.frame(colData(pb)[colIds,,drop=FALSE])
 			df$cellCluster = clstrSet
 			df$Sample = rownames(df)
 			rownames(df) = colnames(geneCounts)
@@ -237,7 +239,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			rownames(df) = colnames(geneCounts)
 
 			list(geneCounts = geneCounts, df = df)
-			})
+		})
 
 		countsMatrix = do.call(cbind, lapply(res, function(x) x$geneCounts))
 		data = do.call(rbind, lapply(res, function(x) x$df))
