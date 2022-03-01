@@ -58,7 +58,7 @@
 #' @export
 plotZenithResults = function(df, ntop=5, nbottom=5){
 
-	delta = se = NULL 
+	delta = se = PValue = NULL 
 	
 	if( all(c('delta', 'se') %in% colnames(df)) ){
 		# construct t-statistic from effect size and standard error

@@ -89,7 +89,7 @@ colsum_beachmat = function(x, group){
 		group = droplevels(group)
 	}else if( is.list(group) ){
 
-		grp = rep(0, max(sapply(group, max)))
+		grp = rep(0, max(vapply(group, max, numeric(1))))
 		for( key in names(group) ){
 			grp[group[[key]]] = key
 		}

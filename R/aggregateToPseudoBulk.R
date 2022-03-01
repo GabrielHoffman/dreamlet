@@ -16,8 +16,7 @@
 # @importFrom scuttle summarizeAssayByGroup
 #' @importFrom SummarizedExperiment assay colData
 # @import Matrix
-.pb = function (x, by, assay, fun, BPPARAM = SerialParam()) 
-{
+.pb = function (x, by, assay, fun, BPPARAM = SerialParam()){
     y <- summarizeAssayByGroup2(x, assay.type = assay, ids = (ids <- colData(x)[by]), 
         statistics = fun, BPPARAM = BPPARAM)
     colnames(y) <- y[[by[length(by)]]]
@@ -26,7 +25,8 @@
     if (is.factor(ids <- y[[by[1]]])) 
         ids <- droplevels(ids)
     is <- split(seq_len(ncol(y)), ids)
-    ys <- purrr::map(is, ~assay(y)[, .])
+    ys <- purrr::map(is, ~assay(y)[, .,drop=FALSE])
+
     for (i in seq_along(ys)) {
         #message(i)
         fill <- setdiff(unique(y[[by[2]]]), colnames(ys[[i]]))
@@ -37,6 +37,10 @@
             foo <- cbind(ys[[i]], foo)
             o <- paste(sort(unique(y[[by[2]]])))
             ys[[i]] <- foo[, o]
+        }else{         
+            # sort columns alphabetically   
+            o <- paste(sort(unique(y[[by[2]]])))
+            ys[[i]] <- ys[[i]][, o]
         }
     }
     return(ys)
@@ -210,7 +214,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     # check that assay is integers
     #-----------------------------
     # get nonzero values from first 3 samples 
-    values = as.matrix(assay(x,y)[,1:3])
+    values = as.matrix(assay(x,y)[,seq(1,3)])
     values = values[values!=0]
 
     if( any(values < 0) ){

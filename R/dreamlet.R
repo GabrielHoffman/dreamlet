@@ -126,9 +126,8 @@ setGeneric('coefNames', function(obj){
 setMethod("coefNames", "dreamletResult",
 	function(obj){		
 
-	unique(c(unlist(sapply(obj, function(x) colnames(coef(x))) )))
+	unique(c(unlist(lapply(obj, function(x) colnames(coef(x))) )))
 })
-
 
 
 
