@@ -159,7 +159,7 @@ run_mash = function( fit, coefList){
 
 	if( length(coefList) > 1){
 		tab$assay = paste(tab$assay, tab$coef, sep='.')
-		lvls = c(sapply(assayNames(fit), function(x) paste(x, coefList, sep='.')))
+		lvls = c(vapply(assayNames(fit), function(x) paste(x, coefList, sep='.'), character(0)))
 	}else{
 		lvls = assayNames(fit)
 	}

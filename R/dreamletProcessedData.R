@@ -75,6 +75,8 @@ setMethod("assayNames", signature(x="dreamletProcessedData"),
 #' @param withDimnames not used
 #' @param ... other arguments
 #'
+#' @return return ith assay
+#'
 #' @rdname assay-methods
 #' @aliases assay,dreamletProcessedData,dreamletProcessedData-method
 #' @export

@@ -24,6 +24,9 @@
 
 \item{...}{other arguments}
 }
+\value{
+return ith assay
+}
 \description{
 Get assay
 

@@ -1,3 +1,6 @@
+# dreamlet 0.0.34
+ - bug fix for `aggregateToPseudoBulk()` with sample ordering
+
 # dreamlet 0.0.33
  - bug fix for `dreamletCompareClusters()`
 

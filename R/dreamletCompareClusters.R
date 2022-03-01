@@ -111,7 +111,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	method = match.arg(method)
 
 	if( ! is(pb, "SingleCellExperiment") ){
-		step("pb must be a SingleCellExperiment")
+		stop("pb must be a SingleCellExperiment")
 	}
 
 	if( is.vector(assays) & ! is.list(assays) ){
@@ -330,7 +330,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 		n_remaining = nrow(data2)
 
-		for(i in 1:100){
+		for(i in seq(1,100)){
 
 			tab = table(data2$Sample) > 1
 			keep = data2$Sample %in% names(tab)[tab]
@@ -376,7 +376,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			}
 		}
 
-		if( ! collapse & min(sapply(assay.lst, length)) == 0 ){
+		if( ! collapse & min(vapply(assay.lst, length, numeric(1))) == 0 ){
 			txt = "Insufficient cellClusters retained after filtering"
 
 			if( errorsAsWarnings ){
