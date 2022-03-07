@@ -126,9 +126,14 @@
 </h2>
 <div style="text-align: justify">
 <p>Recent advances in single cell/nucleus transcriptomic technology has enabled collection of population-level data sets to study cell type specific gene expression differences associated disease state, stimulus, and genetic regulation. The scale of these data, complex study designs, and low read count per cell mean that characterizing cell type specific molecular mechanisms requires a user-frieldly, purpose-build analytical framework. We have developed the dreamlet package that applies a pseudobulk approach and fits a regression model for each gene and cell cluster to test differential expression across individuals associated with a trait of interest. Use of precision-weighted linear mixed models enables accounting for repeated measures study designs, high dimensional batch effects, and varying sequencing depth or observed cells per biosample.</p>
-<div class="section level3">
-<h3 id="technical-intro">Technical intro<a class="anchor" aria-label="anchor" href="#technical-intro"></a>
-</h3>
+<div class="section level2">
+<h2 id="diagram">Diagram<a class="anchor" aria-label="anchor" href="#diagram"></a>
+</h2>
+<p><img src="reference/figures/diagram.png" align="center" alt="" style="padding-left:10px;"></p>
+</div>
+<div class="section level2">
+<h2 id="technical-intro">Technical intro<a class="anchor" aria-label="anchor" href="#technical-intro"></a>
+</h2>
 <p>Dreamlet further enables analysis of massive-scale of single cell/nucleus transcriptome datasets by addressing both CPU and memory usage limitations. Dreamlet performs preprocessing and statistical analysis in parallel on multicore machines, and can distribute work across multiple nodes on a compute cluster. Dreamlet also uses the <a href="https://anndata.readthedocs.io/en/latest/index.html" class="external-link">H5AD format</a> for on-disk data storage to enable data processing in smaller chunks to dramatically reduce memory usage.</p>
 <p>The dreamlet workflow easily integrates into the <a href="https://www.bioconductor.org" class="external-link">Bioconductor</a> ecosystem, and uses the <a href="https://www.bioconductor.org/packages/SingleCellExperiment/" class="external-link"><code>SingleCellExperiment</code></a> class to facilitate compatibility with other analyses. Beyond differential expression testing, dreamlet provides seamless integration of downstream analysis including quantifying sources of expression variation, gene set analysis using the full spectrum of gene-level t-statistics, testing differences in cell type composition and visualizing results.</p>
 <p>Dreamlet builds on previous work on variance partitioning and differential expression using precision-weighted linear mixed models in the <a href="https://bioconductor.org/packages/variancePartition/" class="external-link">variancePartition</a> package. The dreamlet package is designed to be easily adopted by users of <a href="https://bioconductor.org/packages/variancePartition/" class="external-link">variancePartition</a> and <a href="https://bioconductor.org/packages/limma/" class="external-link">limma</a>.</p>
