@@ -45,6 +45,7 @@ knitr::opts_chunk$set(
   cache = TRUE)
 ```
 
+<div style="text-align: justify">
 # Standard `dreamlet` analysis
 ## Preprocess data
 Here single cell RNA-seq data is downloaded from [ExperimentHub](https://bioconductor.org/packages/ExperimentHub/)
@@ -184,4 +185,5 @@ Volcano plot based on local False Sign Rate (lFSR) estimated from the posterior 
 plotVolcano(res_mash)
 ```
 
+</div>
 

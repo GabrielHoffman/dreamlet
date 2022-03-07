@@ -122,6 +122,7 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 
 
 --->
+<div style="text-align: justify">
 <p>As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory if often impractical. Dreamlet can take advantage of efficient data storage through the <a href="https://bioconductor.org" class="external-link">Bioconductors</a> <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> interface to dramatically reduce memory usage. There are two general methods for storing large single-cell datasets. <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a>, and therefore <code>dreamlet</code>, are compatible with both:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>On-disk storage</strong>: The data remains on the physical disk and is only read into memory when requested. In R there is little data duplication in memory since operations are delayed until the result is requested using <code>DelayedMatrix</code>. Memory usage is minimized at the cost of performance since disk access can be slow.</p></li>
@@ -206,19 +207,18 @@ This enables any analysis designed for the [SingleCellExperiment](https://biocon
 <h2 id="comparing-interfaces">Comparing interfaces<a class="anchor" aria-label="anchor" href="#comparing-interfaces"></a>
 </h2>
 <p>The <code>SingleCellExperiment</code> interface to <code>zellkonverter</code> and <code>Seurat</code> hides the backend differences from the typical R user. The usage of <code>dreamlet</code> is the same in both cases. For small to medium datasets, the performance differences should be minimal. However, for large datasets there can be a substantial difference in performance. Use of <code>zellkonverter</code> and <code>DelayedMatrix</code> minimize memory usage at the cost of computationl performance. Use of <code>Seurat</code> and <code>sparseMatrix</code> can be faster if there is sufficent memory.</p>
+</div>
+</div>
 <!---
 Note that a [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) created by [zellkonverter](https://github.com/theislab/zellkonverter) stores the counts as a `DelayedMatrix` so the data remains on disk and are only accessed as needed.  This reduces memory usage substantailly, and `aggregateToPseudoBulk()` uses methods optimized for this data structure.
 
 On the other hand, a [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) created using [Seurat](https://satijalab.org/seurat) and then `as.SingleCellExperiment()` stores count data in memory as a `sparseMatrix`.  This uses less memory than a dense matrix, but substantailly more than a `DelayedMatrix`.  While `aggregateToPseudoBulk()` has been developed to speed up analysis of `sparseMatrix` data, it can be considerablely slower then using the `DelayedMatrix` above.  
 --->
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 

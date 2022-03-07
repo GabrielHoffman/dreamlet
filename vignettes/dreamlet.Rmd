@@ -45,6 +45,7 @@ knitr::opts_chunk$set(
   cache = TRUE)
 ```
 
+<div style="text-align: justify">
  As the scale of single cell/nucleus RNA-seq has increased, so has the complexity of study designs.  Analysis of datasets with simple study designs can be performed using linear model as in the [muscat package](https://bioconductor.org/packages/muscat).  Yet analysis of datsets with complex study designs such as repeated measures or many technical batches can benefit from linear mixed model analysis to model to correlation structure between samples.  We previously developed [dream](https://doi.org/10.1093/bioinformatics/btaa687) to apply linear mixed models to bulk RNA-seq data using a [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)-style workflow.  Dreamlet extends the previous work of dream and [muscat](https://www.nature.com/articles/s41467-020-19894-4) to apply linear mixed models to pseudobulk data.  Dreamlet also supports linear models and facilitates application of 1) [variancePartition](https://bioconductor.org/packages/variancePartition) to quantify the contribution of multiple variables to expression variation, and 2) [zenith](https://github.com/GabrielHoffman/zenith) to perform gene set analysis on the differential expression signatures. 
 
 # Process single cell count data
@@ -79,18 +80,13 @@ qc <- perCellQCMetrics(sce)
 ol <- isOutlier(metric = qc$detected, nmads = 2, log = TRUE)
 sce <- sce[, !ol]
 
-# compute normalized data
-sce <- sce[rowSums(counts(sce) > 1) >= 10, ]
-sce <- computeLibraryFactors(sce)
-sce <- logNormCounts(sce)
-
 # set variable indicating stimulated (stim) or control (ctrl)
 sce$StimStatus = sce$stim
 ```
 
 
 ## Aggregate to pseudobulk
-Dreamlet, like muscat, performs analysis at the pseudobulk-level by summing reads across cells for a given sample and cell type.  `aggregateToPseudoBulk` is substantially faster for large on-disk datasets than [`muscat::aggregateData`](https://rdrr.io/bioc/muscat/man/aggregateData.html).
+Dreamlet, like muscat, performs analysis at the pseudobulk-level by summing <u>raw counts</u> across cells for a given sample and cell type.  `aggregateToPseudoBulk` is substantially faster for large on-disk datasets than [`muscat::aggregateData`](https://rdrr.io/bioc/muscat/man/aggregateData.html).
 
 ```{r aggregate}
 # Since 'ind' is the individual and 'StimStatus' is the stimulus status,
@@ -332,7 +328,7 @@ plotPercentBars( df_cts, genes = genes )
 
 dreamlet::plotHeatmap( df_cts, genes = genes)
 ```
-
+</div>
 
 
 ```{r exit, cache=FALSE, eval=TRUE, echo=FALSE}

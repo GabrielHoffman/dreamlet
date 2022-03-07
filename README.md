@@ -9,8 +9,8 @@ The `dreamlet` package enables differential expression analysis on multi-sample 
 
 Major functionality of `dreamlet` package using the [Bioconductor](https://www.bioconductor.org) [`SingleCellExperiment`](https://www.bioconductor.org/packages/SingleCellExperiment/) interface:
 
-+ [`aggregateToPseudoBulk()`](reference/aggregateToPseudoBulk.html)      Computationally scalable evaluation of pseudobulk from raw counts
-+ [`processAssays()`](reference/processAssays.html)                      Normalize counts, compute precision weights
++ [`aggregateToPseudoBulk()`](reference/aggregateToPseudoBulk.html)      Computationally scalable evaluation of pseudobulk from <u>raw counts</u>
++ [`processAssays()`](reference/processAssays.html)                      Normalize aggregated <u>raw counts</u>, compute precision weights
 + [`fitVarPart()`](reference/fitVarPart.html)                            Variance partitioning analysis
 + [`dreamlet()`](reference/dreamlet.html)                                Differential expression analysis across <u>samples</u> using linear (mixed) models
 + [`dreamletCompareClusters()`](reference/dreamletCompareClusters.html)  Differential expression analysis across <u>cell clusters</u> using linear (mixed) models
