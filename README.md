@@ -11,9 +11,9 @@ Major functionality of `dreamlet` package using the [Bioconductor](https://www.b
 + [`aggregateToPseudoBulk()`](reference/aggregateToPseudoBulk.html)      Computationally scalable evaluation of pseudobulk from <u>raw counts</u>
 + [`processAssays()`](reference/processAssays.html)                      Normalize aggregated <u>raw counts</u>, compute precision weights
 + [`fitVarPart()`](reference/fitVarPart.html)                            Variance partitioning analysis
-+ [`dreamlet()`](reference/dreamlet.html)                                Differential expression analysis across <u>samples</u> using linear (mixed) models
-+ [`dreamletCompareClusters()`](reference/dreamletCompareClusters.html)  Differential expression analysis across <u>cell clusters</u> using linear (mixed) models
-+ [`zenith_gsa()`](reference/zenith_gsa-methods.html)                            Gene set analysis using full spectrum of differential expression test statistics
++ [`dreamlet()`](reference/dreamlet.html)                                Differential expression analysis across <u>samples</u>
++ [`dreamletCompareClusters()`](reference/dreamletCompareClusters.html)  Differential expression analysis across <u>cell clusters</u>
++ [`zenith_gsa()`](reference/zenith_gsa-methods.html)                            Gene set analysis with full spectrum of test statistics
 
 
 
@@ -22,7 +22,7 @@ Major functionality of `dreamlet` package using the [Bioconductor](https://www.b
 <div style="text-align: justify">
 Recent advances in single cell/nucleus transcriptomic technology has enabled collection of population-level data sets to study cell type specific gene expression differences associated disease state, stimulus, and genetic regulation.  The scale of these data, complex study designs, and low read count per cell mean that characterizing cell type specific molecular mechanisms requires a user-frieldly, purpose-build analytical framework.  We have developed the dreamlet package that applies a pseudobulk approach and fits a regression model for each gene and cell cluster to test differential expression across individuals associated with a trait of interest.  Use of precision-weighted linear mixed models enables accounting for repeated measures study designs, high dimensional batch effects, and varying sequencing depth or observed cells per biosample.   
 
-## Diagram
+## Dreamlet workflow
 
 <img src="man/figures/diagram.png" align="center" alt="" style="padding-left:10px;" />
 

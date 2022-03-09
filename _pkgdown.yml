@@ -10,4 +10,5 @@ template:
   params:
     docsearch:
       api_key: dedcc260e9d3743bc634e728855cdbaf
-      index_name: dreamlet
+      index_name: dreamlet 
+      
