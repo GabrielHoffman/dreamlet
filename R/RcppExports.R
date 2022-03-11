@@ -9,23 +9,3 @@ colsum_beachmat_sparseMatrix <- function(mat, groupHsh, grpUnq) {
     .Call('_dreamlet_colsum_beachmat_sparseMatrix', PACKAGE = 'dreamlet', mat, groupHsh, grpUnq)
 }
 
-rowSums_by_chunk_sparse <- function(data, idxlst, verbose) {
-    .Call('_dreamlet_rowSums_by_chunk_sparse', PACKAGE = 'dreamlet', data, idxlst, verbose)
-}
-
-rowSums_by_chunk <- function(data, idxlst, verbose) {
-    .Call('_dreamlet_rowSums_by_chunk', PACKAGE = 'dreamlet', data, idxlst, verbose)
-}
-
-aggregateByColnames <- function(resList, idLst, grpUniq) {
-    .Call('_dreamlet_aggregateByColnames', PACKAGE = 'dreamlet', resList, idLst, grpUniq)
-}
-
-aggregateByColnames1 <- function(spM, colNames, grpUniq) {
-    .Call('_dreamlet_aggregateByColnames1', PACKAGE = 'dreamlet', spM, colNames, grpUniq)
-}
-
-sumSpMatList <- function(resList, verbose) {
-    .Call('_dreamlet_sumSpMatList', PACKAGE = 'dreamlet', resList, verbose)
-}
-

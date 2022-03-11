@@ -1,3 +1,7 @@
+# dreamlet 0.0.35
+  - remove old code and dependencies
+  - change website theme
+
 # dreamlet 0.0.34
  - bug fix for `aggregateToPseudoBulk()` with sample ordering
 
