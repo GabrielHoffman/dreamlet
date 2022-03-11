@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <string>
 
+#include  "Rcpp.h"
+
 using namespace Rcpp;
 
 // Not necessary in a package context:
