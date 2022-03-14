@@ -1,3 +1,6 @@
+# dreamlet 0.0.36
+  - fixes in `processAssays()` to detect issues with SCE
+
 # dreamlet 0.0.35
   - remove old code and dependencies
   - change website theme

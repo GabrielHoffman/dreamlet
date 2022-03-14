@@ -137,6 +137,14 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         stop("Must specify at least one (and usually both): sample_id, cluster_id ")
     }
 
+    # check
+    stopifnot( is(x, 'SingleCellExperiment'))
+
+    # check colnames of SCE
+    if( is.null(colnames(x)) ){
+        stop("colnames(x) is NULL.  Column names are needed for internal filtering")
+    }
+
     if (is.null(assay)) 
         assay <- assayNames(x)[1]
     .check_arg_assay(x, assay)
