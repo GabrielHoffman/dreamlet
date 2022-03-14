@@ -172,6 +172,11 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
 	stopifnot( is(formula, 'formula'))
 
+	# check colnames of SCE
+	if( is.null(colnames(sceObj)) ){
+		stop("colnames(sceObj) is NULL.  Column names are needed for internal filtering")
+	}
+
 	# extract metadata shared across assays
 	data_constant = as.data.frame(colData(sceObj))
 
@@ -200,6 +205,21 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 		stop(txt)
 	}
 
+	# extract cell counts
+	n.cells_full = cellCounts(sceObj)
+	# dreamlet style
+	# n.cells_full = .n_cells(sceObj)
+	# muscat style
+	# n.cells_full = metadata(sceObj)$n_cells	
+
+	# extract all unique colnames
+	colNamesAll = unique(c(sapply(assayNames(sceObj), function(x) colnames(assay(sceObj, x)))))
+
+	# check for colnames missing cell counts
+	if( any(!colNamesAll %in% rownames(n.cells_full) ) ){
+		stop("Cell counts could not be extracted.\n  Check that colnames(sceObj) or rownames(colData(sceObj))\n  have not been modified manually after running aggregateToPseudoBulk()")
+	}	
+
 	# for each assay
 	resList = lapply( assays, function(k){
 
@@ -208,13 +228,8 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 
 		y = assay(sceObj, k)
 
-		# dreamlet style
-		n.cells = .n_cells(sceObj)[k,colnames(y),drop=FALSE]
-
-		if(is.null(n.cells)){
-			# muscat style
-			n.cells = metadata(sceObj)$n_cells[k,colnames(y),drop=FALSE]
-		}
+		# cell counts
+		n.cells = n.cells_full[colnames(y),k,drop=FALSE]
 
 		# merge data_constant and pmetadata based on pkeys and assay k
 		data = merge_metadata(data_constant, pmetadata, pkeys, k)
