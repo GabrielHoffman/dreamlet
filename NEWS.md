@@ -134,11 +134,11 @@
 
 
 # dreamlet 0.0.6
-Sept 1, 2021
+- Sept 1, 2021
 - enforce package version requirements
 
 # dreamlet 0.0.5
-August 25, 2021
+- August 25, 2021
 - handling of pmetadata by processAssays(), fitVarPart(), and dreamlet()
 - change defaults for bpparam to SerialParam()
 - Created new files for code
