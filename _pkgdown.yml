@@ -15,3 +15,5 @@ template:
       api_key: dedcc260e9d3743bc634e728855cdbaf
       index_name: dreamlet 
       
+search:
+  exclude: ['news/index.html']
