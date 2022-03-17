@@ -1,4 +1,7 @@
 
+March 10,
+	Clean up dependencies, since RcppEigen is not used anymore
+
 Feb 10
 	Restore crumblr use in dreamlet.Rmd
 
