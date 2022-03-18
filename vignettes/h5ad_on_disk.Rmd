@@ -40,7 +40,7 @@ knitr::opts_chunk$set(
 ```
 
 <div style="text-align: justify">
-As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory if often impractical.  Dreamlet can take advantage of efficient data storage through the [Bioconductors](https://bioconductor.org) [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) interface to dramatically reduce memory usage.  There are two general methods for storing large single-cell datasets.  [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/), and therefore `dreamlet`, are compatible with both:
+As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory is often impractical.  Dreamlet can take advantage of efficient data storage through the [Bioconductor's](https://bioconductor.org) [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) interface to dramatically reduce memory usage.  There are two general methods for storing large single-cell datasets.  [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/), and therefore `dreamlet`, are compatible with both:
 
 1) __On-disk storage__: The data remains on the physical disk and is only read into memory when requested.  In R there is little data duplication in memory since operations are delayed until the result is requested using `DelayedMatrix`.  Memory usage is minimized at the cost of performance since disk access can be slow.
 
