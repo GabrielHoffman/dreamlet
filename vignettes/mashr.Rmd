@@ -1,6 +1,6 @@
 ---
-title: "mashr analysis following dreamlet"
-subtitle: '[mashr](https://cran.r-project.org/web/packages/mashr/index.html) borrows information across genes and cell types'
+title: "mashr analysis after dreamlet"
+subtitle: 'Borrowing information across genes and cell types'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}
 output:
-  html_document:
+  BiocStyle::html_document:
     toc: true
     toc_float: true
 ---
@@ -29,10 +29,14 @@ rmarkdown::render("mashr.Rmd")
 devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 
 
-
 --->
 
 
+
+<style>
+body {
+text-align: justify}
+</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -45,7 +49,10 @@ knitr::opts_chunk$set(
   cache = TRUE)
 ```
 
-<div style="text-align: justify">
+[mashr](https://cran.r-project.org/web/packages/mashr/index.html) is a Bayesian statistical method to borrow information across genes and cell type [(Urbut, et al, 2019)](https://doi.org/10.1038%2Fs41588-018-0268-8).  [mashr](https://cran.r-project.org/web/packages/mashr/index.html) takes estimated log fold changes and standard errors for each cell type and gene from `dreamlet`, and produces posterior estimates with more accuracy and precision then the original parameter estimates.
+
+
+
 # Standard `dreamlet` analysis
 ## Preprocess data
 Here single cell RNA-seq data is downloaded from [ExperimentHub](https://bioconductor.org/packages/ExperimentHub/)
@@ -185,5 +192,4 @@ Volcano plot based on local False Sign Rate (lFSR) estimated from the posterior 
 plotVolcano(res_mash)
 ```
 
-</div>
 
