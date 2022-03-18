@@ -105,7 +105,7 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 
 --->
 <div style="text-align: justify">
-<p>As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory if often impractical. Dreamlet can take advantage of efficient data storage through the <a href="https://bioconductor.org" class="external-link">Bioconductors</a> <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> interface to dramatically reduce memory usage. There are two general methods for storing large single-cell datasets. <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a>, and therefore <code>dreamlet</code>, are compatible with both:</p>
+<p>As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory is often impractical. Dreamlet can take advantage of efficient data storage through the <a href="https://bioconductor.org" class="external-link">Bioconductor’s</a> <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a> interface to dramatically reduce memory usage. There are two general methods for storing large single-cell datasets. <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a>, and therefore <code>dreamlet</code>, are compatible with both:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>On-disk storage</strong>: The data remains on the physical disk and is only read into memory when requested. In R there is little data duplication in memory since operations are delayed until the result is requested using <code>DelayedMatrix</code>. Memory usage is minimized at the cost of performance since disk access can be slow.</p></li>
 <li><p><strong>In-memory storage</strong>: Single cell read counts are generally sprase with, say, 20% of read counts being non-zero. The counts can be stored as a <code>sparseMatrix</code> that stores only non-zero entries. Performance is higher since data is in memory, but excessive memory usage can be a problem.</p></li>
@@ -142,10 +142,10 @@ This enables any analysis designed for the [SingleCellExperiment](https://biocon
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read a series of H5AD files into a list</span>
 <span class="co"># then combine them into a single merged SingleCellExperiment</span>
-<span class="va">sce.lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span>
+<span class="va">sce.lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">file</span>, use_hdf5<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>
-<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></code></pre></div>
+<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="access-alternative-data">Access alternative data<a class="anchor" aria-label="anchor" href="#access-alternative-data"></a>
@@ -162,7 +162,7 @@ This enables any analysis designed for the [SingleCellExperiment](https://biocon
 <span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/altExps.html" class="external-link">altExp</a></span><span class="op">(</span> <span class="va">sce_in</span>, <span class="st">"raw"</span>, withDimnames<span class="op">=</span><span class="cn">TRUE</span>, withColData<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># convert these alternative data to SingleCellExperiment</span>
-<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"SingleCellExperiment"</span><span class="op">)</span>
+<span class="va">sce</span> <span class="op">=</span> <span class="fu">as</span><span class="op">(</span><span class="va">sce</span>, <span class="st">"SingleCellExperiment"</span><span class="op">)</span>
 
 <span class="co"># Copy over reducedDims too</span>
 <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">reducedDims</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">reducedDims</a></span><span class="op">(</span><span class="va">sce_in</span><span class="op">)</span></code></pre></div>
