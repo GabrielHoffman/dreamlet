@@ -1,6 +1,6 @@
 ---
-title: "Loading large-scale H5AD datasets"
-subtitle: 'On-disk SingleCellExperiment'
+title: "Handling large H5AD datasets"
+subtitle: 'On-disk versus in-memory storage'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 documentclass: article
 vignette: >
@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}
 output:
-  html_document:
+  BiocStyle::html_document:
     toc: true
     toc_float: true
 ---
@@ -25,7 +25,10 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 
 --->
 
-
+<style>
+body {
+text-align: justify}
+</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -39,7 +42,6 @@ knitr::opts_chunk$set(
   cache = TRUE)
 ```
 
-<div style="text-align: justify">
 As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory is often impractical.  Dreamlet can take advantage of efficient data storage through the [Bioconductor's](https://bioconductor.org) [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) interface to dramatically reduce memory usage.  There are two general methods for storing large single-cell datasets.  [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/), and therefore `dreamlet`, are compatible with both:
 
 1) __On-disk storage__: The data remains on the physical disk and is only read into memory when requested.  In R there is little data duplication in memory since operations are delayed until the result is requested using `DelayedMatrix`.  Memory usage is minimized at the cost of performance since disk access can be slow.
@@ -71,7 +73,7 @@ This enables any analysis designed for the [SingleCellExperiment](https://biocon
 --->
 
 
-# On-disk storage using zellkonverter
+# On-disk storage: zellkonverter
  [zellkonverter](https://github.com/theislab/zellkonverter) takes advantage of the [H5AD](https://anndata.readthedocs.io/en/latest/fileformat-prose.html) file format built on the [HDF5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) format in order to dramatically reduce memory usage while still retaining performance.  The [zellkonverter](https://github.com/theislab/zellkonverter) package uses a [DelayedArray](https://bioconductor.org/packages/DelayedArray/) backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class.  
 
 `zellkonverter` >=1.3.0 is required in general  and >=1.3.3 is required for the last example below.  `zellkonverter` is an interface for python code.  Note that the python dependencies are installed the first time `readH5AD()` is run, rather than when the package is installed.  So the first run of `readH5AD()` can take a few minutes, but subsequent runs will be fast.   
@@ -116,7 +118,7 @@ reducedDims(sce) <- reducedDims(sce_in)
 ```
 
 
-# Using Seurat
+# In-memory storage: Seurat
 [Seurat](https://satijalab.org/seurat) can also convert and import H5AD files, and then convert to [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/).  The resulting `SingleCellExperiment` object stores data as a `sparseMatrix`.
 
 ```{r Seurat}
@@ -136,7 +138,6 @@ sce <- as.SingleCellExperiment(obj)
 # Comparing interfaces
 The `SingleCellExperiment` interface to `zellkonverter` and `Seurat` hides the backend differences from the typical R user.  The usage of `dreamlet` is the same in both cases. For small to medium datasets, the performance differences should be minimal.  However, for large datasets there can be a substantial difference in performance.  Use of `zellkonverter` and `DelayedMatrix` minimize memory usage at the cost of computationl performance.  Use of `Seurat` and `sparseMatrix` can be faster if there is sufficent memory.  
 
-</div>
 
 
 <!---
