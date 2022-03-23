@@ -178,14 +178,14 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 	}
 
 	# extract metadata shared across assays
-	data_constant = as.data.frame(colData(sceObj))
+	data_constant = droplevels(as.data.frame(colData(sceObj)))
 
 	# pseudo-metadata about each sample for each cell type
 	# subset this metadata for use be each assay (i.e. cell type)
 	use_pmeta = FALSE
 	if( !is.null(pmetadata) ){
 		# cast to data.frame
-		pmetadata = as.data.frame(pmetadata)
+		pmetadata = droplevels(as.data.frame(pmetadata))
 		use_pmeta = TRUE
 
 		# check that pkeys 
