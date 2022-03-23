@@ -1,3 +1,6 @@
+# dreamlet 0.0.37
+  - `droplevels` for `colData` in `processAssays()`
+
 # dreamlet 0.0.36
   - fixes in `processAssays()` to detect issues with SCE
 
