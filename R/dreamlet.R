@@ -418,7 +418,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 			# get contrasts customized for the formula for this cell type
 			if( ! is.null(contrasts) ){
-				L = makeContrastsDream( form_mod, data2, contrasts=contrasts)
+				L = makeContrastsDream( form_mod, data2, contrasts=contrasts, nullOnError=TRUE)
 			}else{
 				L = NULL
 			}			
