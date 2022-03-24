@@ -30,18 +30,20 @@
 #' # Compute cell type specificity of each gene
 #' df = cellTypeSpecificity( pb)
 #' 
-#' # Violin plot of specificity score for each cell type
+#' # Violin plot of specificity scores for each cell type
 #' plotViolin(df)
-#' 
-#' # Barplot of 5 genes
-#' plotPercentBars( df, genes = rownames(df)[1:5])
 #' 
 #' # Compute the maximum specificity score for each gene
 #' scoreMax = apply(df, 1, max)
 #' head(scoreMax)
+#' 
+#' # For each cell type, get most specific gene
+#' genes = rownames(df)[apply(df, 2, which.max)]
+#' 
+#' # Barplot of 5 genes
+#' plotPercentBars( df, genes = genes)
 #'
 #' # heatmap of 5 genes that are most cell type specific
-#' genes = rownames(df)[apply(df, 2, which.max)]
 #' dreamlet::plotHeatmap( df, genes = genes)
 #' 
 #' @importFrom edgeR DGEList calcNormFactors cpm
