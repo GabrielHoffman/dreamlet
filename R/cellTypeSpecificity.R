@@ -39,7 +39,7 @@
 #' 
 #' # For each cell type, get most specific gene
 #' genes = rownames(df)[apply(df, 2, which.max)]
-#' 
+#'   
 #' # Barplot of 5 genes
 #' plotPercentBars( df, genes = genes)
 #'
