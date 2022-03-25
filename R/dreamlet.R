@@ -265,14 +265,24 @@ setMethod("topTable", signature(fit="dreamletResult"),
        lfc = 0,
        confint = FALSE){   
 		
+		if( any(!coef %in% coefNames(fit)) ){
+			stop("coef must be in coefNames")
+		}
+
 		# Run topTable on each assay
 		res = lapply( assayNames(fit), function(k){
 			fit1 = assay(fit, k)
 
 			if( is.null(genelist) ) genelist = rownames(fit1)
 
-			tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
-			data.frame(assay = k, tab)
+			# if coef is not found 
+			if( all(coef %in% colnames(coef(fit1))) ){
+				tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
+				res = data.frame(assay = k, tab)
+			}else{
+				res = NULL
+			}
+			res
 		})
 		# combine across assays
 		res = DataFrame(do.call(rbind, res))
