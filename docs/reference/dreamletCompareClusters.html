@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.36</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.37</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,8 +27,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Loading large-scale H5AD datasets</a>
-    <a class="dropdown-item" href="../articles/mashr.html">mashr analysis following dreamlet</a>
+    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
+    <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
   </div>
 </li>
 <li class="nav-item">
@@ -93,7 +93,7 @@
 <dt>formula</dt>
 <dd><p>covariates to include in the analysis.</p></dd>
 <dt>collapse</dt>
-<dd><p>if TRUE (default), combine all cell clusters within the test set, and separately the baseline set. If FALSE, estimate coefficient for each cell cluster and then identify differential expression using linear contrasts with <code><a href="https://rdrr.io/pkg/variancePartition/man/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code></p></dd>
+<dd><p>if TRUE (default), combine all cell clusters within the test set, and separately the baseline set. If FALSE, estimate coefficient for each cell cluster and then identify differential expression using linear contrasts with <code><a href="http://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code></p></dd>
 <dt>min.cells</dt>
 <dd><p>minimum number of observed cells for a sample to be included in the analysis</p></dd>
 <dt>min.count</dt>
@@ -111,7 +111,7 @@
 <dt>quiet</dt>
 <dd><p>show messages</p></dd>
 <dt>contrasts</dt>
-<dd><p>cell type is encoded in variable <code>cellCluster</code> with levels <code>test</code> and <code>baseline</code>. <code>contrasts</code> specifies contrasts passed to <code><a href="https://rdrr.io/pkg/variancePartition/man/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code>.  Note, advanced users only.</p></dd>
+<dd><p>cell type is encoded in variable <code>cellCluster</code> with levels <code>test</code> and <code>baseline</code>. <code>contrasts</code> specifies contrasts passed to <code><a href="http://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code>.  Note, advanced users only.</p></dd>
 <dt>BPPARAM</dt>
 <dd><p>parameters for parallel evaluation</p></dd>
 <dt>errorsAsWarnings</dt>
@@ -123,7 +123,7 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Analyze pseudobulk data to identify differential gene expression between two cell clusters or sets of clusters while modeling the cross-donor expression variation and other aspects of the study design.</p>
 <p><code>method</code> indicates the regression method used to test differential expression between sets of cell clusters.  Since the same biosample will usually be represented in both sets of cell clusters, <code>method</code> determines how the paired design is modeled.   For <code>method = "mixed"</code>, the sample is modeled as a random effect: <code>~ (1|Sample) + ...</code>. For <code>method = "fixed"</code>, the sample is modeled as a fixed effect: <code>~ Sample + ...</code>. For <code>method = "none"</code>, the pairing is ignored.</p>
-<p>When <code>collapse=TRUE</code> (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If <code>collapse=FALSE</code>, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with <code><a href="https://rdrr.io/pkg/variancePartition/man/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code>.</p>
+<p>When <code>collapse=TRUE</code> (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If <code>collapse=FALSE</code>, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with <code><a href="http://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code>.</p>
     </div>
 
     <div class="section level2">
