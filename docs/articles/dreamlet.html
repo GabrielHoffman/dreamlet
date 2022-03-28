@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.36</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.37</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-03-18 15:02:55</h4>
+            <h4 data-toc-skip class="date">Run on 2022-03-28 15:46:26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -238,11 +238,11 @@ text-align: justify}
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Show variance fractions at the gene-level for each cell type</span>
 <span class="va">genes</span> <span class="op">=</span> <span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/pkg/variancePartition/man/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
+<span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.barplt-1.png" width="700"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Summarize variance fractions genome-wide for each cell type</span>
-<span class="fu"><a href="https://rdrr.io/pkg/variancePartition/man/plotVarPart-method.html" class="external-link">plotVarPart</a></span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span></code></pre></div>
+<span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.violin-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -279,9 +279,9 @@ text-align: justify}
 <div class="section level3">
 <h3 id="extract-results">Extract results<a class="anchor" aria-label="anchor" href="#extract-results"></a>
 </h3>
-<p>Each entry in <code>res.dl</code> stores a model fit by <a href="https://rdrr.io/bioc/variancePartition/man/dream-method.html" class="external-link"><code>dream()</code></a>, and results can be extracted using <code><a href="https://rdrr.io/pkg/variancePartition/man/toptable-method.html" class="external-link">topTable()</a></code> as in <code>limma</code> by specifying the coefficient of interest. The results shows the gene name, log fold change, average expression, t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
+<p>Each entry in <code>res.dl</code> stores a model fit by <a href="https://rdrr.io/bioc/variancePartition/man/dream-method.html" class="external-link"><code>dream()</code></a>, and results can be extracted using <code>topTable()</code> as in <code>limma</code> by specifying the coefficient of interest. The results shows the gene name, log fold change, average expression, t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/variancePartition/man/toptable-method.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##           logFC   AveExpr        t      P.Value    adj.P.Val        B</span>
 <span class="co">## ISG15  5.526203 10.240731 29.94809 3.942031e-21 5.704118e-18 38.37168</span>
 <span class="co">## ISG20  3.317362 11.421612 28.30217 1.561277e-20 1.129584e-17 37.05904</span>
@@ -462,7 +462,7 @@ plotPercentBars(vp)
 
 <span class="co"># The coefficient 'compare' is the value logFC between test and baseline:</span>
 <span class="co"># compare = cellClustertest - cellClusterbaseline </span>
-<span class="va">df_Bcell</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/variancePartition/man/toptable-method.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"compare"</span><span class="op">)</span>
+<span class="va">df_Bcell</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"compare"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_Bcell</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##              logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
@@ -486,7 +486,7 @@ plotPercentBars(vp)
 <p>Highlight expression fraction for most specific gene from each cell type:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/pkg/variancePartition/man/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span> <span class="op">)</span></code></pre></div>
+<span class="fu">plotPercentBars</span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span> <span class="op">)</span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-1.png" width="700"></p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></code></pre></div>

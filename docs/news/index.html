@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.36</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.37</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,8 +27,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Loading large-scale H5AD datasets</a>
-    <a class="dropdown-item" href="../articles/mashr.html">mashr analysis following dreamlet</a>
+    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
+    <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -54,6 +54,12 @@
       <small>Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.37" id="dreamlet-0037">dreamlet 0.0.37<a class="anchor" aria-label="anchor" href="#dreamlet-0037"></a></h2>
+<ul><li>
+<code>droplevels</code> for <code>colData</code> in <code><a href="../reference/processAssays.html">processAssays()</a></code>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.36" id="dreamlet-0036">dreamlet 0.0.36<a class="anchor" aria-label="anchor" href="#dreamlet-0036"></a></h2>
 <ul><li>fixes in <code><a href="../reference/processAssays.html">processAssays()</a></code> to detect issues with SCE</li>
@@ -169,7 +175,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.16" id="dreamlet-0016">dreamlet 0.0.16<a class="anchor" aria-label="anchor" href="#dreamlet-0016"></a></h2>
-<ul><li>add <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code> for <code><a href="../reference/dreamlet.html">dreamlet()</a></code> result</li>
+<ul><li>add <code><a href="https://rdrr.io/pkg/BiocGenerics/man/residuals.html" class="external-link">residuals()</a></code> for <code><a href="../reference/dreamlet.html">dreamlet()</a></code> result</li>
 <li>add <code>dreamletPairs()</code>
 </li>
 <li>fix bug in <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> with multiple constant terms</li>

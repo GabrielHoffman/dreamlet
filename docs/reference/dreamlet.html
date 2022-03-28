@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.36</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.37</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,8 +27,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Loading large-scale H5AD datasets</a>
-    <a class="dropdown-item" href="../articles/mashr.html">mashr analysis following dreamlet</a>
+    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
+    <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
   </div>
 </li>
 <li class="nav-item">
@@ -126,11 +126,11 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Fit linear (mixed) model on each cell type separately.  For advanced use of contrasts see <code><a href="https://rdrr.io/pkg/variancePartition/man/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code> and vignette <a href="https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1" class="external-link">https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1</a>.</p>
+    <p>Fit linear (mixed) model on each cell type separately.  For advanced use of contrasts see <code><a href="http://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code> and vignette <a href="https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1" class="external-link">https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/variancePartition/man/dream-method.html" class="external-link">variancePartition::dream()</a></code>, <code><a href="https://rdrr.io/pkg/variancePartition/man/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="http://gabrielhoffman.github.io/variancePartition/reference/dream-method.html" class="external-link">variancePartition::dream()</a></code>, <code><a href="http://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -151,29 +151,29 @@
 <span class="r-in"><span class="co"># voom-style normalization</span></span>
 <span class="r-in"><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.019 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.025 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.018 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.027 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Differential expression analysis within each assay,</span></span>
 <span class="r-in"><span class="co"># evaluated on the voom normalized data </span></span>
 <span class="r-in"><span class="va">res.dl</span> <span class="op">=</span> <span class="fu">dreamlet</span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.045 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.041 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.068 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.065 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.05 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.082 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.026 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.058 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.095 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># show coefficients estimated for each cell type</span></span>
