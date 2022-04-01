@@ -312,6 +312,107 @@ setMethod("topTable", signature(fit="dreamletResult"),
 )
 
 
+
+#' Test if coefficient is different from a specified value
+#'
+#' Test if coefficient is different from a specified value
+#'
+#' @param fit dreamletResult object
+#' @param lfc a minimum log2-fold-change below which changes not considered scientifically meaningful
+#' @param coef which coefficient to test
+#' @param number number of genes to return
+#' @param sort.by column to sort by
+#'
+#' @return \code{DataFrame} storing hypothesis test for each gene and cell type
+#'
+#' @examples
+#'  
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # show coefficients estimated for each cell type
+#' coefNames(res.dl)
+#' 
+#' # extract results using limma-style syntax
+#' # combines all cell types together
+#' # adj.P.Val gives study-wide FDR
+#' getTreat(res.dl, coef="group_idstim", number=3)
+#' 
+#' @seealso \code{limma::topTreat()}, \code{variancePartition::getTreat()}
+#' @importFrom variancePartition getTreat
+#' @rdname getTreat-methods
+#' @aliases getTreat,dreamletResult,dreamletResult-method
+#' @export
+setMethod("getTreat", signature(fit="dreamletResult"),
+	function(fit, lfc=log2(1.2), coef=NULL, number=10, sort.by = "p"){
+
+		if( any(!coef %in% coefNames(fit)) ){
+			stop("coef must be in coefNames")
+		}
+
+		adjust.method = "BH"
+
+		# Run topTable on each assay
+		res = lapply( assayNames(fit), function(k){
+			fit1 = assay(fit, k)
+
+			# if coef is not found 
+			if( all(coef %in% colnames(coef(fit1))) ){
+				tab = getTreat(fit1, lfc = lfc,
+									coef = coef, 
+									number = Inf)
+				res = data.frame(assay = k, tab)
+			}else{
+				res = NULL
+			}
+			res
+		})
+		# combine across assays
+		res = DataFrame(do.call(rbind, res))
+
+		# remove rownames
+		rownames(res) = c()
+
+		# apply multiple testing across *all* tests
+		# subset based on number afterwards
+		res$adj.P.Val = p.adjust( res$P.Value, adjust.method)
+
+		opt = c('logFC', 'AveExpr', 'P', 't', 'B', 'none')
+		if( ! tolower(sort.by) %in% tolower(opt)){
+			stop("sort.by must be in: ", paste0(opt, collapse=', '))
+		}
+
+		# sorting
+		ord <- switch( tolower(sort.by), 
+			logfc = order(abs(res$logFC), decreasing = TRUE), 
+			aveexpr = order(res$AveExpr, decreasing = TRUE), 
+			p = order(res$P.Value, decreasing = FALSE), 
+			t = order(abs(t), decreasing = TRUE), 
+			b = order(res$B, decreasing = TRUE), 
+			none = seq_len(nrow(res)) )
+
+		head(res[ord,], number)
+	}
+)
+
+
+
 #' Differential expression for each assay
 #'
 #' Perform differential expression for each assay using linear (mixed) models
