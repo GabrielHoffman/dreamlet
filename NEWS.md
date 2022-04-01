@@ -1,3 +1,6 @@
+# dreamlet 0.0.38
+  - add `getTreat()` for `dreamlet()` result
+
 # dreamlet 0.0.37
   - `droplevels` for `colData` in `processAssays()`
 
