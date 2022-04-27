@@ -1,5 +1,5 @@
 # dreamlet 0.0.39
-  - fix issue with `aggregateToPseudoBulk()`` when summarizing for just 1 sample
+  - fix issue with `aggregateToPseudoBulk()` when summarizing for just 1 sample
 
 # dreamlet 0.0.38
   - add `getTreat()` for `dreamlet()` result
