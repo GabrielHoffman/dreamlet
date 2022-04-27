@@ -36,11 +36,11 @@
             colnames(foo) <- fill
             foo <- cbind(ys[[i]], foo)
             o <- paste(sort(unique(y[[by[2]]])))
-            ys[[i]] <- foo[, o]
+            ys[[i]] <- foo[, o,drop=FALSE]
         }else{         
             # sort columns alphabetically   
             o <- paste(sort(unique(y[[by[2]]])))
-            ys[[i]] <- ys[[i]][, o]
+            ys[[i]] <- ys[[i]][, o,drop=FALSE]
         }
     }
     return(ys)

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.38</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.39</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,13 +55,19 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.39" id="dreamlet-0039">dreamlet 0.0.39<a class="anchor" aria-label="anchor" href="#dreamlet-0039"></a></h2>
+<ul><li>fix issue with `aggregateToPseudoBulk()`` when summarizing for just
+1 sample</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.38" id="dreamlet-0038">dreamlet 0.0.38<a class="anchor" aria-label="anchor" href="#dreamlet-0038"></a></h2>
 <ul><li>add <code>getTreat()</code> for <code><a href="../reference/dreamlet.html">dreamlet()</a></code> result</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.37" id="dreamlet-0037">dreamlet 0.0.37<a class="anchor" aria-label="anchor" href="#dreamlet-0037"></a></h2>
 <ul><li>
-<code>droplevels</code> for <code>colData</code> in <code><a href="../reference/processAssays.html">processAssays()</a></code>
+<code>droplevels</code> for <code>colData</code> in
+<code><a href="../reference/processAssays.html">processAssays()</a></code>
 </li>
 </ul></div>
     <div class="section level2">
@@ -75,7 +81,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.34" id="dreamlet-0034">dreamlet 0.0.34<a class="anchor" aria-label="anchor" href="#dreamlet-0034"></a></h2>
-<ul><li>bug fix for <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> with sample ordering</li>
+<ul><li>bug fix for <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> with sample
+ordering</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.33" id="dreamlet-0033">dreamlet 0.0.33<a class="anchor" aria-label="anchor" href="#dreamlet-0033"></a></h2>
@@ -88,7 +95,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.31" id="dreamlet-0031">dreamlet 0.0.31<a class="anchor" aria-label="anchor" href="#dreamlet-0031"></a></h2>
-<ul><li>reduce memory usage in <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> by fixing `aggregateByColnames()</li>
+<ul><li>reduce memory usage in <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> by
+fixing `aggregateByColnames()</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.30" id="dreamlet-0030">dreamlet 0.0.30<a class="anchor" aria-label="anchor" href="#dreamlet-0030"></a></h2>
@@ -96,7 +104,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.29" id="dreamlet-0029">dreamlet 0.0.29<a class="anchor" aria-label="anchor" href="#dreamlet-0029"></a></h2>
-<ul><li>fix bug in <code>dreamlet::colsum_fast()</code> used in pseudobulk</li>
+<ul><li>fix bug in <code>dreamlet::colsum_fast()</code> used in
+pseudobulk</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.28" id="dreamlet-0028">dreamlet 0.0.28<a class="anchor" aria-label="anchor" href="#dreamlet-0028"></a></h2>
@@ -106,8 +115,10 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.27" id="dreamlet-0027">dreamlet 0.0.27<a class="anchor" aria-label="anchor" href="#dreamlet-0027"></a></h2>
 <ul><li>
-<code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> for <code>DelayedArray</code> now uses <code>colsum_fast()</code>
-<ul><li>this is faster then the previous version for <code>DelayedArray</code>
+<code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> for <code>DelayedArray</code>
+now uses <code>colsum_fast()</code>
+<ul><li>this is faster then the previous version for
+<code>DelayedArray</code>
 </li>
 </ul></li>
 </ul></div>
@@ -116,35 +127,42 @@
 <ul><li>update <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code>:
 <ul><li>now compatable with <code><a href="../reference/plotZenithResults.html">plotZenithResults()</a></code>
 </li>
-<li>include flag <code>errorsAsWarnings</code>. If <code>TRUE</code> warns and returns NULL.</li>
+<li>include flag <code>errorsAsWarnings</code>. If <code>TRUE</code>
+warns and returns NULL.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.25" id="dreamlet-0025">dreamlet 0.0.25<a class="anchor" aria-label="anchor" href="#dreamlet-0025"></a></h2>
-<ul><li>change return value for <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code> to be compatible with <code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code>
+<ul><li>change return value for <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code> to be
+compatible with <code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code>
 </li>
-<li>fix usage of <code>formula</code> in <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code>
+<li>fix usage of <code>formula</code> in
+<code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code>
 </li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.24" id="dreamlet-0024">dreamlet 0.0.24<a class="anchor" aria-label="anchor" href="#dreamlet-0024"></a></h2>
-<ul><li>additional speed up <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> when a Seurat object is used
+<ul><li>additional speed up <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> when a
+Seurat object is used
 <ul><li>uses RcppEigen sparse matrix iterator</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.23" id="dreamlet-0023">dreamlet 0.0.23<a class="anchor" aria-label="anchor" href="#dreamlet-0023"></a></h2>
-<ul><li>dramatic speed up <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> when a Seurat object is used
+<ul><li>dramatic speed up <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> when a Seurat
+object is used
 <ul><li>uses RcppEigen</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.22" id="dreamlet-0022">dreamlet 0.0.22<a class="anchor" aria-label="anchor" href="#dreamlet-0022"></a></h2>
-<ul><li>Speed up <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> when a Seurat object is used</li>
+<ul><li>Speed up <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> when a Seurat object
+is used</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.21" id="dreamlet-0021">dreamlet 0.0.21<a class="anchor" aria-label="anchor" href="#dreamlet-0021"></a></h2>
-<ul><li>Add <code>collapse=TRUE</code> to <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code>
+<ul><li>Add <code>collapse=TRUE</code> to
+<code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code>
 </li>
 </ul></div>
     <div class="section level2">
@@ -159,9 +177,11 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.18" id="dreamlet-0018">dreamlet 0.0.18<a class="anchor" aria-label="anchor" href="#dreamlet-0018"></a></h2>
-<ul><li>add <code>min.samples</code> to <code><a href="../reference/processAssays.html">processAssays()</a></code>, <code><a href="../reference/processOneAssay.html">processOneAssay()</a></code>
+<ul><li>add <code>min.samples</code> to <code><a href="../reference/processAssays.html">processAssays()</a></code>,
+<code><a href="../reference/processOneAssay.html">processOneAssay()</a></code>
 </li>
-<li>add <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code> and <code><a href="../reference/run_mash.html">run_mash()</a></code>
+<li>add <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code> and
+<code><a href="../reference/run_mash.html">run_mash()</a></code>
 </li>
 <li>Fix bug in <code><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters()</a></code>
 </li>
@@ -170,29 +190,40 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.17" id="dreamlet-0017">dreamlet 0.0.17<a class="anchor" aria-label="anchor" href="#dreamlet-0017"></a></h2>
 <ul><li>add <code><a href="../reference/run_mash.html">run_mash()</a></code>
-<ul><li>add <code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code>, <code><a href="../reference/plotVolcano-methods.html">plotVolcano()</a></code>, <code><a href="../reference/plotForest-methods.html">plotForest()</a></code> for results</li>
+<ul><li>add <code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code>, <code><a href="../reference/plotVolcano-methods.html">plotVolcano()</a></code>,
+<code><a href="../reference/plotForest-methods.html">plotForest()</a></code> for results</li>
 </ul></li>
-<li>fix bug in <code><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity()</a></code> for genes with zero reads across all cell types</li>
-<li>order of arguments in <code><a href="../reference/plotForest-methods.html">plotForest()</a></code> and <code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code> changed for consistancy</li>
+<li>fix bug in <code><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity()</a></code> for genes with zero
+reads across all cell types</li>
+<li>order of arguments in <code><a href="../reference/plotForest-methods.html">plotForest()</a></code> and
+<code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code> changed for consistancy</li>
 <li>expand vignettes</li>
-<li>bug fix for <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> when excluded variable string (i.e. tissue) is also a substring of other variables (i.e. tissueStatus)</li>
+<li>bug fix for <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> when excluded
+variable string (i.e. tissue) is also a substring of other variables
+(i.e. tissueStatus)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.16" id="dreamlet-0016">dreamlet 0.0.16<a class="anchor" aria-label="anchor" href="#dreamlet-0016"></a></h2>
-<ul><li>add <code><a href="https://rdrr.io/pkg/BiocGenerics/man/residuals.html" class="external-link">residuals()</a></code> for <code><a href="../reference/dreamlet.html">dreamlet()</a></code> result</li>
+<ul><li>add <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code> for <code><a href="../reference/dreamlet.html">dreamlet()</a></code> result</li>
 <li>add <code>dreamletPairs()</code>
 </li>
-<li>fix bug in <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> with multiple constant terms</li>
-<li>improve usability of <code><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity()</a></code> by adding <code>plotPercentBars()</code> and <code><a href="../reference/plotViolin-methods.html">plotViolin()</a></code> compatability</li>
-<li>fix bug in <code>topTable()</code> when <code>coef</code> is not estimated</li>
-<li>add argument <code>assays</code> to <code><a href="../reference/dreamlet.html">dreamlet()</a></code>, <code><a href="../reference/fitVarPart.html">fitVarPart()</a></code>, and <code><a href="../reference/processAssays.html">processAssays()</a></code>
+<li>fix bug in <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> with multiple constant
+terms</li>
+<li>improve usability of <code><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity()</a></code> by adding
+<code>plotPercentBars()</code> and <code><a href="../reference/plotViolin-methods.html">plotViolin()</a></code>
+compatability</li>
+<li>fix bug in <code>topTable()</code> when <code>coef</code> is not
+estimated</li>
+<li>add argument <code>assays</code> to <code><a href="../reference/dreamlet.html">dreamlet()</a></code>,
+<code><a href="../reference/fitVarPart.html">fitVarPart()</a></code>, and <code><a href="../reference/processAssays.html">processAssays()</a></code>
 </li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.15" id="dreamlet-0015">dreamlet 0.0.15<a class="anchor" aria-label="anchor" href="#dreamlet-0015"></a></h2>
 <ul><li>
 <code><a href="../reference/processOneAssay.html">processOneAssay()</a></code> weights by number of cells</li>
-<li>require <code>variancePartition &gt;= 1.25.1</code> to handle weights in <code>voomWithDreamWeights()</code>
+<li>require <code>variancePartition &gt;= 1.25.1</code> to handle
+weights in <code>voomWithDreamWeights()</code>
 </li>
 <li>fix bug in <code>topTable()</code>
 </li>
@@ -216,7 +247,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.12" id="dreamlet-0012">dreamlet 0.0.12<a class="anchor" aria-label="anchor" href="#dreamlet-0012"></a></h2>
 <ul><li>Oct 15, 2021</li>
-<li>update print for <code>dreamletResult</code> using <code><a href="../reference/coefNames-methods.html">coefNames()</a></code>
+<li>update print for <code>dreamletResult</code> using
+<code><a href="../reference/coefNames-methods.html">coefNames()</a></code>
 </li>
 <li>small bug fix</li>
 <li>fix bugs in <code>regModel()</code>
@@ -226,19 +258,25 @@
 <h2 class="pkg-version" data-toc-text="0.0.11" id="dreamlet-0011">dreamlet 0.0.11<a class="anchor" aria-label="anchor" href="#dreamlet-0011"></a></h2>
 <ul><li>Oct 6, 2021</li>
 <li>
-<code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> now doesn’t drop terms solely because of NA’s
-<ul><li>this means that other functions can gracefully warn the user about NA’s</li>
+<code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> now doesn’t drop terms solely
+because of NA’s
+<ul><li>this means that other functions can gracefully warn the user about
+NA’s</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.10" id="dreamlet-0010">dreamlet 0.0.10<a class="anchor" aria-label="anchor" href="#dreamlet-0010"></a></h2>
 <ul><li><p>Oct 5, 2021</p></li>
-<li><p>suppress package startup messages in <code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code></p></li>
+<li><p>suppress package startup messages in
+<code><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code></p></li>
 <li><p>bug fix in <code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code></p></li>
 <li><p>Sept 30, 2021</p></li>
-<li><p>call to <code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code> adds argument <code>inter.gene.cor</code> and <code>progressbar</code></p></li>
-<li><p>fix output to <code>cellTypeCompositionVarPart()</code> and <code>cellTypeCompositionTest()</code></p></li>
-<li><p>fix issue with <code>topTable()</code> where FDR was evaluated on only a subset of genes</p></li>
+<li><p>call to <code><a href="../reference/zenith_gsa-methods.html">zenith_gsa()</a></code> adds argument
+<code>inter.gene.cor</code> and <code>progressbar</code></p></li>
+<li><p>fix output to <code>cellTypeCompositionVarPart()</code> and
+<code>cellTypeCompositionTest()</code></p></li>
+<li><p>fix issue with <code>topTable()</code> where FDR was evaluated on
+only a subset of genes</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.8" id="dreamlet-008">dreamlet 0.0.8<a class="anchor" aria-label="anchor" href="#dreamlet-008"></a></h2>
@@ -246,7 +284,8 @@
 <li>update docs, logos, TODO</li>
 <li>update <code><a href="../reference/dreamlet.html">dreamlet()</a></code> to handle linear contrasts</li>
 <li>
-<code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> now drops categorical variables with only a max of one example per category</li>
+<code><a href="../reference/removeConstantTerms.html">removeConstantTerms()</a></code> now drops categorical variables
+with only a max of one example per category</li>
 <li>Cleaner code for cell composition test</li>
 </ul></div>
     <div class="section level2">
@@ -264,24 +303,30 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.5" id="dreamlet-005">dreamlet 0.0.5<a class="anchor" aria-label="anchor" href="#dreamlet-005"></a></h2>
 <ul><li>August 25, 2021</li>
-<li>handling of pmetadata by processAssays(), fitVarPart(), and dreamlet()</li>
+<li>handling of pmetadata by processAssays(), fitVarPart(), and
+dreamlet()</li>
 <li>change defaults for bpparam to SerialParam()</li>
 <li>Created new files for code</li>
-<li>Create object dreamletResult returned by dreamlet() and used by topTable()</li>
+<li>Create object dreamletResult returned by dreamlet() and used by
+topTable()</li>
 <li>more capable dreamletProcessedData object</li>
-<li>add details() functions for dreamletResult, dreamletProcessedData and vpDF</li>
+<li>add details() functions for dreamletResult, dreamletProcessedData
+and vpDF</li>
 <li>More information about when terms are dropped from formulas</li>
 <li>type definition to zenith_gsa</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.4" id="dreamlet-004">dreamlet 0.0.4<a class="anchor" aria-label="anchor" href="#dreamlet-004"></a></h2>
-<ul><li>add aggregateToPseudoBulk() for faster access to SingleCellExperiment() backed by H5AD</li>
+<ul><li>add aggregateToPseudoBulk() for faster access to
+SingleCellExperiment() backed by H5AD</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.3" id="dreamlet-003">dreamlet 0.0.3<a class="anchor" aria-label="anchor" href="#dreamlet-003"></a></h2>
-<ul><li>add argument to <code><a href="../reference/processAssays.html">processAssays()</a></code> to include extra meta-data<br></li>
+<ul><li>add argument to <code><a href="../reference/processAssays.html">processAssays()</a></code> to include extra
+meta-data<br></li>
 <li>add subseting with assay() for dreamletProcessedData</li>
-<li>adapt plotVoom(), plotVolcano(), plotVarPart() to be more flexiable</li>
+<li>adapt plotVoom(), plotVolcano(), plotVarPart() to be more
+flexiable</li>
 <li>fitVarPart() returns DataFrame</li>
 </ul></div>
     <div class="section level2">
@@ -297,11 +342,13 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel Hoffman</a>.</p>
+  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel
+Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
     </footer></div>

@@ -1,4 +1,16 @@
 
+April 27: DONE
+	aggregateToPseudoBulk fails with 1 subject id:
+
+	see h5ad from 
+	/sc/arion/projects/psychAD/NPS-AD/freeze2_rc/h5ad-by-donor/
+	pb = aggregateToPseudoBulk(sce,
+	  assay = "X",     
+	  cluster_id = "constant",  
+	  sample_id = "id",
+
+
+
 March 10,
 	Clean up dependencies, since RcppEigen is not used anymore
 

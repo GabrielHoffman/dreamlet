@@ -25,7 +25,7 @@ colsum2 = function (x, group, reorder = TRUE, BPPARAM = SerialParam(), verbose=F
 		}, BPPARAM=BPPARAM )
 		ans <- do.call(rbind, block_results)
 		dimnames(ans) <- list(rownames(x), ugroup)
-		ans[,sort(colnames(ans))]
+		ans[,sort(colnames(ans)),drop=FALSE]
 	}
 	.local(x, group, reorder, ...)
 }
