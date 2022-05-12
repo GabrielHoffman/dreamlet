@@ -64,10 +64,8 @@ Here, single cell RNA-seq data is downloaded from [ExperimentHub](https://biocon
 library(dreamlet)
 library(muscat)
 library(ExperimentHub)
-library(cowplot)
 library(zenith)
 library(scater)
-library(kableExtra)
 
 # Download data, specifying EH2259 for the Kang, et al study
 eh <- ExperimentHub()

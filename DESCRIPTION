@@ -15,7 +15,9 @@ Suggests:
     pander,
     rmarkdown,
     muscat,
+    ExperimentHub,
     RUnit,
+    scater,
     scuttle
 biocViews: RNASeq,
     GeneExpression,
