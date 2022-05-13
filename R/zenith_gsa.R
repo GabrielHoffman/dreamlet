@@ -4,9 +4,9 @@
 # Apply zenith to dreamlet result
 
 
-#' Perform zenith analysis
+#' Perform gene set analysis using zenith
 #' 
-#' Perform zenith analysis
+#' Perform a competitive gene set analysis accounting for correlation between genes.
 #'
 #' @param fit results from \code{dreamlet}
 #' @param geneSets a list of gene sets
@@ -19,6 +19,8 @@
 #' @param ... other arguments
 #'  
 #' @return \code{data.frame} of results for each gene set and cell type 
+#'
+#' @details This code adapts the widely used \code{camera()} analysis \insertCite{wu2012camera}{dreamlet} in the \code{limma} package \insertCite{ritchie2015limma}{dreamlet} to the case of linear (mixed) models used by \code{variancePartition::dream()} and \code{dreamlet()}.
 #'
 #' @examples
 #' library(muscat)
@@ -55,8 +57,12 @@
 #' #    to few genes were represented
 #' plotZenithResults(res_zenith, 3, 1)
 #' 
+#' @references{
+#' \insertAllCited{}
+#' }
 #' @rdname zenith_gsa-methods
 #' @export
+#' @seealso \code{limma::camera}
 setGeneric('zenith_gsa', function(fit, geneSets, coefs, use.ranks=FALSE, n_genes_min = 10, inter.gene.cor=0.01, progressbar=TRUE,...){
 	standardGeneric("zenith_gsa")
 	})
