@@ -103,9 +103,6 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest-methods.html</loc>
   </url>
   <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest.html</loc>
-  </url>
-  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotHeatmap-methods.html</loc>
   </url>
   <url>
@@ -122,9 +119,6 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotVoom-methods.html</loc>
-  </url>
-  <url>
-    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotZenithResults.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/print-methods.html</loc>
@@ -161,5 +155,8 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/zenith_gsa-methods.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/zenith_gsa.html</loc>
   </url>
 </urlset>

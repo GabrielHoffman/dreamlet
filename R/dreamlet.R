@@ -8,7 +8,7 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 
 #' Class dreamletResult
 #'
-#' Class \code{dreamletResult} 
+#' Class \code{dreamletResult} stores results produced by \code{dreamlet()} to give a standard interface for downstream analysis
 #'
 #' @name dreamletResult-class
 #' @rdname dreamletResult-class
@@ -85,12 +85,11 @@ setMethod("print", "dreamletResult",
 #' 
 #' Get coefficient names
 #'
-#' @param obj A dreamletResult object
+#' @param obj A \code{dreamletResult} object
 #'
 #' @return array storing names of coefficients
 #'
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
@@ -221,7 +220,6 @@ setMethod("[", signature(x="dreamletResult"),
 #' @return \code{data.frame} storing hypothesis test for each gene and cell type
 #'
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
@@ -326,7 +324,6 @@ setMethod("topTable", signature(fit="dreamletResult"),
 #' @return \code{DataFrame} storing hypothesis test for each gene and cell type
 #'
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
@@ -437,7 +434,6 @@ setMethod("getTreat", signature(fit="dreamletResult"),
 #' @return Object of class \code{dreamletResult} storing results for each cell type
 #'
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'

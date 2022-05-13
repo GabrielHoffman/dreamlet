@@ -1,3 +1,6 @@
+# dreamlet 0.0.40
+  - Compatibility with zenith package submitted to Bioconductor.
+
 # dreamlet 0.0.39
   - fix issue with `aggregateToPseudoBulk()` when summarizing for just 1 sample
 

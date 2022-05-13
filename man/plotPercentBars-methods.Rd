@@ -37,7 +37,6 @@ Bar plot showing variance fractions for each gene
 Bar plot of variance fractions for a subset of genes
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 

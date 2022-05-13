@@ -25,7 +25,6 @@
 Test if coefficient is different from a specified value
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 

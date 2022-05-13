@@ -5,5 +5,5 @@
 \alias{dreamletResult-class}
 \title{Class dreamletResult}
 \description{
-Class \code{dreamletResult}
+Class \code{dreamletResult} stores results produced by \code{dreamlet()} to give a standard interface for downstream analysis
 }

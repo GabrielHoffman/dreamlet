@@ -10,7 +10,7 @@ coefNames(obj)
 \S4method{coefNames}{dreamletResult}(obj)
 }
 \arguments{
-\item{obj}{A dreamletResult object}
+\item{obj}{A \code{dreamletResult} object}
 }
 \value{
 array storing names of coefficients
@@ -19,7 +19,6 @@ array storing names of coefficients
 Get coefficient names
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 

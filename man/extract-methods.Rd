@@ -12,7 +12,7 @@
 \S4method{[}{dreamletProcessedData,ANY,ANY,ANY}(x, i)
 }
 \arguments{
-\item{x}{dreamletProcessedData object}
+\item{x}{\code{dreamletProcessedData} object}
 
 \item{i}{indeces to extract}
 }

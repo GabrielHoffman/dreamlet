@@ -49,7 +49,6 @@ Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggre
 Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
 }
 \examples{
-
 library(muscat)
 library(SingleCellExperiment)
 

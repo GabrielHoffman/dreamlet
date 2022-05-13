@@ -82,7 +82,6 @@
 #'  Aggregation parameters (\code{assay, by, fun, scaled}) are stored in  \code{metadata()$agg_pars}, where \code{by = c(cluster_id, sample_id)}.  The number of cells that were aggregated are accessible in \code{int_colData()$n_cells}.
 #' 
 #' @examples 
-#' 
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
