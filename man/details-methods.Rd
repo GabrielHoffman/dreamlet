@@ -16,10 +16,10 @@ details(object)
 \S4method{details}{vpDF}(object)
 }
 \arguments{
-\item{object}{A dreamletProcessedData object}
+\item{object}{A \code{dreamletProcessedData} object}
 }
 \description{
-Extract details from dreamletProcessedData
+Extract details from \code{dreamletProcessedData}
 }
 \details{
 Extract detailed information from some classes

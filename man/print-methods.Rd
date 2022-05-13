@@ -12,7 +12,7 @@
 \S4method{print}{dreamletProcessedData}(x, ...)
 }
 \arguments{
-\item{x}{dreamletProcessedData object}
+\item{x}{\code{dreamletProcessedData} object}
 
 \item{...}{other arguments}
 }

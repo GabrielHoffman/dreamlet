@@ -37,7 +37,6 @@ Violin plot showing variance fractions
 Violin plot of variance fraction for each gene and each variable
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 
@@ -57,7 +56,6 @@ res.proc = processAssays( pb, ~ group_id)
 vp = fitVarPart( res.proc, ~ group_id)
 
 # Summarize variance fractions genome-wide for each cell type
-genes = vp$gene[2:4]
 plotVarPart(vp)
 
 }

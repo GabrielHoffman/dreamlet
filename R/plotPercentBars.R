@@ -14,7 +14,6 @@ setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
 #' @return Bar plot showing variance fractions for each gene
 #' 
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'

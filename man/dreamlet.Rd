@@ -70,7 +70,6 @@ Perform differential expression for each assay using linear (mixed) models
 Fit linear (mixed) model on each cell type separately.  For advanced use of contrasts see \code{variancePartition::makeContrastsDream()} and vignette \url{https://gabrielhoffman.github.io/variancePartition/articles/dream.html#advanced-hypothesis-testing-1}.
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 

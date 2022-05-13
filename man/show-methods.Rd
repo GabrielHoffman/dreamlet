@@ -12,7 +12,7 @@
 \S4method{show}{dreamletProcessedData}(object)
 }
 \arguments{
-\item{object}{dreamletProcessedData object}
+\item{object}{\code{dreamletProcessedData} object}
 }
 \value{
 show data stored in object

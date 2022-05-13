@@ -2,15 +2,15 @@
 % Please edit documentation in R/dreamletProcessedData.R
 \name{colData,dreamletProcessedData-method}
 \alias{colData,dreamletProcessedData-method}
-\title{Extract colData from dreamletProcessedData}
+\title{Extract colData from \code{dreamletProcessedData}}
 \usage{
 \S4method{colData}{dreamletProcessedData}(x, ...)
 }
 \arguments{
-\item{x}{A dreamletProcessedData object}
+\item{x}{A \code{dreamletProcessedData} object}
 
 \item{...}{other arguments}
 }
 \description{
-Extract colData from dreamletProcessedData
+Extract colData from \code{dreamletProcessedData}
 }

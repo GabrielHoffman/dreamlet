@@ -46,7 +46,6 @@
 Extract a table of the top-ranked genes from a dreamlet fit.
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 

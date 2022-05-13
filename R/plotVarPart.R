@@ -14,7 +14,6 @@
 #' @return Violin plot showing variance fractions
 #' 
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
@@ -34,7 +33,6 @@
 #' vp = fitVarPart( res.proc, ~ group_id)
 #' 
 #' # Summarize variance fractions genome-wide for each cell type
-#' genes = vp$gene[2:4]
 #' plotVarPart(vp)
 #'
 #' @rdname plotVarPart-methods
@@ -58,7 +56,8 @@ setMethod("plotVarPart", "DataFrame",
 
 	ggplot(df, aes(variable, value)) + 
 		geom_violin( scale="width", aes(fill = factor(variable))) + 
-		ylab("Variance explained (%)") + xlab('') + ylim(0, 1) + theme_bw() + 
+		ylab("Variance explained (%)") + xlab('') + ylim(0, 1) + 
+		theme_bw() + 
 		geom_boxplot(width=0.07, fill="grey", outlier.colour='black') + 
 		scale_fill_manual(values=col) +
 		theme(legend.position="none", plot.title=element_text(hjust=0.5),
@@ -66,10 +65,10 @@ setMethod("plotVarPart", "DataFrame",
 	                            angle = label.angle,
 	                            hjust = 1,
 	                            vjust = 1), 
-		aspect.ratio=1,
-		text 	= element_text(colour="black"), 
-		axis.text 	= element_text(colour="black"),
-		legend.text = element_text(colour="black")) + 
+			aspect.ratio=1,
+			text 	= element_text(colour="black"), 
+			axis.text 	= element_text(colour="black"),
+			legend.text = element_text(colour="black")) + 
 		facet_wrap(~assay, ncol=3) + 
 		ggtitle(main)
 })

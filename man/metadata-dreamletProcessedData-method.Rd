@@ -2,7 +2,7 @@
 % Please edit documentation in R/dreamletProcessedData.R
 \name{metadata,dreamletProcessedData-method}
 \alias{metadata,dreamletProcessedData-method}
-\title{Extract metadata from dreamletProcessedData}
+\title{Extract metadata from \code{dreamletProcessedData}}
 \usage{
 \S4method{metadata}{dreamletProcessedData}(x)
 }
@@ -10,5 +10,5 @@
 \item{x}{A dreamletProcessedData object}
 }
 \description{
-Extract metadata from dreamletProcessedData
+Extract metadata from \code{dreamletProcessedData}
 }

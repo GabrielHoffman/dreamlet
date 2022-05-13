@@ -1,8 +1,8 @@
 Package: dreamlet
 Type: Package
 Title: Perform differential expression analysis on multi-sample single cell datasets using linear (mixed) models
-Version: 0.0.39
-Date: 2021-04-27
+Version: 0.0.40
+Date: 2021-05-13
 Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu")
 Description: Recent advances in single cell/nucleus transcriptomic technology has enabled collection of population-level data sets to study cell type specific gene expression differences associated disease state, stimulus, and genetic regulation. The scale of these data, complex study designs, and low read count per cell mean that characterizing cell type specific molecular mechanisms requires a user-frieldly, purpose-build analytical framework. We have developed the dreamlet package that applies a pseudobulk approach and fits a regression model for each gene and cell cluster to test differential expression across individuals associated with a trait of interest. Use of precision-weighted linear mixed models enables accounting for repeated measures study designs, high dimensional batch effects, and varying sequencing depth or observed cells per biosample.
 VignetteBuilder: knitr
@@ -47,7 +47,7 @@ Imports:
     methods,
     purrr,
     data.table,
-    zenith (>= 0.99.0),
+    zenith (>= 0.99.2),
     mashr (>= 0.2.52),
     ashr,
     BiocParallel,
@@ -56,17 +56,14 @@ Imports:
     limma,
     BiocGenerics,
     HDF5Array,
-    ComplexHeatmap,
     DelayedArray,
-    circlize,
-    reshape2,
     gtools,
+    reshape2,
     ggrepel,
     Rcpp,
     lme4,
     Rdpack,
     utils,
-    grid,
     stats
 RoxygenNote: 7.1.2
 RdMacros: Rdpack

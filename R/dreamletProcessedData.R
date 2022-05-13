@@ -27,7 +27,7 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 #'
 #' Subset with brackets
 #'
-#' @param x dreamletProcessedData object
+#' @param x \code{dreamletProcessedData} object
 #' @param i indeces to extract
 #'
 #' @rdname extract-methods
@@ -54,7 +54,7 @@ setGeneric('metadata', S4Vectors::metadata)
 #' 
 #' Get assayNames
 #' 
-#' @param x dreamletProcessedData object
+#' @param x \code{dreamletProcessedData} object
 #' @param ... other arguments
 #'
 #' @rdname assayNames-methods
@@ -70,7 +70,7 @@ setMethod("assayNames", signature(x="dreamletProcessedData"),
 #' 
 #' Get assay
 #' 
-#' @param x dreamletProcessedData object
+#' @param x \code{dreamletProcessedData} object
 #' @param i number indicating index, or string indicating assay
 #' @param withDimnames not used
 #' @param ... other arguments
@@ -87,11 +87,11 @@ setMethod("assay", signature(x="dreamletProcessedData"),
 )
 
 
-#' Extract colData from dreamletProcessedData
+#' Extract colData from \code{dreamletProcessedData}
 #' 
-#' Extract colData from dreamletProcessedData
+#' Extract colData from \code{dreamletProcessedData}
 #'
-#' @param x A dreamletProcessedData object
+#' @param x A \code{dreamletProcessedData} object
 #' @param ... other arguments
 #' @export
 setMethod("colData", "dreamletProcessedData",
@@ -100,9 +100,9 @@ setMethod("colData", "dreamletProcessedData",
 })
 
 
-#' Extract metadata from dreamletProcessedData
+#' Extract metadata from \code{dreamletProcessedData}
 #' 
-#' Extract metadata from dreamletProcessedData
+#' Extract metadata from \code{dreamletProcessedData}
 #'
 #' @param x A dreamletProcessedData object
 #' @export
@@ -116,7 +116,7 @@ setMethod("metadata", "dreamletProcessedData",
 #' 
 #' Show object
 #' 
-#' @param object dreamletProcessedData object
+#' @param object \code{dreamletProcessedData} object
 #'
 #' @rdname show-methods
 #' @aliases show,dreamletProcessedData,dreamletProcessedData-method
@@ -133,7 +133,7 @@ setMethod("show", "dreamletProcessedData",
 #' 
 #' Print object
 #' 
-#' @param x dreamletProcessedData object
+#' @param x \code{dreamletProcessedData} object
 #' @param ... other arguments
 #' 
 #' @importFrom utils head tail
@@ -212,9 +212,9 @@ setMethod("print", "dreamletProcessedData",
 
 #' Extract details from dreamletProcessedData
 #' 
-#' Extract details from dreamletProcessedData
+#' Extract details from \code{dreamletProcessedData}
 #'
-#' @param object A dreamletProcessedData object
+#' @param object A \code{dreamletProcessedData} object
 #'
 #' @details Extract detailed information from some classes
 #'
