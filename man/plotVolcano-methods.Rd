@@ -73,7 +73,6 @@ Volcano plot for each cell type
 Volcano plot for each cell type
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 
