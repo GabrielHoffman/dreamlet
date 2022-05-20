@@ -57,7 +57,7 @@ setGeneric("plotVolcano",
 
 
 
-#' @importFrom data.table data.table rbindlist
+#' @importFrom data.table data.table as.data.table
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,list,list-method
 setMethod("plotVolcano", "list",
