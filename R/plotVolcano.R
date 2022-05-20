@@ -57,7 +57,7 @@ setGeneric("plotVolcano",
 
 
 
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table rbindlist
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,list,list-method
 setMethod("plotVolcano", "list",
@@ -69,7 +69,8 @@ setMethod("plotVolcano", "list",
     data.table(ID = id, Gene = rownames(tab), tab)
     })
   names(dfList) = names(x)
-  df_combine = do.call(rbind, dfList)
+  df_combine = rbindlist(dfList)
+  rm(dfList)
 
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = Gene = NULL
