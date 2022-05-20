@@ -1,3 +1,6 @@
+# dreamlet 0.0.41
+  - fix issue with `topTable()` when all random effects are dropped
+
 # dreamlet 0.0.40
   - Compatibility with zenith package submitted to Bioconductor.
 
