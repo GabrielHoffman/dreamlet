@@ -57,7 +57,7 @@ setMethod("plotForest", signature(x="dreamletResult"),
 	Assay = logFC = FDR = se = NULL
 
  	df = topTable(x, coef=coef, number=Inf)
- 	df$se = with(df, logFC / t)
+ 	df$se = df$logFC / df$t
 	df$FDR = p.adjust(df$P.Value)
 	df = as.data.frame(df)
 
