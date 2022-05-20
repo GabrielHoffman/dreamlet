@@ -16,7 +16,6 @@
 #' @return Volcano plot for each cell type
 #'  
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
@@ -97,7 +96,7 @@ setMethod("plotVolcano", "list",
     scale_color_manual(values=c("grey", "darkred")) + 
     scale_y_continuous(limits=c(0, ymax*1.02), expand=c(0,0)) + 
     geom_text_repel(data=df2, aes(logFC, -log10(P.Value), label=ID), segment.size=.5,  segment.color="black", color="black", force=1, nudge_x=.005, nudge_y=.5) +
-    facet_wrap(~ID, ncol=ncol) 
+    facet_wrap(~assay, ncol=ncol) 
 })
 
 
