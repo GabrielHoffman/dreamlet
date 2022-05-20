@@ -63,14 +63,17 @@ setGeneric("plotVolcano",
 setMethod("plotVolcano", "list",
   function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3){
 
-  dfList = lapply( names(x), function(id){
+  # dfList = lapply( names(x), function(id){
 
-    tab = topTable(x[[id]], coef=coef, number=Inf)
-    data.table(ID = id, Gene = rownames(tab), tab)
-    })
-  names(dfList) = names(x)
-  df_combine = rbindlist(dfList)
-  rm(dfList)
+  #   tab = topTable(x[[id]], coef=coef, number=Inf)
+  #   data.table(ID = id, Gene = rownames(tab), tab)
+  #   })
+  # names(dfList) = names(x)
+  # df_combine = rbindlist(dfList)
+  # rm(dfList)
+
+  df_combine = topTable(x, coef=coef, number=Inf)
+  df_combine = as.data.table(df_combine)
 
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = Gene = NULL
