@@ -62,15 +62,6 @@ setGeneric("plotVolcano",
 setMethod("plotVolcano", "list",
   function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3){
 
-  # dfList = lapply( names(x), function(id){
-
-  #   tab = topTable(x[[id]], coef=coef, number=Inf)
-  #   data.table(ID = id, Gene = rownames(tab), tab)
-  #   })
-  # names(dfList) = names(x)
-  # df_combine = rbindlist(dfList)
-  # rm(dfList)
-
   df_combine = topTable(x, coef=coef, number=Inf)
   df_combine = as.data.table(df_combine)
 
@@ -85,6 +76,9 @@ setMethod("plotVolcano", "list",
 
   # sort facets by original sorting of assays
   df_combine$assay = factor(df_combine$assay, names(x))
+  # order by assay, then p-value
+  ord = order(df_combine$assay, df_combine$P.Value)
+  df_combine = df_combine[ord,]
 
   # top significant genes in each cell type
   df2 = df_combine[,head(.SD, nGenes), by="ID"]
@@ -177,8 +171,12 @@ setMethod("plotVolcano", "dreamlet_mash_result",
   # top significant genes in each cell type
   df2 = df[,head(.SD, nGenes), by="ID.x"]
 
+   # order by assay, then p-value
+  ord = order(df$ID.x, df$lFSR)
+  df = df[ord,]
+
   # reverse order to plot significant points last
-  df = df[seq(nrow(df), 1)]
+  # df = df[seq(nrow(df), 1)]
 
   ggplot(df, aes(logFC, -log10(lFSR), color=isSignif)) + 
     geom_point() + 
