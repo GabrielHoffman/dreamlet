@@ -9,6 +9,7 @@
 #' @param main title of plot
 #' @param ylab text on y-axis
 #' @param convertToPercent multiply fractions by 100 to convert to percent values
+#' @param ncol number of columns in the plot
 #' @param ... additional arguments
 #' 
 #' @return Violin plot showing variance fractions
@@ -41,11 +42,19 @@
 #' @importFrom S4Vectors as.data.frame
 #' @import ggplot2
 setMethod("plotVarPart", "DataFrame",
-	function( obj, col=c(ggColorHue(base::ncol(obj)-3), "grey85"), label.angle=20, main="", ylab = "",  convertToPercent = TRUE,...){
+	function( obj, col=c(ggColorHue(base::ncol(obj)-3), "grey85"), label.angle=20, main="", ylab = "", convertToPercent = TRUE, ncol = 3,...){
 
 	if( any(!c("assay", "gene") %in% colnames(obj)) ){
 		stop("obj must have columns with names: 'assay', and 'gene'")
 	}	
+	
+	# # get ncol when it is not defined in generic function		
+	# args <- list(...)
+	# if( 'ncol' %in% names(args) ){
+	# 	ncol = args$ncol
+	# }else{
+	# 	ncol = 3
+	# }
 			
 	df = melt( as.data.frame(obj), id.vars = c("assay", "gene"))
 
@@ -69,6 +78,6 @@ setMethod("plotVarPart", "DataFrame",
 			text 	= element_text(colour="black"), 
 			axis.text 	= element_text(colour="black"),
 			legend.text = element_text(colour="black")) + 
-		facet_wrap(~assay, ncol=3) + 
+		facet_wrap(~assay, ncol=ncol) + 
 		ggtitle(main)
 })
