@@ -14,7 +14,6 @@
 #' @return Plot of mean-variance trend
 #'
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
@@ -79,14 +78,15 @@ setMethod("plotVoom", "dreamletProcessedData",
 	ylab = bquote(sqrt(standard~deviation))
 
 	# only included assays were voom succeeded
-	validAssays = unique(df_range)$id
+	validAssays = droplevels(factor(unique(df_range)$id, names(x)))
 
 	# make data.frame of points
 	df.list = lapply( validAssays, function(id){
 		with(x[[id]]$voom.xy, data.frame(id, x,y))
 	})
 	df_points = do.call(rbind, df.list)
-	df_points$id = factor(df_points$id, names(x))
+	df_points$id = droplevels(factor(df_points$id, names(x)))
+	df_points = df_points[order(df_points$id),]
 
 	# make data.frame of curves
 	df.list = lapply( validAssays, function(id){
