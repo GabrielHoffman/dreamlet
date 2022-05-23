@@ -81,7 +81,7 @@ setMethod("plotVolcano", "list",
   df_combine = df_combine[ord,]
 
   # top significant genes in each cell type
-  df2 = df_combine[,head(.SD, nGenes), by="ID"]
+  df2 = df_combine[,head(.SD, nGenes), by="assay"]
 
   # reverse order to plot significant points last
   ggplot(df_combine, aes(logFC, -log10(P.Value), color=isSignif)) + 
