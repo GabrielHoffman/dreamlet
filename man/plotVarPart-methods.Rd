@@ -12,6 +12,7 @@
   main = "",
   ylab = "",
   convertToPercent = TRUE,
+  ncol = 3,
   ...
 )
 }
@@ -27,6 +28,8 @@
 \item{ylab}{text on y-axis}
 
 \item{convertToPercent}{multiply fractions by 100 to convert to percent values}
+
+\item{ncol}{number of columns in the plot}
 
 \item{...}{additional arguments}
 }

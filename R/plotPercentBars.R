@@ -10,6 +10,7 @@ setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
 #' @param col color of bars for each variable
 #' @param genes name of genes to plot
 #' @param width specify width of bars
+#' @param ncol number of columns in the plot
 #' 
 #' @return Bar plot showing variance fractions for each gene
 #' 
@@ -33,7 +34,7 @@ setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
 #' vp = fitVarPart( res.proc, ~ group_id)
 #' 
 #' # Show variance fractions at the gene-level for each cell type
-#' plotPercentBars(vp, genes = vp$gene[2:4])
+#' plotPercentBars(vp, genes = vp$gene[2:4], ncol=2)
 #' 
 #' @export
 #' @rdname plotPercentBars-methods
@@ -41,7 +42,7 @@ setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
 #' @importFrom reshape2 melt
 #' @import ggplot2
 setMethod("plotPercentBars", "vpDF",
-	function( x, col=c(ggColorHue(ncol(x)-3), "grey85"), genes=unique(x$gene), width=NULL){
+	function( x, col=c(ggColorHue(ncol(x)-3), "grey85"), genes=unique(x$gene), width=NULL, ncol = 3){
 	
 	# subset based on specified genes
 	x = x[x$gene %in% unique(genes),]	
@@ -58,7 +59,7 @@ setMethod("plotPercentBars", "vpDF",
 		geom_bar(stat = "identity", width=width) + theme_bw() + 
 		theme(panel.grid.major = element_blank(), 
 		panel.grid.minor = element_blank()) + coord_flip() + 
-		xlab("") + theme(plot.title=element_text(hjust=0.5)) + facet_wrap(~ assay)
+		xlab("") + theme(plot.title=element_text(hjust=0.5)) + facet_wrap(~ assay, ncol=ncol)
 
 	fig = fig + theme(axis.line = element_line(colour = "transparent"),
 		axis.line.x = element_line(colour = "black"),

@@ -11,7 +11,8 @@
   x,
   col = c(ggColorHue(ncol(x) - 3), "grey85"),
   genes = unique(x$gene),
-  width = NULL
+  width = NULL,
+  ncol = 3
 )
 
 \S4method{plotPercentBars}{cellSpecificityValues}(
@@ -29,6 +30,8 @@
 \item{genes}{name of genes to plot}
 
 \item{width}{specify width of bars}
+
+\item{ncol}{number of columns in the plot}
 }
 \value{
 Bar plot showing variance fractions for each gene
@@ -56,6 +59,6 @@ res.proc = processAssays( pb, ~ group_id)
 vp = fitVarPart( res.proc, ~ group_id)
 
 # Show variance fractions at the gene-level for each cell type
-plotPercentBars(vp, genes = vp$gene[2:4])
+plotPercentBars(vp, genes = vp$gene[2:4], ncol=2)
 
 }
