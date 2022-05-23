@@ -84,7 +84,7 @@ setMethod("plotVolcano", "list",
   df2 = df_combine[,head(.SD, nGenes), by="ID"]
 
   # reverse order to plot significant points last
-  ggplot(df_combine[seq(nrow(df_combine), 1)], aes(logFC, -log10(P.Value), color=isSignif)) + 
+  ggplot(df_combine, aes(logFC, -log10(P.Value), color=isSignif)) + 
     geom_point() + 
     theme_bw(size) + 
     theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
