@@ -86,12 +86,12 @@ setMethod("plotVoom", "dreamletProcessedData",
 		with(x[[id]]$voom.xy, data.frame(id, x,y))
 	})
 	df_points = do.call(rbind, df.list)
+	df_points$id = factor(df_points$id, names(x))
 
 	# make data.frame of curves
 	df.list = lapply( validAssays, function(id){
 		with(x[[id]]$voom.line, data.frame(id, x,y))
-	})
-	df_curve = do.call(rbind, df.list)
+	})	
 
 	ggplot(df_points, aes(x,y)) + geom_point(size=0.1) + theme_bw() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + facet_wrap(~id, ncol=ncol) + xlab(xlab) + ylab(ylab) + xlim(xlim) + ylim(ylim) + geom_line(data = df_curve, aes(x,y), color="red")
 })

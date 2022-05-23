@@ -83,6 +83,9 @@ setMethod("plotVolcano", "list",
   df_combine$isSignif = c("no","yes")[(df_combine$adj.P.Val < cutoff)+1]
   df_combine$P.Value = pmax(minp, df_combine$P.Value )
 
+  # sort facets by original sorting of assays
+  df_combine$assay = factor(df_combine$assay, names(x))
+
   # top significant genes in each cell type
   df2 = df_combine[,head(.SD, nGenes), by="ID"]
 
@@ -158,6 +161,9 @@ setMethod("plotVolcano", "dreamlet_mash_result",
 
   # sort by lFSR
   df = df[order(df$lFSR),]
+
+  # sort facets by original sorting of assays
+  df$ID.x = factor(df$ID.x, names(x))
 
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = Gene.x = lFSR = NULL
