@@ -76,11 +76,12 @@ This enables any analysis designed for the [SingleCellExperiment](https://biocon
 # On-disk storage: zellkonverter
  [zellkonverter](https://github.com/theislab/zellkonverter) takes advantage of the [H5AD](https://anndata.readthedocs.io/en/latest/fileformat-prose.html) file format built on the [HDF5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) format in order to dramatically reduce memory usage while still retaining performance.  The [zellkonverter](https://github.com/theislab/zellkonverter) package uses a [DelayedArray](https://bioconductor.org/packages/DelayedArray/) backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class.  
 
-`zellkonverter` >=1.3.0 is required in general  and >=1.3.3 is required for the last example below.  `zellkonverter` is an interface for python code.  Note that the python dependencies are installed the first time `readH5AD()` is run, rather than when the package is installed.  So the first run of `readH5AD()` can take a few minutes, but subsequent runs will be fast.   
+`zellkonverter` is an interface for python code.  Note that the python dependencies are installed the first time `readH5AD()` is run, rather than when the package is installed.  So the first run of `readH5AD()` can take a few minutes, but subsequent runs will be fast.   
 
 
 ## Standard usage 
 ```{r example}
+`zellkonverter` >= v1.3.3 is required for these examples
 library(zellkonverter)
 library(SingleCellExperiment)
 
@@ -106,6 +107,12 @@ Some software, including [pegasus](https://pegasus.readthedocs.io/en/stable/), s
 # Must use zellkonverter >=1.3.3
 sce_in = readH5AD(h5ad_file, use_hdf5=TRUE, raw=TRUE)
 
+# use `raw` as counts
+sce = swapAltExp(sce_in, "raw") # use raw as main
+counts(sce) = assay(sce, 'X')   # set counts assay to data in X
+assay(sce, 'X') = NULL          # free X 
+```
+<!---
 # extract raw counts
 # include Dimnames and colData
 sce = altExp( sce_in, "raw", withDimnames=TRUE, withColData=TRUE)
@@ -115,7 +122,7 @@ sce = as(sce, "SingleCellExperiment")
 
 # Copy over reducedDims too
 reducedDims(sce) <- reducedDims(sce_in)
-```
+--->
 
 
 # In-memory storage: Seurat
@@ -138,6 +145,7 @@ sce <- as.SingleCellExperiment(obj)
 # Comparing interfaces
 The `SingleCellExperiment` interface to `zellkonverter` and `Seurat` hides the backend differences from the typical R user.  The usage of `dreamlet` is the same in both cases. For small to medium datasets, the performance differences should be minimal.  However, for large datasets there can be a substantial difference in performance.  Use of `zellkonverter` and `DelayedMatrix` minimize memory usage at the cost of computationl performance.  Use of `Seurat` and `sparseMatrix` can be faster if there is sufficent memory.  
 
+`aggregateToPseudoBulk()` for computing pseudobulk data uses different backend implements for on-disk `DelayedMatrix` and in-memory `sparseMatrix`.  Both versions are highly optimized compared to a naive implementation.
 
 
 <!---

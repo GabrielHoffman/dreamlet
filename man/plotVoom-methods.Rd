@@ -27,7 +27,6 @@ Plot of mean-variance trend
 Plot voom curves from each cell type
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 
