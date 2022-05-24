@@ -1,3 +1,6 @@
+# dreamlet 0.0.42
+  - fix misc issues with plotting and order of facets
+
 # dreamlet 0.0.41
   - fix issue with `topTable()` when all random effects are dropped
 
