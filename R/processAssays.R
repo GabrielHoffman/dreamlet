@@ -73,6 +73,9 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 		# drop any constant terms from the formula
 		formula = removeConstantTerms(formula, data)
 
+		# Drop variables in a redundant pair
+		formula = dropRedundantTerms(formula, data)
+
 		# get samples with enough cells
 		# filter genes
 		# design = model.matrix( subbars(formula), data)
