@@ -15,7 +15,7 @@
 #' dropRedundantTerms(~ group + extra, sleep)
 #' 
 #' @importFrom stats terms update.formula reformulate as.formula cor
-#' @importFrom lme4 findbars
+#' @importFrom lme4 nobars
 #' @importFrom Matrix summary
 #' @export
 dropRedundantTerms = function(formula, data, tol=1e-3){
@@ -30,6 +30,11 @@ dropRedundantTerms = function(formula, data, tol=1e-3){
 
 	# throw error if variable is not in data
 	checkFormula( formula, data)
+
+	# get terms from formula
+	trmf = terms(formula)
+	intercept = attr(trmf, "intercept")
+	fterms = attr(trmf, "term.labels")
 
 	# remove response
 	form2 = update.formula(formula, NULL ~ .)
@@ -53,8 +58,6 @@ dropRedundantTerms = function(formula, data, tol=1e-3){
 	}
 
 	excludeVar = colnames(dsgn)[df$j]
-
-	fterms = attr(terms(formula), "term.labels")
 
 	# find terms with bars, and add back parentheses
 	i = which(fterms %in% findbars(formula)[])
