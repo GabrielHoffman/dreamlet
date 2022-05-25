@@ -69,6 +69,12 @@ setGeneric('zenith_gsa', zenith::zenith_gsa)
 setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetCollection", coefs="ANY"),
 	function(fit, geneSets, coefs, use.ranks=FALSE, n_genes_min = 10, inter.gene.cor=0.01, progressbar=TRUE,...){
 
+	# check that coefs are in the dreamlet result
+	if( any(!coefs %in% coefNames(fit)) ){
+		i = which(!coefs %in% coefNames(fit))
+		stop("coefs are not found in dreamletResult: ", paste(coefs[i], sep=','))
+	}
+
 	# convert GeneSetCollection to list
 	geneSets.lst = recodeToList( geneSets )
 
@@ -86,10 +92,16 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetColle
 
 		# for each coefficient selected
 		df_res = lapply( coefs, function(coef){
-			# run zenith on dream fits
-			df_res = zenith(fit_local, coef, index, use.ranks=use.ranks, inter.gene.cor=inter.gene.cor, progressbar=progressbar)
+			# if coef is available
+			if( coef %in% colnames(coef(fit_local)) ){
+				# run zenith on dream fits
+				df_res = zenith(fit_local, coef, index, use.ranks=use.ranks, inter.gene.cor=inter.gene.cor, progressbar=progressbar)
 			
-			data.frame(assay = k, coef = coef, Geneset = rownames(df_res), df_res)
+				df = data.frame(assay = k, coef = coef, Geneset = rownames(df_res), df_res)
+			}else{
+				df = NULL
+			}
+			df
 		})
 		do.call(rbind, df_res)
 	})
