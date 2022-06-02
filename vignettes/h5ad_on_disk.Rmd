@@ -81,7 +81,6 @@ This enables any analysis designed for the [SingleCellExperiment](https://biocon
 
 ## Standard usage 
 ```{r example}
-`zellkonverter` >= v1.3.3 is required for these examples
 library(zellkonverter)
 library(SingleCellExperiment)
 
