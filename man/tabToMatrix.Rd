@@ -4,16 +4,16 @@
 \alias{tabToMatrix}
 \title{Convert results table to matrix}
 \usage{
-tabToMatrix(tab, col, rn, cn)
+tabToMatrix(tab, col, rn = "ID", cn = "assay")
 }
 \arguments{
 \item{tab}{results table from \code{topTable()}}
 
 \item{col}{which column to extract}
 
-\item{rn}{rownames}
+\item{rn}{column id storing rownames}
 
-\item{cn}{colnames}
+\item{cn}{column id storing colnames}
 }
 \description{
 Convert results table to matrix

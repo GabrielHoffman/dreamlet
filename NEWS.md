@@ -1,3 +1,8 @@
+
+# dreamlet 0.0.43
+  - faster `aggregateToPseudoBulk()` by speeding up check in `.check_arg_assay()`
+  - more flexibility for `tabToMatrix()`
+
 # dreamlet 0.0.42
   - fix misc issues with plotting and order of facets
   - fix issue with redundant variables in small sample sizes

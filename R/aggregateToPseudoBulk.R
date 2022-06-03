@@ -220,8 +220,12 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
     # check that assay is integers
     #-----------------------------
-    # get nonzero values from first 3 samples 
-    values = as.matrix(assay(x,y)[,seq(1,3)])
+    # get nonzero values from first samples 
+    # values = as.matrix(assay(x,y)[,seq(1,10)])
+    M = assay(x,y)
+    idx1 = seq(1, min(1000, nrow(M)))
+    idx2 = seq(1, min(50, ncol(M)))
+    values = as.matrix(M[idx1,idx2])
     values = values[values!=0]
 
     if( any(values < 0) ){
