@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.42</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.43</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,27 +119,27 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.025 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Differential expression analysis within each assay,</span></span>
 <span class="r-in"><span class="co"># evaluated on the voom normalized data </span></span>
 <span class="r-in"><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.039 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.052 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.059 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.044 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.063 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.064 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.03 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.06 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># run MASH model</span></span>
@@ -153,23 +153,37 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># original logFC</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          B cells CD14+ Monocytes CD4 T cells CD8 T cells FCGR3A+ Monocytes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ISG20  3.5977107       6.1228165   3.0731003   3.7280605         4.9675542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ISG15         NA       8.1862294   5.5005509          NA         7.5386815</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IRF8   2.8610495              NA          NA          NA                NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CXCL10        NA              NA          NA          NA         5.2692770</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> UBE2L6 2.6902060       3.0387733   2.2976869          NA         1.9672296</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B2M    0.7765687       0.9465299   0.7490134   0.5667585         0.4578611</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          B cells CD14+ Monocytes CD4 T cells CD8 T cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                        NA       0.6176814          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                         NA       2.6548818          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                          NA      -0.2202786          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                  -0.5591887      -0.9246124 -0.43264268  0.07892874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009 -0.5542913      -0.8377776 -0.02035041  0.90908842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                        NA       0.6705051          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       FCGR3A+ Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                       0.07918305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                        0.99499233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                        -0.66846812</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                        -0.97279604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009       -1.02526737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                      -0.04216179</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># posterior mean for logFC</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_pm</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          B cells CD14+ Monocytes CD4 T cells CD8 T cells FCGR3A+ Monocytes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ISG20  3.6201965       5.9543024   3.0940579   3.7474017         4.8601198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ISG15         NA       7.9791899   5.5248155          NA         7.4170174</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IRF8   2.7637566              NA          NA          NA                NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CXCL10        NA              NA          NA          NA         5.2524025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> UBE2L6 2.6253831       2.9768342   2.2885609          NA         1.9513343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B2M    0.7662939       0.9141552   0.7442989   0.5792546         0.4655056</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          B cells CD14+ Monocytes CD4 T cells CD8 T cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                        NA       0.4379623          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                         NA       2.5718772          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                          NA      -0.1092377          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                  -0.5523738      -0.7505848 -0.46195943  -0.1917018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009 -0.4939871      -0.7015427 -0.06533366   0.6087126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                        NA       0.4982703          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       FCGR3A+ Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                       0.05046108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                        1.00322342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                        -0.26985565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                        -0.78691227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009       -0.83077054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                      -0.01118286</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># how many gene-by-celltype tests are significant</span></span>
 <span class="r-in"><span class="co"># i.e.  if a gene is significant in 2 celltypes, it is counted twice</span></span>
@@ -217,7 +231,8 @@
 <span class="r-in"><span class="co"># gene set analysis using mashr results</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://DiseaseNeuroGenomics.github.io/zenith" class="external-link">zenith</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/get_GeneOntology.html" class="external-link">get_GeneOntology</a></span><span class="op">(</span><span class="st">"CC"</span>, to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-05-20 22:52:52</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="co"># valid values for statistic: </span></span>
 <span class="r-in"><span class="co"># "tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)"</span></span>
 <span class="r-in"><span class="va">df_gs</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/zenith_gsa-methods.html" class="external-link">zenith_gsa</a></span><span class="op">(</span><span class="va">res_mash</span>, <span class="va">go.gs</span><span class="op">)</span></span>

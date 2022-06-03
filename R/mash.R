@@ -18,26 +18,46 @@ setClass("dreamlet_mash_result", contains="list")
 #' 
 #' @param tab results table from \code{topTable()}
 #' @param col which column to extract
-#' @param rn rownames
-#' @param cn colnames
+#' @param rn column id storing rownames
+#' @param cn column id storing colnames
 #' 
 #' @importFrom Matrix sparseMatrix 
-tabToMatrix = function(tab, col, rn, cn){
+tabToMatrix = function(tab, col, rn = "ID", cn = "assay"){
 
-  # row and column names
-  rn = unique(tab$ID)
-  cn = levels(tab$assay)
+	# check column names
+	if( ! rn %in% colnames(tab) ) stop("Column not found: ", rn)
+	if( ! cn %in% colnames(tab) ) stop("Column not found: ", cn)
 
-  i = match(tab$ID, rn)
-  j = match(tab$assay, cn)
+	# convert query column names to factor
+	if( ! is.factor(tab[[rn]]) ) tab[[rn]] = factor(tab[[rn]])
+	if( ! is.factor(tab[[cn]]) ) tab[[cn]] = factor(tab[[cn]])
 
-  M = sparseMatrix(i,j, x=tab[[col]], 
-    dims=c(length(rn), length(cn)),
-    dimnames = list(rn, cn))
+	# extract row and column names for resulting matrix
+	rnlvl = levels(tab[[rn]])
+	cnlvl = levels(tab[[cn]])
 
-  data = as.matrix(M)
-  data[data == 0] = NA 
-  data
+	# get indeces
+	i = match(tab[[rn]], rnlvl)
+	j = match(tab[[cn]], cnlvl)
+
+	# A = matrix(NA, length(rnlvl), length(cnlvl), 
+	# 	dimnames = list(rnlvl, cnlvl))
+	# A[i,j] = tab[[col]]
+
+	# convert row,col,value to sparse matrix
+	# empty entries are set to 0
+	M = sparseMatrix(i,j, x=tab[[col]], 
+		dims = c(length(rnlvl), length(cnlvl)),
+		dimnames = list(rnlvl, cnlvl))
+
+	# convert to real matrix
+	data = as.matrix(M)
+
+	# replace 0's with NA
+	# since 
+	data[data == 0] = NA 
+
+	data
 }
 
 

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.42</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.43</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -172,10 +172,10 @@ minutes, but subsequent runs will be fast.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read a series of H5AD files into a list</span>
 <span class="co"># then combine them into a single merged SingleCellExperiment</span>
-<span class="va">sce.lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span>
+<span class="va">sce.lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">file</span>, use_hdf5<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>
-<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></code></pre></div>
+<span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="access-alternative-data">Access alternative data<a class="anchor" aria-label="anchor" href="#access-alternative-data"></a>
