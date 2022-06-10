@@ -12,18 +12,20 @@
   col = c(ggColorHue(ncol(x) - 3), "grey85"),
   genes = unique(x$gene),
   width = NULL,
-  ncol = 3
+  ncol = 3,
+  ...
 )
 
 \S4method{plotPercentBars}{cellSpecificityValues}(
   x,
   col = ggColorHue(ncol(x)),
   genes = rownames(x),
-  width = NULL
+  width = NULL,
+  ...
 )
 }
 \arguments{
-\item{x}{object returned by extractVarPart() or fitExtractVarPartModel()}
+\item{x}{\code{vpDF} object returned by \code{fitVarPart()}}
 
 \item{col}{color of bars for each variable}
 
@@ -32,6 +34,8 @@
 \item{width}{specify width of bars}
 
 \item{ncol}{number of columns in the plot}
+
+\item{...}{other arguments}
 }
 \value{
 Bar plot showing variance fractions for each gene

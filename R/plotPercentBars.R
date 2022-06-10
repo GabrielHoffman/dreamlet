@@ -1,16 +1,16 @@
 
-setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
-
+setClass("vpDF", contains="DFrame", slots=c(df_details = "data.frame"))
 
 #' Bar plot of variance fractions
 #'
 #' Bar plot of variance fractions for a subset of genes
 #'
-#' @param x object returned by extractVarPart() or fitExtractVarPartModel()
+#' @param x \code{vpDF} object returned by \code{fitVarPart()}
 #' @param col color of bars for each variable
 #' @param genes name of genes to plot
 #' @param width specify width of bars
 #' @param ncol number of columns in the plot
+#' @param ... other arguments
 #' 
 #' @return Bar plot showing variance fractions for each gene
 #' 
@@ -42,8 +42,19 @@ setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
 #' @importFrom reshape2 melt
 #' @import ggplot2
 setMethod("plotPercentBars", "vpDF",
-	function( x, col=c(ggColorHue(ncol(x)-3), "grey85"), genes=unique(x$gene), width=NULL, ncol = 3){
+	function( x, col=c(ggColorHue(ncol(x)-3), "grey85"), genes=unique(x$gene), width=NULL, ncol = 3,...){
 	
+	# get assays when it is not defined in generic function		
+	args <- list(...)
+	if( 'assays' %in% names(args) ){
+		assays = args$assays
+	}else{
+		assays = assayNames(x)
+	}
+
+	# subset based on assays
+	x = x[x$assay %in% unique(assays),]	
+
 	# subset based on specified genes
 	x = x[x$gene %in% unique(genes),]	
 
@@ -94,7 +105,7 @@ setMethod("plotPercentBars", "vpDF",
 #' @importFrom reshape2 melt
 #' @import ggplot2
 setMethod("plotPercentBars", "cellSpecificityValues",
-	function( x, col=ggColorHue(ncol(x)), genes=rownames(x), width=NULL){
+	function( x, col=ggColorHue(ncol(x)), genes=rownames(x), width=NULL,...){
 		
 	gene = unique(genes)
 	idx = match(genes, rownames(x))
