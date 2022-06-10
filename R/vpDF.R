@@ -9,7 +9,10 @@
 #' @name vpDF-class
 #' @rdname vpDF-class
 #' @exportClass vpDF
-setClass("vpDF", contains="DataFrame", slots=c(df_details = "data.frame"))
+#' @importFrom S4Vectors DataFrame
+setClass("vpDF", contains="DFrame", slots=c(df_details = "data.frame"))
+
+
 
 #' Get assayNames
 #' 

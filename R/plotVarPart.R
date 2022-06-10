@@ -48,22 +48,22 @@ setMethod("plotVarPart", "DataFrame",
 		stop("obj must have columns with names: 'assay', and 'gene'")
 	}	
 	
-	# # get ncol when it is not defined in generic function		
-	# args <- list(...)
-	# if( 'ncol' %in% names(args) ){
-	# 	ncol = args$ncol
-	# }else{
-	# 	ncol = 3
-	# }
-			
-	df = melt( as.data.frame(obj), id.vars = c("assay", "gene"))
+	# get assays when it is not defined in generic function		
+	args <- list(...)
+	if( 'assays' %in% names(args) ){
+		assays = args$assays
+	}else{
+		assays = assayNames(obj)
+	}
+						
+	df = melt( as.data.frame(obj[obj$assay %in% assays,]), id.vars = c("assay", "gene"))
 
-	if( label.angle == '') label.angle = 20
+	# if( label.angle == '') label.angle = 20
 
 	# pass R CMD check
 	variable = value = NULL
 
-	ggplot(df, aes(variable, value)) + 
+	fig = ggplot(df, aes(variable, value)) + 
 		geom_violin( scale="width", aes(fill = factor(variable))) + 
 		ylab("Variance explained (%)") + xlab('') + ylim(0, 1) + 
 		theme_bw() + 
@@ -78,6 +78,11 @@ setMethod("plotVarPart", "DataFrame",
 			text 	= element_text(colour="black"), 
 			axis.text 	= element_text(colour="black"),
 			legend.text = element_text(colour="black")) + 
-		facet_wrap(~assay, ncol=ncol) + 
 		ggtitle(main)
+
+	if( length(unique(df$assay)) > 1 ){
+		fig = fig + facet_wrap(~assay, ncol=ncol)
+	}
+
+	fig 
 })

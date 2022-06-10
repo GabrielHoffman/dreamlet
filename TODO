@@ -1,3 +1,6 @@
+June 10, 2022
+	select assays from plotVarPart
+
 
 April 27: DONE
 	aggregateToPseudoBulk fails with 1 subject id:
