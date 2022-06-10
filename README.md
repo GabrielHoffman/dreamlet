@@ -48,8 +48,8 @@ devtools::install_github("GabrielHoffman/dreamlet")
 ### Dependencies
 In case code above doesn't install these automatically:
 ```r
-devtools::install_github("GabrielHoffman/variancePartition")
-devtools::install_github("GabrielHoffman/zenith")
+devtools::install_github("DiseaseNeurogenomics/variancePartition")
+devtools::install_github("DiseaseNeurogenomics/zenith")
 ```
 
 
