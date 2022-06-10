@@ -13,6 +13,7 @@
 #' @param coef column number or column name specifying which coefficient or contrast of the linear model is of interest.
 #' @param coef array of genes to include in plot
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(x)}
+#' @param zmax maximum z.std value 
 #' 
 #' @return Heatmap plot for specified genes and assays
 #'  
@@ -20,7 +21,7 @@
 #' @docType methods
 #' @rdname plotGeneHeatmap-methods
 setGeneric("plotGeneHeatmap", 
-	function(x, coef, genes, assays=assayNames(x)){
+	function(x, coef, genes, assays=assayNames(x), zmax=NULL){
 
   standardGeneric("plotGeneHeatmap")
 })
@@ -36,6 +37,7 @@ setGeneric("plotGeneHeatmap",
 #' @param coef column number or column name specifying which coefficient or contrast of the linear model is of interest.
 #' @param genes array of genes to include in plot 
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(x)}
+#' @param zmax maximum z.std value 
 #' 
 #' @return Heatmap plot for specified genes and assays
 #' 
@@ -67,29 +69,31 @@ setGeneric("plotGeneHeatmap",
 #' @importFrom tidyr complete
 #' @import ggplot2
 setMethod("plotGeneHeatmap", "dreamletResult",
-	function(x, coef, genes, assays=assayNames(x)){
+	function(x, coef, genes, assays=assayNames(x), zmax=NULL){
 
-  # extract gene-level results
-  tab = topTable(x, coef=coef, number=Inf)
-  tab = tab[tab$ID %in% genes,c("assay", "ID", "z.std")]
-  tab = as.data.frame(tab[tab$assay %in% assays,])
+	# extract gene-level results
+	tab = topTable(x, coef=coef, number=Inf)
+	tab = tab[tab$ID %in% genes,c("assay", "ID", "z.std")]
+	tab = as.data.frame(tab[tab$assay %in% assays,])
 
-  # pass R CMD check
-  assay = ID = z.std = NULL
+	# pass R CMD check
+	assay = ID = z.std = NULL
 
-  # fill empty values with NA
-  tab = as.data.frame(complete(tab, assay, ID))
+	# fill empty values with NA
+	tab = as.data.frame(complete(tab, assay, ID))
 
-  zmax = max(abs(tab$z.std), na.rm=TRUE)
+	if( is.null(zmax) ){
+		zmax = max(abs(tab$z.std), na.rm=TRUE)
+	}
 
-  ncol = length(unique(tab$assay))
-  nrow = length(unique(tab$ID))
+	ncol = length(unique(tab$assay))
+	nrow = length(unique(tab$ID))
 
-  ggplot(tab, aes(assay, ID, fill=z.std)) +
-      geom_tile() +
-      theme_classic() +
-      scale_fill_gradient2("z-statistic", low="blue", mid="white", high="red", limits=c(-zmax, zmax), na.value="grey70")  +
-      theme(aspect.ratio=nrow/ncol, axis.text.x = element_text(angle = 45, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5)) +
-      ylab("Gene")
+	ggplot(tab, aes(assay, ID, fill=z.std)) +
+	  geom_tile() +
+	  theme_classic() +
+	  scale_fill_gradient2("z-statistic", low="blue", mid="white", high="red", limits=c(-zmax, zmax), na.value="grey70")  +
+	  theme(aspect.ratio=nrow/ncol, axis.text.x = element_text(angle = 45, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5)) +
+	  ylab("Gene")
 })
 
