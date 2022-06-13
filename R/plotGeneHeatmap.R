@@ -7,7 +7,7 @@
 
 #' Heatmap of genes and assays
 #' 
-#' Heatmap of genes and assays
+# Heatmap of genes and assays
 #'
 #' @param x A \code{dreamletResult} object
 #' @param coef column number or column name specifying which coefficient or contrast of the linear model is of interest.
@@ -45,7 +45,7 @@ setGeneric("plotGeneHeatmap",
 #' library(muscat)
 #' library(SingleCellExperiment)
 #' 
-#' data(example_sce)
+#' data(example_sce) 
 #' 
 #' # create pseudobulk for each sample and cell cluster
 #' pb <- aggregateToPseudoBulk(example_sce, 
@@ -84,6 +84,10 @@ setMethod("plotGeneHeatmap", "dreamletResult",
 
 	if( is.null(zmax) ){
 		zmax = max(abs(tab$z.std), na.rm=TRUE)
+	}else{
+		if( max(abs(tab$z.std), na.rm=TRUE) > zmax){
+			warning("z.std > zmax", immediate.=TRUE)
+		}
 	}
 
 	ncol = length(unique(tab$assay))

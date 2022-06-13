@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.43</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.44</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,8 @@
   col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">ggColorHue</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span><span class="op">)</span>, <span class="st">"grey85"</span><span class="op">)</span>,
   genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gene</span><span class="op">)</span>,
   width <span class="op">=</span> <span class="cn">NULL</span>,
-  ncol <span class="op">=</span> <span class="fl">3</span>
+  ncol <span class="op">=</span> <span class="fl">3</span>,
+  <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S4 method for cellSpecificityValues</span>
@@ -75,14 +76,15 @@
   <span class="va">x</span>,
   col <span class="op">=</span> <span class="fu">ggColorHue</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,
   genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  width <span class="op">=</span> <span class="cn">NULL</span>
+  width <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>object returned by extractVarPart() or fitExtractVarPartModel()</p></dd>
+<dd><p><code>vpDF</code> object returned by <code><a href="fitVarPart.html">fitVarPart()</a></code></p></dd>
 <dt>col</dt>
 <dd><p>color of bars for each variable</p></dd>
 <dt>genes</dt>
@@ -91,6 +93,8 @@
 <dd><p>specify width of bars</p></dd>
 <dt>ncol</dt>
 <dd><p>number of columns in the plot</p></dd>
+<dt>...</dt>
+<dd><p>other arguments</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -114,28 +118,34 @@
 <span class="r-in"><span class="co"># voom-style normalization</span></span>
 <span class="r-in"><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.025 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.02 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.025 secs</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># variance partitioning analysis</span></span>
 <span class="r-in"><span class="va">vp</span> <span class="op">=</span> <span class="fu"><a href="fitVarPart.html">fitVarPart</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.1 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘Matrix’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:S4Vectors’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     expand</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.7 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.9 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.2 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.4 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.51 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.65 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.5 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.8 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Show variance fractions at the gene-level for each cell type</span></span>
