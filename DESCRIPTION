@@ -46,6 +46,7 @@ Imports:
     Matrix,
     methods,
     purrr,
+    GSEABase,
     data.table,
     zenith (>= 0.99.2),
     mashr (>= 0.2.52),

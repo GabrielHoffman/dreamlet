@@ -218,11 +218,11 @@ setMethod("print", "dreamletProcessedData",
 #'
 #' @details Extract detailed information from some classes
 #'
+#' @importMethodsFrom GSEABase details
 #' @rdname details-methods
 #' @export
-setGeneric('details', function(object){
-	standardGeneric("details")
-	})
+setGeneric('details', getGeneric("details", package="GSEABase"))
+
 
 
 #' @export
@@ -255,6 +255,33 @@ setMethod("details", "dreamletResult",
 
 
 
+
+
+#' Extract expression and colData
+#' 
+#' @rdname extractData-methods
+#' @export
+setGeneric('extractData', function(x, assay) standardGeneric("extractData"))
+
+
+#' Extract expression and colData
+#' 
+#' Extract expression and colData \code{dreamletProcessedData}
+#'
+#' @param x A \code{dreamletProcessedData} object
+#' @param assay assay to extract
+#'
+#' @details \code{DataFrame} of merge exrpession and colData
+#'
+#' @importFrom S4Vectors merge
+#' @rdname extractData-methods
+#' @aliases extractData,dreamletProcessedData-method
+#' @export
+setMethod("extractData", c(x="dreamletProcessedData", assay="character"),
+	function(x, assay){
+					
+	merge(colData(x), t(assay(x, assay)$E), by="row.names")
+})
 
 
 
