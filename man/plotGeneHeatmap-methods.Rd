@@ -29,14 +29,12 @@ Heatmap plot for specified genes and assays
 }
 \description{
 Heatmap of genes and assays
-
-Heatmap of genes and assays
 }
 \examples{
 library(muscat)
 library(SingleCellExperiment)
 
-data(example_sce)
+data(example_sce) 
 
 # create pseudobulk for each sample and cell cluster
 pb <- aggregateToPseudoBulk(example_sce, 
