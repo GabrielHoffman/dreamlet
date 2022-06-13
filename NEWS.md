@@ -2,6 +2,7 @@
 # dreamlet 0.0.44
   - add `plotGeneHeatmap()`
   - add argument `assays` to `plotVarPart()`
+  - add `extractData()`
 
 # dreamlet 0.0.43
   - faster `aggregateToPseudoBulk()` by speeding up check in `.check_arg_assay()`

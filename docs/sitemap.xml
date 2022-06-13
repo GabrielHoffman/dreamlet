@@ -85,6 +85,9 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/extract-methods.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/extractData-methods.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/fitVarPart.html</loc>
   </url>
   <url>
@@ -104,6 +107,9 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotForest-methods.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotGeneHeatmap-methods.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotHeatmap-methods.html</loc>
