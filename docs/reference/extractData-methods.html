@@ -75,10 +75,54 @@
 <dd><p>assay to extract</p></dd>
 </dl></div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>DataFrame</code> of merge exrpession and colData</p>
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p><code>data.frame</code> or <code>DataFrame</code> of merged expression and colData</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/muscat" class="external-link">muscat</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/muscat/man/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># create pseudobulk for each sample and cell cluster</span></span>
+<span class="r-in"><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span>, </span>
+<span class="r-in">   assay <span class="op">=</span> <span class="st">"counts"</span>,    </span>
+<span class="r-in">   cluster_id <span class="op">=</span> <span class="st">'cluster_id'</span>, </span>
+<span class="r-in">   sample_id <span class="op">=</span> <span class="st">'sample_id'</span>,</span>
+<span class="r-in">   verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># voom-style normalization</span></span>
+<span class="r-in"><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Extract data.frame of colData merged with expression.</span></span>
+<span class="r-in"><span class="co"># variables and genes are stored as columns, samples as rows</span></span>
+<span class="r-in"><span class="va">df_merge</span> <span class="op">=</span> <span class="fu">extractData</span><span class="op">(</span> <span class="va">res.proc</span>, <span class="st">"B cells"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">df_merge</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   4 634</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># first few columns</span></span>
+<span class="r-in"><span class="va">df_merge</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Row.names group_id AURKAIP1    SSU72     RER1    RPL22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   ctrl101     ctrl 7.800105 8.155200 8.351120 8.713690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   ctrl107     ctrl 8.347624 8.546933 7.499627 8.722019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   stim101     stim 8.281584 7.940547 7.734097 8.425974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   stim107     stim 7.788927 8.430473 7.899958 9.027714</span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
