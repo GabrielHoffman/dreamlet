@@ -16,6 +16,9 @@
 
 \item{i}{indeces to extract}
 }
+\value{
+entries stored at specified index
+}
 \description{
 Subset with brackets
 

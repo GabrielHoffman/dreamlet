@@ -18,6 +18,8 @@
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
+#' @return \code{EList} object storing log2 CPM and precision weights
+#'
 #' @import BiocParallel 
 #' @import limma 
 #' @importFrom variancePartition voomWithDreamWeights
@@ -216,7 +218,8 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 	# n.cells_full = metadata(sceObj)$n_cells	
 
 	# extract all unique colnames
-	colNamesAll = unique(c(sapply(assayNames(sceObj), function(x) colnames(assay(sceObj, x)))))
+	# colNamesAll = unique(c(sapply(assayNames(sceObj), function(x) colnames(assay(sceObj, x)))))
+	colNamesAll = unique(unlist(lapply(assayNames(sceObj), function(x) colnames(assay(sceObj, x)))))
 
 	# check for colnames missing cell counts
 	if( any(!colNamesAll %in% rownames(n.cells_full) ) ){

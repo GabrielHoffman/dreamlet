@@ -30,6 +30,8 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 #' @param x \code{dreamletProcessedData} object
 #' @param i indeces to extract
 #'
+#' @return entries stored at specified index
+
 #' @rdname extract-methods
 #' @aliases [,dreamletProcessedData,dreamletProcessedData-method
 #' @export
@@ -57,6 +59,7 @@ setGeneric('metadata', S4Vectors::metadata)
 #' @param x \code{dreamletProcessedData} object
 #' @param ... other arguments
 #'
+#' @return array of assay names
 #' @rdname assayNames-methods
 #' @aliases assayNames,dreamletProcessedData,dreamletProcessedData-method
 #' @export
@@ -93,6 +96,8 @@ setMethod("assay", signature(x="dreamletProcessedData"),
 #'
 #' @param x A \code{dreamletProcessedData} object
 #' @param ... other arguments
+#'
+#' @return object from \code{colData} field
 #' @export
 setMethod("colData", "dreamletProcessedData",
 	function(x,...){
@@ -105,6 +110,9 @@ setMethod("colData", "dreamletProcessedData",
 #' Extract metadata from \code{dreamletProcessedData}
 #'
 #' @param x A dreamletProcessedData object
+#'
+#' @return object from \code{metadata} field
+#' @aliases metadata,dreamletProcessedData,dreamletProcessedData-method
 #' @export
 setMethod("metadata", "dreamletProcessedData",
 	function(x){
@@ -216,7 +224,7 @@ setMethod("print", "dreamletProcessedData",
 #'
 #' @param object A \code{dreamletProcessedData} object
 #'
-#' @details Extract detailed information from some classes
+#' @return Extract detailed information from some classes
 #'
 #' @importMethodsFrom GSEABase details
 #' @rdname details-methods
@@ -224,7 +232,26 @@ setMethod("print", "dreamletProcessedData",
 setGeneric('details', getGeneric("details", package="GSEABase"))
 
 
-
+#' @examples
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # For each cell type, number of samples retained, 
+#' # and variables retained
+#' details(res.proc)
+#' 
 #' @export
 #' @rdname details-methods
 #' @aliases details,dreamletProcessedData-method
@@ -259,6 +286,10 @@ setMethod("details", "dreamletResult",
 
 #' Extract expression and colData
 #' 
+#'
+#' @param x A \code{dreamletProcessedData} object
+#' @param assay assay to extract
+#'
 #' @rdname extractData-methods
 #' @export
 setGeneric('extractData', function(x, assay) standardGeneric("extractData"))
@@ -271,7 +302,32 @@ setGeneric('extractData', function(x, assay) standardGeneric("extractData"))
 #' @param x A \code{dreamletProcessedData} object
 #' @param assay assay to extract
 #'
-#' @details \code{DataFrame} of merge exrpession and colData
+#' @return \code{data.frame} or \code{DataFrame} of merged expression and colData
+#'
+#' @examples
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Extract data.frame of colData merged with expression.
+#' # variables and genes are stored as columns, samples as rows
+#' df_merge = extractData( res.proc, "B cells")
+#' 
+#' dim(df_merge)
+#' 
+#' # first few columns
+#' df_merge[, 1:6]
 #'
 #' @importFrom S4Vectors merge
 #' @rdname extractData-methods
@@ -279,7 +335,11 @@ setGeneric('extractData', function(x, assay) standardGeneric("extractData"))
 #' @export
 setMethod("extractData", c(x="dreamletProcessedData", assay="character"),
 	function(x, assay){
-					
+	
+	if( ! assay %in% assayNames(x) ){
+		stop("assay not found: ", assay)
+	} 				
+
 	merge(colData(x), t(assay(x, assay)$E), by="row.names")
 })
 

@@ -20,6 +20,9 @@
 
 \item{...}{additional arguments}
 }
+\value{
+array of assay names
+}
 \description{
 Get assayNames
 

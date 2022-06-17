@@ -21,6 +21,8 @@ setClass("dreamlet_mash_result", contains="list")
 #' @param rn column id storing rownames
 #' @param cn column id storing colnames
 #' 
+#' @return matrix storing values of column \code{col} in rows defind by \code{rn} and columns defined by \code{cn}
+#' 
 #' @importFrom Matrix sparseMatrix 
 tabToMatrix = function(tab, col, rn = "ID", cn = "assay"){
 
