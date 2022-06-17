@@ -18,9 +18,30 @@ details(object)
 \arguments{
 \item{object}{A \code{dreamletProcessedData} object}
 }
+\value{
+Extract detailed information from some classes
+}
 \description{
 Extract details from \code{dreamletProcessedData}
 }
-\details{
-Extract detailed information from some classes
+\examples{
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# create pseudobulk for each sample and cell cluster
+pb <- aggregateToPseudoBulk(example_sce, 
+   assay = "counts",    
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
+
+# voom-style normalization
+res.proc = processAssays( pb, ~ group_id)
+
+# For each cell type, number of samples retained, 
+# and variables retained
+details(res.proc)
+
 }

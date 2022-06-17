@@ -2,12 +2,16 @@
 % Please edit documentation in R/dreamletProcessedData.R
 \name{metadata,dreamletProcessedData-method}
 \alias{metadata,dreamletProcessedData-method}
+\alias{metadata,dreamletProcessedData,dreamletProcessedData-method}
 \title{Extract metadata from \code{dreamletProcessedData}}
 \usage{
 \S4method{metadata}{dreamletProcessedData}(x)
 }
 \arguments{
 \item{x}{A dreamletProcessedData object}
+}
+\value{
+object from \code{metadata} field
 }
 \description{
 Extract metadata from \code{dreamletProcessedData}

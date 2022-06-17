@@ -23,6 +23,9 @@
 
 \item{...}{other arguments to sort}
 }
+\value{
+\code{data.frame} with columns sorted by mean value, with Residuals in last column
+}
 \description{
 Sort variance partition statistics
 }

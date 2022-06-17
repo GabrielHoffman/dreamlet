@@ -47,6 +47,9 @@ processOneAssay(
 
 \item{...}{other arguments passed to \code{dream}}
 }
+\value{
+\code{EList} object storing log2 CPM and precision weights
+}
 \description{
 For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells
 }

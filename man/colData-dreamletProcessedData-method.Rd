@@ -11,6 +11,9 @@
 
 \item{...}{other arguments}
 }
+\value{
+object from \code{colData} field
+}
 \description{
 Extract colData from \code{dreamletProcessedData}
 }

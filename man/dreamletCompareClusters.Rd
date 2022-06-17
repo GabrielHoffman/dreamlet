@@ -59,6 +59,9 @@ dreamletCompareClusters(
 
 \item{...}{other arguments passed to \code{dream}}
 }
+\value{
+Object of class \code{dreamletResult} storing results for each comparison
+}
 \description{
 Perform differential expression between a pair of assays using linear (mixed) models
 }
@@ -70,7 +73,6 @@ Analyze pseudobulk data to identify differential gene expression between two cel
 When \code{collapse=TRUE} (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If \code{collapse=FALSE}, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with \code{variancePartition::makeContrastsDream()}.
 }
 \examples{
-
 library(muscat)
 library(SingleCellExperiment) 
 

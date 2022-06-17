@@ -60,8 +60,8 @@ setMethod("assay", signature(x="vpDF"),
 #' @param last columns to be placed on the right, regardless of values in these columns
 #' @param ... other arguments to sort 
 #'
-#' @examples
-#'  
+#' @return \code{data.frame} with columns sorted by mean value, with Residuals in last column
+#' @examples  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'

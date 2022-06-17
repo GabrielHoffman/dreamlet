@@ -72,7 +72,8 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetColle
 	# check that coefs are in the dreamlet result
 	if( any(!coefs %in% coefNames(fit)) ){
 		i = which(!coefs %in% coefNames(fit))
-		stop("coefs are not found in dreamletResult: ", paste(coefs[i], sep=','))
+		txt = paste0("coefs are not found in dreamletResult: ", paste(coefs[i], sep=','))
+		stop(txt)
 	}
 
 	# convert GeneSetCollection to list

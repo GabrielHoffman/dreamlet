@@ -1,3 +1,5 @@
+# dreamlet 0.0.45
+  - update documentation
 
 # dreamlet 0.0.44
   - add `plotGeneHeatmap()`

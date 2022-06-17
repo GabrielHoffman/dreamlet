@@ -12,11 +12,13 @@
 
 \item{...}{other arguments}
 }
+\value{
+residuals from model fit
+}
 \description{
 Extract residuls from \code{dreamletResult}
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 

@@ -39,8 +39,8 @@
 #' 
 #' When \code{collapse=TRUE} (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If \code{collapse=FALSE}, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with \code{variancePartition::makeContrastsDream()}.
 #' 
+#' @return Object of class \code{dreamletResult} storing results for each comparison
 #' @examples
-#' 
 #' library(muscat)
 #' library(SingleCellExperiment) 
 #' 

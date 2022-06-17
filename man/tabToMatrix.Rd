@@ -15,6 +15,9 @@ tabToMatrix(tab, col, rn = "ID", cn = "assay")
 
 \item{cn}{column id storing colnames}
 }
+\value{
+matrix storing values of column \code{col} in rows defind by \code{rn} and columns defined by \code{cn}
+}
 \description{
 Convert results table to matrix
 }

@@ -92,8 +92,8 @@ equalFormulas = function(formula1, formula2){
 #' @param object \code{dreamletResult} object
 #' @param ... other arguments
 #' 
+#' @return residuals from model fit
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
