@@ -86,6 +86,20 @@ sce <- sce[, !ol]
 sce$StimStatus = sce$stim
 ```
 
+```{r tnse}
+library(scattermore)
+
+df_tsne = data.frame(reducedDim(sce), CellType = sce$cell)
+
+ggplot(df_tsne, aes(tsne1, tsne2, color=CellType)) +
+  # geom_scattermore(pointsize=1) + 
+  geom_point(size=1) +
+  theme_classic() +
+  theme(aspect.ratio=1) +
+  xlab("TNSE 1") +
+  ylab("TNSE 2")
+```
+
 
 ## Aggregate to pseudobulk
 Dreamlet, like muscat, performs analysis at the pseudobulk-level by summing <u>raw counts</u> across cells for a given sample and cell type.  `aggregateToPseudoBulk` is substantially faster for large on-disk datasets than [`muscat::aggregateData`](https://rdrr.io/bioc/muscat/man/aggregateData.html).
@@ -187,9 +201,20 @@ The volcano plot can indicate the strength of the differential expression signal
 plotVolcano( res.dl, coef = 'StimStatusstim' )
 ```
 
+## Gene-level heatmap
+For each cell type and specified gene, show z-statistic from `dreamlet` analysis.  Grey indicates that insufficient reads were observed to include the gene in the analysis.
+```{r plotGeneHeatmap, fig.height=3}
+genes = c("ISG20", "ISG15")
+plotGeneHeatmap( res.dl, coef="StimStatusstim", genes=genes)
+```
+
 ## Extract results
 Each entry in `res.dl` stores a model fit by [`dream()`](https://rdrr.io/bioc/variancePartition/man/dream-method.html), and results can be extracted using `topTable()` as in `limma` by specifying the coefficient of interest.  The results shows the gene name, log fold change, average expression, t-statistic, p-value, FDR (i.e. adj.P.Val). 
 ```{r extract}
+# results from full analysis
+topTable(res.dl, coef = 'StimStatusstim' )
+
+# only B cells
 topTable(res.dl[["B cells"]], coef = 'StimStatusstim' )
 ```
 
@@ -245,7 +270,7 @@ head(res_zenith)
 ```
 
 ## Heatmap of top genesets
-```{r heatmap, fig.height=10, fig.width=5}
+```{r heatmap, fig.height=10, fig.width=8}
 # for each cell type select 5 genesets with largest t-statistic
 # and 1 geneset with the lowest
 # Grey boxes indicate the gene set could not be evaluted because
@@ -255,7 +280,7 @@ plotZenithResults(res_zenith, 5, 1)
 
 ### All gene sets with FDR < 5%
 Here, show all genes with FDR < 5% in any cell type
-```{r heatmap2, fig.height=10, fig.width=5}
+```{r heatmap2, fig.height=10, fig.width=8}
 # get genesets with FDR < 5%
 gs = unique(res_zenith$Geneset[res_zenith$FDR < 0.05])
 
