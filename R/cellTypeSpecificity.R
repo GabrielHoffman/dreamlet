@@ -1,6 +1,16 @@
 # Gabriel Hoffman
 # Nov 8, 2021
 
+#' Class cellSpecificityValues 
+#'
+#' Class \code{cellSpecificityValues} cell type specificity values for each gene and cell type
+#'
+#' @name cellSpecificityValues-class
+#' @rdname cellSpecificityValues-class
+#' @exportClass cellSpecificityValues
+setClass("cellSpecificityValues", contains="DFrame")
+
+
 
 
 #' Get cell type specificity of gene expression
@@ -79,7 +89,7 @@ cellTypeSpecificity = function(pb,...){
 	dge = DGEList(geneExpr)
 	dge = calcNormFactors(dge,...)
 
-	# evalute counts per million
+	# evaluate counts per million
 	geneExpr = cpm(dge, log=FALSE)
 
 	# for each gene, compute fraction of expression
@@ -87,20 +97,11 @@ cellTypeSpecificity = function(pb,...){
 	# df = DataFrame(geneExpr.fract)
 	# colnames(df) = colnames(geneExpr.fract)
 
-	df = DataFrame(geneExpr / rowSums(geneExpr), check.names=FALSE)
+	df = DataFrame(totalCPM =rowSums(geneExpr),
+		geneExpr / rowSums(geneExpr), check.names=FALSE)
 
 	new("cellSpecificityValues", df)
 }
-
-
-#' Class cellSpecificityValues 
-#'
-#' Class \code{cellSpecificityValues} cell type specificity valupes for each gene and cell type
-#'
-#' @name cellSpecificityValues-class
-#' @rdname cellSpecificityValues-class
-#' @exportClass cellSpecificityValues
-setClass("cellSpecificityValues", contains="DataFrame")
 
 
 

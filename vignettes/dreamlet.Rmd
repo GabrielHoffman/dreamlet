@@ -86,21 +86,6 @@ sce <- sce[, !ol]
 sce$StimStatus = sce$stim
 ```
 
-```{r tnse}
-library(scattermore)
-
-df_tsne = data.frame(reducedDim(sce), CellType = sce$cell)
-
-ggplot(df_tsne, aes(tsne1, tsne2, color=CellType)) +
-  # geom_scattermore(pointsize=1) + 
-  geom_point(size=1) +
-  theme_classic() +
-  theme(aspect.ratio=1) +
-  xlab("TNSE 1") +
-  ylab("TNSE 2")
-```
-
-
 ## Aggregate to pseudobulk
 Dreamlet, like muscat, performs analysis at the pseudobulk-level by summing <u>raw counts</u> across cells for a given sample and cell type.  `aggregateToPseudoBulk` is substantially faster for large on-disk datasets than [`muscat::aggregateData`](https://rdrr.io/bioc/muscat/man/aggregateData.html).
 
@@ -328,7 +313,7 @@ Identifying genes that are differentially expressed between cell clusters incorp
 
 ```{r dreamletCompareClusters}
 # test differential expression between B cells and the rest of the cell clusters
-ct.pairs = c("B cells", "rest")
+ct.pairs = c("CD4 T cells", "rest")
  
 fit = dreamletCompareClusters( pb, ct.pairs, method="fixed")
 
@@ -340,125 +325,31 @@ head(df_Bcell)
 ```
 
 # Gene-cluster specificity
-Evaluate the specificity of each gene for each cluster:
+Evaluate the specificity of each gene for each cluster, retaining only highly expressed genes:
 ```{r cellTypeSpecificity}
 df_cts = cellTypeSpecificity( pb )
+ 
+# retain only genes with total CPM summed across cell type > 100
+df_cts = df_cts[df_cts$totalCPM > 100,]
 
 # Violin plot of specificity score for each cell type
-plotViolin(df_cts)
+plotViolin(df_cts) 
 ```
 
 Highlight expression fraction for most specific gene from each cell type:
 ```{r plotPercentBars}
 genes = rownames(df_cts)[apply(df_cts, 2, which.max)]
 plotPercentBars( df_cts, genes = genes )
-
+  
 dreamlet::plotHeatmap( df_cts, genes = genes)
 ```
 
-
-```{r exit, cache=FALSE, eval=TRUE, echo=FALSE}
-knitr::knit_exit()
+# Session Info
+<details>
+```{r session, echo=FALSE}
+sessionInfo()
 ```
-
-
-
-<!---
-```{r dreamletCompareClusters.all}
-df = lapply( assayNames(pb), function(CT){
-  res = dreamletCompareClusters( pb, c(CT, "rest"), method="fixed", min.count=5)
-  data.frame(cluster = CT, Gene = rownames(res), res)
-})
-df = do.call(rbind, df)
-rownames(df) = c()
-
-table(df$P.Value < 1e-4)
-
-markerGenes = lapply( assayNames(pb), function(CT){
-  df[df$cluster == CT,][1:5, 'Gene']
-  })
-names(markerGenes) = assayNames(pb)
-
-genes = unique(unlist(markerGenes))
-
-df_cts = cellTypeSpecificity( pb)
-dreamlet::plotHeatmap( df_cts, genes)
-
-
-# sum counts for each cell type
-geneCounts = lapply( assayNames(pb), function(key){
-
-  # get expression for this assay, and sum across all samples
-  rowSums(assay(pb, key))
-  })
-names(geneCounts) = assayNames(pb)
-geneCounts = do.call(cbind, geneCounts)
-
-# get total expression counts for each cell,
-# and peform normalization
-dge = DGEList(geneCounts)
-dge = calcNormFactors(dge)
-
-# evalute counts per million
-geneExpr = cpm(dge, log=TRUE)
-
-plotHeatmap( geneExpr, genes)
-```
---->
-
-
-
-
-
-<!---
-Perform statistical tests
-
-```{r testCellComposition, eval=FALSE}
-formula = ~ StimStatus
-coef = 'StimStatusstim'
-
-# default is negative binomial model
-# poisson model gives similar effect sizes, but *much* smaller standard errors
-cellTypeCompositionTest( pb, formula, coef)
-```
-
-```{r testCellComposition.eval, results="html", echo=FALSE}
-formula = ~ StimStatus
-coef = 'StimStatusstim'
-
-tab1 = cellTypeCompositionTest( pb, formula, coef)
-tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
-
-knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(full_width = FALSE, html_font = "Cambria")
-```
-
-Partition variation in cell type composition
-```{r cellTypeCompositionVarPart, fig.height=2, fig.width=6}
-df_vp = cellTypeCompositionVarPart( pb, formula)
-
-rownames(df_vp) = df_vp$assay
-plotPercentBars(df_vp[,-1])
-```
-
-
-```{r testCellComposition.nb, eval=FALSE}
-# negative binomial model is more conservative.
-# estimated effects sizes are very similar, 
-#   but the standard errors are larger here
-cellTypeCompositionTest( pb, formula, coef, "nb")
-```
-
-```{r testCellComposition.nb.eval, results="html", echo=FALSE}
-tab1 = cellTypeCompositionTest( pb, formula, coef, "nb")
-tab1$pValue = format(tab1$pValue, scientific = TRUE, digits=2)
-
-knitr::kable(tab1, row.names=FALSE, digits=c(2, 2, 2, 3, 3)) %>%  kable_classic(full_width = FALSE, html_font = "Cambria")
-```
---->
-
-
-
-
+</details>
 
 
 

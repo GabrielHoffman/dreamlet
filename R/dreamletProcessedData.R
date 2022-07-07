@@ -295,9 +295,9 @@ setMethod("details", "dreamletResult",
 setGeneric('extractData', function(x, assay) standardGeneric("extractData"))
 
 
-#' Extract expression and colData
+#' Extract expression and \code{colData}
 #' 
-#' Extract expression and colData \code{dreamletProcessedData}
+#' Extract expression and \code{colData} from \code{dreamletProcessedData}
 #'
 #' @param x A \code{dreamletProcessedData} object
 #' @param assay assay to extract
