@@ -19,7 +19,7 @@ extractData(x, assay)
 \code{data.frame} or \code{DataFrame} of merged expression and colData
 }
 \description{
-Extract expression and colData \code{dreamletProcessedData}
+Extract expression and \code{colData} from \code{dreamletProcessedData}
 }
 \examples{
 library(muscat)

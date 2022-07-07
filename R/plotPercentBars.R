@@ -120,6 +120,10 @@ setMethod("plotPercentBars", "cellSpecificityValues",
 		warning(txt)
 	}
 
+	# omit column totalCPM, if it exists
+	i = which(colnames(x) == "totalCPM")
+	if( length(i) > 0) x= x[,-1]
+
 	df = data.frame(x[idx,], check.names=FALSE)
 	df$gene = rownames(df)
 	df_melt = melt(df, id.vars="gene")

@@ -1,3 +1,6 @@
+# dreamlet 0.0.46
+  - add `totalCPM` column to output of `cellTypeSpecificity()` to use for filtering.  Functions `dreamlet::plotHeatmap()` `plotViolin()` and `plotPercentBars()` now ignore this column 
+
 # dreamlet 0.0.45
   - update documentation
 

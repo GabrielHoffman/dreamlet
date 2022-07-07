@@ -5,5 +5,5 @@
 \alias{cellSpecificityValues-class}
 \title{Class cellSpecificityValues}
 \description{
-Class \code{cellSpecificityValues} cell type specificity valupes for each gene and cell type
+Class \code{cellSpecificityValues} cell type specificity values for each gene and cell type
 }

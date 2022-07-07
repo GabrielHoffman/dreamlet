@@ -103,6 +103,7 @@ setMethod("plotGeneHeatmap", "dreamletResult",
 	  theme_classic() +
 	  scale_fill_gradient2("z-statistic", low="blue", mid="white", high="red", limits=c(-zmax, zmax), na.value="grey70")  +
 	  theme(aspect.ratio=nrow/ncol, axis.text.x = element_text(angle = 45, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5)) +
-	  ylab("Gene")
+	  ylab("Gene") +
+	  xlab("Cell type")
 })
 

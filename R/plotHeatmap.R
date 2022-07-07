@@ -55,6 +55,10 @@ setMethod("plotHeatmap", "cellSpecificityValues",
 	# pass R CMD check
 	value = variable = gene = NA
 
+	# omit column totalCPM, if it exists
+	i = which(colnames(x) == "totalCPM")
+	if( length(i) > 0) x = x[,-1]
+
   df = data.frame(gene = rownames(x), x, check.names=FALSE)
 
 	df_melt = reshape2::melt(df, id.vars="gene")

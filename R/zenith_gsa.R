@@ -18,6 +18,7 @@ setGeneric('zenith_gsa', zenith::zenith_gsa)
 #' @param n_genes_min minumum number of genes in a geneset
 #' @param inter.gene.cor if NA, estimate correlation from data.  Otherwise, use specified value
 #' @param progressbar if TRUE, show progress bar
+# @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments
 #'  
 #' @return \code{data.frame} of results for each gene set and cell type 
@@ -62,6 +63,7 @@ setGeneric('zenith_gsa', zenith::zenith_gsa)
 #' @importFrom limma ids2indices
 #' @importFrom zenith zenith recodeToList
 #' @importFrom stats p.adjust
+#' @importFrom BiocParallel bplapply
 #'
 #' @rdname zenith_gsa-methods
 #' @aliases zenith_gsa,dreamletResult,GeneSetCollection,ANY-method
@@ -78,6 +80,7 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetColle
 
 	# convert GeneSetCollection to list
 	geneSets.lst = recodeToList( geneSets )
+	rm(geneSets)
 
 	# for each assay
 	df_zenith = lapply( assayNames(fit), function(k){
