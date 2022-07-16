@@ -17,7 +17,7 @@ output:
 
 <!---
 
-cd /Users/gabrielhoffman/workspace/repos/variancePartition/vignettes
+cd /Users/gabrielhoffman/workspace/repos/dreamlet/vignettes
 
 # rm -rf dreamlet_cache/
 
