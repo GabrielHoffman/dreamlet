@@ -61,7 +61,8 @@ setGeneric('zenith_gsa', zenith::zenith_gsa)
 #' plotZenithResults(res_zenith, 3, 1)
 #' 
 #' @importFrom limma ids2indices
-#' @importFrom zenith zenith recodeToList
+#' @importFrom zenith zenith 
+#' @importFrom GSEABase geneIds
 #' @importFrom stats p.adjust
 #' @importFrom BiocParallel bplapply
 #'
@@ -79,7 +80,7 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetColle
 	}
 
 	# convert GeneSetCollection to list
-	geneSets.lst = recodeToList( geneSets )
+	geneSets.lst = geneIds( geneSets )
 	rm(geneSets)
 
 	# for each assay
@@ -127,7 +128,8 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetColle
 
 #'
 #' @importFrom limma ids2indices cameraPR
-#' @importFrom zenith zenith recodeToList
+#' @importFrom zenith zenith
+#' @importFrom GSEABase geneIds
 #' @importFrom stats p.adjust
 #' @importFrom ashr get_pm get_lfsr get_psd
 #'
@@ -155,7 +157,7 @@ setMethod("zenith_gsa", signature(fit="dreamlet_mash_result", geneSets = "GeneSe
 	}
 
 	# convert GeneSetCollection to list
-	geneSets.lst = recodeToList( geneSets )
+	geneSets.lst = geneIds( geneSets )
 
 	# for each cell type (i.e. column)
 	df_zenith = lapply( colnames(statMat), function(key){
