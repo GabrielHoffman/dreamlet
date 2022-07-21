@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.44</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,12 +68,17 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>pb</dt>
 <dd><p><code>SingleCellExperiment</code> of pseudobulk data where easy <code>assay</code> is a cell type.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>other arguments passed to <code><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html" class="external-link">edgeR::calcNormFactors()</a></code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>matrix of the fraction of expression attributable to each cell type for each gene.</p>
+    
+
+<p>matrix of the fraction of expression attributable to each cell type for each gene.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -104,8 +109,8 @@
 <span class="r-in"><span class="co"># Compute the maximum specificity score for each gene</span></span>
 <span class="r-in"><span class="va">scoreMax</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scoreMax</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      HES4     ISG15  AURKAIP1    MRPL20     SSU72      RER1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4642496 0.4958420 0.2204701 0.3240954 0.2995513 0.2563389 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       HES4      ISG15   AURKAIP1     MRPL20      SSU72       RER1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   585.0935 61555.5769  1012.0795   644.9976   835.4867  1049.8381 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># For each cell type, get most specific gene</span></span>
 <span class="r-in"><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
@@ -125,13 +130,11 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel
-Hoffman</a>.</p>
+  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

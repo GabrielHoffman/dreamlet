@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.44</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,34 +82,61 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>y</dt>
 <dd><p>matrix of counts or log2 CPM</p></dd>
+
+
 <dt>formula</dt>
 <dd><p>regression formula for differential expression analysis</p></dd>
+
+
 <dt>data</dt>
 <dd><p>metadata used in regression formula</p></dd>
+
+
 <dt>n.cells</dt>
 <dd><p>array of cell count for each sample</p></dd>
+
+
 <dt>min.cells</dt>
 <dd><p>minimum number of observed cells for a sample to be included in the analysis</p></dd>
+
+
 <dt>min.count</dt>
 <dd><p>minimum number of reads for a gene to be considered expressed in a sample.  Passed to <code><a href="https://rdrr.io/pkg/edgeR/man/filterByExpr.html" class="external-link">edgeR::filterByExpr</a></code></p></dd>
+
+
 <dt>min.samples</dt>
 <dd><p>minimum number of samples passing cutoffs for cell cluster to be retained</p></dd>
+
+
 <dt>isCounts</dt>
 <dd><p>logical, indicating if data is raw counts</p></dd>
+
+
 <dt>normalize.method</dt>
 <dd><p>normalization method to be used by <code>calcNormFactors</code></p></dd>
+
+
 <dt>useCountsWeights</dt>
 <dd><p>use cell count weights</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>show messages</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>parameters for parallel evaluation</p></dd>
+
+
 <dt>...</dt>
 <dd><p>other arguments passed to <code>dream</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>EList</code> object storing log2 CPM and precision weights</p>
+    
+
+<p><code>EList</code> object storing log2 CPM and precision weights</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -117,13 +144,11 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel
-Hoffman</a>.</p>
+  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
