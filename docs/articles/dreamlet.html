@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.46</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,8 +88,8 @@ analysis of pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-07-06
-20:31:59</h4>
+            <h4 data-toc-skip class="date">Run on 2022-07-21
+15:31:06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -99,7 +99,7 @@ analysis of pseudobulk data</h3>
     
 <!---
 
-cd /Users/gabrielhoffman/workspace/repos/variancePartition/vignettes
+cd /Users/gabrielhoffman/workspace/repos/dreamlet/vignettes
 
 # rm -rf dreamlet_cache/
 
@@ -157,7 +157,7 @@ gives us a oppurtunity to walk through a standard dreamlet workflow.</p>
 
 <span class="co"># only keep singlet cells with sufficient reads</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span>
 
 <span class="co"># compute QC metrics</span>
 <span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
@@ -193,7 +193,7 @@ on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.htm
     verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># one 'assay' per cell type</span>
-<span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "B cells"           "CD14+ Monocytes"   "CD4 T cells"      </span>
 <span class="co">## [4] "CD8 T cells"       "Dendritic cells"   "FCGR3A+ Monocytes"</span>
 <span class="co">## [7] "Megakaryocytes"    "NK cells"</span></code></pre>

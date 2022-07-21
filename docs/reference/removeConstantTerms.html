@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.44</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,16 +68,21 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>formula</dt>
 <dd><p>original formula</p></dd>
+
+
 <dt>data</dt>
 <dd><p>data.frame</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a formula, possibly with terms omitted.</p>
+    
+
+<p>a formula, possibly with terms omitted.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Adapted from <code><a href="https://rdrr.io/pkg/MoEClust/man/drop_constants.html" class="external-link">MoEClust::drop_constants</a></code></p>
+    <p>Adapted from <code>MoEClust::drop_constants</code></p>
     </div>
 
     <div class="section level2">
@@ -86,12 +91,12 @@
 <span class="r-in"><span class="co"># Valid formula</span></span>
 <span class="r-in"><span class="fu">removeConstantTerms</span><span class="op">(</span><span class="op">~</span> <span class="va">group</span> <span class="op">+</span> <span class="va">extra</span>, <span class="va">sleep</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~group + extra</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f80f7038a20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f83c6e9c870&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># there is no variation in 'group' in this dataset</span></span>
 <span class="r-in"><span class="fu">removeConstantTerms</span><span class="op">(</span><span class="op">~</span> <span class="va">group</span> <span class="op">+</span> <span class="va">extra</span>, <span class="va">sleep</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 + extra</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f80f7038a20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f83c6e9c870&gt;</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -100,13 +105,11 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel
-Hoffman</a>.</p>
+  <p></p><p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
