@@ -506,6 +506,16 @@ setMethod("dreamlet", "dreamletProcessedData",
 	# extract metadata shared across assays
 	data_constant = as.data.frame(data)
 
+	# remove samples with missing covariate data
+	idx = sapply(all.vars(formula), function(v) {
+	        which(is.na(data_constant[[v]]))
+    })
+    idx = unique(unlist(idx))    
+
+    if( length(idx) > 1){
+	    data_constant = droplevels(data_constant[-idx,,drop=FALSE])
+	}
+
 	pkeys = x@pkeys
 
 	# for each assay
@@ -516,8 +526,10 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		geneExpr = assay(x, k)
 
-		# get names of samples to extract from metadata
-		ids = colnames(geneExpr)
+		# get names of samples to extract from 
+		# intersecting between geneExpr and metadata
+		ids = intersect(colnames(geneExpr), rownames(data_constant)) 
+		geneExpr = geneExpr[,ids,drop=FALSE]
 
 		# merge data_constant and pmetadata based on pkeys and assay k
 		data2 = merge_metadata(data_constant[ids,,drop=FALSE], metadata(x), pkeys, k)
@@ -540,7 +552,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 			}			
 
 			fit = tryCatch( {
-				# fit linear (mixed) model for each gene			
+				# fit linear (mixed) model for each gene		
 				dream( geneExpr, form_mod, data2, L = L, BPPARAM=BPPARAM,..., quiet=TRUE)
 				}, 
 				error = function(e) NULL)
@@ -588,7 +600,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		data.frame( assay = id,
 			n_retain = resList[[id]]$n_retain,
-			formula = paste(as.character(resList[[id]]$formula), collapse=''),
+			formula = Reduce(paste, deparse(resList[[id]]$formula)),
 			formDropsTerms = ! equalFormulas( resList[[id]]$formula, formula)	)
 	})
 	df_details = do.call(rbind, df_details)

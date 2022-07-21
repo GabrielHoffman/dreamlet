@@ -1,3 +1,6 @@
+# dreamlet 0.0.47
+  - update filtering of covariates, especially for when many samples are dropped 
+
 # dreamlet 0.0.46
   - add `totalCPM` column to output of `cellTypeSpecificity()` to use for filtering.  Functions `dreamlet::plotHeatmap()` `plotViolin()` and `plotPercentBars()` now ignore this column 
 
