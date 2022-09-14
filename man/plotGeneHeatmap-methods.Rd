@@ -7,9 +7,23 @@
 \alias{plotGeneHeatmap,dreamletResult,dreamletResult-method}
 \title{Heatmap of genes and assays}
 \usage{
-plotGeneHeatmap(x, coef, genes, assays = assayNames(x), zmax = NULL)
+plotGeneHeatmap(
+  x,
+  coef,
+  genes,
+  assays = assayNames(x),
+  zmax = NULL,
+  transpose = FALSE
+)
 
-\S4method{plotGeneHeatmap}{dreamletResult}(x, coef, genes, assays = assayNames(x), zmax = NULL)
+\S4method{plotGeneHeatmap}{dreamletResult}(
+  x,
+  coef,
+  genes,
+  assays = assayNames(x),
+  zmax = NULL,
+  transpose = FALSE
+)
 }
 \arguments{
 \item{x}{A \code{dreamletResult} object}
@@ -21,6 +35,8 @@ plotGeneHeatmap(x, coef, genes, assays = assayNames(x), zmax = NULL)
 \item{assays}{array of assay names to include in analysis. Defaults to \code{assayNames(x)}}
 
 \item{zmax}{maximum z.std value}
+
+\item{transpose}{(default: FALSE) Use `coord_flip()` to flip axies}
 }
 \value{
 Heatmap plot for specified genes and assays
