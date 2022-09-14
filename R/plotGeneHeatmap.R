@@ -8,12 +8,13 @@
 #' Heatmap of genes and assays
 #' 
 # Heatmap of genes and assays
-#'
+#' 
 #' @param x A \code{dreamletResult} object
 #' @param coef column number or column name specifying which coefficient or contrast of the linear model is of interest.
 #' @param coef array of genes to include in plot
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(x)}
 #' @param zmax maximum z.std value 
+#' @param transpose (default: FALSE) Use `coord_flip()` to flip axies
 #' 
 #' @return Heatmap plot for specified genes and assays
 #'  
@@ -21,7 +22,7 @@
 #' @docType methods
 #' @rdname plotGeneHeatmap-methods
 setGeneric("plotGeneHeatmap", 
-	function(x, coef, genes, assays=assayNames(x), zmax=NULL){
+	function(x, coef, genes, assays=assayNames(x), zmax=NULL, transpose=FALSE){
 
   standardGeneric("plotGeneHeatmap")
 })
@@ -32,12 +33,13 @@ setGeneric("plotGeneHeatmap",
 #' Heatmap of genes and assays
 #' 
 #' Heatmap of genes and assays
-#'
+#' 
 #' @param x A \code{dreamletResult} object
 #' @param coef column number or column name specifying which coefficient or contrast of the linear model is of interest.
 #' @param genes array of genes to include in plot 
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(x)}
 #' @param zmax maximum z.std value 
+#' @param transpose (default: FALSE) Use `coord_flip()` to flip axies
 #' 
 #' @return Heatmap plot for specified genes and assays
 #' 
@@ -69,7 +71,7 @@ setGeneric("plotGeneHeatmap",
 #' @importFrom tidyr complete
 #' @import ggplot2
 setMethod("plotGeneHeatmap", "dreamletResult",
-	function(x, coef, genes, assays=assayNames(x), zmax=NULL){
+	function(x, coef, genes, assays=assayNames(x), zmax=NULL, transpose=FALSE){
 
 	# extract gene-level results
 	tab = topTable(x, coef=coef, number=Inf)
@@ -97,13 +99,21 @@ setMethod("plotGeneHeatmap", "dreamletResult",
 
 	ncol = length(unique(tab$assay))
 	nrow = length(unique(tab$ID))
+	aspect.ratio = nrow / ncol
 
-	ggplot(tab, aes(assay, ID, fill=z.std)) +
+	fig = ggplot(tab, aes(assay, ID, fill=z.std)) +
 	  geom_tile() +
 	  theme_classic() +
 	  scale_fill_gradient2("z-statistic", low="blue", mid="white", high="red", limits=c(-zmax, zmax), na.value="grey70")  +
-	  theme(aspect.ratio=nrow/ncol, axis.text.x = element_text(angle = 45, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5)) +
 	  ylab("Gene") +
 	  xlab("Cell type")
-})
 
+	if( transpose ){
+	  fig = fig + theme(aspect.ratio=1/aspect.ratio, axis.text.x = element_text(angle = 45, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5)) + 
+	  		coord_flip()
+	}else{
+	  fig = fig + theme(aspect.ratio=aspect.ratio, axis.text.x = element_text(angle = 45, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5)) 
+	}
+
+	fig
+})

@@ -1,3 +1,7 @@
+# dreamlet 0.0.48
+  - Sept 14, 2022
+  - add `transpose` argument to `plotGeneHeatmap()`
+
 # dreamlet 0.0.47
   - update filtering of covariates, especially for when many samples are dropped 
 
