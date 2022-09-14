@@ -9,16 +9,18 @@
 \alias{plotVoom,list,list-method}
 \title{Plot voom curves from each cell type}
 \usage{
-plotVoom(x, ncol = 3)
+plotVoom(x, ncol = 3, alpha = 0.5)
 
-\S4method{plotVoom}{dreamletProcessedData}(x, ncol = 3)
+\S4method{plotVoom}{dreamletProcessedData}(x, ncol = 3, alpha = 0.5)
 
-\S4method{plotVoom}{EList}(x, ncol = 3)
+\S4method{plotVoom}{EList}(x, ncol = 3, alpha = 0.5)
 }
 \arguments{
 \item{x}{dreamletProcessedData}
 
 \item{ncol}{number of columns in the plot}
+
+\item{alpha}{transparency of points}
 }
 \value{
 Plot of mean-variance trend

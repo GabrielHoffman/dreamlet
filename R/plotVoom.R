@@ -10,6 +10,7 @@
 #' 
 #' @param x dreamletProcessedData
 #' @param ncol number of columns in the plot
+#' @param alpha transparency of points
 #'
 #' @return Plot of mean-variance trend
 #'
@@ -40,7 +41,7 @@
 #' @docType methods
 #' @rdname plotVoom-methods
 setGeneric("plotVoom", 
-  function(x, ncol=3){
+  function(x, ncol=3, alpha=.5){
 
   standardGeneric("plotVoom")
 })
@@ -49,7 +50,7 @@ setGeneric("plotVoom",
 #' @rdname plotVoom-methods
 #' @aliases plotVoom,dreamletProcessedData,dreamletProcessedData-method
 setMethod("plotVoom", "dreamletProcessedData",
-  function(x, ncol=3){
+  function(x, ncol=3, alpha=.5){
 
 	# Pass R CMD check
 	y = NULL
@@ -94,7 +95,16 @@ setMethod("plotVoom", "dreamletProcessedData",
 	})	
 	df_curve = do.call(rbind, df.list)
 
-	ggplot(df_points, aes(x,y)) + geom_point(size=0.1) + theme_bw() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + facet_wrap(~id, ncol=ncol) + xlab(xlab) + ylab(ylab) + xlim(xlim) + ylim(ylim) + geom_line(data = df_curve, aes(x,y), color="red")
+	ggplot(df_points, aes(x,y)) + 
+		geom_point(size=0.1, alpha=alpha) + 
+		theme_bw() + 
+		theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5))+ 
+		facet_wrap(~id, ncol=ncol) + 
+		xlab(xlab) + 
+		ylab(ylab) + 
+		xlim(xlim) + 
+		ylim(ylim) + 
+		geom_line(data = df_curve, aes(x,y), color="red")
 })
 
 
@@ -102,7 +112,7 @@ setMethod("plotVoom", "dreamletProcessedData",
 #' @rdname plotVoom-methods
 #' @aliases plotVoom,list,list-method
 setMethod("plotVoom", "EList",
-  function(x, ncol=3){
+  function(x, ncol=3, alpha=.5){
 
 	# Pass R CMD check
 	y = NULL
@@ -124,7 +134,14 @@ setMethod("plotVoom", "EList",
 	# make data.frame of curves
 	df_curve = with(x$voom.line, data.frame(x,y))
 
-	ggplot(df_points, aes(x,y)) + geom_point(size=0.1) + theme_bw() + theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + xlab(xlab) + ylab(ylab) + xlim(xlim) + ylim(ylim) + geom_line(data = df_curve, aes(x,y), color="red")
+	ggplot(df_points, aes(x,y)) + 
+		geom_point(size=0.1, alpha=alpha) + 
+		theme_bw() + 
+		theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + xlab(xlab) + 
+		ylab(ylab) + 
+		xlim(xlim) + 
+		ylim(ylim) + 
+		geom_line(data = df_curve, aes(x,y), color="red")
 })
 
 
