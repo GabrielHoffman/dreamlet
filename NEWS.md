@@ -2,6 +2,7 @@
   - Sept 14, 2022
   - add `transpose` argument to `plotGeneHeatmap()`
   - and `alpha` arugment to `plotVoom()`
+  - update y axis and outlines in `plotVarPart()`
 
 # dreamlet 0.0.47
   - update filtering of covariates, especially for when many samples are dropped 
