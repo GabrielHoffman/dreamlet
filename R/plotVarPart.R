@@ -68,7 +68,7 @@ setMethod("plotVarPart", "DataFrame",
 		ylab("Variance explained (%)") + 
 		xlab('') + 
 		scale_y_continuous(limits=c(0, 100), expand=c(0,3)) +
-		theme_bw() + 
+		theme_classic() + 
 		geom_boxplot(width=0.07, fill="grey", outlier.colour='black') + 
 		scale_fill_manual(values=col) +
 		theme(legend.position="none", plot.title=element_text(hjust=0.5),
