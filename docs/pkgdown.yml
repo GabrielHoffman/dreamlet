@@ -1,11 +1,11 @@
 pandoc: '2.18'
-pkgdown: 2.0.4
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   dreamlet: dreamlet.html
   h5ad_on_disk: h5ad_on_disk.html
   mashr: mashr.html
-last_built: 2022-07-21T19:28Z
+last_built: 2022-09-15T14:53Z
 urls:
   reference: http://gabrielhoffman.github.io/dreamlet/reference
   article: http://gabrielhoffman.github.io/dreamlet/articles

@@ -158,7 +158,7 @@ plotPercentBars(vp.lst[vp.lst$gene %in% genes,])
 
 ```{r vp.violin, fig.height=7}
 # Summarize variance fractions genome-wide for each cell type
-plotVarPart(vp.lst, label.angle=60)
+plotVarPart(vp.lst, label.angle=60) 
 ```
 
 
