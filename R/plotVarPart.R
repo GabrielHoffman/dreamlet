@@ -63,9 +63,11 @@ setMethod("plotVarPart", "DataFrame",
 	# pass R CMD check
 	variable = value = NULL
 
-	fig = ggplot(df, aes(variable, value)) + 
-		geom_violin( scale="width", aes(fill = factor(variable))) + 
-		ylab("Variance explained (%)") + xlab('') + ylim(0, 1) + 
+	fig = ggplot(df, aes(variable, 100*value)) + 
+		geom_violin( scale="width", aes(fill = factor(variable)), color=NA) + 
+		ylab("Variance explained (%)") + 
+		xlab('') + 
+		scale_y_continuous(limits=c(0, 100), expand=c(0,3)) +
 		theme_bw() + 
 		geom_boxplot(width=0.07, fill="grey", outlier.colour='black') + 
 		scale_fill_manual(values=col) +
