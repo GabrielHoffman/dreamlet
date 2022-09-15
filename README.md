@@ -41,7 +41,8 @@ Dreamlet builds on previous work on variance partitioning and differential expre
 ## Install
 ```r
 # this should install dependencies too
-devtools::install_github("GabrielHoffman/dreamlet")
+# where XXXX is your GitHub Personal Access Token
+devtools::install_github("GabrielHoffman/dreamlet", auth_token='XXXX')
 ```
 
 
