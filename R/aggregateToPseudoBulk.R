@@ -52,7 +52,7 @@
 
 #' Aggregation of single-cell to pseudobulk data
 #' 
-#' Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster for on-disk \code{SingleCellExperiment} backed by H5AD files
+#' Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster for \code{SingleCellExperiment} backed by H5AD files using on-disk storage.
 #' 
 #' @param x a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 #' @param assay character string specifying the assay slot to use as 
