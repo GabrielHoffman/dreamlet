@@ -1,3 +1,7 @@
+# dreamlet 0.0.49
+  - Oct 17, 2022
+  - add `computeCellCounts()`
+
 # dreamlet 0.0.48
   - Sept 14, 2022
   - add `transpose` argument to `plotGeneHeatmap()`

@@ -38,7 +38,7 @@
 
 \item{use.ranks}{do a rank-based test \code{TRUE} or a parametric test \code{FALSE}? default: FALSE}
 
-\item{n_genes_min}{minumum number of genes in a geneset}
+\item{n_genes_min}{minimum number of genes in a geneset}
 
 \item{inter.gene.cor}{if NA, estimate correlation from data.  Otherwise, use specified value}
 
