@@ -16,7 +16,6 @@ matrix of cell counts with samples as rows and cell types as columns
 Extract matrix of cell counts from \code{SingleCellExperiment}
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 

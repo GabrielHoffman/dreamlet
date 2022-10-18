@@ -15,7 +15,7 @@ setGeneric('zenith_gsa', zenith::zenith_gsa)
 #' @param geneSets \code{GeneSetCollection} 
 #' @param coefs coefficients to test using \code{topTable(fit, coef=coefs[i])}
 #' @param use.ranks do a rank-based test \code{TRUE} or a parametric test \code{FALSE}? default: FALSE
-#' @param n_genes_min minumum number of genes in a geneset
+#' @param n_genes_min minimum number of genes in a geneset
 #' @param inter.gene.cor if NA, estimate correlation from data.  Otherwise, use specified value
 #' @param progressbar if TRUE, show progress bar
 # @param BPPARAM parameters for parallel evaluation
