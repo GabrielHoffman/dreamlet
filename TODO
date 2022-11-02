@@ -1,3 +1,10 @@
+
+Retain mean of QC metrics in aggregateToPseudoBulk
+
+
+ 
+
+
 Better describe warnings:
 	
 	Warning in .check_arg_assay(x, assay) :
