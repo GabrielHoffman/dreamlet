@@ -1,3 +1,7 @@
+# dreamlet 0.0.50
+  - Nov 2, 2022
+  - fix bug in `zenith_gsa()` for few gene sets
+
 # dreamlet 0.0.49
   - Oct 17, 2022
   - add `computeCellCounts()`

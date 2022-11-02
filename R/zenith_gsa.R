@@ -98,7 +98,7 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetColle
 		# for each coefficient selected
 		df_res = lapply( coefs, function(coef){
 			# if coef is available
-			if( coef %in% colnames(coef(fit_local)) ){
+			if( (coef %in% colnames(coef(fit_local))) & (length(index) > 0) ){
 				# run zenith on dream fits
 				df_res = zenith(fit_local, coef, index, use.ranks=use.ranks, inter.gene.cor=inter.gene.cor, progressbar=progressbar)
 			
