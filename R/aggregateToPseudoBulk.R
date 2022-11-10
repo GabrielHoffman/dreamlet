@@ -187,12 +187,15 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     if (length(by) == 2) {
         cd <- colData(x)
         ids <- colnames(pb)
+
+        # keep columns if there is a unique value in each sample
         counts <- vapply(ids, function(u) {
             m <- as.logical(match(cd[, by[2]], u, nomatch = 0))
             vapply(cd[m, ], function(u) length(unique(u)), numeric(1))
         }, numeric(ncol(colData(x))))
         cd_keep <- apply(counts, 1, function(u) all(u == 1))
         cd_keep <- setdiff(names(which(cd_keep)), by) 
+
         if (length(cd_keep) != 0) {
             m <- match(ids, cd[, by[2]], nomatch = 0)
             cd <- cd[m, cd_keep, drop = FALSE]
@@ -203,6 +206,21 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     return(pb)
 }
 
+
+
+# # keep if continuous, and report mean
+# keep_cont = vapply(cd, function(u) is.double(u), logical(1))
+# keep_cont = setdiff(names(keep_cont)[which(keep_cont)],     cd_keep)
+
+# cd_ids = apply(cd[,by], 1, paste, collapse=' ')
+
+# df_summary = purrr::map_df( unique(cd_ids), function(key){
+#     i = which(cd_ids==key)
+#     mu = colMeans(as.data.frame(cd[i,keep_cont,drop=FALSE]))
+#     data.frame(key, t(mu))
+#     })
+
+# # colData(pb) merge(colData(pb), df_summary)
 
 
 

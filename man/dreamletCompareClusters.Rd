@@ -68,6 +68,13 @@ Perform differential expression between a pair of assays using linear (mixed) mo
 \details{
 Analyze pseudobulk data to identify differential gene expression between two cell clusters or sets of clusters while modeling the cross-donor expression variation and other aspects of the study design.  
 
+\code{dreamletCompareClusters()} is useful for finding genes that are differentially expressed betweeen cell clusters and estimating their fold change.  However, the p-values and number of differentially expressed genes are problematic for two reasons, so users must be careful not to overinterpret them:
+
+\enumerate{
+\item{Cell clusters are typically identified with the same gene expression data used for this differential expression analysis between clusters. The same data is used both for discovery and testing, and this means that the p-values from the differential expression analysis will not be uniform under the null.  This will produce a lot of findings with small p-values even in the absence of true biological differences.}
+\item{The \code{dreamlet} package is designed for large datasets with many subjects.  The sample sizes from cohort studies are an order of magnitude larger than typical single cell studies.  This means that these analyses have huge power to detect even subtle difference in expression between cell clusters.  While cluster-specific marker genes are often discovered from an handful of samples, the \code{dreamlet} package is applicable to 100s or 1000s of subjects.}
+}
+
 \code{method} indicates the regression method used to test differential expression between sets of cell clusters.  Since the same biosample will usually be represented in both sets of cell clusters, \code{method} determines how the paired design is modeled.   For \code{method = "mixed"}, the sample is modeled as a random effect: \code{~ (1|Sample) + ...}. For \code{method = "fixed"}, the sample is modeled as a fixed effect: \code{~ Sample + ...}. For \code{method = "none"}, the pairing is ignored.
 
 When \code{collapse=TRUE} (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If \code{collapse=FALSE}, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with \code{variancePartition::makeContrastsDream()}.

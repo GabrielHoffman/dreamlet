@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.48</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.50</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -161,7 +161,10 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Analyze pseudobulk data to identify differential gene expression between two cell clusters or sets of clusters while modeling the cross-donor expression variation and other aspects of the study design.</p>
-<p><code>method</code> indicates the regression method used to test differential expression between sets of cell clusters.  Since the same biosample will usually be represented in both sets of cell clusters, <code>method</code> determines how the paired design is modeled.   For <code>method = "mixed"</code>, the sample is modeled as a random effect: <code>~ (1|Sample) + ...</code>. For <code>method = "fixed"</code>, the sample is modeled as a fixed effect: <code>~ Sample + ...</code>. For <code>method = "none"</code>, the pairing is ignored.</p>
+<p><code>dreamletCompareClusters()</code> is useful for finding genes that are differentially expressed betweeen cell clusters and estimating their fold change.  However, the p-values and number of differentially expressed genes are problematic for two reasons, so users must be careful not to overinterpret them:</p>
+<ol><li><p>Cell clusters are typically identified with the same gene expression data used for this differential expression analysis between clusters. The same data is used both for discovery and testing, and this means that the p-values from the differential expression analysis will not be uniform under the null.  This will produce a lot of findings with small p-values even in the absence of true biological differences.</p></li>
+<li><p>The <code>dreamlet</code> package is designed for large datasets with many subjects.  The sample sizes from cohort studies are an order of magnitude larger than typical single cell studies.  This means that these analyses have huge power to detect even subtle difference in expression between cell clusters.  While cluster-specific marker genes are often discovered from an handful of samples, the <code>dreamlet</code> package is applicable to 100s or 1000s of subjects.</p></li>
+</ol><p><code>method</code> indicates the regression method used to test differential expression between sets of cell clusters.  Since the same biosample will usually be represented in both sets of cell clusters, <code>method</code> determines how the paired design is modeled.   For <code>method = "mixed"</code>, the sample is modeled as a random effect: <code>~ (1|Sample) + ...</code>. For <code>method = "fixed"</code>, the sample is modeled as a fixed effect: <code>~ Sample + ...</code>. For <code>method = "none"</code>, the pairing is ignored.</p>
 <p>When <code>collapse=TRUE</code> (default) combine all cell clusters within the test set, and separately the baseline set, and estimate a coefficient indicating the differential expression between sets for a given gene.  If <code>collapse=FALSE</code>, estimate a coefficient for each cell type and then identify differential expression using linear contrasts with <code><a href="http://gabrielhoffman.github.io/variancePartition/reference/makeContrastsDream.html" class="external-link">variancePartition::makeContrastsDream()</a></code>.</p>
     </div>
 
