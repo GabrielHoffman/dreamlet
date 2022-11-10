@@ -157,7 +157,7 @@ setMethod("plotVolcano", "dreamlet_mash_result",
   df = df[order(df$lFSR),]
 
   # sort facets by original sorting of assays
-  df$ID.x = factor(df$ID.x, names(x))
+  df$ID.x = factor(df$ID.x, colnames(x$logFC.original))
 
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = Gene.x = lFSR = NULL
