@@ -11,6 +11,7 @@
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
+#' @param min.prop minimum proportion of retained samples with non-zero counts
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param useCountsWeights use cell count weights
@@ -31,7 +32,7 @@
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
 #'
-processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet = TRUE, BPPARAM = SerialParam(),...){
+processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count = 10, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet = TRUE, BPPARAM = SerialParam(),...){
 
 	checkFormula( formula, data)
 	if( is.null(n.cells) ){
@@ -84,7 +85,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 		# design = model.matrix( subbars(formula), data)
 		# Design often includes batch and donor, which are very small
 		# 	this causes too many genes to be retained 
-		keep = suppressWarnings(filterByExpr(y, min.count=min.count))
+		keep = suppressWarnings(filterByExpr(y, min.count=min.count, min.prop=min.prop))
 
 		# weights from w_cells are used in calculating residuals that 
 		# voom uses to compute precision weights
@@ -135,6 +136,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
+#' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param useCountsWeights use cell count weights
@@ -146,7 +148,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #'
 #' @return Object of class \code{dreamletProcessedData} storing voom-style normalized expression data
 #'
-#' @details  For each cell cluster, samples with at least \code{min.cells} are retained.  Genes are retained if they have at least \code{min.count} reads in at least \code{min.samples} samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 5} and \code{min.count = 5} are also reasonable if you want to include more genes in the analysis.
+#' @details  For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 5} and \code{min.count = 5} are also reasonable if you want to include more genes in the analysis.
 #'
 #' @examples
 #' library(muscat)
@@ -174,7 +176,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @export
-processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, pmetadata=NULL, pkeys=NULL, quiet=FALSE, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, min.count = 10, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, pmetadata=NULL, pkeys=NULL, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -248,6 +250,7 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 				min.cells = min.cells,
 				min.count = min.count,
 				min.samples = min.samples, 
+				min.prop = min.prop,
 				isCounts = isCounts,
 				normalize.method = normalize.method, 
 				useCountsWeights=useCountsWeights, 

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.48</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.51</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -177,27 +177,27 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.02 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.019 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.037 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.016 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.019 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Differential expression analysis within each assay,</span></span></span>
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data </span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu">dreamlet</span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.041 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.044 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.063 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.071 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.046 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.068 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.026 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.053 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.056 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># show coefficients estimated for each cell type</span></span></span>
@@ -208,17 +208,7 @@
 <span class="r-in"><span><span class="co"># combines all cell types together</span></span></span>
 <span class="r-in"><span><span class="co"># adj.P.Val gives study-wide FDR</span></span></span>
 <span class="r-in"><span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">"group_idstim"</span>, number<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 3 rows and 9 columns</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         assay          ID     logFC   AveExpr         t     P.Value   adj.P.Val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     B cells       ISG20   3.59771   11.5794   15.5721 1.01377e-18 3.55733e-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 CD4 T cells       ISG15   5.50055   10.1672   21.5266 1.38871e-15 2.43649e-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 CD4 T cells       ISG20   3.07310   10.7918   17.0119 1.37235e-13 1.60520e-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           B     z.std</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;numeric&gt; &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   32.2930   15.5721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   24.9379   21.5266</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   21.2155   17.0119</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in data.frame(assay = k, tab):</span> arguments imply differing number of rows: 1, 0</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

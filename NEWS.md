@@ -1,3 +1,7 @@
+# dreamlet 0.0.51
+  - Nov 10, 2022
+  - in `processAssays()` and `processOneAssay()`, add argument `min.prop` indicating the minimum proportion of retained samples with non-zero counts
+
 # dreamlet 0.0.50
   - Nov 2, 2022
   - fix bug in `zenith_gsa()` for few gene sets

@@ -11,6 +11,7 @@ processAssays(
   min.cells = 10,
   min.count = 10,
   min.samples = 4,
+  min.prop = 0.4,
   isCounts = TRUE,
   normalize.method = "TMM",
   useCountsWeights = TRUE,
@@ -33,6 +34,8 @@ processAssays(
 \item{min.count}{minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
 
 \item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
+
+\item{min.prop}{minimum proportion of retained samples with non-zero counts for a gene to be}
 
 \item{isCounts}{logical, indicating if data is raw counts}
 
@@ -57,7 +60,7 @@ Object of class \code{dreamletProcessedData} storing voom-style normalized expre
 For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells
 }
 \details{
-For each cell cluster, samples with at least \code{min.cells} are retained.  Genes are retained if they have at least \code{min.count} reads in at least \code{min.samples} samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 5} and \code{min.count = 5} are also reasonable if you want to include more genes in the analysis.
+For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 5} and \code{min.count = 5} are also reasonable if you want to include more genes in the analysis.
 }
 \examples{
 library(muscat)

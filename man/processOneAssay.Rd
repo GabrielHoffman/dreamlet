@@ -12,6 +12,7 @@ processOneAssay(
   min.cells = 10,
   min.count = 10,
   min.samples = 4,
+  min.prop = 0.4,
   isCounts = TRUE,
   normalize.method = "TMM",
   useCountsWeights = TRUE,
@@ -34,6 +35,8 @@ processOneAssay(
 \item{min.count}{minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
 
 \item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
+
+\item{min.prop}{minimum proportion of retained samples with non-zero counts}
 
 \item{isCounts}{logical, indicating if data is raw counts}
 
