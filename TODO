@@ -1,5 +1,12 @@
 
-Retain mean of QC metrics in aggregateToPseudoBulk
+
+
+# Nov 2, 2022
+	Push variancePartition and zenith to Bioconductor
+	Push remaCor to CRAN
+
+	Retain mean of QC metrics in aggregateToPseudoBulk
+		Use pmetadata in processAssays()
 
 
  

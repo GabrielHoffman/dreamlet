@@ -20,6 +20,7 @@
 #'
 #' @return \code{EList} object storing log2 CPM and precision weights
 #'
+#' @seealso \code{processAssays()}
 #' @import BiocParallel 
 #' @import limma 
 #' @importFrom variancePartition voomWithDreamWeights
@@ -144,6 +145,8 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #' @param ... other arguments passed to \code{dream}
 #'
 #' @return Object of class \code{dreamletProcessedData} storing voom-style normalized expression data
+#'
+#' @details  For each cell cluster, samples with at least \code{min.cells} are retained.  Genes are retained if they have at least \code{min.count} reads in at least \code{min.samples} samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 5} and \code{min.count = 5} are also reasonable if you want to include more genes in the analysis.
 #'
 #' @examples
 #' library(muscat)

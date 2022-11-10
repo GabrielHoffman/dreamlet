@@ -37,5 +37,7 @@ pb <- aggregateToPseudoBulk(example_sce,
 df = cellTypeSpecificity( pb)
 
 # Violin plot of specificity scores for each cell type
+# Dashed line indicates genes that are equally expressed
+# across all cell types.  For K cell types, this is 1/K
 plotViolin(df)
 }
