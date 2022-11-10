@@ -126,11 +126,11 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.072 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.02 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
 <span class="r-in"><span></span></span>
@@ -138,84 +138,124 @@
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data </span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.044 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.049 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.067 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.071 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.048 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.055 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.03 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.029 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.062 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.12 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run MASH model</span></span></span>
 <span class="r-in"><span><span class="co"># This can take 10s of minutes on real data</span></span></span>
 <span class="r-in"><span><span class="co"># This small datasets should take ~30s</span></span></span>
 <span class="r-in"><span><span class="va">res_mash</span> <span class="op">=</span> <span class="fu">run_mash</span><span class="op">(</span> <span class="va">res.dl</span>, <span class="st">'group_idstim'</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in data.frame(assay = k, tab):</span> arguments imply differing number of rows: 1, 0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># extract statistics from mashr model</span></span></span>
 <span class="r-in"><span><span class="co"># NA values indicate genes not sufficiently expressed</span></span></span>
-<span class="r-in"><span><span class="co"># in a given cell type</span></span></span>
+<span class="r-in"><span><span class="co"># in a given cell type </span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># original logFC</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'head': object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          B cells CD14+ Monocytes CD4 T cells CD8 T cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                        NA       0.6176814          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                         NA       2.6548818          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                          NA      -0.2202786          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                  -0.5591887      -0.9246124 -0.43264268  0.07892874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009 -0.5542913      -0.8377776 -0.02035041  0.90908842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                        NA       0.6705051          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       FCGR3A+ Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                       0.07918305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                        0.99499233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                        -0.66846812</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                        -0.97279604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009       -1.02526737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                      -0.04216179</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># posterior mean for logFC</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_pm</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'head': object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          B cells CD14+ Monocytes CD4 T cells CD8 T cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                        NA       0.4379623          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                         NA       2.5718772          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                          NA      -0.1092377          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                  -0.5523738      -0.7505848 -0.46195943  -0.1917018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009 -0.4939871      -0.7015427 -0.06533366   0.6087126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                        NA       0.4982703          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       FCGR3A+ Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ABRACL                       0.05046108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACOT9                        1.00322342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACP5                        -0.26985565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTB                        -0.78691227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTG1_ENSG00000184009       -0.83077054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ACTR10                      -0.01118286</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># how many gene-by-celltype tests are significant</span></span></span>
 <span class="r-in"><span><span class="co"># i.e.  if a gene is significant in 2 celltypes, it is counted twice</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, useNA<span class="op">=</span><span class="st">"ifany"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_lfsr(res_mash$model):</span> object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE  &lt;NA&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2407  1102  2346 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># how many genes are significant in at least one cell type</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">min</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_lfsr(res_mash$model):</span> object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   593   578 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># how many genes are significant in each cell type</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_lfsr(res_mash$model):</span> object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               143               488               144                77 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FCGR3A+ Monocytes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               250 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># examine top set of genes</span></span></span>
 <span class="r-in"><span><span class="co"># which genes are significant in at least 1 cell type</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/mashr/man/get_significant_results.html" class="external-link">get_significant_results</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'sort': object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "ACTB"                  "ACTG1_ENSG00000184009" "ARHGDIB"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "ATP5L_ENSG00000167283" "ATP6V1G1"              "B2M"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "BRK1"                  "BTF3"                  "BTG1"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "CALM1"                </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Lets examine CXCL3</span></span></span>
 <span class="r-in"><span><span class="co"># There is a lot of variation in the raw logFC</span></span></span>
 <span class="r-in"><span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">[</span><span class="st">"ISG20"</span>,<span class="op">]</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          3.597711          6.122816          3.073100          3.728061 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FCGR3A+ Monocytes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          4.967554 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># posterior mean after borrowing across cell type and genes</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_pm</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">[</span><span class="st">"ISG20"</span>,<span class="op">]</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_pm(res_mash$model):</span> object 'res_mash' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          3.620196          5.954302          3.094058          3.747402 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FCGR3A+ Monocytes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          4.860120 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># gene set analysis using mashr results</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://DiseaseNeuroGenomics.github.io/zenith" class="external-link">zenith</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/get_GeneOntology.html" class="external-link">get_GeneOntology</a></span><span class="op">(</span><span class="st">"CC"</span>, to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-11-10 21:30:12</span>
 <span class="r-in"><span><span class="co"># valid values for statistic: </span></span></span>
 <span class="r-in"><span><span class="co"># "tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)"</span></span></span>
 <span class="r-in"><span><span class="va">df_gs</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/zenith_gsa-methods.html" class="external-link">zenith_gsa</a></span><span class="op">(</span><span class="va">res_mash</span>, <span class="va">go.gs</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'fit' in selecting a method for function 'zenith_gsa': object 'res_mash' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Heatmap of results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/plotZenithResults.html" class="external-link">plotZenithResults</a></span><span class="op">(</span><span class="va">df_gs</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is.data.frame(x):</span> object 'df_gs' not found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 6 rows containing missing values (`geom_text()`).</span>
+<span class="r-plt img"><img src="run_mash-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># forest plot based on mashr results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plotForest-methods.html">plotForest</a></span><span class="op">(</span><span class="va">res_mash</span>, <span class="st">"ISG20"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plotForest': object 'res_mash' not found</span>
+<span class="r-plt img"><img src="run_mash-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># volcano plot based on mashr results</span></span></span>
 <span class="r-in"><span><span class="co"># yaxis uses local false sign rate (lfsr)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plotVolcano': object 'res_mash' not found</span>
+<span class="r-plt img"><img src="run_mash-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -52,7 +52,7 @@ res_mash = run_mash( res.dl, 'group_idstim')
 
 # extract statistics from mashr model
 # NA values indicate genes not sufficiently expressed
-# in a given cell type
+# in a given cell type 
 
 # original logFC
 head(res_mash$logFC.original)

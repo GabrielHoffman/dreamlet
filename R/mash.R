@@ -107,7 +107,7 @@ tabToMatrix = function(tab, col, rn = "ID", cn = "assay"){
 #' 
 #' # extract statistics from mashr model
 #' # NA values indicate genes not sufficiently expressed
-#' # in a given cell type
+#' # in a given cell type 
 #' 
 #' # original logFC
 #' head(res_mash$logFC.original)

@@ -70,7 +70,7 @@ coefNames(res.dl)
 
 # extract results using limma-style syntax
 # combines all cell types together
-# adj.P.Val gives study-wide FDR 
+# adj.P.Val gives study-wide FDR   
 topTable(res.dl, coef="group_idstim", number=3)
 
 }
