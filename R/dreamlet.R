@@ -244,7 +244,7 @@ setMethod("[", signature(x="dreamletResult"),
 #' 
 #' # extract results using limma-style syntax
 #' # combines all cell types together
-#' # adj.P.Val gives study-wide FDR
+#' # adj.P.Val gives study-wide FDR 
 #' topTable(res.dl, coef="group_idstim", number=3)
 #' 
 #' @seealso \code{limma::topTable()}, \code{variancePartition::topTable()}
@@ -273,10 +273,12 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 			if( is.null(genelist) ) genelist = rownames(fit1)
 
-			# if coef is not found 
-			if( all(coef %in% colnames(coef(fit1))) ){
-				tab = topTable(fit1, coef = coef, number = Inf, , genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
-				# tab = tab[tab$ID %in% genelist,]
+			# if coef is found, and at least one entry of genelist in is fit1
+			good = all(coef %in% colnames(coef(fit1))) & any(rownames(fit1) %in% genelist)
+
+			if( good ){
+				tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
+				tab = tab[!is.na(tab$ID),]
 
 				# if doesn't have z.std, add it
 				if( ! "z.std" %in% colnames(tab) ){
@@ -294,6 +296,10 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 		# remove rownames
 		rownames(res) = c()
+
+		if( nrow(res) == 0){
+			stop("No results were found matching given criteria")
+		}
 
 		# apply multiple testing across *all* tests
 		# subset based on number afterwards
