@@ -76,6 +76,7 @@ setMethod("plotGeneHeatmap", "dreamletResult",
 	# extract gene-level results
 	tab = topTable(x, coef=coef, number=Inf)
 	tab = tab[tab$ID %in% genes,c("assay", "ID", "z.std")]
+	tab$ID <- factor(tab$ID, levels=genes)
 
 	if( nrow(tab) == 0) stop("No genes retained")
 
