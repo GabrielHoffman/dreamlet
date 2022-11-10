@@ -275,9 +275,8 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 			# if coef is not found 
 			if( all(coef %in% colnames(coef(fit1))) ){
-				tab = topTable(fit1, coef = coef, number = Inf, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
-				# , genelist = genelist
-				tab = tab[tab$ID %in% genelist,]
+				tab = topTable(fit1, coef = coef, number = Inf, , genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
+				# tab = tab[tab$ID %in% genelist,]
 
 				# if doesn't have z.std, add it
 				if( ! "z.std" %in% colnames(tab) ){
