@@ -63,7 +63,7 @@ pb <- aggregateToPseudoBulk(example_sce,
 res.proc = processAssays( pb, ~ group_id)
 
 # Differential expression analysis within each assay,
-# evaluated on the voom normalized data 
+# evaluated on the voom normalized data  
 res.dl = dreamlet( res.proc, ~ group_id)
 
 # Heatmap for specified subset of genes
