@@ -356,14 +356,18 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 			if( good ){
 				tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
-				tab = tab[!is.na(tab$ID),]
+				if( nrow(tab) > 0 ){
+					tab = tab[!is.na(tab$ID),]
 
-				# if doesn't have z.std, add it
-				if( ! "z.std" %in% colnames(tab) ){
-					tab$z.std = tab$t
+					# if doesn't have z.std, add it
+					if( ! "z.std" %in% colnames(tab) ){
+						tab$z.std = tab$t
+					}
+
+					res = data.frame(assay = k, tab)
+				}else{
+					res = NULL
 				}
-
-				res = data.frame(assay = k, tab)
 			}else{
 				res = NULL
 			}

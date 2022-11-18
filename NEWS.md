@@ -1,3 +1,7 @@
+# dreamlet 0.0.53
+ - Nov 18, 2022
+ - fix bug in `topTable()`
+
 # dreamlet 0.0.52
   - Nov 18, 2022
   - add `as.dreamletResult()`
