@@ -1,3 +1,8 @@
+# dreamlet 0.0.52
+  - Nov 18, 2022
+  - add `as.dreamletResult()`
+  - update `variancePartition` dependency and source
+
 # dreamlet 0.0.51
   - Nov 10, 2022
   - in `processAssays()` and `processOneAssay()`, add argument `min.prop` indicating the minimum proportion of retained samples with non-zero counts
