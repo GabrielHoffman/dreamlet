@@ -1,4 +1,22 @@
 
+# Nov 16
+	- in dreamletCompareClusters() change coef from "compare"
+		to something informative
+	- allow user to combine multiple dreamletCompareClusters() fits
+		for joint plotting and zenith
+
+		Donghoon: uick question about working with fit object(s). When I run dreamletCompareClusters multiple times for each cluster, I end up multiple fit object with the same coef name compare . Is there a way to merge multiple fit object and run them on single zenith pipeline? I just want to summarize these by cluster names
+
+	- Test of differential variance:
+		use limma's EB on residual variance
+		compare residual variance posterior from two data subsets
+			misc_vp/compare_posteriors.R
+			How is posterior parameterized in limma
+
+
+
+# Nov 11,
+	Add flag to switch between study-wide vs cell type multiple testing burden
 
 
 # Nov 2, 2022

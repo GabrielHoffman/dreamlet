@@ -201,6 +201,84 @@ setMethod("[", signature(x="dreamletResult"),
 
 
 
+#' Convert list of regression fits to \code{dreamletResult}
+#'
+#' Convert list of regression fits to \code{dreamletResult} for downstream analysis
+#'
+#' @param fitList list of regression fit with \code{dream()}
+#' @param df_details \code{data.frame} storing assay details
+#' 
+#' @details Useful for combining multiple runs of \code{dreamletCompareClusters()} into a single \code{dreamletResult} for downstream analysis
+#' @examples
+#' library(muscat)
+#' library(SingleCellExperiment) 
+#' 
+#' data(example_sce)
+#' 
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'   assay = "counts",    
+#'   cluster_id = 'cluster_id', 
+#'   sample_id = 'sample_id',
+#'  verbose=FALSE)
+#' 
+#' # first comparison
+#' ct.pairs =  c("B cells", "CD14+ Monocytes")
+#' fit = dreamletCompareClusters( pb, ct.pairs, method="fixed")
+#' 
+#' # second comparison
+#' ct.pairs2 =  c("B cells", "CD8 T cells")
+#' fit2 = dreamletCompareClusters( pb, ct.pairs2, method="fixed")
+#' 
+#' # Make a list storing each result with a meaningful name
+#' fitList = list()
+#' 
+#' id = paste0('[', ct.pairs[1], ']_vs_[', ct.pairs[2], ']')
+#' fitList[[id]] = fit
+#' 
+#' id = paste0('[', ct.pairs2[1], ']_vs_[', ct.pairs2[2], ']')
+#' fitList[[id]] = fit2
+#' 
+#' # create a dreamletResult form this list
+#' res.compare = as.dreamletResult( fitList )
+#' 
+#' library(zenith)
+#' go.gs = get_GeneOntology("CC", to="SYMBOL")
+#' 
+#' # Run zenith on each result.
+#' # The coef 'compare' is used for each model
+#' res_zenith = zenith_gsa(res.compare, go.gs, coef = 'compare')
+#' 
+#' @importFrom methods new is
+#' @export
+as.dreamletResult = function(fitList, df_details=NULL){
+
+	# check that names are not empty
+	if( any(names(fitList) == '') ){
+		stop("names(fitList) must not contain empty names")
+	}
+
+	# check that names are unique and not empty
+	if( length(unique(names(fitList))) != length(fitList) ){
+		stop("names(fitList) must be unique")
+	}
+
+	# check that entries are the result of a dream() fit
+	if( any(!sapply(fitList, is, class2="MArrayLM")) ){
+		stop("Each element of fitList must be a fit from dream()")
+	}
+
+	if( is.null(df_details) ){
+		res = new("dreamletResult", fitList)
+	}else{
+		res = new("dreamletResult", fitList, df_details = df_details)	
+	}
+
+	res
+}
+
+
+
 
 #' Table of Top Genes from dreamlet fit
 #'
