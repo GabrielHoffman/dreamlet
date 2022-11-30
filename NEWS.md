@@ -1,3 +1,7 @@
+# dreamlet 0.0.54
+ - Nov 30, 2022
+ - fadd `buildClusterTreeFromPB()`
+
 # dreamlet 0.0.53
  - Nov 18, 2022
  - fix bug in `topTable()`
