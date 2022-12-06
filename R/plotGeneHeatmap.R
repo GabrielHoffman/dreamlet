@@ -81,6 +81,7 @@ setMethod("plotGeneHeatmap", "dreamletResult",
 	if( nrow(tab) == 0) stop("No genes retained")
 
 	tab = as.data.frame(tab[tab$assay %in% assays,])
+	tab = droplevels(tab)
 
 	if( nrow(tab) == 0) stop("No assays retained")
 

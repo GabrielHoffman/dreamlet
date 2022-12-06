@@ -1,6 +1,10 @@
+# dreamlet 0.0.55
+ - Dec 7, 2022
+ - in `plotGeneHeatmap()` drop empty genes
+
 # dreamlet 0.0.54
  - Nov 30, 2022
- - fadd `buildClusterTreeFromPB()`
+ - add `buildClusterTreeFromPB()`
 
 # dreamlet 0.0.53
  - Nov 18, 2022
