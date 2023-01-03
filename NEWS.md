@@ -1,3 +1,7 @@
+# dreamlet 0.0.56
+ - Jan 3, 2023
+ - Enable processing of non-count data with `aggregateNonCountSignal()`
+
 # dreamlet 0.0.55
  - Dec 7, 2022
  - in `plotGeneHeatmap()` drop empty genes

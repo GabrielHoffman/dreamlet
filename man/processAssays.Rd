@@ -57,10 +57,12 @@ processAssays(
 Object of class \code{dreamletProcessedData} storing voom-style normalized expression data
 }
 \description{
-For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells
+For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells.
 }
 \details{
 For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 5} and \code{min.count = 5} are also reasonable if you want to include more genes in the analysis.
+
+The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.
 }
 \examples{
 library(muscat)

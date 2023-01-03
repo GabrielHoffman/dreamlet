@@ -261,14 +261,18 @@ setMethod("details", "dreamletProcessedData",
 	df = lapply( assayNames(object), function(k){
 
 		obj = assay(object, k)
-		DataFrame(assay = k, n_retained = ncol(obj$E), formula = paste(as.character(obj$formula), collapse=''))
+
+		if( is(obj, "EList") ){
+			res = DataFrame(assay = k, n_retained = ncol(obj), formula = paste(as.character(obj$formula), collapse=''))
+		}else{
+			res = DataFrame(assay = k, n_retained = ncol(obj))
+		}
+		res
 	})
 	df = do.call(rbind, df)
 
 	df
 })
-
-
 
 
 #' @export

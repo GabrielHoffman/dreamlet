@@ -32,3 +32,6 @@ pb <- aggregateToPseudoBulk(example_sce,
 cellCounts(pb)
 
 }
+\seealso{
+\code{computeCellCounts()}
+}
