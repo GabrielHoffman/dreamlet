@@ -131,6 +131,8 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     
     fun <- match.arg(fun)
 
+    colData(x) = droplevels(colData(x))
+
     # specify the 'by' parameter using cluster_id and sample_id.
     by = c(cluster_id, sample_id)
 
