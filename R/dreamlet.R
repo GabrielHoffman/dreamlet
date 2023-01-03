@@ -515,7 +515,7 @@ setMethod("getTreat", signature(fit="dreamletResult"),
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(x)}
 #' @param contrasts character vector specifying contrasts specifying linear combinations of fixed effects to test.  This is fed into \code{makeContrastsDream( formula, data, contrasts=contrasts)}
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
-#' @param isCounts logical, indicating if data is raw counts
+# @param isCounts logical, indicating if data is raw counts
 #' @param robust logical, use eBayes method that is robust to outlier genes
 # @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param quiet show messages
@@ -562,7 +562,7 @@ setMethod("getTreat", signature(fit="dreamletResult"),
 #' @seealso \code{variancePartition::dream()}, \code{variancePartition::makeContrastsDream()}
 #' @export
 setGeneric("dreamlet", 
-	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
+	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
 
 	standardGeneric("dreamlet")
 })
@@ -579,7 +579,7 @@ setGeneric("dreamlet",
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method
 setMethod("dreamlet", "dreamletProcessedData",
-	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, isCounts=TRUE, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
+	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
 
 	# checks
 	# stopifnot( is(x, 'dreamletProcessedData'))
@@ -658,8 +658,12 @@ setMethod("dreamlet", "dreamletProcessedData",
 				}
 
 				if( use.eBayes ){
+
+					# use counts directly if is an EList
+					isCounts = ifelse(is(geneExpr, "EList"), TRUE, FALSE)
+
 					# borrow information across genes with the empirical Bayes step
-					fit = eBayes(fit, robust=robust, trend=!geneExpr$isCounts)
+					fit = eBayes(fit, robust=robust, trend=isCounts)
 				}
 			}else{	
 				fit = NULL

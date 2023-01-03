@@ -47,6 +47,8 @@ Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggre
 }
 \details{
 Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
+
+Keeps variables from \code{colData()} that are constant within \code{sample_id}.  For example, sex will be constant for all cells from the same \code{sample_id}, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each \code{sample_id}, so it is dropped.
 }
 \examples{
 library(muscat)

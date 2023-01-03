@@ -12,7 +12,6 @@ dreamlet(
   assays = assayNames(x),
   contrasts = NULL,
   min.cells = 10,
-  isCounts = TRUE,
   robust = FALSE,
   quiet = FALSE,
   BPPARAM = SerialParam(),
@@ -27,7 +26,6 @@ dreamlet(
   assays = assayNames(x),
   contrasts = NULL,
   min.cells = 10,
-  isCounts = TRUE,
   robust = FALSE,
   quiet = FALSE,
   BPPARAM = SerialParam(),
@@ -47,8 +45,6 @@ dreamlet(
 \item{contrasts}{character vector specifying contrasts specifying linear combinations of fixed effects to test.  This is fed into \code{makeContrastsDream( formula, data, contrasts=contrasts)}}
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
-
-\item{isCounts}{logical, indicating if data is raw counts}
 
 \item{robust}{logical, use eBayes method that is robust to outlier genes}
 

@@ -25,6 +25,7 @@
 #' # get matrix of cell counts for each sample
 #' cellCounts(pb)
 #'
+#' @seealso \code{computeCellCounts()}
 #' @export
 cellCounts = function(x){
 

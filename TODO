@@ -1,4 +1,11 @@
 
+Jan 3, 2022
+	- in aggregateNonCountSignal() 
+		include precision weights based on averaging scores.
+		Need aggregateToPseudoBulk() to compute variance
+	- plotVoom() should give better error message here
+
+
 # Nov 16
 	- in dreamletCompareClusters() change coef from "compare"
 		to something informative
