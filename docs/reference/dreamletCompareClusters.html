@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.51</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.57</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -191,7 +191,6 @@
 <span class="r-in"><span><span class="co"># run comparison</span></span></span>
 <span class="r-in"><span><span class="co"># use method = 'fixed' here since it is faster</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"><span></span></span>
@@ -217,7 +216,6 @@
 <span class="r-in"><span><span class="co"># compare B cells versus the rest of the cell types</span></span></span>
 <span class="r-in"><span><span class="co"># 'rest' is a keyword indicating all other assays  </span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">'rest'</span><span class="op">)</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"><span></span></span>
@@ -244,7 +242,6 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare 2 monocyte clusters to two T cell clusters</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">lst</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Fixed effect model, using limma directly...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"><span></span></span>

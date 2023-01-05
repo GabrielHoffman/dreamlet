@@ -40,17 +40,10 @@ Dreamlet builds on previous work on variance partitioning and differential expre
 
 ## Install
 ```r
-# this should install dependencies too
-# where XXXX is your GitHub Personal Access Token
-devtools::install_github("GabrielHoffman/dreamlet", auth_token='XXXX')
+# 1) Make sure Bioconductor is installed
+# 2) Install dreamlet and dependencies:
+devtools::install_github("GabrielHoffman/dreamlet")
 ```
 
-
-### Dependencies
-In case code above doesn't install these automatically:
-```r
-devtools::install_github("DiseaseNeurogenomics/variancePartition")
-devtools::install_github("DiseaseNeurogenomics/zenith")
-```
 
 

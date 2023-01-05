@@ -69,6 +69,7 @@
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam}}
 #'   object specifying how aggregation should be parallelized.
 #' @param verbose logical. Should information on progress be reported?
+#' @param checkValues logical. Should we check that signal values are positive integers?
 #' 
 #' @return a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 # \itemize{
@@ -126,8 +127,8 @@
 #' @importFrom SummarizedExperiment rowData colData colData<-
 #' @export
 aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id = NULL,
-    fun = c("sum", "mean", "median", "prop.detected", "num.detected"), 
-    scale = FALSE, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose)){
+    fun = c("sum", "mean", "median", "prop.detected", "num.detected", "sem", "number"), 
+    scale = FALSE, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose), checkValues=TRUE){
     
     fun <- match.arg(fun)
 
@@ -150,7 +151,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
     if (is.null(assay)) 
         assay <- assayNames(x)[1]
-    .check_arg_assay(x, assay)
+    .check_arg_assay(x, assay, checkValues)
     .check_args_aggData(as.list(environment()))
     stopifnot(is(BPPARAM, "BiocParallelParam"))
     for (i in by) if (!is.factor(x[[i]])) 
@@ -229,7 +230,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
 
 #' @importFrom SummarizedExperiment assayNames
-.check_arg_assay = function (x, y){
+.check_arg_assay = function (x, y, checkValues){
     stopifnot(is.character(y), length(y) == 1)
 
     if( ! y %in% assayNames(x)){
@@ -240,27 +241,29 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
             " Please assure that the input SCE has unique 'assayNames'.")
     }
 
-    # check that assay is integers
-    #-----------------------------
-    # get nonzero values from first samples 
-    # values = as.matrix(assay(x,y)[,seq(1,10)])
-    M = assay(x,y)
-    idx1 = seq(1, min(1000, nrow(M)))
-    idx2 = seq(1, min(50, ncol(M)))
-    values = as.matrix(M[idx1,idx2])
-    values = values[values!=0]
+    if( checkValues ){
+        # check that assay is integers
+        #-----------------------------
+        # get nonzero values from first samples 
+        # values = as.matrix(assay(x,y)[,seq(1,10)])
+        M = assay(x,y)
+        idx1 = seq(1, min(1000, nrow(M)))
+        idx2 = seq(1, min(50, ncol(M)))
+        values = as.matrix(M[idx1,idx2])
+        values = values[values!=0]
 
-    if( any(values < 0) ){
-        txt = paste0("Assay '", y, "' stores negatives values instead of counts.\n\tThis is not allowed for creating pseudobulk.\n\tThis dataset contains assays: ", paste(assayNames(x), collapse=', '))
-        stop(txt)
-    }
+        if( any(values < 0) ){
+            txt = paste0("Assay '", y, "' stores negative values instead of counts.\n\tThis is not allowed for creating pseudobulk.\n\tThis dataset contains assays: ", paste(assayNames(x), collapse=', '))
+            stop(txt)
+        }
 
-    # compute fraction that are already integers
-    integerFrac = sum(values == floor(values)) / length(values)
+        # compute fraction that are already integers
+        integerFrac = sum(values == floor(values)) / length(values)
 
-    if( integerFrac < 1 ){
-        txt = paste0("Assay '", y, "' stores continuous values instead of counts.\n\tMake sure this is the intended assay.\n\tThis dataset contains assays: ", paste(assayNames(x), collapse=', '))
-        warning(txt, immediate.=TRUE)
+        if( integerFrac < 1 ){
+            txt = paste0("Assay '", y, "' stores continuous values instead of counts.\n\tMake sure this is the intended assay.\n\tThis dataset contains assays: ", paste(assayNames(x), collapse=', '))
+            warning(txt, immediate.=TRUE)
+        }
     }
 }
 
@@ -284,7 +287,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 #' @importFrom BiocParallel SerialParam 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 .summarize_assay_by_group <- function(x, ids, subset.row=NULL, subset.col=NULL,
-    statistics=c("mean", "sum", "num.detected", "prop.detected", "median"),
+    statistics=c("mean", "sum", "num.detected", "prop.detected", "median", "sem", "number"),
     store.number="ncells", threshold=0, BPPARAM=SerialParam()){
     
     statistics = match.arg(statistics, several.ok=TRUE)
@@ -359,10 +362,13 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
 
 # method for aggregation depends on datatype    
-#' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
-#' @importFrom sparseMatrixStats rowMeans2 rowSums2 rowCounts rowMedians
-#' @importFrom MatrixGenerics rowMeans2 rowSums2 rowCounts rowMedians
+#' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians rowSds
+#' @importFrom sparseMatrixStats rowMeans2 rowSums2 rowCounts rowMedians rowSds
+#' @importFrom MatrixGenerics rowMeans2 rowSums2 rowCounts rowMedians rowSds
 .pb_summary = function(x, by.group, statistics, threshold, BPPARAM){
+
+    # Pass R CMD check
+    data = NULL
 
     if( is(x, "DelayedMatrix") ){
         
@@ -395,6 +401,17 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
             if( "median" %in% statistics ){
                 resLst[["median"]] = DelayedMatrixStats::rowMedians(data, cols=idx)
             }
+
+            if( "sem" %in% statistics ){
+                # standard error of the mean is sd(data) / sqrt(n)
+                resLst[["sem"]] = DelayedMatrixStats::rowSds(data, cols=idx) / sqrt(length(idx))
+            }
+
+            if( "number" %in% statistics ){
+                # return number of units used for pseudobulk
+                resLst[["number"]] = rep(length(idx), nrow(data))
+            }
+
             })
 
             resLst
@@ -402,7 +419,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
     }else if( is(x, "sparseMatrix") ){
         # Avoid repeated garbage collection steps in bclapply()
-        resCombine = lapply( by.group, function(idx){
+        resCombine = lapply( by.group, function(idx, data){
 
             resLst = list()
 
@@ -427,11 +444,21 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
                 resLst[["median"]] = sparseMatrixStats::rowMedians(x, cols=idx)
             }
 
+            if( "sem" %in% statistics ){
+                # standard error of the mean is sd(data) / sqrt(n)
+                resLst[["sem"]] = sparseMatrixStats::rowSds(data, cols=idx) / sqrt(length(idx))
+            }
+
+            if( "number" %in% statistics ){
+                # return number of units used for pseudobulk
+                resLst[["number"]] = rep(length(idx), nrow(data))
+            }
+
             resLst
-        })
+        }, data=x)
           
     }else{
-        resCombine = lapply( by.group, function(idx){
+        resCombine = lapply( by.group, function(idx, data){
 
             resLst = list()
 
@@ -456,8 +483,18 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
                 resLst[["median"]] = rowMedians(x[,idx,drop=FALSE])
             }
 
+            if( "sem" %in% statistics ){
+                # standard error of the mean is sd(data) / sqrt(n)
+                resLst[["sem"]] = MatrixGenerics::rowSds(data, cols=idx) / sqrt(length(idx))
+            }
+
+            if( "number" %in% statistics ){
+                # return number of units used for pseudobulk
+                resLst[["number"]] = rep(length(idx), nrow(data))
+            }
+
             resLst
-        })
+        }, data=x)
     }
 
     # Create list of merged values for each statistic

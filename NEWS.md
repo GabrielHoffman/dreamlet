@@ -1,3 +1,7 @@
+# dreamlet 0.0.57
+ - Jan 4, 2023
+ - Include precision weights in `aggregateNonCountSignal()`
+
 # dreamlet 0.0.56
  - Jan 3, 2023
  - Enable processing of non-count data with `aggregateNonCountSignal()`

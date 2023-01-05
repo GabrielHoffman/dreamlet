@@ -9,10 +9,11 @@ aggregateToPseudoBulk(
   assay = NULL,
   sample_id = NULL,
   cluster_id = NULL,
-  fun = c("sum", "mean", "median", "prop.detected", "num.detected"),
+  fun = c("sum", "mean", "median", "prop.detected", "num.detected", "sem", "number"),
   scale = FALSE,
   verbose = TRUE,
-  BPPARAM = SerialParam(progressbar = verbose)
+  BPPARAM = SerialParam(progressbar = verbose),
+  checkValues = TRUE
 )
 }
 \arguments{
@@ -36,6 +37,8 @@ with the effective library size & multiplied by 1M?}
 
 \item{BPPARAM}{a \code{\link[BiocParallel]{BiocParallelParam}}
 object specifying how aggregation should be parallelized.}
+
+\item{checkValues}{logical. Should we check that signal values are positive integers?}
 }
 \value{
 a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
