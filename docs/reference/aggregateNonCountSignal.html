@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.56</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.57</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,11 @@ object specifying how aggregation should be parallelized.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For standard analysis of count data, <code><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> create pseudobulk counts and <code><a href="processAssays.html">processAssays()</a></code> performs folder and estimates precision weights.  Yet the <code>dreamlet</code> workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type.  And the precision weights step is set skipped.</p>
+    <p>For standard analysis of count data, <code><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> create pseudobulk counts and <code><a href="processAssays.html">processAssays()</a></code> performs folder and estimates precision weights.  Yet the <code>dreamlet</code> workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type.</p> 
+<p>The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as <code>1/sem^2</code>, where <code>sem = sd(signal) / sqrt(n)</code>, <code>signal</code> stores the values averaged across cells, and <code>n</code> is the number of cells.  The weights are modified from this value in 3 edge cases.</p>
+<p>1) if <code>n==0</code> so that no cells are observed for a given cell type and sample, then the signal is set to NA, and weight is set to 0.</p>
+<p>2) if <code>n==1</code>, then there is only one cell and the sem is zero. The weight is set to match the lowest non-zero value for that feature</p>
+<p>3) if <code>weight == Inf</code>, then sem = 0 so set weight is set to match the largest non-zero value for that feature</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.51</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.57</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,29 +146,29 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.083 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.099 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.019 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.022 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.05 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.019 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Differential expression analysis within each assay,</span></span></span>
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data </span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.065 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.059 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.066 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.086 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.05 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.066 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.026 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.032 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.061 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.079 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># show coefficients estimated for each cell type</span></span></span>
@@ -182,14 +182,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 3 rows and 9 columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         assay          ID     logFC   AveExpr         t     P.Value   adj.P.Val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     B cells       ISG20   3.59771   11.5794   15.5721 1.01377e-18 3.55733e-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 CD4 T cells       ISG15   5.50055   10.1672   21.5266 1.38871e-15 2.43649e-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 CD4 T cells       ISG20   3.07310   10.7918   17.0119 1.37235e-13 1.60520e-10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 CD8 T cells       ISG20   3.72806   10.9147   16.8000 3.90507e-32 1.37029e-28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     B cells       ISG20   3.59771   11.5794   16.8407 5.01550e-20 8.79970e-17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 CD4 T cells       ISG15   5.50055   10.1672   21.9010 2.62269e-15 3.06767e-12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           B     z.std</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;numeric&gt; &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   32.2930   15.5721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   24.9379   21.5266</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   21.2155   17.0119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   62.5196   16.8000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   35.4471   16.8407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   24.3335   21.9010</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

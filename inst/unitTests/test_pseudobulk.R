@@ -13,7 +13,7 @@ test_pseudobulk_example = function(){
 
 	out <- scuttle::summarizeAssayByGroup(example_sce, ids)
 
-	out2 <- dreamlet:::summarizeAssayByGroup2(example_sce, ids)
+	out2 <- dreamlet:::summarizeAssayByGroup2(example_sce, ids, statistics = c("mean", "sum", "num.detected", "prop.detected", "median"))
 
 	checkEquals(out, out2)
 }

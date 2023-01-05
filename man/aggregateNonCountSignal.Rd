@@ -35,5 +35,13 @@ a \code{dreamletProcessedData} object
 Aggregation of single-cell to pseudobulk data for non-count data.
 }
 \details{
-For standard analysis of count data, \code{aggregateToPseudoBulk()} create pseudobulk counts and \code{processAssays()} performs folder and estimates precision weights.  Yet the \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type.  And the precision weights step is set skipped.
+For standard analysis of count data, \code{aggregateToPseudoBulk()} create pseudobulk counts and \code{processAssays()} performs folder and estimates precision weights.  Yet the \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type.
+ 
+The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells.  The weights are modified from this value in 3 edge cases.
+
+1) if \code{n==0} so that no cells are observed for a given cell type and sample, then the signal is set to NA, and weight is set to 0.
+
+2) if \code{n==1}, then there is only one cell and the sem is zero. The weight is set to match the lowest non-zero value for that feature
+
+3) if \code{weight == Inf}, then sem = 0 so set weight is set to match the largest non-zero value for that feature
 }
