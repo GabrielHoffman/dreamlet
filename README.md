@@ -39,11 +39,25 @@ Dreamlet builds on previous work on variance partitioning and differential expre
 </div>
 
 ## Install
+`dreamlet >= v0.0.58` is compatible with `BioC v3.16` for `R v4.2`.
+
 ```r
 # 1) Make sure Bioconductor is installed
 # 2) Install dreamlet and dependencies:
 devtools::install_github("GabrielHoffman/dreamlet")
 ```
+
+`dreamlet` is also compatible with `BioC v3.14` for `R v4.1` after installing these dependencies:
+
+### Dependencies
+ In case these aren't installed automatically:
+```r
+devtools::install_github("DiseaseNeurogenomics/variancePartition")
+devtools::install_github("DiseaseNeurogenomics/zenith")
+```
+
+
+
 
 
 

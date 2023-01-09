@@ -14,26 +14,27 @@
 #   \code{colData(x)} columns to summarize by (at most 2!).
 #' @param sample_id character string specifying which variable to use as sample id
 #' @param cluster_id character string specifying which variable to use as cluster id
+#' @param min.cells minimum number of observed cells for a sample to be included in the analysis
+#' @param min.signal minimum signal value for a gene to be considered expressed in a sample.  Proper value for this cutoff depends on the type of signal value  
+#' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
+#' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam}}
 #'   object specifying how aggregation should be parallelized.
 #' @param verbose logical. Should information on progress be reported?
 #'
 #' @return a \code{dreamletProcessedData} object 
 #' 
-#' @details For standard analysis of count data, \code{aggregateToPseudoBulk()} create pseudobulk counts and \code{processAssays()} performs folder and estimates precision weights.  Yet the \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type.
+#' @details 
+#' The \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type. Here \code{aggregateNonCountSignal()} performs the roles of \code{aggregateToPseudoBulk()} followed by \code{processAssays()} but using non-count data.
+#'
+#' For each cell cluster, samples with at least min.cells are retained. Only clusters with at least min.samples retained samples are kept. Features are retained if they have at least min.signal in at least min.prop fraction of the samples.
 #'  
-#' The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells.  The weights are modified from this value in 3 edge cases.
-#'
-#' 1) if \code{n==0} so that no cells are observed for a given cell type and sample, then the signal is set to NA, and weight is set to 0.
-#'
-#' 2) if \code{n==1}, then there is only one cell and the sem is zero. The weight is set to match the lowest non-zero value for that feature
-#'
-#' 3) if \code{weight == Inf}, then sem = 0 so set weight is set to match the largest non-zero value for that feature
+#' The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells. 
 #' 
 #' @export
 #' @import limma 
 #' @importFrom MatrixGenerics rowVars
-aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_id = NULL, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose)){
+aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_id = NULL, min.cells = 10, min.signal = 0.01,  min.samples = 4, min.prop = 0.4, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose)){
 
 	# average signal across cells in a sample_id
 	pb <- aggregateToPseudoBulk(sce, 
@@ -59,7 +60,7 @@ aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_
 	# this allows is to distinguish between 
 	# a signal of zero due to 
 	# 1) no observed cells
-	# 2) the mean of multiple cells iz erpo
+	# 2) the mean of multiple cells is zero
 	pb.number <- aggregateToPseudoBulk(sce, 
 	    assay = assay,    
 	    cluster_id = cluster_id, 
@@ -74,7 +75,7 @@ aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_
 	pmetadata = data.frame()
 	pkeys = array()
 
-	# Extract signal as lists
+	# Extract signal for each cell type as lists
 	resList = lapply(assayNames(pb), function(CT){
 
 		# mean signal for each
@@ -86,47 +87,42 @@ aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_
 		# number of cells used for pseudobulk aggregation
 		number = assay(pb.number, CT)
 
-		# if zero counts, set E = NA, w = NA
-		idx = which(number == 0)
-		if( length(idx) > 0){
-			signal[idx] = NA
-			w[idx] = 0
-		}
+		# create EList with signal and precision weights
+		obj = new('EList', list(E = as.matrix(signal), weights = as.matrix(w)))
 
-		# if 1 count, sem is currently set to NA.  
-		# Want E = signal, w = lowest weight observed value per row
-		idx = which(number[1,] == 1)
-		if( length(idx) > 0){
-			w[,idx] = apply(w, 1, function(b){
-				b = b[b>0 & is.finite(b)]
-				ifelse(length(b) > 0, min(b), 1)
-				})
-		}
+		# inclusion criteria for samples
+		include = (number[1,] >= min.cells)
+		obj = obj[,include]
+
+		# inclusion criteria for genes
+		keep = apply(obj$E, 1, function(x){
+			sum(x >= min.signal) >= min.prop*length(x)
+			} )
+		obj = obj[keep,]
 
 		# if weight is Inf, set to largest finite value per row
-		if( any(!is.finite(w)) ){
-			for(i in seq(nrow(w))){
-				if( all(!is.finite(w[i,])) ){
-					w[i,] = 0
-				}else{ 
-					idx = which(!is.finite(w[i,]))
+		if( any(!is.finite(obj$weights)) ){
+			for(i in seq(nrow(obj$weights))){
+				if( any(!is.finite(obj$weights[i,])) ){
+					idx = which(!is.finite(obj$weights[i,]))
 					if( length(idx) > 0){
-						w[i,idx] = max(w[i, -idx])
+						obj$weights[i,idx] = max(obj$weights[i, -idx])
 					}
 				}
 			}
 		}
-		
-		# create EList with signal and precision weights
-		obj = new('EList', list(E = as.matrix(signal), weights = as.matrix(w)))
 
-		# keep rows that satisfy
-		# variance of signal > 0, and maximum weight > 0
-		keep = (rowVars(obj$E, na.rm=TRUE) > 0) & (apply(obj$w, 1, max) > 0) 
+		# if there are too few remaining samples
+		if( ncol(obj) < min.samples ){
+			return( NULL )
+		}
 
-		obj[keep,]
-		})
+		obj
+	})
 	names(resList) = assayNames(pb)
+
+	# remove empty assays
+	resList = resList[!vapply(resList, is.null, FUN.VALUE=logical(1))]
 
 	# return signal as dreamletProcessedData object
 	new("dreamletProcessedData", resList, data = data_constant, metadata = pmetadata, pkeys=pkeys)
@@ -150,3 +146,34 @@ aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_
 
 
 
+		# # if zero counts, set E = NA, w = NA
+		# idx = which(number == 0)
+		# if( length(idx) > 0){
+		# 	signal[idx] = NA
+		# 	w[idx] = 0
+		# }
+
+		# # if 1 count, sem is currently set to NA.  
+		# # Want E = signal, w = lowest weight observed value per row
+		# idx = which(number[1,] == 1)
+		# if( length(idx) > 0){
+		# 	w[,idx] = apply(w, 1, function(b){
+		# 		b = b[b>0 & is.finite(b)]
+		# 		ifelse(length(b) > 0, min(b), 1)
+		# 		})
+		# }
+
+		# # if weight is Inf, set to largest finite value per row
+		# if( any(!is.finite(w)) ){
+		# 	for(i in seq(nrow(w))){
+		# 		if( all(!is.finite(w[i,])) ){
+		# 			w[i,] = 0
+		# 		}else{ 
+		# 			idx = which(!is.finite(w[i,]))
+		# 			if( length(idx) > 0){
+		# 				w[i,idx] = max(w[i, -idx])
+		# 			}
+		# 		}
+		# 	}
+		# }
+		

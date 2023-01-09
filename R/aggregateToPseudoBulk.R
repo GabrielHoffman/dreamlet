@@ -55,8 +55,7 @@
 #' Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster for \code{SingleCellExperiment} backed by H5AD files using on-disk storage.
 #' 
 #' @param x a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param assay character string specifying the assay slot to use as 
-#'   input data. Defaults to the 1st available (\code{assayNames(x)[1]}).
+#' @param assay character string specifying the assay slot to use as input data. Defaults to the 1st available (\code{assayNames(x)[1]}).
 # @param by character vector specifying which 
 #   \code{colData(x)} columns to summarize by (at most 2!).
 #' @param sample_id character string specifying which variable to use as sample id
