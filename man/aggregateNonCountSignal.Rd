@@ -9,6 +9,10 @@ aggregateNonCountSignal(
   assay = NULL,
   sample_id = NULL,
   cluster_id = NULL,
+  min.cells = 10,
+  min.signal = 0.01,
+  min.samples = 4,
+  min.prop = 0.4,
   verbose = TRUE,
   BPPARAM = SerialParam(progressbar = verbose)
 )
@@ -23,6 +27,14 @@ input data. Defaults to the 1st available (\code{assayNames(x)[1]}).}
 
 \item{cluster_id}{character string specifying which variable to use as cluster id}
 
+\item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
+
+\item{min.signal}{minimum signal value for a gene to be considered expressed in a sample.  Proper value for this cutoff depends on the type of signal value}
+
+\item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
+
+\item{min.prop}{minimum proportion of retained samples with non-zero counts for a gene to be}
+
 \item{verbose}{logical. Should information on progress be reported?}
 
 \item{BPPARAM}{a \code{\link[BiocParallel]{BiocParallelParam}}
@@ -35,13 +47,9 @@ a \code{dreamletProcessedData} object
 Aggregation of single-cell to pseudobulk data for non-count data.
 }
 \details{
-For standard analysis of count data, \code{aggregateToPseudoBulk()} create pseudobulk counts and \code{processAssays()} performs folder and estimates precision weights.  Yet the \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type.
+The \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type. Here \code{aggregateNonCountSignal()} performs the roles of \code{aggregateToPseudoBulk()} followed by \code{processAssays()} but using non-count data.
+
+For each cell cluster, samples with at least min.cells are retained. Only clusters with at least min.samples retained samples are kept. Features are retained if they have at least min.signal in at least min.prop fraction of the samples.
  
-The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells.  The weights are modified from this value in 3 edge cases.
-
-1) if \code{n==0} so that no cells are observed for a given cell type and sample, then the signal is set to NA, and weight is set to 0.
-
-2) if \code{n==1}, then there is only one cell and the sem is zero. The weight is set to match the lowest non-zero value for that feature
-
-3) if \code{weight == Inf}, then sem = 0 so set weight is set to match the largest non-zero value for that feature
+The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells.
 }

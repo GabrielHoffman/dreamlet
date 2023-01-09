@@ -1,3 +1,8 @@
+# dreamlet 0.0.58
+ - Jan 9, 2023
+ - Rewrite`aggregateNonCountSignal()` to include filters
+ - Depend only on CRAN and BioC packages
+
 # dreamlet 0.0.57
  - Jan 4, 2023
  - Include precision weights in `aggregateNonCountSignal()`

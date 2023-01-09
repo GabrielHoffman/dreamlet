@@ -1,4 +1,18 @@
 
+plotVolano scale="free" in facet wrap
+
+
+
+
+for aggregateNonCountSignal() 
+	Add filtering parameters as in processAssays():
+
+
+	This filtering will address issue with weighting edge cases  
+
+
+
+
 Jan 3, 2022
 	[DONE] - in aggregateNonCountSignal() 
 		include precision weights based on averaging scores.

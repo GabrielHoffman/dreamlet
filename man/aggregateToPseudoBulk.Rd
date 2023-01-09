@@ -19,8 +19,7 @@ aggregateToPseudoBulk(
 \arguments{
 \item{x}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
 
-\item{assay}{character string specifying the assay slot to use as 
-input data. Defaults to the 1st available (\code{assayNames(x)[1]}).}
+\item{assay}{character string specifying the assay slot to use as input data. Defaults to the 1st available (\code{assayNames(x)[1]}).}
 
 \item{sample_id}{character string specifying which variable to use as sample id}
 
