@@ -1,3 +1,8 @@
+# dreamlet 0.0.59
+ - Jan 12, 2023
+ - update `plotVolcano()` to allow `scales="free_y"`
+   - warning when p-values are zero.
+
 # dreamlet 0.0.58
  - Jan 9, 2023
  - Rewrite`aggregateNonCountSignal()` to include filters

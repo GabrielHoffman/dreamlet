@@ -12,6 +12,7 @@
 #' @param minp minimum p-value to show on the y-axis
 #' @param cutoff adj.P.Val cutoff to distinguish significant from non-significant genes
 #' @param ncol number of columns in the plot
+#' @param ... arguments passed to \code{facet_wrap()}. Useful for specifying \code{scales = "free_y"}
 #'
 #' @return Volcano plot for each cell type
 #'  
@@ -49,7 +50,7 @@
 #' @docType methods
 #' @rdname plotVolcano-methods
 setGeneric("plotVolcano", 
-  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3){
+  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3,...){
 
   standardGeneric("plotVolcano")
 })
@@ -60,7 +61,7 @@ setGeneric("plotVolcano",
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,list,list-method
 setMethod("plotVolcano", "list",
-  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3){
+  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3,...){
 
   df_combine = topTable(x, coef=coef, number=Inf)
   df_combine = as.data.table(df_combine)
@@ -70,6 +71,13 @@ setMethod("plotVolcano", "list",
 
   xmax = max(abs(df_combine$logFC))
   ymax = -log10(min(df_combine$P.Value))
+
+  # check for 0 p-values
+  if( ! is.finite(ymax) ){
+    nzero = length(df_combine$P.Value==0)
+    txt = paste0("There are ", nzero, " features with p-value of 0. Plotting will be affected")
+    warning(txt)
+  }
 
   df_combine$isSignif = c("no","yes")[(df_combine$adj.P.Val < cutoff)+1]
   df_combine$P.Value = pmax(minp, df_combine$P.Value )
@@ -84,16 +92,26 @@ setMethod("plotVolcano", "list",
   df2 = df_combine[,head(.SD, nGenes), by="assay"]
 
   # reverse order to plot significant points last
-  ggplot(df_combine, aes(logFC, -log10(P.Value), color=isSignif)) + 
+  fig = ggplot(df_combine, aes(logFC, -log10(P.Value), color=isSignif)) + 
     geom_point() + 
     theme_bw(size) + 
     theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
     xlab(bquote(log[2]~fold~change)) + 
     ylab(bquote(-log[10]~P)) + 
     scale_color_manual(values=c("grey", "darkred")) + 
-    scale_y_continuous(limits=c(0, ymax*1.02), expand=c(0,0)) + 
     geom_text_repel(data=df2, aes(logFC, -log10(P.Value), label=ID), segment.size=.5,  segment.color="black", color="black", force=1, nudge_x=.005, nudge_y=.5) +
-    facet_wrap(~assay, ncol=ncol) 
+    facet_wrap(~assay, ncol=ncol,...) 
+
+  # If scales is not specified, standardize y-axis 
+  # and don't expand
+  argsList = match.call(expand.dots = FALSE)$`...`
+  ags = names(argsList)
+  if( length(ags) == 0 || !("scales" %in% ags) ){
+    fig = fig + 
+    scale_y_continuous(limits=c(0, ymax*1.02), expand=c(0,0))
+  }  
+
+  fig
 })
 
 
@@ -102,7 +120,7 @@ setMethod("plotVolcano", "list",
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,MArrayLM,MArrayLM-method
 setMethod("plotVolcano", "MArrayLM",
-  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3){
+  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3,...){
 
   tab = topTable(x, coef=coef, number=Inf)
   df_combine = data.table(ID = rownames(tab), tab)
@@ -140,7 +158,7 @@ setMethod("plotVolcano", "MArrayLM",
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,dreamlet_mash_result,dreamlet_mash_result-method
 setMethod("plotVolcano", "dreamlet_mash_result",
-  function(x, coef, nGenes=5, size=12, minp=1.0e-16, cutoff=0.05, ncol=3){
+  function(x, coef, nGenes=5, size=12, minp=1.0e-16, cutoff=0.05, ncol=3,...){
 
   df_logFC = reshape2::melt(get_pm(x$model))
   colnames(df_logFC) = c("Gene", "ID", "logFC")
@@ -178,16 +196,26 @@ setMethod("plotVolcano", "dreamlet_mash_result",
   # reverse order to plot significant points last
   # df = df[seq(nrow(df), 1)]
 
-  ggplot(df, aes(logFC, -log10(lFSR), color=isSignif)) + 
+  fig = ggplot(df, aes(logFC, -log10(lFSR), color=isSignif)) + 
     geom_point() + 
     theme_bw(size) + 
     theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
     xlab(bquote(log[2]~fold~change)) + 
     ylab(bquote(-log[10]~local~False~Sign~Rate~(mashr))) + 
     scale_color_manual(values=c("grey", "darkred")) + 
-    scale_y_continuous(limits=c(0, ymax*1.04), expand=c(0,0)) + 
-    geom_text_repel(data=df2, aes(logFC, -log10(lFSR), label=Gene.x), segment.size=.5,  segment.color="black", color="black", force=1, nudge_x=.005, nudge_y=.5) +
-    facet_wrap(~ID.x, ncol=ncol) 
+    geom_text_repel(data=df2, aes(logFC, -log10(lFSR), label=Gene.x), segment.size=.5, segment.color="black", color="black", force=1, nudge_x=.005, nudge_y=.5) +
+    facet_wrap(~ID.x, ncol=ncol,...) 
+
+  # If scales is not specified, standardize y-axis 
+  # and don't expand
+  argsList = match.call(expand.dots = FALSE)$`...`
+  ags = names(argsList)
+  if( length(ags) == 0 || !("scales" %in% ags) ){
+    fig = fig + 
+    scale_y_continuous(limits=c(0, ymax*1.02), expand=c(0,0))
+  }  
+
+  fig
 })
 
 
