@@ -131,6 +131,13 @@ setMethod("plotVolcano", "MArrayLM",
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = ID = NULL
 
+  # check for 0 p-values
+  if( ! is.finite(ymax) ){
+    nzero = length(df_combine$P.Value==0)
+    txt = paste0("There are ", nzero, " features with p-value of 0. Plotting will be affected")
+    warning(txt)
+  }
+
   df_combine$isSignif = c("no","yes")[(df_combine$adj.P.Val < cutoff)+1]
   df_combine$P.Value = pmax(minp, df_combine$P.Value )
 
