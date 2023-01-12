@@ -18,7 +18,8 @@ plotVolcano(
   size = 12,
   minp = 9.99999999999997e-311,
   cutoff = 0.05,
-  ncol = 3
+  ncol = 3,
+  ...
 )
 
 \S4method{plotVolcano}{list}(
@@ -28,7 +29,8 @@ plotVolcano(
   size = 12,
   minp = 9.99999999999997e-311,
   cutoff = 0.05,
-  ncol = 3
+  ncol = 3,
+  ...
 )
 
 \S4method{plotVolcano}{MArrayLM}(
@@ -38,7 +40,8 @@ plotVolcano(
   size = 12,
   minp = 9.99999999999997e-311,
   cutoff = 0.05,
-  ncol = 3
+  ncol = 3,
+  ...
 )
 
 \S4method{plotVolcano}{dreamlet_mash_result}(
@@ -48,7 +51,8 @@ plotVolcano(
   size = 12,
   minp = 1e-16,
   cutoff = 0.05,
-  ncol = 3
+  ncol = 3,
+  ...
 )
 }
 \arguments{
@@ -65,6 +69,8 @@ plotVolcano(
 \item{cutoff}{adj.P.Val cutoff to distinguish significant from non-significant genes}
 
 \item{ncol}{number of columns in the plot}
+
+\item{...}{arguments passed to \code{facet_wrap()}. Useful for specifying \code{scales = "free_y"}}
 }
 \value{
 Volcano plot for each cell type
