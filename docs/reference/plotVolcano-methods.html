@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.59</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.60</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,7 @@
 <span>  minp <span class="op">=</span> <span class="fl">9.99999999999997e-311</span>,</span>
 <span>  cutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  ncol <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -105,6 +106,7 @@
 <span>  minp <span class="op">=</span> <span class="fl">1e-16</span>,</span>
 <span>  cutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  ncol <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -142,6 +144,10 @@
 <dt>...</dt>
 <dd><p>arguments passed to <code>facet_wrap()</code>. Useful for specifying <code>scales = "free_y"</code></p></dd>
 
+
+<dt>assays</dt>
+<dd><p>which assays to plot</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -167,29 +173,29 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.073 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.023 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.088 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.018 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.02 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.016 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.021 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Differential expression analysis within each assay,</span></span></span>
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data </span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.082 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.068 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.11 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.073 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.081 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.035 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.042 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.087 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.12 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># show coefficients estimated for each cell type</span></span></span>

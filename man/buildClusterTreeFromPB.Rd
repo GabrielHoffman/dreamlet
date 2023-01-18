@@ -18,6 +18,9 @@ buildClusterTreeFromPB(
 
 \item{dist.method}{distance metric}
 }
+\value{
+hierarchical clustering object of class \code{hclust}
+}
 \description{
 Perform hierarchical clustering on cell types from pseudobulk by aggregating read counts from each cell type.
 }

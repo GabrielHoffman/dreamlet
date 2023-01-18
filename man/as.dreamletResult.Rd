@@ -11,6 +11,9 @@ as.dreamletResult(fitList, df_details = NULL)
 
 \item{df_details}{\code{data.frame} storing assay details}
 }
+\value{
+object of class \code{dreamletResult}
+}
 \description{
 Convert list of regression fits to \code{dreamletResult} for downstream analysis
 }

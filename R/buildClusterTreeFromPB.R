@@ -9,6 +9,7 @@
 #' @param method clustering method for \code{hclust()}
 #' @param dist.method distance metric
 #'
+#' @return hierarchical clustering object of class \code{hclust}
 #' @examples
 #' library(muscat)
 #' library(SingleCellExperiment)

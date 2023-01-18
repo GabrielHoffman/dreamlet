@@ -78,7 +78,7 @@ setMethod("fitVarPart", "dreamletProcessedData",
 	data_constant = as.data.frame(data)
 
 	# remove samples with missing covariate data
-	idx = sapply(all.vars(formula), function(v) {
+	idx = lapply(all.vars(formula), function(v) {
 	        which(is.na(data_constant[[v]]))
     })
     idx = unique(unlist(idx))    

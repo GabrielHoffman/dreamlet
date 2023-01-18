@@ -7,12 +7,16 @@
 \alias{plotViolin,cellSpecificityValues,cellSpecificityValues-method}
 \title{Plot Violins}
 \usage{
-plotViolin(x)
+plotViolin(x, ...)
 
-\S4method{plotViolin}{cellSpecificityValues}(x)
+\S4method{plotViolin}{cellSpecificityValues}(x, assays = colnames(x))
 }
 \arguments{
 \item{x}{fractions for each gene}
+
+\item{...}{other arguments}
+
+\item{assays}{array of assays to plot}
 }
 \value{
 Violin plot

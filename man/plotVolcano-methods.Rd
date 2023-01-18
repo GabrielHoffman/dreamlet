@@ -30,6 +30,7 @@ plotVolcano(
   minp = 9.99999999999997e-311,
   cutoff = 0.05,
   ncol = 3,
+  assays = names(x),
   ...
 )
 
@@ -52,6 +53,7 @@ plotVolcano(
   minp = 1e-16,
   cutoff = 0.05,
   ncol = 3,
+  assays = colnames(x$logFC.original),
   ...
 )
 }
@@ -71,6 +73,8 @@ plotVolcano(
 \item{ncol}{number of columns in the plot}
 
 \item{...}{arguments passed to \code{facet_wrap()}. Useful for specifying \code{scales = "free_y"}}
+
+\item{assays}{which assays to plot}
 }
 \value{
 Volcano plot for each cell type

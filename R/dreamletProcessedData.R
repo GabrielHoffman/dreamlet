@@ -127,13 +127,49 @@ setMethod("metadata", "dreamletProcessedData",
 #' @param object \code{dreamletProcessedData} object
 #'
 #' @rdname show-methods
+#' @importFrom utils head tail
+#' @importFrom S4Vectors coolcat
 #' @aliases show,dreamletProcessedData,dreamletProcessedData-method
 #' @export
 setMethod("show", "dreamletProcessedData",
 	function(object){
-		print(object)
+
+	cat('class:', class(object), '\n')
+
+	# assay
+    nms <- assayNames(object)
+    if (is.null(nms))
+        nms <- character(length(assays(object, withDimnames=FALSE)))
+    coolcat("assays(%d): %s\n", nms)
+
+	# colData
+    nms <- names(colData(object))
+    if (is.null(nms))
+        nms <- character(length(colData(object, withDimnames=FALSE)))
+    coolcat("colData(%d): %s\n", nms)
+
+    # metadata
+    nms <- names(metadata(object))
+    if (is.null(nms))
+        nms <- character(length(metadata(object, withDimnames=FALSE)))
+    coolcat("metadata(%d): %s\n", nms)
+
+	df_count = lapply(object, function(obj) dim(obj))
+	df_count = do.call(rbind, df_count)
+
+	if( is.null(df_count) ){
+		cat("No assays retained\n")
+	}else{
+		cat('Samples:\n min:', min(df_count[,2]), '\n max:', max(df_count[,2]))
+		cat('\nGenes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
+
+		# metadata
+	    nms <- names(details(object))
+	    if (is.null(nms))
+	        nms <- character(length(metadata(object, withDimnames=FALSE)))
+	    coolcat("details(%d): %s\n", nms)
 	}
-)
+})
 
 
 
@@ -144,49 +180,12 @@ setMethod("show", "dreamletProcessedData",
 #' @param x \code{dreamletProcessedData} object
 #' @param ... other arguments
 #' 
-#' @importFrom utils head tail
-#' @importFrom S4Vectors coolcat
 #' @export
 #' @rdname print-methods
 #' @aliases print,dreamletProcessedData,dreamletProcessedData-method
 setMethod("print", "dreamletProcessedData",
 	function(x,...){
-
-		cat('class:', class(x), '\n')
-
-		# assay
-	    nms <- assayNames(x)
-	    if (is.null(nms))
-	        nms <- character(length(assays(x, withDimnames=FALSE)))
-	    coolcat("assays(%d): %s\n", nms)
-
-		# colData
-	    nms <- names(colData(x))
-	    if (is.null(nms))
-	        nms <- character(length(colData(x, withDimnames=FALSE)))
-	    coolcat("colData(%d): %s\n", nms)
-
-	    # metadata
-	    nms <- names(metadata(x))
-	    if (is.null(nms))
-	        nms <- character(length(metadata(x, withDimnames=FALSE)))
-	    coolcat("metadata(%d): %s\n", nms)
-
-		df_count = lapply(x, function(obj) dim(obj))
-		df_count = do.call(rbind, df_count)
-
-		if( is.null(df_count) ){
-			cat("No assays retained\n")
-		}else{
-			cat('Samples:\n min:', min(df_count[,2]), '\n max:', max(df_count[,2]))
-			cat('\nGenes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
-
-			# metadata
-		    nms <- names(details(x))
-		    if (is.null(nms))
-		        nms <- character(length(metadata(x, withDimnames=FALSE)))
-		    coolcat("details(%d): %s\n", nms)
-		}
+		show(x)
 	}
 )
 

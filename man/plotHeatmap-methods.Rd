@@ -9,11 +9,11 @@
 \alias{plotHeatmap,matrix,matrix-method}
 \title{Plot heatmap}
 \usage{
-plotHeatmap(x, genes = rownames(x), color = "darkblue")
+plotHeatmap(x, genes = rownames(x), color = "darkblue", ...)
 
-\S4method{plotHeatmap}{cellSpecificityValues}(x, genes = rownames(x), color = "darkblue")
+\S4method{plotHeatmap}{cellSpecificityValues}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
 
-\S4method{plotHeatmap}{matrix}(x, genes = rownames(x), color = "darkblue")
+\S4method{plotHeatmap}{matrix}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
 }
 \arguments{
 \item{x}{fractions for each gene}
@@ -21,6 +21,10 @@ plotHeatmap(x, genes = rownames(x), color = "darkblue")
 \item{genes}{name of genes to plot}
 
 \item{color}{color of heatmap}
+
+\item{...}{other arguments}
+
+\item{assays}{array of assays to plot}
 }
 \value{
 heatmap

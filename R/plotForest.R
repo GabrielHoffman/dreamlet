@@ -7,6 +7,8 @@
 #' @param x result from \code{dreamlet}
 #' @param gene gene to show results for
 #' @param coef coefficient to test with \code{topTable}
+#' @param assays array of assays to plot
+#' @param ... other arguments
 #'
 #' @return Plot showing effect sizes
 #' 
@@ -39,7 +41,7 @@
 #' 
 #' @rdname plotForest-methods
 #' @export
-setGeneric('plotForest', function(x, gene, coef){
+setGeneric('plotForest', function(x, gene, coef,...){
 	standardGeneric("plotForest")
 	})
 
@@ -51,7 +53,7 @@ setGeneric('plotForest', function(x, gene, coef){
 #' @aliases plotForest,dreamletResult-method
 #' @export
 setMethod("plotForest", signature(x="dreamletResult"),
-	function(x, gene, coef){
+	function(x, gene, coef, assays=names(x)){
 
 	# Pass R CMD check
 	Assay = logFC = FDR = se = NULL
@@ -60,6 +62,8 @@ setMethod("plotForest", signature(x="dreamletResult"),
  	df$se = df$logFC / df$t
 	df$FDR = p.adjust(df$P.Value)
 	df = as.data.frame(df)
+	df = df[df$assay %in% assays,]
+	df$assay = factor(df$assay, assays)
 
 	ggplot(df[df$ID == gene, ], aes(assay, logFC,  color=-log10(pmax(1e-4,FDR)) )) + geom_point() + geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + theme_classic() + theme(plot.title = element_text(hjust = 0.5)) + coord_flip() + ggtitle(gene) + ylab(bquote(log[2]~fold~change)) + geom_hline(yintercept=0, linetype="dashed") + scale_color_gradient(name = bquote(-log[10]~FDR), low="grey", high="red", limits=c(0, 4)) + xlab('')
 })
@@ -73,7 +77,7 @@ setMethod("plotForest", signature(x="dreamletResult"),
 #' @importFrom ashr get_pm get_lfsr get_psd
 #' @export
 setMethod("plotForest", signature(x="dreamlet_mash_result"),
-	function(x, gene, coef){
+	function(x, gene, coef, assays=colnames(x$logFC.original)){
 
 	# Pass R CMD check
 	ID = logFC = lFSR = se = NULL
@@ -94,6 +98,9 @@ setMethod("plotForest", signature(x="dreamlet_mash_result"),
 	# merge mashr statistics
 	df = merge(df_logFC, df_lfsr, by='key')
 	df = merge(df, df_se, by='key')
+
+	df = df[df$ID %in% assays,]
+	df$ID = factor(df$ID, assays)
 
 	# drop NA values
 	df = df[!is.na(df$logFC),]

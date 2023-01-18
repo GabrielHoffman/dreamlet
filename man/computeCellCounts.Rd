@@ -13,6 +13,9 @@ computeCellCounts(sce, annotation, sampleIDs)
 
 \item{sampleIDs}{string indicating column in \code{colData(sce)} storing sample identifers}
 }
+\value{
+\code{matrix} storing cell counts
+}
 \description{
 Get cell counts with metadata for each sample
 }
