@@ -5,6 +5,8 @@
 #' Plot Violins
 #' 
 #' @param x fractions for each gene
+#' @param assays array of assays to plot
+#' @param ... other arguments
 #'
 #' @return Violin plot
 #'  
@@ -12,7 +14,7 @@
 #' @docType methods
 #' @rdname plotViolin-methods
 setGeneric("plotViolin", 
-  function(x){
+  function(x,...){
 
   standardGeneric("plotViolin")
 })
@@ -43,7 +45,7 @@ setGeneric("plotViolin",
 #' @rdname plotViolin-methods
 #' @aliases plotViolin,cellSpecificityValues,cellSpecificityValues-method
 setMethod("plotViolin", "cellSpecificityValues",
-  function(x){
+  function(x, assays=colnames(x)){
 
 	# pass R CMD check
 	gene = value = variable = NA
@@ -51,6 +53,11 @@ setMethod("plotViolin", "cellSpecificityValues",
 	# omit column totalCPM, if it exists
 	i = which(colnames(x) == "totalCPM")
 	if( length(i) > 0) x = x[,-1]
+
+	# intersect preserving order from assays
+	assays = intersect(assays, colnames(x))
+	if( length(assays) == 0) stop("No valid assays selected")
+	x = x[,assays,drop=FALSE]
 
 	df = data.frame(gene = rownames(x), x, check.names=FALSE)
 

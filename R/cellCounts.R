@@ -45,6 +45,7 @@ cellCounts = function(x){
 #' @param annotation string indicating column in \code{colData(sce)} storing cell type annotations
 #' @param sampleIDs string indicating column in \code{colData(sce)} storing sample identifers
 #' 
+#' @return \code{matrix} storing cell counts
 #' @examples
 #' library(muscat)
 #' library(SingleCellExperiment)

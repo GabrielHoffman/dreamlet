@@ -7,6 +7,8 @@
 #' @param x fractions for each gene
 #' @param genes name of genes to plot
 #' @param color color of heatmap
+#' @param assays array of assays to plot
+#' @param ... other arguments
 #'
 #' @return heatmap
 #'  
@@ -14,7 +16,7 @@
 #' @docType methods
 #' @rdname plotHeatmap-methods
 setGeneric("plotHeatmap", 
-  function(x, genes = rownames(x), color="darkblue"){
+  function(x, genes = rownames(x), color="darkblue",...){
 
   standardGeneric("plotHeatmap")
 })
@@ -47,7 +49,13 @@ setGeneric("plotHeatmap",
 #' @rdname plotHeatmap-methods
 #' @aliases plotHeatmap,cellSpecificityValues,cellSpecificityValues-method
 setMethod("plotHeatmap", "cellSpecificityValues",
-  function(x, genes = rownames(x), color="darkblue"){
+  function(x, genes = rownames(x), color="darkblue", assays=colnames(x)){
+
+  # intersect preserving order from assays
+	assays = intersect(assays, colnames(x))
+	if( length(assays) == 0) stop("No valid assays selected")
+
+	x = x[,assays,drop=FALSE]
 
 	# subset based on specified genes
 	x = x[rownames(x) %in% unique(genes),]	
@@ -64,7 +72,7 @@ setMethod("plotHeatmap", "cellSpecificityValues",
 	df_melt = reshape2::melt(df, id.vars="gene")
 
 	df_melt$gene = factor(df_melt$gene, unique(genes))
-	df_melt$variable = factor(df_melt$variable, colnames(x))
+	df_melt$variable = factor(df_melt$variable, assays)
 
 	ratio = nlevels(df_melt$gene) / nlevels(df_melt$variable)
 
@@ -88,7 +96,13 @@ setMethod("plotHeatmap", "cellSpecificityValues",
 #' @rdname plotHeatmap-methods
 #' @aliases plotHeatmap,matrix,matrix-method
 setMethod("plotHeatmap", "matrix",
-  function(x, genes = rownames(x), color="darkblue"){
+  function(x, genes = rownames(x), color="darkblue", assays=colnames(x)){
+
+  # intersect preserving order from assays
+	assays = intersect(assays, colnames(x))
+	if( length(assays) == 0) stop("No valid assays selected")
+
+	x = x[,assays,drop=FALSE]
 
 	# subset based on specified genes
 	x = x[rownames(x) %in% unique(genes),]	
@@ -101,7 +115,7 @@ setMethod("plotHeatmap", "matrix",
 	df_melt = reshape2::melt(df, id.vars="gene")
 
 	df_melt$gene = factor(df_melt$gene, unique(genes))
-	df_melt$variable = factor(df_melt$variable, colnames(x))
+	df_melt$variable = factor(df_melt$variable, assays)
 
 	ratio = nlevels(df_melt$gene) / nlevels(df_melt$variable)
 

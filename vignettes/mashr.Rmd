@@ -62,6 +62,7 @@ library(dreamlet)
 library(muscat)
 library(ExperimentHub)
 library(zenith)
+library(scater)
 
 # Download data, specifying EH2259 for the Kang, et al study
 eh <- ExperimentHub()

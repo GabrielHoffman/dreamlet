@@ -11,6 +11,8 @@
 #' @param x dreamletProcessedData
 #' @param ncol number of columns in the plot
 #' @param alpha transparency of points
+#' @param assays which assays to plot
+#' @param ... other arguments
 #'
 #' @return Plot of mean-variance trend
 #'
@@ -41,7 +43,7 @@
 #' @docType methods
 #' @rdname plotVoom-methods
 setGeneric("plotVoom", 
-  function(x, ncol=3, alpha=.5){
+  function(x, ncol=3, alpha=.5,...){
 
   standardGeneric("plotVoom")
 })
@@ -50,14 +52,18 @@ setGeneric("plotVoom",
 #' @rdname plotVoom-methods
 #' @aliases plotVoom,dreamletProcessedData,dreamletProcessedData-method
 setMethod("plotVoom", "dreamletProcessedData",
-  function(x, ncol=3, alpha=.5){
+  function(x, ncol=3, alpha=.5, assays = names(x)){
 
 	# Pass R CMD check
 	y = NULL
 
+	# intersect preserving order from assays
+	assays = intersect(assays, names(x))
+	if( length(assays) == 0) stop("No valid assays selected")
+
 	# get common range across all plots
 	###################################
-	df_range = lapply( names(x), function(id){
+	df_range = lapply( assays, function(id){
 
 		if( !is.null(x[[id]]$voom.xy) ){
 			res = with(x[[id]]$voom.xy, data.frame(range(x),range(y), id=id))
@@ -79,14 +85,14 @@ setMethod("plotVoom", "dreamletProcessedData",
 	ylab = bquote(sqrt(standard~deviation))
 
 	# only included assays were voom succeeded
-	validAssays = droplevels(factor(unique(df_range)$id, names(x)))
+	validAssays = droplevels(factor(unique(df_range)$id, assays))
 
 	# make data.frame of points
 	df.list = lapply( validAssays, function(id){
 		with(x[[id]]$voom.xy, data.frame(id, x,y))
 	})
 	df_points = do.call(rbind, df.list)
-	df_points$id = droplevels(factor(df_points$id, names(x)))
+	df_points$id = droplevels(factor(df_points$id, assays))
 	df_points = df_points[order(df_points$id),]
 
 	# make data.frame of curves

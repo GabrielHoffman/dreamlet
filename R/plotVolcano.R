@@ -12,6 +12,7 @@
 #' @param minp minimum p-value to show on the y-axis
 #' @param cutoff adj.P.Val cutoff to distinguish significant from non-significant genes
 #' @param ncol number of columns in the plot
+#' @param assays which assays to plot
 #' @param ... arguments passed to \code{facet_wrap()}. Useful for specifying \code{scales = "free_y"}
 #'
 #' @return Volcano plot for each cell type
@@ -61,10 +62,16 @@ setGeneric("plotVolcano",
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,list,list-method
 setMethod("plotVolcano", "list",
-  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3,...){
+  function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3, assays = names(x),...){
 
+  # intersect preserving order from assays
+  assays = intersect(assays, names(x))
+  if( length(assays) == 0) stop("No valid assays selected")
+    
   df_combine = topTable(x, coef=coef, number=Inf)
   df_combine = as.data.table(df_combine)
+  idx = df_combine$assay %in% assays
+  df_combine = df_combine[idx,]
 
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = Gene = ID = NULL
@@ -83,7 +90,7 @@ setMethod("plotVolcano", "list",
   df_combine$P.Value = pmax(minp, df_combine$P.Value )
 
   # sort facets by original sorting of assays
-  df_combine$assay = factor(df_combine$assay, names(x))
+  df_combine$assay = factor(df_combine$assay, assays)
   # order by assay, then p-value
   ord = order(df_combine$assay, df_combine$P.Value)
   df_combine = df_combine[ord,]
@@ -165,7 +172,11 @@ setMethod("plotVolcano", "MArrayLM",
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,dreamlet_mash_result,dreamlet_mash_result-method
 setMethod("plotVolcano", "dreamlet_mash_result",
-  function(x, coef, nGenes=5, size=12, minp=1.0e-16, cutoff=0.05, ncol=3,...){
+  function(x, coef, nGenes=5, size=12, minp=1.0e-16, cutoff=0.05, ncol=3, assays = colnames(x$logFC.original),...){
+
+  # intersect preserving order from assays
+  assays = intersect(assays, colnames(x$logFC.original))
+  if( length(assays) == 0) stop("No valid assays selected")
 
   df_logFC = reshape2::melt(get_pm(x$model))
   colnames(df_logFC) = c("Gene", "ID", "logFC")
@@ -190,13 +201,17 @@ setMethod("plotVolcano", "dreamlet_mash_result",
   df$isSignif = c("no","yes")[(df$lFSR < cutoff)+1]
   df$lFSR = pmax(minp, df$lFSR )
 
+  # filter based on assays
+  df = df[df$ID.x %in% assays,]
+  df$ID.x = factor(df$ID.x, assays)
+
   xmax = max(abs(df$logFC))
   ymax = -log10(min(df$lFSR))
 
   # top significant genes in each cell type
   df2 = df[,head(.SD, nGenes), by="ID.x"]
 
-   # order by assay, then p-value
+  # order by assay, then lFSR
   ord = order(df$ID.x, df$lFSR)
   df = df[ord,]
 

@@ -75,18 +75,19 @@ setMethod("plotGeneHeatmap", "dreamletResult",
 
 	# extract gene-level results
 	tab = topTable(x, coef=coef, number=Inf)
-	tab = tab[tab$ID %in% genes,c("assay", "ID", "z.std")]
+	tab = tab[tab$ID %in% genes,c("assay", "ID", "z.std", 'adj.P.Val')]
 	tab$ID <- factor(tab$ID, levels=genes)
 
 	if( nrow(tab) == 0) stop("No genes retained")
 
 	tab = as.data.frame(tab[tab$assay %in% assays,])
 	tab = droplevels(tab)
+	tab$assay = factor(tab$assay, assays)
 
 	if( nrow(tab) == 0) stop("No assays retained")
 
 	# pass R CMD check
-	assay = ID = z.std = NULL
+	assay = ID = z.std = adj.P.Val = NULL
 
 	# fill empty values with NA
 	tab = as.data.frame(complete(tab, assay, ID))
@@ -103,9 +104,10 @@ setMethod("plotGeneHeatmap", "dreamletResult",
 	nrow = length(unique(tab$ID))
 	aspect.ratio = nrow / ncol
 
-	fig = ggplot(tab, aes(assay, ID, fill=z.std)) +
+	fig = ggplot(tab, aes(assay, ID, fill=z.std, label=ifelse(adj.P.Val < 0.05, '*', ''))) +
 	  geom_tile() +
 	  theme_classic() +
+	  geom_text(vjust=1, hjust=0.5) +
 	  scale_fill_gradient2("z-statistic", low="blue", mid="white", high="red", limits=c(-zmax, zmax), na.value="grey70")  +
 	  ylab("Gene") +
 	  xlab("Cell type")

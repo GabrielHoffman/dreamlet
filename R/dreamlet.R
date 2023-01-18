@@ -30,7 +30,32 @@ setClass("dreamletResult", contains="list", slots=c(df_details = "data.frame"))
 #' @export
 setMethod("show", "dreamletResult",
 	function(object){
-		print(object)
+		object
+		cat('class:', class(object), '\n')
+
+		# assay
+	    nms <- names(object)
+	    if (is.null(nms))
+	        nms <- character(length(assays(object, withDimnames=FALSE)))
+	    coolcat("assays(%d): %s\n", nms)
+
+		df_count = lapply(object, function(obj) nrow(obj$coefficients))
+		df_count = do.call(rbind, df_count)
+
+		if( is.null(df_count) ){
+			cat("No assays retained\n")
+		}else{
+			cat('Genes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
+		}
+
+		# metadata
+	    nms <- names(details(object))
+	    if (is.null(nms))
+	        nms <- character(length(metadata(object, withDimnames=FALSE)))
+	    coolcat("details(%d): %s\n", nms)
+
+	    # show coef names
+	    coolcat("coefNames(%d): %s\n", coefNames(object))
 	}
 )
 
@@ -50,35 +75,9 @@ setMethod("show", "dreamletResult",
 #' @aliases print,dreamletResult,dreamletResult-method
 setMethod("print", "dreamletResult",
 	function(x,...){
-
-		cat('class:', class(x), '\n')
-
-		# assay
-	    nms <- names(x)
-	    if (is.null(nms))
-	        nms <- character(length(assays(x, withDimnames=FALSE)))
-	    coolcat("assays(%d): %s\n", nms)
-
-		df_count = lapply(x, function(obj) nrow(obj$coefficients))
-		df_count = do.call(rbind, df_count)
-
-		if( is.null(df_count) ){
-			cat("No assays retained\n")
-		}else{
-			cat('Genes:\n min:', min(df_count[,1]), '\n max:', max(df_count[,1]), '\n')
-		}
-
-		# metadata
-	    nms <- names(details(x))
-	    if (is.null(nms))
-	        nms <- character(length(metadata(x, withDimnames=FALSE)))
-	    coolcat("details(%d): %s\n", nms)
-
-	    # show coef names
-	    coolcat("coefNames(%d): %s\n", coefNames(x))
+		show(x)		
 	}
 )
-
 
 
 #' Get coefficient names
@@ -209,6 +208,7 @@ setMethod("[", signature(x="dreamletResult"),
 #' @param df_details \code{data.frame} storing assay details
 #' 
 #' @details Useful for combining multiple runs of \code{dreamletCompareClusters()} into a single \code{dreamletResult} for downstream analysis
+#' @return object of class \code{dreamletResult}
 #' @examples
 #' library(muscat)
 #' library(SingleCellExperiment) 
@@ -264,7 +264,7 @@ as.dreamletResult = function(fitList, df_details=NULL){
 	}
 
 	# check that entries are the result of a dream() fit
-	if( any(!sapply(fitList, is, class2="MArrayLM")) ){
+	if( any(!vapply(fitList, is, class2="MArrayLM", FUN.VALUE=logical(1))) ){
 		stop("Each element of fitList must be a fit from dream()")
 	}
 
@@ -596,7 +596,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 	data_constant = as.data.frame(data)
 
 	# remove samples with missing covariate data
-	idx = sapply(all.vars(formula), function(v) {
+	idx = lapply(all.vars(formula), function(v) {
 	        which(is.na(data_constant[[v]]))
     })
     idx = unique(unlist(idx))    

@@ -1,3 +1,7 @@
+# dreamlet 0.0.560
+ - Jan 18, 2023
+ - allow custom ordering of assays in plots
+
 # dreamlet 0.0.59
  - Jan 12, 2023
  - update `plotVolcano()` to allow `scales="free_y"`
