@@ -8,8 +8,8 @@ Description: Recent advances in single cell/nucleus transcriptomic technology ha
 VignetteBuilder: knitr
 License: Artistic-2.0
 Encoding: UTF-8
-URL: https://gabrielhoffman.github.io/dreamlet
-BugReports: https://github.com/GabrielHoffman/dreamlet/issues
+URL: https://DiseaseNeurogenomics.github.io/dreamlet
+BugReports: https://github.com/DiseaseNeurogenomics/dreamlet/issues
 Suggests:
     BiocStyle,
     knitr,
