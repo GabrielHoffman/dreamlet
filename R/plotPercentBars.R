@@ -62,6 +62,7 @@ setMethod("plotPercentBars", "vpDF",
 	df = melt( as.data.frame(x), id.vars=c("assay", "gene"))
 
 	df$gene = factor(df$gene, rev(genes))
+	df$assay = factor(df$assay, assays)
 
 	# pass R CMD check
 	gene = value = variable = NA
@@ -107,6 +108,15 @@ setMethod("plotPercentBars", "vpDF",
 setMethod("plotPercentBars", "cellSpecificityValues",
 	function( x, col=ggColorHue(ncol(x)), genes=rownames(x), width=NULL,...){
 		
+	# get assays when it is not defined in generic function		
+	args <- list(...)
+	if( 'assays' %in% names(args) ){
+		assays = args$assays
+	}else{
+		assays = colnames(df)
+		assays = assays[grep("totalCPM", assays, invert=TRUE)]
+	}
+
 	gene = unique(genes)
 	idx = match(genes, rownames(x))
 	idx = idx[!is.na(idx)]
@@ -129,6 +139,7 @@ setMethod("plotPercentBars", "cellSpecificityValues",
 	df_melt = melt(df, id.vars="gene")
 
 	df_melt$gene = factor(df_melt$gene, rev(gene))
+	df_melt$variable = factor(df_melt$variable, assays)
 
 	# pass R CMD check
 	gene = value = variable = NA
