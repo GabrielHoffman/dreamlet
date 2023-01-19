@@ -58,7 +58,7 @@ setMethod("plotVarPart", "DataFrame",
 						
 	df = melt( as.data.frame(obj[obj$assay %in% assays,]), id.vars = c("assay", "gene"))
 
-	# if( label.angle == '') label.angle = 20
+	df$assay = factor(df$assay, assays)
 
 	# pass R CMD check
 	variable = value = NULL
