@@ -1,4 +1,8 @@
-# dreamlet 0.0.560
+# dreamlet 0.0.61
+ - Jan 25, 2023
+ - add `plotProjection()`
+
+# dreamlet 0.0.60
  - Jan 18, 2023
  - allow custom ordering of assays in plots
 
