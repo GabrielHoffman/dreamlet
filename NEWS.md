@@ -1,6 +1,7 @@
 # dreamlet 0.0.61
  - Jan 25, 2023
  - add `plotProjection()`
+ - add `outlier()`
 
 # dreamlet 0.0.60
  - Jan 18, 2023
