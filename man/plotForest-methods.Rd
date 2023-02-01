@@ -8,9 +8,9 @@
 \usage{
 plotForest(x, gene, coef, ...)
 
-\S4method{plotForest}{dreamletResult}(x, gene, coef, assays = names(x))
+\S4method{plotForest}{dreamletResult}(x, gene, coef, assays = names(x), ylim = NULL)
 
-\S4method{plotForest}{dreamlet_mash_result}(x, gene, coef, assays = colnames(x$logFC.original))
+\S4method{plotForest}{dreamlet_mash_result}(x, gene, coef, assays = colnames(x$logFC.original), ylim = NULL)
 }
 \arguments{
 \item{x}{result from \code{dreamlet}}
@@ -22,6 +22,8 @@ plotForest(x, gene, coef, ...)
 \item{...}{other arguments}
 
 \item{assays}{array of assays to plot}
+
+\item{ylim}{limits for the y axis}
 }
 \value{
 Plot showing effect sizes

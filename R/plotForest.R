@@ -8,6 +8,7 @@
 #' @param gene gene to show results for
 #' @param coef coefficient to test with \code{topTable}
 #' @param assays array of assays to plot
+#' @param ylim limits for the y axis
 #' @param ... other arguments
 #'
 #' @return Plot showing effect sizes
@@ -53,7 +54,7 @@ setGeneric('plotForest', function(x, gene, coef,...){
 #' @aliases plotForest,dreamletResult-method
 #' @export
 setMethod("plotForest", signature(x="dreamletResult"),
-	function(x, gene, coef, assays=names(x)){
+	function(x, gene, coef, assays=names(x), ylim=NULL){
 
 	# Pass R CMD check
 	Assay = logFC = FDR = se = NULL
@@ -65,7 +66,15 @@ setMethod("plotForest", signature(x="dreamletResult"),
 	df = df[df$assay %in% assays,]
 	df$assay = factor(df$assay, assays)
 
-	ggplot(df[df$ID == gene, ], aes(assay, logFC,  color=-log10(pmax(1e-4,FDR)) )) + geom_point() + geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + theme_classic() + theme(plot.title = element_text(hjust = 0.5)) + coord_flip() + ggtitle(gene) + ylab(bquote(log[2]~fold~change)) + geom_hline(yintercept=0, linetype="dashed") + scale_color_gradient(name = bquote(-log[10]~FDR), low="grey", high="red", limits=c(0, 4)) + xlab('')
+	ggplot(df[df$ID == gene, ], aes(assay, logFC,  color=-log10(pmax(1e-4,FDR)) )) + 
+		geom_point() + geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + 
+		theme_classic() + 
+		theme(plot.title = element_text(hjust = 0.5)) + 
+		coord_flip(ylim=ylim) + 
+		ggtitle(gene) + ylab(bquote(log[2]~fold~change)) + 
+		geom_hline(yintercept=0, linetype="dashed") + 
+		scale_color_gradient(name = bquote(-log[10]~FDR), low="grey", high="red", limits=c(0, 4)) + 
+		xlab('')
 })
 
 
@@ -77,7 +86,7 @@ setMethod("plotForest", signature(x="dreamletResult"),
 #' @importFrom ashr get_pm get_lfsr get_psd
 #' @export
 setMethod("plotForest", signature(x="dreamlet_mash_result"),
-	function(x, gene, coef, assays=colnames(x$logFC.original)){
+	function(x, gene, coef, assays=colnames(x$logFC.original), ylim=NULL){
 
 	# Pass R CMD check
 	ID = logFC = lFSR = se = NULL
@@ -106,7 +115,17 @@ setMethod("plotForest", signature(x="dreamlet_mash_result"),
 	df = df[!is.na(df$logFC),]
 
 	# make plot
-	ggplot(df[df$Gene.x == gene, ], aes(ID, logFC,  color=-log10(pmax(1e-4,lFSR)) )) + geom_point() + geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + theme_classic() + theme(plot.title = element_text(hjust = 0.5)) + coord_flip() + ggtitle(gene) + ylab(bquote(log[2]~fold~change)) + geom_hline(yintercept=0, linetype="dashed") + scale_color_gradient(name = bquote(-log[10]~lFSR), low="grey", high="red", limits=c(0, 4)) + xlab('')
+	ggplot(df[df$Gene.x == gene, ], aes(ID, logFC,  color=-log10(pmax(1e-4,lFSR)) )) + 
+		geom_point() + 
+		geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + 
+		theme_classic() + 
+		theme(plot.title = element_text(hjust = 0.5)) + 
+		coord_flip(ylim=ylim) + 
+		ggtitle(gene) + 
+		ylab(bquote(log[2]~fold~change)) + 
+		geom_hline(yintercept=0, linetype="dashed") + 
+		scale_color_gradient(name = bquote(-log[10]~lFSR), low="grey", high="red", limits=c(0, 4)) + 
+		xlab('')
 })
 
 
