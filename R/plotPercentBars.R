@@ -113,7 +113,7 @@ setMethod("plotPercentBars", "cellSpecificityValues",
 	if( 'assays' %in% names(args) ){
 		assays = args$assays
 	}else{
-		assays = colnames(df)
+		assays = colnames(x)
 		assays = assays[grep("totalCPM", assays, invert=TRUE)]
 	}
 
@@ -145,19 +145,16 @@ setMethod("plotPercentBars", "cellSpecificityValues",
 	gene = value = variable = NA
 
 	ggplot(df_melt, aes(gene, value, fill=variable)) + 
-	  geom_bar(stat="identity") + 
-	  theme_classic() + 
-	  theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + 
-	  coord_flip() + 
-	  scale_fill_discrete(name = "Cell type") + 
-	  xlab("Gene") + 
-	  ylab("Fraction of gene expression") + 
-	  scale_y_continuous(limits=c(0, 1 + 1e-14), expand=c(0,0)) + 
-	 ggtitle("Cell type specificity scores")
+		geom_bar(stat="identity") + 
+		theme_classic() + 
+		theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + 
+		coord_flip() + 
+		xlab("Gene") + 
+		ylab("Fraction of gene expression") + 
+		scale_y_continuous(limits=c(0, 1 + 1e-14), expand=c(0,0)) + 
+		ggtitle("Cell type specificity scores") +
+		scale_fill_manual(name = "Cell type", values = col)
 })
-
-
-
 
 
 

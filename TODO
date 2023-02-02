@@ -1,4 +1,14 @@
 
+Feb 2, 
+	topTable(fit) does study-wide FDR correction
+	topTable(fit[[a]]) does cluster-wide FDR correction
+
+
+
+
+
+
+
 plotVolano scale="free" in facet wrap
 
 
