@@ -94,6 +94,10 @@ cellTypeSpecificity = function(pb,...){
 	# evaluate counts per million
 	geneExpr = cpm(dge, log=FALSE)
 
+	# # get cell counts
+	# cell_fracs = colSums(cellCounts(pb))
+	# cell_fracs = cell_fracs / sum(cell_fracs)
+
 	# for each gene, compute fraction of expression
 	# geneExpr.fract = t(apply(geneExpr, 1, function(x) x/ sum(x)))
 	# df = DataFrame(geneExpr.fract)

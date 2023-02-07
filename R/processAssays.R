@@ -136,7 +136,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
 #' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
-#' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be
+#' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be retained
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param useCountsWeights use cell count weights
