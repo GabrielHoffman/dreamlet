@@ -35,7 +35,7 @@ processAssays(
 
 \item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
 
-\item{min.prop}{minimum proportion of retained samples with non-zero counts for a gene to be}
+\item{min.prop}{minimum proportion of retained samples with non-zero counts for a gene to be retained}
 
 \item{isCounts}{logical, indicating if data is raw counts}
 
