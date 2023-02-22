@@ -1,4 +1,10 @@
 
+Feb 16:
+	in pseudobulk, average per-cell statistics
+	into per-cell type summary
+
+
+
 Feb 2, 
 	topTable(fit) does study-wide FDR correction
 	topTable(fit[[a]]) does cluster-wide FDR correction

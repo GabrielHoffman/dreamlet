@@ -68,7 +68,7 @@ setMethod("plotPercentBars", "vpDF",
 	gene = value = variable = NA
 
 	fig = ggplot(df, aes(x = gene, y = 100*value, fill = variable)) + 
-		geom_bar(stat = "identity", width=width) + theme_bw() + 
+		geom_bar(stat = "identity", width=width) + theme_classic() + 
 		theme(panel.grid.major = element_blank(), 
 		panel.grid.minor = element_blank()) + coord_flip() + 
 		xlab("") + theme(plot.title=element_text(hjust=0.5)) + facet_wrap(~ assay, ncol=ncol)

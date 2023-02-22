@@ -101,7 +101,7 @@ setMethod("plotVolcano", "list",
   # reverse order to plot significant points last
   fig = ggplot(df_combine, aes(logFC, -log10(P.Value), color=isSignif)) + 
     geom_point() + 
-    theme_bw(size) + 
+    theme_classic(size) + 
     theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
     xlab(bquote(log[2]~fold~change)) + 
     ylab(bquote(-log[10]~P)) + 
@@ -154,7 +154,7 @@ setMethod("plotVolcano", "MArrayLM",
   # reverse order to plot significant points last
   ggplot(df_combine[seq(nrow(df_combine), 1)], aes(logFC, -log10(P.Value), color=isSignif)) + 
     geom_point() + 
-    theme_bw(size) + 
+    theme_classic(size) + 
     theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
     xlab(bquote(log[2]~fold~change)) + 
     ylab(bquote(-log[10]~P)) + 
@@ -220,7 +220,7 @@ setMethod("plotVolcano", "dreamlet_mash_result",
 
   fig = ggplot(df, aes(logFC, -log10(lFSR), color=isSignif)) + 
     geom_point() + 
-    theme_bw(size) + 
+    theme_classic(size) + 
     theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
     xlab(bquote(log[2]~fold~change)) + 
     ylab(bquote(-log[10]~local~False~Sign~Rate~(mashr))) + 
