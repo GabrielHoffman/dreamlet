@@ -103,7 +103,7 @@ setMethod("plotVoom", "dreamletProcessedData",
 
 	ggplot(df_points, aes(x,y)) + 
 		geom_point(size=0.1, alpha=alpha) + 
-		theme_bw() + 
+		theme_classic() + 
 		theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5))+ 
 		facet_wrap(~id, ncol=ncol) + 
 		xlab(xlab) + 
@@ -142,7 +142,7 @@ setMethod("plotVoom", "EList",
 
 	ggplot(df_points, aes(x,y)) + 
 		geom_point(size=0.1, alpha=alpha) + 
-		theme_bw() + 
+		theme_classic() + 
 		theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) + xlab(xlab) + 
 		ylab(ylab) + 
 		xlim(xlim) + 

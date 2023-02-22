@@ -27,7 +27,7 @@
 #' @details 
 #' The \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type. Here \code{aggregateNonCountSignal()} performs the roles of \code{aggregateToPseudoBulk()} followed by \code{processAssays()} but using non-count data.
 #'
-#' For each cell cluster, samples with at least min.cells are retained. Only clusters with at least min.samples retained samples are kept. Features are retained if they have at least min.signal in at least min.prop fraction of the samples.
+#' For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Features are retained if they have at least \code{min.signal} in at least min.prop fraction of the samples.
 #'  
 #' The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells. 
 #' 
