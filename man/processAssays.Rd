@@ -15,8 +15,6 @@ processAssays(
   isCounts = TRUE,
   normalize.method = "TMM",
   useCountsWeights = TRUE,
-  pmetadata = NULL,
-  pkeys = NULL,
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -42,10 +40,6 @@ processAssays(
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
 \item{useCountsWeights}{use cell count weights}
-
-\item{pmetadata}{sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula}
-
-\item{pkeys}{array of two strings indicating sample identifier and cell type identifier columns in pmetadata}
 
 \item{quiet}{show messages}
 

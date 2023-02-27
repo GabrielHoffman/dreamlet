@@ -1,3 +1,9 @@
+# dreamlet 0.0.62
+ - Feb 27, 2023
+ - store mean of cell-level covariates in `metadata(pb)$aggr_means`
+ - Use these covariates in `processAssays()`, dreamlet()`, `fitVarPart()`
+ 
+
 # dreamlet 0.0.61
  - Jan 25, 2023
  - add `plotProjection()`

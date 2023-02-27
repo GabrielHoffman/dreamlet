@@ -7,7 +7,7 @@
 # This also dramatically reduces memory usage for large datasets
 #
 # The only change is to .summarize_assay()
-# The rest of the code is imported here beccause it is private in muscat, 
+# The rest of the code is imported here because it is private in muscat, 
 # and I didn't want to overwrite summarizeAssayByGroup() in scuttle
 
 
@@ -123,7 +123,8 @@
 #' @importFrom purrr map
 #' @importFrom S4Vectors DataFrame metadata metadata<-
 #' @importFrom SingleCellExperiment SingleCellExperiment reducedDims<- int_colData<-
-#' @importFrom SummarizedExperiment rowData colData colData<-
+#' @importFrom SummarizedExperiment rowData colData colData<- metadata<-
+#' @importFrom dplyr as_tibble group_by summarise_at `%>%` group_by_at
 #' @export
 aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id = NULL,
     fun = c("sum", "mean", "median", "prop.detected", "num.detected", "sem", "number"), 
@@ -207,6 +208,22 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
             colData(pb) <- cd
         }
     }
+
+    # Per sample, per cell type
+    # compute mean of each continuous column in colData
+
+    # Get columns that are numeric (or integers), but not factor
+    cols = sapply(colData(x), function(a) is.numeric(a) & ! is.factor(a))
+    cols = names(cols[cols])
+    cols = cols[!(cols %in% by)]
+
+    # per sample, per cell type
+    # report mean of value
+    metadata(pb)$aggr_means = colData(x) %>%
+        as_tibble %>%
+        group_by_at(vars(metadata(pb)$agg_pars$by)) %>%  
+        summarise_at(cols, mean, na.rm=TRUE)
+
     return(pb)
 }
 
