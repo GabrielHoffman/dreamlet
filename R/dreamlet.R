@@ -4,7 +4,7 @@
 # dreamlet uses linear mixed models in dream to perform differential expression in single cell data
 
 # local definition so methods in this file have this class
-setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', pkeys="vector"))
+# setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', by="vector"))
 
 #' Class dreamletResult
 #'
@@ -186,7 +186,6 @@ setMethod("assay", signature(x="dreamletResult"),
 #' @export
 setMethod("[", signature(x="dreamletResult"),
 	function(x, i){   
-
 
 	res = new("dreamletResult", x@.Data[i], 
 				df_details = details(x)[i,,drop=FALSE])
@@ -605,8 +604,6 @@ setMethod("dreamlet", "dreamletProcessedData",
 	    data_constant = droplevels(data_constant[-idx,,drop=FALSE])
 	}
 
-	pkeys = x@pkeys
-
 	# for each assay
 	resList = lapply( assays, function( k ){
 
@@ -620,9 +617,9 @@ setMethod("dreamlet", "dreamletProcessedData",
 		ids = intersect(colnames(geneExpr), rownames(data_constant)) 
 		geneExpr = geneExpr[,ids,drop=FALSE]
 
-		# merge data_constant and pmetadata based on pkeys and assay k
-		data2 = merge_metadata(data_constant[ids,,drop=FALSE], metadata(x), pkeys, k)
-		data2 = droplevels(data2)
+		# merge data_constant (data constant for all cell types)
+		# with metadata(sceObj)$aggr_means (data that varies)
+		data2 = merge_metadata(data_constant[ids,,drop=FALSE], metadata(x), k, x@by)
 
 		# drop any constant terms from the formula
 		form_mod = removeConstantTerms(formula, data2)

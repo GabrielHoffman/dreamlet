@@ -140,8 +140,6 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param useCountsWeights use cell count weights
-#' @param pmetadata sample-specific metadata the varies across cell types.  This is merged with \code{colData(sceObj)} for each assay to make variables accessable to the formula
-#' @param pkeys array of two strings indicating sample identifier and cell type identifier columns in pmetadata
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
@@ -173,12 +171,11 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #' res.dl = dreamlet( res.proc, ~ group_id)
 #'
 #' @import BiocParallel  
-#' @importFrom SummarizedExperiment colData assays assay assayNames
 #' @importFrom S4Vectors metadata as.data.frame
-#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
 #'
 #' @export
-processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, min.count = 10, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, pmetadata=NULL, pkeys=NULL, quiet=FALSE, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, min.count = 10, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -192,24 +189,6 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 	# extract metadata shared across assays
 	data_constant = droplevels(as.data.frame(colData(sceObj)))
 
-	# pseudo-metadata about each sample for each cell type
-	# subset this metadata for use be each assay (i.e. cell type)
-	use_pmeta = FALSE
-	if( !is.null(pmetadata) ){
-		# cast to data.frame
-		pmetadata = droplevels(as.data.frame(pmetadata))
-		use_pmeta = TRUE
-
-		# check that pkeys 
-		found = pkeys %in% colnames(pmetadata) 
-		if( any(!found) ){
-			stop("pkeys not found in pmetadata: ", paste(pkeys[!found], collapse=", "))
-		}
-	}else{
-		pmetadata = data.frame()
-		pkeys = array()
-	}
-
 	# check if assays are valid
 	if( any( ! assays %in% assayNames(sceObj)) ){
 		idx = which( ! assays %in% assayNames(sceObj))
@@ -219,13 +198,8 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 
 	# extract cell counts
 	n.cells_full = cellCounts(sceObj)
-	# dreamlet style
-	# n.cells_full = .n_cells(sceObj)
-	# muscat style
-	# n.cells_full = metadata(sceObj)$n_cells	
 
 	# extract all unique colnames
-	# colNamesAll = unique(c(sapply(assayNames(sceObj), function(x) colnames(assay(sceObj, x)))))
 	colNamesAll = unique(unlist(lapply(assayNames(sceObj), function(x) colnames(assay(sceObj, x)))))
 
 	# check for colnames missing cell counts
@@ -244,8 +218,12 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 		# cell counts
 		n.cells = n.cells_full[colnames(y),k,drop=FALSE]
 
-		# merge data_constant and pmetadata based on pkeys and assay k
-		data = merge_metadata(data_constant, pmetadata, pkeys, k)
+		# merge data_constant (data constant for all cell types)
+		# with metadata(sceObj)$aggr_means (data that varies)
+		data = merge_metadata(data_constant, 
+								metadata(sceObj)$aggr_means, 
+								k,
+								metadata(sceObj)$agg_pars$by)
 
 		# processing counts with voom or log2 CPM
 		res = processOneAssay(y, formula, data, n.cells,
@@ -255,8 +233,8 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 				min.prop = min.prop,
 				isCounts = isCounts,
 				normalize.method = normalize.method, 
-				useCountsWeights=useCountsWeights, 
-				BPPARAM=BPPARAM,...)
+				useCountsWeights = useCountsWeights, 
+				BPPARAM = BPPARAM,...)
 
 		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
 
@@ -267,25 +245,32 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 	# remove empty assays
 	resList = resList[!vapply(resList, is.null, FUN.VALUE=logical(1))]
 
-	new("dreamletProcessedData", resList, data = data_constant, metadata = pmetadata, pkeys=pkeys)
+	new("dreamletProcessedData", 
+		resList, 
+		data = data_constant, 
+		metadata = metadata(sceObj)$aggr_means, 
+		by = metadata(sceObj)$agg_pars$by)
+}
+
+# merge data_constant (data constant for all cell types)
+# with metadata(sceObj)$aggr_means (data that varies)
+#' @importFrom dplyr filter_at
+merge_metadata = function(dataIn, md, cellType, by){ 
+
+	# PASS R CMD check
+	cell = NULL
+
+	data = merge(dataIn, 
+			dplyr::filter_at( md, by[1], ~ . == cellType),
+			by.x = "row.names",
+			by.y = by[2])
+	rownames(data) = data$Row.names
+	data = data[rownames(dataIn),,drop=FALSE]
+	droplevels(data)
 }
 
 
-merge_metadata = function(data, mdata, pkeys, value){
 
-	# if no mdata, return data
-	if( nrow(mdata) == 0 ){
-		return( data )
-	}
-
-	# subset mdata for this assay
-	mdata_sub = mdata[mdata[[pkeys[2]]] == value, ]
-
-	# merge and make sure order is the same
-	dataOut = merge(data, mdata_sub, by.x="row.names", by.y=pkeys[1], all.x=TRUE)
-	rownames(dataOut) = dataOut$Row.names
-	dataOut[rownames(data),-1,drop=FALSE]
-}
 
 
 

@@ -60,7 +60,9 @@ test_aggregateData = function(){
 			cluster_id = "cluster_id",
 			sample_id = "sample_id", 
 			scale = TRUE) 
-	
+
+	metadata(pb2)$aggr_means = c()
+
 	# convert from sparseMatrix to matrix just for comparing to expectation
 	for(id in assayNames(pb2)){
 		assay(pb2, id) = as.matrix(assay(pb2, id))
@@ -75,6 +77,7 @@ test_aggregateData = function(){
 
 	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id")
 	assays(pb2)[[1]] = as.matrix(assays(pb2)[[1]])
+	metadata(pb2)$aggr_means = c()
 
 	check1 & checkEquals(pb, pb2)
 }
@@ -142,38 +145,69 @@ test_aggregateToPseudoBulk_datatype = function(){
 }
 
 
-test_pmetadata = function(){
+# test_pmetadata = function(){
 
 
-	# devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
+# 	# devtools::reload("/Users/gabrielhoffman/workspace/repos/dreamlet")
 
+# 	library(muscat)
+# 	library(BiocParallel)
+# 	library(SingleCellExperiment)
+
+# 	# pseudobulk counts by cluster-sample
+# 	data(example_sce)
+# 	pb <- aggregateData(example_sce[1:100,])
+
+# 	# simulated pmetadata at the assay level
+# 	df = data.frame( ID = colnames(pb), assay = sort(rep(assayNames(pb), ncol(pb))))
+# 	df$Size = rnorm(nrow(df))
+# 	pkeys = c("ID", "assay")
+
+# 	res.proc = processAssays( pb, ~ (1|group_id) + Size, min.count=5, pmetadata=df, pkeys=pkeys)
+
+# 	fig = plotVoom(res.proc)
+
+# 	vp.lst = fitVarPart( res.proc, ~ Size + (1|group_id))
+
+# 	fig = plotVarPart( sortCols(vp.lst))
+
+# 	res.dl = dreamlet( res.proc, ~ (1|group_id) + Size)
+
+# 	tab = topTable(res.dl, coef="Size")
+
+# 	TRUE
+# }
+
+test_cell_level_means = function(){
 	library(muscat)
-	library(BiocParallel)
 	library(SingleCellExperiment)
 
-	# pseudobulk counts by cluster-sample
 	data(example_sce)
-	pb <- aggregateData(example_sce[1:100,])
 
-	# simulated pmetadata at the assay level
-	df = data.frame( ID = colnames(pb), assay = sort(rep(assayNames(pb), ncol(pb))))
-	df$Size = rnorm(nrow(df))
-	pkeys = c("ID", "assay")
+	# continuous value
+	example_sce$value1 = rnorm(ncol(example_sce))
+	example_sce$value2 = rnorm(ncol(example_sce))
 
-	res.proc = processAssays( pb, ~ (1|group_id) + Size, min.count=5, pmetadata=df, pkeys=pkeys)
+	# create pseudobulk for each sample and cell cluster
+	pb <- aggregateToPseudoBulk(example_sce, 
+	   assay = "counts",    
+	   cluster_id = 'cluster_id', 
+	   sample_id = 'sample_id',
+	   verbose=FALSE)
 
-	fig = plotVoom(res.proc)
+	metadata(pb)$aggr_means
 
-	vp.lst = fitVarPart( res.proc, ~ Size + (1|group_id))
+	metadata(pb)$agg_pars$by
 
-	fig = plotVarPart( sortCols(vp.lst))
+	# voom-style normalization
+	res.proc = processAssays( pb, ~ group_id + value1)
 
-	res.dl = dreamlet( res.proc, ~ (1|group_id) + Size)
+	vp = fitVarPart(res.proc, ~ group_id + value1)
 
-	tab = topTable(res.dl, coef="Size")
-
-	TRUE
+	fit = dreamlet(res.proc, ~ group_id + value1)
 }
+
+
 
 # test_da_to_sparseMatrix = function() {
 

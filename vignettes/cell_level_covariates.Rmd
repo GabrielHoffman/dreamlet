@@ -1,0 +1,143 @@
+---
+title: "Modeling continuous cell-level covariates"
+subtitle: 'Collapse using mean value for pseudobulk data'
+author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
+date: "Run on `r Sys.time()`"
+documentclass: article
+vignette: >
+  %\VignetteIndexEntry{Modeling continuous cell-level covariates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[utf8]{inputenc}
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+<!---
+
+cd /Users/gabrielhoffman/workspace/repos/dreamlet/vignettes
+
+rmarkdown::render("cell_level_covariates.Rmd")
+
+
+--->
+
+
+<style>
+body {
+text-align: justify}
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning=FALSE,
+  message=FALSE,
+  error = FALSE,
+  tidy = FALSE,
+  dev = c("png"),
+  cache = TRUE)
+```
+
+Since read counts are summed across cells in a pseudobulk approach, modeling continuous cell-level covariates also requires a collapsing step.  Here we summarize the values of a variable from a set of cells using the mean, and store the value for each cell type.  Including these variables in a regression formula uses the summarized values from the corresponding cell type.   
+
+We demonstrate this feature on a lightly modified analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).
+
+
+# Standard processing
+
+Here is the code from the main vignette:
+
+```{r preprocess.data}
+library(dreamlet)
+library(muscat)
+library(ExperimentHub)
+library(scater)
+
+# Download data, specifying EH2259 for the Kang, et al study
+eh <- ExperimentHub()
+sce <- eh[["EH2259"]]
+
+# only keep singlet cells with sufficient reads
+sce <- sce[rowSums(counts(sce) > 0) > 0, ]
+sce <- sce[,colData(sce)$multiplets == 'singlet']
+
+# compute QC metrics
+qc <- perCellQCMetrics(sce)
+
+# remove cells with few or many detected genes
+ol <- isOutlier(metric = qc$detected, nmads = 2, log = TRUE)
+sce <- sce[, !ol]
+
+# set variable indicating stimulated (stim) or control (ctrl)
+sce$StimStatus = sce$stim
+```
+
+In many datasets, continuous cell-level variables could be mapped reads, gene count, mitochondrial rate, etc. There are no continuous cell-level variables in this dataset, so we can simulate two from a normal distribution:
+```{r variable}
+sce$value1 = rnorm(ncol(sce))
+sce$value2 = rnorm(ncol(sce))
+```
+
+# Pseudobulk
+Now compute the pseudobulk using standard code:
+
+```{r aggregate}
+sce$id <- paste0(sce$StimStatus, sce$ind)
+
+# Create pseudobulk 
+pb <- aggregateToPseudoBulk(sce,
+    assay = "counts",     
+    cluster_id = "cell",  
+    sample_id = "id",
+    verbose = FALSE)
+```
+
+The means per variable, cell type, and sample are stored in the pseudobulk `SingleCellExperiment` object:
+
+```{r aggr_means}
+metadata(pb)$aggr_means
+```
+
+# Analysis
+Including these variables in a regression formula uses the summarized values from the corresponding cell type.  This happens behind the scenes, so the user doesn't need to distinguish bewteen sample-level variables stored in `colData(pb)` and cell-level variables stored in `metadata(pb)$aggr_means`.
+
+Variance partition and hypothesis testing proceeds as ususal:
+
+```{r processAssays, fig.height=12}
+form = ~ StimStatus + value1 + value2
+
+# Normalize and apply voom/voomWithDreamWeights
+res.proc = processAssays( pb, form, min.count=5)
+
+# run variance partitioning analysis
+vp.lst = fitVarPart( res.proc, form)
+
+# Summarize variance fractions genome-wide for each cell type
+plotVarPart(vp.lst, label.angle=60) 
+
+# Differential expression analysis within each assay
+res.dl = dreamlet( res.proc, form)
+
+# dreamlet results include coefficients for value1 and value2
+res.dl
+```
+
+
+
+
+# Session Info
+<details>
+```{r session, echo=FALSE}
+sessionInfo()
+```
+</details>
+
+
+
+
+
+
