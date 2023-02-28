@@ -89,8 +89,8 @@ for pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-02-27
-17:18:25</h4>
+            <h4 data-toc-skip class="date">Run on 2023-02-28
+09:09:30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/cell_level_covariates.Rmd" class="external-link"><code>vignettes/cell_level_covariates.Rmd</code></a></small>
       <div class="d-none name"><code>cell_level_covariates.Rmd</code></div>
@@ -135,7 +135,7 @@ Nature Biotech</a>.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>

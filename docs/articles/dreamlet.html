@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.61</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.62</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/cell_level_covariates.html">Modeling continuous cell-level covariates</a>
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
   </div>
@@ -88,8 +89,8 @@ analysis of pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-02-02
-15:22:23</h4>
+            <h4 data-toc-skip class="date">Run on 2023-02-28
+09:09:33</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -158,7 +159,7 @@ workflow.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -194,7 +195,7 @@ on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.htm
 <span>    verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># one 'assay' per cell type</span></span>
-<span><span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "B cells"           "CD14+ Monocytes"   "CD4 T cells"      </span></span>
 <span><span class="co">## [4] "CD8 T cells"       "Dendritic cells"   "FCGR3A+ Monocytes"</span></span>
 <span><span class="co">## [7] "Megakaryocytes"    "NK cells"</span></span></code></pre>
@@ -216,7 +217,7 @@ to handle random effects (if specified).</p>
 <pre><code><span><span class="co">## class: dreamletProcessedData </span></span>
 <span><span class="co">## assays(8): B cells CD14+ Monocytes ... Megakaryocytes NK cells</span></span>
 <span><span class="co">## colData(4): ind stim multiplets StimStatus</span></span>
-<span><span class="co">## metadata(0):</span></span>
+<span><span class="co">## metadata(4): cell id ind cluster</span></span>
 <span><span class="co">## Samples:</span></span>
 <span><span class="co">##  min: 5 </span></span>
 <span><span class="co">##  max: 16</span></span>
@@ -282,11 +283,11 @@ type using a bar plot, or genome-wide using a violin plot.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Show variance fractions at the gene-level for each cell type</span></span>
 <span><span class="va">genes</span> <span class="op">=</span> <span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
-<span><span class="fu"><a href="http://gabrielhoffman.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.barplt-1.png" width="700"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize variance fractions genome-wide for each cell type</span></span>
-<span><span class="fu"><a href="http://gabrielhoffman.github.io/variancePartition/reference/plotVarPart-method.html" class="external-link">plotVarPart</a></span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.violin-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -618,7 +619,7 @@ only highly expressed genes:</p>
 type:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu"><a href="http://gabrielhoffman.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="fu">plotPercentBars</span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-1.png" width="700"></p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
@@ -655,9 +656,9 @@ type:</p>
 <span><span class="co">## [19] zenith_0.99.13              ExperimentHub_2.4.0        </span></span>
 <span><span class="co">## [21] AnnotationHub_3.4.0         BiocFileCache_2.4.0        </span></span>
 <span><span class="co">## [23] dbplyr_2.2.1                BiocGenerics_0.44.0        </span></span>
-<span><span class="co">## [25] muscat_1.11.2               dreamlet_0.0.61            </span></span>
-<span><span class="co">## [27] variancePartition_1.28.3    BiocParallel_1.32.0        </span></span>
-<span><span class="co">## [29] limma_3.54.0                ggplot2_3.4.0              </span></span>
+<span><span class="co">## [25] muscat_1.11.2               dreamlet_0.0.62            </span></span>
+<span><span class="co">## [27] variancePartition_1.28.5    BiocParallel_1.32.0        </span></span>
+<span><span class="co">## [29] limma_3.54.0                ggplot2_3.4.1              </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] rappdirs_0.3.3                scattermore_0.8              </span></span>
@@ -675,14 +676,14 @@ type:</p>
 <span><span class="co">##  [25] viridis_0.6.2                 xfun_0.35                    </span></span>
 <span><span class="co">##  [27] hms_1.1.2                     jquerylib_0.1.4              </span></span>
 <span><span class="co">##  [29] promises_1.2.0.1              babelgene_22.9               </span></span>
-<span><span class="co">##  [31] evaluate_0.18                 fansi_1.0.3                  </span></span>
+<span><span class="co">##  [31] evaluate_0.18                 fansi_1.0.4                  </span></span>
 <span><span class="co">##  [33] progress_1.2.2                caTools_1.18.2               </span></span>
 <span><span class="co">##  [35] Rgraphviz_2.40.0              DBI_1.1.3                    </span></span>
 <span><span class="co">##  [37] geneplotter_1.74.0            purrr_0.3.5                  </span></span>
 <span><span class="co">##  [39] ellipsis_0.3.2                dplyr_1.0.10                 </span></span>
 <span><span class="co">##  [41] backports_1.4.1               annotate_1.74.0              </span></span>
 <span><span class="co">##  [43] aod_1.3.2                     sparseMatrixStats_1.8.0      </span></span>
-<span><span class="co">##  [45] vctrs_0.5.1                   abind_1.4-5                  </span></span>
+<span><span class="co">##  [45] vctrs_0.5.2                   abind_1.4-5                  </span></span>
 <span><span class="co">##  [47] cachem_1.0.6                  withr_2.5.0                  </span></span>
 <span><span class="co">##  [49] sctransform_0.3.5             treeio_1.20.2                </span></span>
 <span><span class="co">##  [51] prettyunits_1.1.1             softImpute_1.4-1             </span></span>
@@ -715,7 +716,7 @@ type:</p>
 <span><span class="co">## [105] zlibbioc_1.42.0               compiler_4.2.0               </span></span>
 <span><span class="co">## [107] RColorBrewer_1.1-3            clue_0.3-63                  </span></span>
 <span><span class="co">## [109] KEGGgraph_1.56.0              DESeq2_1.36.0                </span></span>
-<span><span class="co">## [111] cli_3.4.1                     XVector_0.36.0               </span></span>
+<span><span class="co">## [111] cli_3.6.0                     XVector_0.36.0               </span></span>
 <span><span class="co">## [113] lmerTest_3.1-3                listenv_0.8.0                </span></span>
 <span><span class="co">## [115] patchwork_1.1.2               TMB_1.9.1                    </span></span>
 <span><span class="co">## [117] MASS_7.3-58.1                 tidyselect_1.2.0             </span></span>
@@ -733,7 +734,7 @@ type:</p>
 <span><span class="co">## [141] broom_1.0.1                   later_1.3.0                  </span></span>
 <span><span class="co">## [143] BiocVersion_3.15.2            httr_1.4.4                   </span></span>
 <span><span class="co">## [145] ComplexHeatmap_2.12.1         Rdpack_2.4                   </span></span>
-<span><span class="co">## [147] colorspace_2.0-3              XML_3.99-0.13                </span></span>
+<span><span class="co">## [147] colorspace_2.1-0              XML_3.99-0.13                </span></span>
 <span><span class="co">## [149] fs_1.5.2                      truncnorm_1.0-8              </span></span>
 <span><span class="co">## [151] yulab.utils_0.0.5             tidytree_0.4.1               </span></span>
 <span><span class="co">## [153] pkgdown_2.0.6                 ggplotify_0.1.0              </span></span>
@@ -747,7 +748,7 @@ type:</p>
 <span><span class="co">## [169] minqa_1.2.5                   BiocNeighbors_1.14.0         </span></span>
 <span><span class="co">## [171] class_7.3-20                  interactiveDisplayBase_1.34.0</span></span>
 <span><span class="co">## [173] codetools_0.2-18              tsne_0.1-3.1                 </span></span>
-<span><span class="co">## [175] mvtnorm_1.1-3                 utf8_1.2.2                   </span></span>
+<span><span class="co">## [175] mvtnorm_1.1-3                 utf8_1.2.3                   </span></span>
 <span><span class="co">## [177] lattice_0.20-45               bslib_0.4.1                  </span></span>
 <span><span class="co">## [179] tibble_3.1.8                  numDeriv_2016.8-1.1          </span></span>
 <span><span class="co">## [181] pbkrtest_0.5.1                curl_4.3.3                   </span></span>
