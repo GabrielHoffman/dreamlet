@@ -53,3 +53,21 @@ For each cell cluster, samples with at least \code{min.cells} are retained. Only
  
 The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells.
 }
+\examples{
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# create pseudobulk for each sample and cell cluster
+# using non-count signal
+pb.signal <- aggregateNonCountSignal(example_sce, 
+   assay = "logcounts",    
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
+
+# Differential expression analysis within each assay,
+# evaluated on the voom normalized data 
+res.dl = dreamlet( pb.signal, ~ group_id)
+}

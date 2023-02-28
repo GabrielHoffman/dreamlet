@@ -31,6 +31,23 @@
 #'  
 #' The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells. 
 #' 
+#' @examples
+#' library(muscat)
+#' library(SingleCellExperiment)
+#' 
+#' data(example_sce)
+#' 
+#' # create pseudobulk for each sample and cell cluster
+#' # using non-count signal
+#' pb.signal <- aggregateNonCountSignal(example_sce, 
+#'    assay = "logcounts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( pb.signal, ~ group_id)
 #' @export
 #' @import limma 
 #' @importFrom MatrixGenerics rowVars
@@ -72,8 +89,6 @@ aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_
 	
 	# extract metadata shared across assays
 	data_constant = droplevels(as.data.frame(colData(pb)))
-	pmetadata = data.frame()
-	pkeys = array()
 
 	# Extract signal for each cell type as lists
 	resList = lapply(assayNames(pb), function(CT){
@@ -125,7 +140,11 @@ aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_
 	resList = resList[!vapply(resList, is.null, FUN.VALUE=logical(1))]
 
 	# return signal as dreamletProcessedData object
-	new("dreamletProcessedData", resList, data = data_constant, metadata = pmetadata, pkeys=pkeys)
+	new("dreamletProcessedData", 
+		resList, 
+		data = data_constant, 
+		metadata = metadata(pb)$aggr_means, 
+		by = metadata(pb)$agg_pars$by)
 }
 
 
