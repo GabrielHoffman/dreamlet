@@ -54,7 +54,7 @@ knitr::opts_chunk$set(
 
 # Process single cell count data
 
-Here we perform analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).  This is a small dataset that does not have repeated measures or high dimensional batch effects, so the sophisticated features of dreamlet are not strictly necessary.  But this gives us an opportunity to walk through a standard dreamlet workflow.
+Here we perform analysis of PBMCs from 8 individuals stimulated with interferon-β ([Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042)).  This is a small dataset that does not have repeated measures or high dimensional batch effects, so the sophisticated features of dreamlet are not strictly necessary.  But this gives us an opportunity to walk through a standard dreamlet workflow.
 
 
 ## Preprocess data
