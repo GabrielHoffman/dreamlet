@@ -1,4 +1,7 @@
 
+Feb 28
+	metadata(pb) duplicates continuous columns that are constant by sample
+
 Feb 16:
 	in pseudobulk, average per-cell statistics
 	into per-cell type summary
