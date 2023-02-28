@@ -44,7 +44,7 @@ knitr::opts_chunk$set(
 
 Since read counts are summed across cells in a pseudobulk approach, modeling continuous cell-level covariates also requires a collapsing step.  Here we summarize the values of a variable from a set of cells using the mean, and store the value for each cell type.  Including these variables in a regression formula uses the summarized values from the corresponding cell type.   
 
-We demonstrate this feature on a lightly modified analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).
+We demonstrate this feature on a lightly modified analysis of PBMCs from 8 individuals stimulated with interferon-β ([Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042)).
 
 
 # Standard processing
