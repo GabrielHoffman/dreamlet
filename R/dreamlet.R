@@ -348,13 +348,11 @@ setMethod("topTable", signature(fit="dreamletResult"),
 		res = lapply( assayNames(fit), function(k){
 			fit1 = assay(fit, k)
 
-			if( is.null(genelist) ) genelist = rownames(fit1)
+			# if entries in coef are found
+			if( all(coef %in% colnames(coef(fit1))) ){
+				# specifiying genelist create column ID
+				tab = topTable(fit1, coef = coef, number = Inf, sort.by = "none", genelist=rownames(fit1), confint=confint)
 
-			# if coef is found, and at least one entry of genelist in is fit1
-			good = all(coef %in% colnames(coef(fit1))) & any(rownames(fit1) %in% genelist)
-
-			if( good ){
-				tab = topTable(fit1, coef = coef, number = Inf, genelist = genelist, sort.by = "none", p.value=p.value, lfc=lfc, confint=confint)
 				if( nrow(tab) > 0 ){
 					tab = tab[!is.na(tab$ID),]
 
@@ -385,6 +383,14 @@ setMethod("topTable", signature(fit="dreamletResult"),
 		# apply multiple testing across *all* tests
 		# subset based on number afterwards
 		res$adj.P.Val = p.adjust( res$P.Value, adjust.method)
+
+		# apply filtering afterwards
+		res = res[res$P.Value <= p.value,,drop=FALSE]
+		res = res[abs(res$logFC) >= lfc,,drop=FALSE]
+
+		if( !is.null(genelist) ){
+			res = res[res$ID %in% genelist,,drop=FALSE]
+		}
 
 		opt = c('logFC', 'AveExpr', 'P', 't', 'B', 'none')
 		if( ! sort.by %in% opt){

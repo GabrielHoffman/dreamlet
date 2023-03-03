@@ -1,4 +1,8 @@
-# dreamlet 0.0.62
+# dreamlet 0.0.63
+ - March 3, 2023
+ - small bug fixes in `topTable()` and `plotForest()`
+
+ # dreamlet 0.0.62
  - Feb 27, 2023
  - `aggregateToPseudoBulk()` stores mean of cell-level covariates in `metadata(pb)$aggr_means`
   - Use these covariates in `processAssays()`, `dreamlet()`, `fitVarPart()`
