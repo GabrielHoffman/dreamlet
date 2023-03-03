@@ -65,7 +65,8 @@ setMethod("plotForest", signature(x="dreamletResult"),
 	df$assay = factor(df$assay, assays)
 
 	ggplot(df[df$ID == gene, ], aes(assay, logFC,  color=-log10(pmax(1e-4,adj.P.Val)) )) + 
-		geom_point() + geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + 
+		geom_point() + 
+		geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0) + 
 		theme_classic() + 
 		theme(plot.title = element_text(hjust = 0.5)) + 
 		coord_flip(ylim=ylim) + 
@@ -115,7 +116,7 @@ setMethod("plotForest", signature(x="dreamlet_mash_result"),
 	# make plot
 	ggplot(df[df$Gene.x == gene, ], aes(ID, logFC,  color=-log10(pmax(1e-4,lFSR)) )) + 
 		geom_point() + 
-		geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + 
+		geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0) + 
 		theme_classic() + 
 		theme(plot.title = element_text(hjust = 0.5)) + 
 		coord_flip(ylim=ylim) + 
