@@ -14,7 +14,6 @@
 #' @return Plot showing effect sizes
 #' 
 #' @examples
-#'  
 #' library(muscat)
 #' library(SingleCellExperiment)
 #'
@@ -24,7 +23,7 @@
 #' pb <- aggregateToPseudoBulk(example_sce, 
 #'    assay = "counts",    
 #'    cluster_id = 'cluster_id', 
-#'    sample_id = 'sample_id',
+#'    sample_id = 'sample_id', 
 #'    verbose=FALSE)
 #'
 #' # voom-style normalization
@@ -57,16 +56,15 @@ setMethod("plotForest", signature(x="dreamletResult"),
 	function(x, gene, coef, assays=names(x), ylim=NULL){
 
 	# Pass R CMD check
-	Assay = logFC = FDR = se = NULL
+	Assay = logFC = se = NULL
 
  	df = topTable(x, coef=coef, number=Inf)
  	df$se = df$logFC / df$t
-	df$FDR = p.adjust(df$P.Value)
 	df = as.data.frame(df)
 	df = df[df$assay %in% assays,]
 	df$assay = factor(df$assay, assays)
 
-	ggplot(df[df$ID == gene, ], aes(assay, logFC,  color=-log10(pmax(1e-4,FDR)) )) + 
+	ggplot(df[df$ID == gene, ], aes(assay, logFC,  color=-log10(pmax(1e-4,adj.P.Val)) )) + 
 		geom_point() + geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0.1) + 
 		theme_classic() + 
 		theme(plot.title = element_text(hjust = 0.5)) + 

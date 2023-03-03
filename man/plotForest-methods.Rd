@@ -32,7 +32,6 @@ Plot showing effect sizes
 Forest plot
 }
 \examples{
- 
 library(muscat)
 library(SingleCellExperiment)
 
@@ -42,7 +41,7 @@ data(example_sce)
 pb <- aggregateToPseudoBulk(example_sce, 
    assay = "counts",    
    cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
+   sample_id = 'sample_id', 
    verbose=FALSE)
 
 # voom-style normalization
