@@ -91,7 +91,7 @@ variables</h3>
 </h4>
             
             <h4 data-toc-skip class="date">Run on 2023-03-07
-14:56:13</h4>
+16:03:44</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/non_linear_effects.Rmd" class="external-link"><code>vignettes/non_linear_effects.Rmd</code></a></small>
       <div class="d-none name"><code>non_linear_effects.Rmd</code></div>
@@ -134,7 +134,7 @@ Nature Biotech</a>).</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -161,8 +161,9 @@ Nature Biotech</a>).</p>
 <p>Consider the continuous variable <code>Age</code>. Typical analysis
 only considers linear effects using a single regression coefficient, but
 we also want to consider the non-linear effects of age. We can peform a
-basis expansion using splines instead use 3 coefficients to model the
-age effect.</p>
+<a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-019-0666-3" class="external-link">basis
+expansion using splines</a> instead use 3 coefficients to model the age
+effect.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Simulate age between 18 and 65</span></span>
 <span><span class="va">pb</span><span class="op">$</span><span class="va">Age</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span>, <span class="fl">18</span>, <span class="fl">65</span><span class="op">)</span></span>
@@ -186,47 +187,21 @@ age effect.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Jointly test effects of the 3 spline components</span></span>
 <span><span class="co"># The test of the 3 coefficients is performed with an F-statistic</span></span>
-<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
-<span><span class="co">##                assay                   ID splines..ns.Age..3.1</span></span>
-<span><span class="co">##          &lt;character&gt;          &lt;character&gt;            &lt;numeric&gt;</span></span>
-<span><span class="co">## 1    Dendritic cells                 IDO1             0.697299</span></span>
-<span><span class="co">## 2            B cells               MAGOHB             0.704290</span></span>
-<span><span class="co">## 3  FCGR3A+ Monocytes                USMG5             0.136903</span></span>
-<span><span class="co">## 4           NK cells                  FBL            -0.257094</span></span>
-<span><span class="co">## 5    Dendritic cells                 SOD2             2.470411</span></span>
-<span><span class="co">## 6  FCGR3A+ Monocytes MPP1_ENSG00000130830             0.547798</span></span>
-<span><span class="co">## 7            B cells               FAM26F             0.328634</span></span>
-<span><span class="co">## 8    Dendritic cells                ANXA1             3.189509</span></span>
-<span><span class="co">## 9    Dendritic cells                TIMP1             1.983684</span></span>
-<span><span class="co">## 10           B cells                 IDH2             0.947591</span></span>
-<span><span class="co">##    splines..ns.Age..3.2 splines..ns.Age..3.3   AveExpr         F     P.Value</span></span>
-<span><span class="co">##               &lt;numeric&gt;            &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1              -5.13850            -3.751616  11.37793  24.14051 1.39876e-05</span></span>
-<span><span class="co">## 2               4.91978             1.251633   6.21859  14.27653 5.78102e-05</span></span>
-<span><span class="co">## 3               6.07896             0.256773   6.40237  13.56337 1.07114e-04</span></span>
-<span><span class="co">## 4               5.56146            -0.381165   6.77908  11.07362 2.17506e-04</span></span>
-<span><span class="co">## 5              -5.89470            -1.468531  10.25568  13.16937 3.12193e-04</span></span>
-<span><span class="co">## 6               6.19447             0.179508   6.61334  10.21997 5.00379e-04</span></span>
-<span><span class="co">## 7              -5.52809             0.143017   6.10153   9.70757 5.26390e-04</span></span>
-<span><span class="co">## 8              -5.89230             0.661055   9.85811  11.69043 5.46430e-04</span></span>
-<span><span class="co">## 9              -4.91000            -1.197129  12.81133  11.40761 6.11639e-04</span></span>
-<span><span class="co">## 10              4.37001             1.351814   6.01563   9.21005 6.94517e-04</span></span>
-<span><span class="co">##    adj.P.Val</span></span>
-<span><span class="co">##    &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   0.204974</span></span>
-<span><span class="co">## 2   0.423575</span></span>
-<span><span class="co">## 3   0.523214</span></span>
-<span><span class="co">## 4   0.796832</span></span>
-<span><span class="co">## 5   0.905228</span></span>
-<span><span class="co">## 6   0.905228</span></span>
-<span><span class="co">## 7   0.905228</span></span>
-<span><span class="co">## 8   0.905228</span></span>
-<span><span class="co">## 9   0.905228</span></span>
-<span><span class="co">## 10  0.905228</span></span></code></pre>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, number<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## DataFrame with 3 rows and 9 columns</span></span>
+<span><span class="co">##            assay          ID splines..ns.Age..3.1 splines..ns.Age..3.2</span></span>
+<span><span class="co">##      &lt;character&gt; &lt;character&gt;            &lt;numeric&gt;            &lt;numeric&gt;</span></span>
+<span><span class="co">## 1       NK cells       SSU72              3.04111              5.14592</span></span>
+<span><span class="co">## 2 Megakaryocytes         FTL             -4.13990              2.39984</span></span>
+<span><span class="co">## 3    CD8 T cells      GPR171             -1.10264             -5.76385</span></span>
+<span><span class="co">##   splines..ns.Age..3.3   AveExpr         F     P.Value adj.P.Val</span></span>
+<span><span class="co">##              &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1           0.00220515   6.97847   15.6904 3.11656e-05  0.329936</span></span>
+<span><span class="co">## 2          -1.85504972  13.51587   10.9944 4.50302e-05  0.329936</span></span>
+<span><span class="co">## 3           0.36381934   7.36806   12.2733 9.85846e-05  0.403353</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="ordered-categorical-variables">Ordered categorical variables<a class="anchor" aria-label="anchor" href="#ordered-categorical-variables"></a>
+<h2 id="ordered-categorical">Ordered categorical<a class="anchor" aria-label="anchor" href="#ordered-categorical"></a>
 </h2>
 <p>We can also test non-linear effects in the case of categorical
 variables with a natural ordering to the categories. Consider time
@@ -290,61 +265,58 @@ analysis.</p>
 <pre><code><span><span class="co">## [1] "(Intercept)" "TimePoint.L" "TimePoint.Q" "TimePoint.C"</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Test only linear effect</span></span>
-<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">"TimePoint.L"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
-<span><span class="co">##              assay          ID     logFC   AveExpr         t     P.Value</span></span>
-<span><span class="co">##        &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1      CD4 T cells        DCXR -0.678397   6.52867  -5.65493 3.08306e-05</span></span>
-<span><span class="co">## 2      CD4 T cells        GGA2 -0.890912   4.98987  -5.27996 6.55506e-05</span></span>
-<span><span class="co">## 3  CD14+ Monocytes        CAPG -0.874746   8.83660  -5.18913 1.12897e-04</span></span>
-<span><span class="co">## 4      CD8 T cells        FTH1 -0.728341  14.55380  -4.68420 1.61981e-04</span></span>
-<span><span class="co">## 5      CD4 T cells        GYG1 -0.744049   5.25734  -4.83991 1.62252e-04</span></span>
-<span><span class="co">## 6      CD4 T cells        PRNP -0.658713   6.42813  -4.76842 1.88356e-04</span></span>
-<span><span class="co">## 7         NK cells       TSSC4  1.498894   6.60588   4.59938 2.37758e-04</span></span>
-<span><span class="co">## 8      CD8 T cells       LIMD2  0.854844   8.65709   4.48842 2.52275e-04</span></span>
-<span><span class="co">## 9      CD4 T cells CTC-524C5.2  1.449680   4.12861   4.40548 4.04622e-04</span></span>
-<span><span class="co">## 10     CD4 T cells     GPR137B -1.123550   4.87273  -4.33962 4.65381e-04</span></span>
-<span><span class="co">##    adj.P.Val         B     z.std</span></span>
-<span><span class="co">##    &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   0.451791  2.064035  -5.65493</span></span>
-<span><span class="co">## 2   0.460027  0.826826  -5.27996</span></span>
-<span><span class="co">## 3   0.460027 -3.020427  -5.18913</span></span>
-<span><span class="co">## 4   0.460027  1.019179  -4.68420</span></span>
-<span><span class="co">## 5   0.460027  0.364617  -4.83991</span></span>
-<span><span class="co">## 6   0.460027  0.678718  -4.76842</span></span>
-<span><span class="co">## 7   0.462105 -3.629349   4.59938</span></span>
-<span><span class="co">## 8   0.462105  0.324478   4.48842</span></span>
-<span><span class="co">## 9   0.564765 -0.709002   4.40548</span></span>
-<span><span class="co">## 10  0.564765 -0.534719  -4.33962</span></span></code></pre>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">"TimePoint.L"</span>, number<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## DataFrame with 3 rows and 9 columns</span></span>
+<span><span class="co">##             assay          ID     logFC   AveExpr         t     P.Value</span></span>
+<span><span class="co">##       &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
+<span><span class="co">## 1     CD4 T cells        DCXR -0.678397   6.52867  -5.65493 3.08306e-05</span></span>
+<span><span class="co">## 2     CD4 T cells        GGA2 -0.890912   4.98987  -5.27996 6.55506e-05</span></span>
+<span><span class="co">## 3 CD14+ Monocytes        CAPG -0.874746   8.83660  -5.18913 1.12897e-04</span></span>
+<span><span class="co">##   adj.P.Val         B     z.std</span></span>
+<span><span class="co">##   &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1  0.451791  2.064035  -5.65493</span></span>
+<span><span class="co">## 2  0.460027  0.826826  -5.27996</span></span>
+<span><span class="co">## 3  0.460027 -3.020427  -5.18913</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Test linear, quadratic and cubic effcts</span></span>
 <span><span class="va">coefs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TimePoint.L"</span>, <span class="st">"TimePoint.Q"</span>, <span class="st">"TimePoint.C"</span><span class="op">)</span></span>
-<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="va">coefs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
-<span><span class="co">##             assay                   ID TimePoint.L TimePoint.Q TimePoint.C</span></span>
-<span><span class="co">##       &lt;character&gt;          &lt;character&gt;   &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1  Megakaryocytes                TIMP1   -0.191992    1.973790          NA</span></span>
-<span><span class="co">## 2     CD8 T cells               GPR183   -0.834378    1.124437    1.155308</span></span>
-<span><span class="co">## 3     CD8 T cells                 CD52    0.879689   -1.506103   -0.960712</span></span>
-<span><span class="co">## 4     CD8 T cells                  CD2    0.892265   -1.138723   -0.193190</span></span>
-<span><span class="co">## 5     CD8 T cells CCL5_ENSG00000161570    0.643026   -0.967586   -0.696946</span></span>
-<span><span class="co">## 6     CD8 T cells                 GZMB    1.052967   -0.752389   -1.240968</span></span>
-<span><span class="co">## 7     CD4 T cells                CPNE1   -0.151464    0.447804    0.807129</span></span>
-<span><span class="co">## 8     CD8 T cells                 GZMK   -0.396369    0.578851    1.404890</span></span>
-<span><span class="co">## 9     CD8 T cells                CLIC3    0.815244   -1.210180    0.360297</span></span>
-<span><span class="co">## 10    CD8 T cells                 GZMH    1.090292   -1.335205   -1.540505</span></span>
-<span><span class="co">##      AveExpr         F     P.Value adj.P.Val</span></span>
-<span><span class="co">##    &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   10.94510   19.9684 1.36276e-06 0.0199699</span></span>
-<span><span class="co">## 2    8.47413   16.5751 1.55974e-05 0.0826416</span></span>
-<span><span class="co">## 3    8.69458   15.9934 1.98237e-05 0.0826416</span></span>
-<span><span class="co">## 4    9.67181   15.3226 2.63403e-05 0.0826416</span></span>
-<span><span class="co">## 5   11.88811   15.0857 2.91811e-05 0.0826416</span></span>
-<span><span class="co">## 6   10.00343   14.4217 3.91184e-05 0.0826416</span></span>
-<span><span class="co">## 7    6.28801   15.8387 3.94767e-05 0.0826416</span></span>
-<span><span class="co">## 8    8.67454   13.5741 5.76420e-05 0.0970173</span></span>
-<span><span class="co">## 9    7.42046   13.5032 5.95848e-05 0.0970173</span></span>
-<span><span class="co">## 10   8.67404   12.8138 8.27491e-05 0.1129544</span></span></code></pre>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="va">coefs</span>, number<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## DataFrame with 3 rows and 9 columns</span></span>
+<span><span class="co">##            assay          ID TimePoint.L TimePoint.Q TimePoint.C   AveExpr</span></span>
+<span><span class="co">##      &lt;character&gt; &lt;character&gt;   &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1 Megakaryocytes       TIMP1   -0.191992     1.97379          NA  10.94510</span></span>
+<span><span class="co">## 2    CD8 T cells      GPR183   -0.834378     1.12444    1.155308   8.47413</span></span>
+<span><span class="co">## 3    CD8 T cells        CD52    0.879689    -1.50610   -0.960712   8.69458</span></span>
+<span><span class="co">##           F     P.Value adj.P.Val</span></span>
+<span><span class="co">##   &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1   19.9684 1.36276e-06 0.0199699</span></span>
+<span><span class="co">## 2   16.5751 1.55974e-05 0.0826416</span></span>
+<span><span class="co">## 3   15.9934 1.98237e-05 0.0826416</span></span></code></pre>
+<div class="section level3">
+<h3 id="sample-filtering">Sample filtering<a class="anchor" aria-label="anchor" href="#sample-filtering"></a>
+</h3>
+<p>Due to variation in cell and read count for each sample,
+<code><a href="../reference/processAssays.html">processAssays()</a></code> filters out some sample. This filtering is
+summarized here:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/details-methods.html">details</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##               assay n_retain    formula formDropsTerms</span></span>
+<span><span class="co">## 1           B cells       16 ~TimePoint          FALSE</span></span>
+<span><span class="co">## 2   CD14+ Monocytes       16 ~TimePoint          FALSE</span></span>
+<span><span class="co">## 3       CD4 T cells       16 ~TimePoint          FALSE</span></span>
+<span><span class="co">## 4       CD8 T cells       16 ~TimePoint          FALSE</span></span>
+<span><span class="co">## 5   Dendritic cells        5 ~TimePoint          FALSE</span></span>
+<span><span class="co">## 6 FCGR3A+ Monocytes       16 ~TimePoint          FALSE</span></span>
+<span><span class="co">## 7    Megakaryocytes        9 ~TimePoint          FALSE</span></span>
+<span><span class="co">## 8          NK cells       16 ~TimePoint          FALSE</span></span></code></pre>
+<p>Whle all 16 samples are detained in B cells, only 9 are retained for
+megakaryocytes. This can result in a time point being dropped, and so
+the polynomial expansion for some cell types can have a lower degree.
+The combined results will then have <code>NA</code> values for these
+coefficients. For example, for <code>TIMP1</code> in
+<code>Megakaryocytes</code> above there is not enought data to fit the
+cubic term, so <code>TimePoint.C</code> is <code>NA</code>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
