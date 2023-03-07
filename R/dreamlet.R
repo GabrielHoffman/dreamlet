@@ -327,6 +327,7 @@ as.dreamletResult = function(fitList, df_details=NULL){
 #' @seealso \code{limma::topTable()}, \code{variancePartition::topTable()}
 #' @rdname topTable-methods
 #' @aliases topTable,dreamletResult,dreamletResult-method
+#' @importFrom gtools smartbind
 #' @export
 setMethod("topTable", signature(fit="dreamletResult"),
 	function(fit,       
@@ -349,9 +350,18 @@ setMethod("topTable", signature(fit="dreamletResult"),
 			fit1 = assay(fit, k)
 
 			# if entries in coef are found
-			if( all(coef %in% colnames(coef(fit1))) ){
+			if( any(coef %in% colnames(coef(fit1))) ){
+
+				# only test coefs estimated in this model
+				coef_found = coef[coef %in% colnames(coef(fit1))]
+
 				# specifiying genelist create column ID
-				tab = topTable(fit1, coef = coef, number = Inf, sort.by = "none", genelist=rownames(fit1), confint=confint)
+				tab = topTable(fit1, coef = coef_found, number = Inf, sort.by = "none", genelist=rownames(fit1), confint=confint)
+
+				# with multiple coefs, first column is 'ProbeID'
+				if( colnames(tab)[1] == 'ProbeID' ){
+					colnames(tab)[1] = 'ID'
+				}
 
 				if( nrow(tab) > 0 ){
 					tab = tab[!is.na(tab$ID),]
@@ -371,7 +381,9 @@ setMethod("topTable", signature(fit="dreamletResult"),
 			res
 		})
 		# combine across assays
-		res = DataFrame(do.call(rbind, res))
+		# allow columns to be missing when coef is array
+		# and some cell types dont have all of them
+		res = DataFrame(do.call(smartbind, res))
 
 		# remove rownames
 		rownames(res) = c()
@@ -386,7 +398,12 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 		# apply filtering afterwards
 		res = res[res$P.Value <= p.value,,drop=FALSE]
-		res = res[abs(res$logFC) >= lfc,,drop=FALSE]
+
+		# check that logFC exists, 
+		# since with multiple coefs it does not
+		if( "logFC" %in% colnames(res) ){
+			res = res[abs(res$logFC) >= lfc,,drop=FALSE]
+		}
 
 		if( !is.null(genelist) ){
 			res = res[res$ID %in% genelist,,drop=FALSE]

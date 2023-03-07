@@ -1,4 +1,9 @@
 
+March 6, 
+	Extend tree clutsering test to gene expression
+	misc_vp/diffVar.R
+	
+
 Feb 28
 	metadata(pb) duplicates continuous columns that are constant by sample
 

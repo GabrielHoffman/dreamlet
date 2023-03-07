@@ -1,3 +1,8 @@
+# dreamlet 0.0.64
+ - March 7, 2023
+ - fix `topTable()` to deal with multiple `coef` as array
+ - add vignette about non-linear effects
+
 # dreamlet 0.0.63
  - March 3, 2023
  - small bug fixes in `topTable()` and `plotForest()`
