@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.62</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.64</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,6 +30,7 @@
     <a class="dropdown-item" href="../articles/cell_level_covariates.html">Modeling continuous cell-level covariates</a>
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
+    <a class="dropdown-item" href="../articles/non_linear_effects.html">Testing non-linear effects</a>
   </div>
 </li>
 <li class="nav-item">
@@ -92,12 +93,12 @@
 <span class="r-in"><span><span class="co"># Valid formula</span></span></span>
 <span class="r-in"><span><span class="fu">removeConstantTerms</span><span class="op">(</span><span class="op">~</span> <span class="va">group</span> <span class="op">+</span> <span class="va">extra</span>, <span class="va">sleep</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~group + extra</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fd32c44ce50&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f8850761580&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># there is no variation in 'group' in this dataset</span></span></span>
 <span class="r-in"><span><span class="fu">removeConstantTerms</span><span class="op">(</span><span class="op">~</span> <span class="va">group</span> <span class="op">+</span> <span class="va">extra</span>, <span class="va">sleep</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 + extra</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fd32c44ce50&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f8850761580&gt;</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
