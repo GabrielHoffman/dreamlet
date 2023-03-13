@@ -42,7 +42,7 @@ aggregateVar = function(sce, assay = NULL, cluster_id = NULL, sample_id = NULL,
         sample_id = sample_id,
         verbose=FALSE, 
         fun = "sem",
-        BPPARAM = SnowParam(8, progressbar=TRUE),
+        BPPARAM = BPPARAM,
         checkValues = FALSE)
 
     # get number of units used for pseudobulk
@@ -52,13 +52,11 @@ aggregateVar = function(sce, assay = NULL, cluster_id = NULL, sample_id = NULL,
         sample_id = sample_id,
         verbose=FALSE, 
         fun = "number",
-        BPPARAM = SnowParam(8, progressbar=TRUE),
+        BPPARAM = BPPARAM,
         checkValues = FALSE)
     
     # extract metadata shared across assays
     data_constant = droplevels(as.data.frame(colData(pb.sem)))
-    pmetadata = data.frame()
-    pkeys = array()
     
     # variance for each cell type as lists
     resList = lapply(assayNames(pb.sem), function(CT){
@@ -110,5 +108,8 @@ aggregateVar = function(sce, assay = NULL, cluster_id = NULL, sample_id = NULL,
     resList = resList[!vapply(resList, is.null, FUN.VALUE=logical(1))]
     
     # return var as dreamletProcessedData object
-    new("dreamletProcessedData", resList, data = data_constant, metadata = pmetadata, pkeys=pkeys)    
+    new("dreamletProcessedData", resList,
+        data = data_constant,
+        metadata = metadata(pb.sem)$aggr_means,
+        by = c(cluster_id, sample_id))
 }
