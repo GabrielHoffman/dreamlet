@@ -32,6 +32,9 @@ plotProjection(
 
 \item{order}{specify order of levels for \code{annotation}}
 }
+\value{
+ggplot2 plot of the projection
+}
 \description{
 Plot 2D projection (i.e. UMAP, tSNE) for millions of cells efficiently
 }

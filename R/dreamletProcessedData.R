@@ -35,6 +35,7 @@ setMethod("[", signature(x="dreamletProcessedData"),
 setGeneric('assayNames', SummarizedExperiment::assayNames)
 setGeneric('assay', SummarizedExperiment::assay)
 setGeneric('colData', SummarizedExperiment::colData)
+setGeneric('colData<-', SummarizedExperiment::`colData<-`)
 setGeneric('metadata', S4Vectors::metadata)
 
 #' Get assayNames
@@ -89,6 +90,37 @@ setMethod("colData", "dreamletProcessedData",
 		x@data
 })
 
+
+
+#' Set colData
+#'
+#' Set colData of dreamletProcessedData, and check for same dimensions and rownames
+#'
+#' @param x \code{dreamletProcessedData} object
+#' @param ... other arguments
+#' @param value \code{data.frame} or object that can be coerced to it
+#'
+#' @return none
+#' @export
+setMethod("colData<-", "dreamletProcessedData",
+    function(x, ..., value){
+    
+    # convert to data.frame
+    value = as.data.frame(value)
+
+    # check dimensions
+    if( nrow(x@data) != nrow(value) ){
+    	stop("Number of rows in colData(x) must remain the same")
+    }
+
+    # check same rownames
+    if( ! all.equal(rownames(x@data), rownames(value)) ){    	
+    	stop("rownames(colData(x)) must remain the same in the new data.frame")
+    }
+
+    x@data = value
+    x
+})
 
 #' Extract metadata from \code{dreamletProcessedData}
 #' 

@@ -1,4 +1,6 @@
 
+Add colData(res.proc)<- function
+
 March 6, 
 	Extend tree clutsering test to gene expression
 	misc_vp/diffVar.R

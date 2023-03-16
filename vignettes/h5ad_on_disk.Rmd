@@ -160,6 +160,17 @@ On the other hand, a [SingleCellExperiment](https://bioconductor.org/packages/Si
 
 
 
+# Session Info
+<details>
+```{r session, echo=FALSE}
+sessionInfo()
+```
+</details>
+
+
+
+
+
 
 
 
