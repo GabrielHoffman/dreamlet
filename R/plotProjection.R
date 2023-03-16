@@ -17,6 +17,8 @@
 #' 
 #' @details Uses \code{scattermore::geom_scattermore()} to plot millions of points efficiently
 #' 
+#' @return ggplot2 plot of the projection
+#' 
 #' @examples
 #' library(muscat)
 #' library(SingleCellExperiment)

@@ -36,7 +36,7 @@ biocViews: RNASeq,
     Preprocessing,
     Software
 Depends:
-    R (>= 4.1.0),
+    R (>= 4.2.0),
     ggplot2,
     variancePartition (>= 1.28.3)
 Imports:
@@ -73,7 +73,7 @@ Imports:
     Rdpack,
     utils,
     stats
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 RdMacros: Rdpack
 SystemRequirements: C++11
 LinkingTo: 

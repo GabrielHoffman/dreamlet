@@ -9,6 +9,8 @@
 #' @details
 #' The distance follow a chisq distrubtion under the null with standard method for mean and covariance.  It is approximate of robust method is used.  So use \code{qchisq(p = 0.999 , df = 2)} to get cutoff to keep 99.9\% of samples under the null for data with 2 columns.
 #' 
+#' @return z-score for each entry indicating deviation from the mean
+#' 
 #' @examples
 #' data = matrix(rnorm(200), 100, 2)
 #' 

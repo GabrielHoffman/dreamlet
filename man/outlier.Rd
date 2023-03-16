@@ -13,6 +13,9 @@ outlier(data, robust = TRUE, ...)
 
 \item{...}{arguments passed to \code{MASS::cov.rob()}}
 }
+\value{
+z-score for each entry indicating deviation from the mean
+}
 \description{
 Detect multivariante outliers using Mahalanobis distance using mean and covariance estimated either with standard or robust methods.
 }

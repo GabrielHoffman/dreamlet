@@ -56,7 +56,7 @@ setMethod("plotForest", signature(x="dreamletResult"),
 	function(x, gene, coef, assays=names(x), ylim=NULL){
 
 	# Pass R CMD check
-	Assay = logFC = se = NULL
+	Assay = logFC = se = adj.P.Val = NULL
 
  	df = topTable(x, coef=coef, number=Inf)
  	df$se = df$logFC / df$t

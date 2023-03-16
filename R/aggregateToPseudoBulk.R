@@ -213,7 +213,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     # compute mean of each continuous column in colData
 
     # Get columns that are numeric (or integers), but not factor
-    cols = sapply(colData(x), function(a) is.numeric(a) & ! is.factor(a))
+    cols = vapply(colData(x), function(a) is.numeric(a) & ! is.factor(a), logical(1))
     cols = names(cols[cols])
     # exclude columns in by and already in colData(pb)
     cols = cols[!(cols %in% by)]
