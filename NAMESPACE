@@ -2,6 +2,7 @@
 
 export(aggregateNonCountSignal)
 export(aggregateToPseudoBulk)
+export(aggregateVar)
 export(as.dreamletResult)
 export(buildClusterTreeFromPB)
 export(cellCounts)
