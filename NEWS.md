@@ -1,3 +1,7 @@
+# dreamlet 0.99.0
+  - March 15, 2023
+  - Biocondcutor submission
+
 # dreamlet 0.0.64
  - March 7, 2023
  - fix `topTable()` to deal with multiple `coef` as array
