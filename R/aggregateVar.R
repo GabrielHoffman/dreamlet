@@ -30,7 +30,6 @@
 #' @export
 #' @import limma 
 #' @importFrom MatrixGenerics rowVars
-
 aggregateVar = function(sce, assay = NULL, cluster_id = NULL, sample_id = NULL,
                         min.cells = 10, min.var = 0.01,  min.samples = 4, min.prop = 0.4,
                         verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose)){
