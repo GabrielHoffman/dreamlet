@@ -1,3 +1,7 @@
+# dreamlet 0.99.1
+  - March 20, 2023
+  - fix Biocondcutor submission based on https://github.com/Bioconductor/Contributions/issues/2955#issuecomment-1476037237
+
 # dreamlet 0.99.0
   - March 15, 2023
   - Biocondcutor submission

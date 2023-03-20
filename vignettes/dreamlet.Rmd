@@ -277,36 +277,6 @@ plotZenithResults(df, Inf, Inf)
 ```
 
 
-<!---
-# Variation in cell counts
-The number of cells observed in of each type varies across samples.  Visualizing these difference and evaluating weither these differences are explained by other measured variables can give insight into the biology of this variation in cell type composition.    
-Here, compare fraction of each cell type bewteen simulated and unstimulated samples
-
-```{r plotCellComposition, fig.height=5, fig.width=5}
-plotCellComposition(pb)     
-```
-
-Use [crumblr](https://gabrielhoffman.github.io/crumblr/reference/crumblr.html) to transform the cell counts for each sample into log count ratios and precision weights for analysis with dream.
-```{r ctc.crumblr}
-library(crumblr)
-
-# get transformed counts and precision weights with crumblr
-cobj = crumblr( cellCounts(pb) )
-
-# perform standard dream analysis
-fit = dream(cobj, ~ StimStatus, as.data.frame(colData(pb)))
-fit = eBayes(fit)
-
-topTable(fit, coef='StimStatusstim', sort.by="none")
-```
-
-Variance partioning analysis quantifies the contribution of multiple sources of variation in cell type composition differences. 
-```{r ctc.crumblr.cp}
-vp = fitExtractVarPartModel(cobj, ~ StimStatus, as.data.frame(colData(pb)))
-
-plotPercentBars(vp)
-```
---->
 
 # Comparing expression in clusters
 Identifying genes that are differentially expressed between cell clusters incorporates a paired analysis design, since each individual is observed for each cell cluster.    
