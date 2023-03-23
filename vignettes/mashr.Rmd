@@ -170,7 +170,7 @@ library(zenith)
 # Load Gene Ontology database 
 # use gene 'SYMBOL', or 'ENSEMBL' id
 # use get_MSigDB() to load MSigDB 
-go.gs = get_GeneOntology(to="SYMBOL")
+go.gs = get_GeneOntology("CC", to="SYMBOL")
 
 # valid values for statistic: 
 # "tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)"

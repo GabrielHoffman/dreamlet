@@ -37,6 +37,9 @@
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/aggregateToPseudoBulk.html</loc>
   </url>
   <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/aggregateVar.html</loc>
+  </url>
+  <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/as.dreamletResult.html</loc>
   </url>
   <url>
@@ -67,7 +70,16 @@
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/colData-dreamletProcessedData-method.html</loc>
   </url>
   <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/colData-set-dreamletProcessedData-ANY-method.html</loc>
+  </url>
+  <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeCellCounts.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeLogCPM.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeNormCounts.html</loc>
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/details-methods.html</loc>

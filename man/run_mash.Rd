@@ -32,7 +32,7 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
+pb <- aggregateToPseudoBulk(example_sce[1:100,], 
 	assay = "counts",    
 	cluster_id = 'cluster_id', 
 	sample_id = 'sample_id',
@@ -74,29 +74,28 @@ apply(get_lfsr(res_mash$model), 2, function(x) sum(x < 0.05, na.rm=TRUE))
 # which genes are significant in at least 1 cell type
 sort(names(get_significant_results(res_mash$model)))[1:10]
 
-# Lets examine CXCL3
+# Lets examine ENO1
 # There is a lot of variation in the raw logFC
-res_mash$logFC.original["ISG20",]
+res_mash$logFC.original["ENO1",]
 
 # posterior mean after borrowing across cell type and genes
-get_pm(res_mash$model)["ISG20",]
-
-# gene set analysis using mashr results
-library(zenith)
-go.gs = get_GeneOntology("CC", to="SYMBOL")
-# valid values for statistic: 
-# "tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)"
-df_gs = zenith_gsa(res_mash, go.gs)
-
-# Heatmap of results
-plotZenithResults(df_gs, 2, 1)
+get_pm(res_mash$model)["ENO1",]
 
 # forest plot based on mashr results
-plotForest(res_mash, "ISG20")
+plotForest(res_mash, "ENO1")
 
 # volcano plot based on mashr results
 # yaxis uses local false sign rate (lfsr)
 plotVolcano(res_mash)
+
+# Comment out to reduce package runtime
+# gene set analysis using mashr results
+# library(zenith)
+# go.gs = get_GeneOntology("CC", to="SYMBOL")
+# df_gs = zenith_gsa(res_mash, go.gs)
+
+# Heatmap of results
+# plotZenithResults(df_gs, 2, 1)
 
 }
 \references{
