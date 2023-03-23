@@ -245,7 +245,7 @@ Here, `zenith_gsa` takes a `dreamletResult` object, the coefficient of interest,
 # Load Gene Ontology database 
 # use gene 'SYMBOL', or 'ENSEMBL' id
 # use get_MSigDB() to load MSigDB
-go.gs = get_GeneOntology(to="SYMBOL")
+go.gs = get_GeneOntology("CC", to="SYMBOL")
    
 # Run zenith gene set analysis on result of dreamlet
 res_zenith = zenith_gsa(res.dl, coef = 'StimStatusstim', go.gs)

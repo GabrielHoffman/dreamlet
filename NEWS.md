@@ -1,3 +1,8 @@
+# dreamlet 0.99.3
+  - March 23, 2023
+  - reduce compiler time
+  - add `computeNormCounts()` and `computeLogCPM()` 
+
 # dreamlet 0.99.1
   - March 20, 2023
   - fix Biocondcutor submission based on https://github.com/Bioconductor/Contributions/issues/2955#issuecomment-1476037237

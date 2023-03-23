@@ -240,14 +240,8 @@ setMethod("[", signature(x="dreamletResult"),
 #' 
 #' # create a dreamletResult form this list
 #' res.compare = as.dreamletResult( fitList )
-#' 
-#' library(zenith)
-#' go.gs = get_GeneOntology("CC", to="SYMBOL")
-#' 
-#' # Run zenith on each result.
-#' # The coef 'compare' is used for each model
-#' res_zenith = zenith_gsa(res.compare, go.gs, coef = 'compare')
-#' 
+#' res.compare
+#'
 #' @importFrom methods new is
 #' @export
 as.dreamletResult = function(fitList, df_details=NULL){
