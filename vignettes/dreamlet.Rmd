@@ -245,6 +245,7 @@ Here, `zenith_gsa` takes a `dreamletResult` object, the coefficient of interest,
 # Load Gene Ontology database 
 # use gene 'SYMBOL', or 'ENSEMBL' id
 # use get_MSigDB() to load MSigDB
+# Use Cellular Component (i.e. CC) to reduce run time here
 go.gs = get_GeneOntology("CC", to="SYMBOL")
    
 # Run zenith gene set analysis on result of dreamlet
@@ -263,11 +264,12 @@ head(res_zenith)
 plotZenithResults(res_zenith, 5, 1)
 ```
 
-### All gene sets with FDR < 5%
+### All gene sets with FDR < 30%
 Here, show all genes with FDR < 5% in any cell type
 ```{r heatmap2, fig.height=10, fig.width=8}
-# get genesets with FDR < 5%
-gs = unique(res_zenith$Geneset[res_zenith$FDR < 0.05])
+# get genesets with FDR < 30%
+# Few significant genesets because uses Cellular Component (i.e. CC) 
+gs = unique(res_zenith$Geneset[res_zenith$FDR < 0.3])
 
 # keep only results of these genesets
 df = res_zenith[res_zenith$Geneset %in% gs,]
