@@ -49,7 +49,7 @@
 #' # evaluated on the voom normalized data 
 #' res.dl = dreamlet( pb.signal, ~ group_id)
 #' @export
-#' @import limma 
+#' @importClassesFrom limma EList
 #' @importFrom MatrixGenerics rowVars
 aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_id = NULL, min.cells = 10, min.signal = 0.01,  min.samples = 4, min.prop = 0.4, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose)){
 

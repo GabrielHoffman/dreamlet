@@ -380,8 +380,9 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
 
 # method for aggregation depends on datatype    
-#' @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians rowSds
-#' @importFrom sparseMatrixStats rowMeans2 rowSums2 rowCounts rowMedians rowSds
+# @importFrom DelayedMatrixStats rowMeans2 rowSums2 rowCounts rowMedians rowSds
+# @importFrom sparseMatrixStats rowMeans2 rowSums2 rowCounts rowMedians rowSds
+# @importFrom matrixStats rowMeans2 rowSums2 rowCounts rowMedians rowSds
 #' @importFrom MatrixGenerics rowMeans2 rowSums2 rowCounts rowMedians rowSds
 .pb_summary = function(x, by.group, statistics, threshold, BPPARAM){
 

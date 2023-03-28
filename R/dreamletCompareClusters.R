@@ -2,7 +2,6 @@
 # Nov 11, 2021
 
 
-# @importFrom edgeR
 
 # min.count = 5
 # normalize.method = "TMM"

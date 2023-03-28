@@ -26,8 +26,9 @@
 #' data(example_sce)
 #' 
 #' plotProjection(example_sce, "TSNE", 'cluster_id', 1)
-#' @import dplyr ggplot2 SingleCellExperiment
+#' @import dplyr ggplot2 
 #' @importFrom scattermore geom_scattermore
+#' @importFrom SingleCellExperiment reducedDims colData
 #' @export
 plotProjection = function(sce, type, annotation, pointsize = 0, pixels = c(512, 512), legend.position='none', text=TRUE, order){
 

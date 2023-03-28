@@ -28,7 +28,7 @@
 #' The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd / sqrt(n)} and \code{n} is the number of cells.
 #' 
 #' @export
-#' @import limma 
+#' @importClassesFrom limma EList
 #' @importFrom MatrixGenerics rowVars
 aggregateVar = function(sce, assay = NULL, cluster_id = NULL, sample_id = NULL,
                         min.cells = 10, min.var = 0.01,  min.samples = 4, min.prop = 0.4,

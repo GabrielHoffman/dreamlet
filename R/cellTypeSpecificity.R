@@ -60,6 +60,7 @@ setClass("cellSpecificityValues", contains="DFrame")
 #' 
 #' @importFrom edgeR DGEList calcNormFactors cpm
 #' @importFrom S4Vectors DataFrame
+#' @importFrom MatrixGenerics rowSums2
 #' @export
 cellTypeSpecificity = function(pb,...){
 
@@ -71,13 +72,14 @@ cellTypeSpecificity = function(pb,...){
 	geneExpr = lapply( assayNames(pb), function(key){
 
 		# get expression for this assay, and sum across all samples
-		rowSums(assay(pb, key))
+		rowSums2(assay(pb, key), useNames=TRUE)
 		})
 	names(geneExpr) = assayNames(pb)
 	geneExpr = do.call(cbind, geneExpr)
+	rownames(geneExpr) = rownames(pb)
 
 	# identify genes with no reads
-	idx = which(rowSums(geneExpr) == 0)
+	idx = which(rowSums2(geneExpr) == 0)
 
 	if(length(idx) > 0){
 
@@ -92,7 +94,7 @@ cellTypeSpecificity = function(pb,...){
 	dge = calcNormFactors(dge,...)
 
 	# evaluate counts per million
-	geneExpr = cpm(dge, log=FALSE)
+	geneExpr = edgeR::cpm(dge, log=FALSE)
 
 	# # get cell counts
 	# cell_fracs = colSums(cellCounts(pb))
@@ -103,8 +105,8 @@ cellTypeSpecificity = function(pb,...){
 	# df = DataFrame(geneExpr.fract)
 	# colnames(df) = colnames(geneExpr.fract)
 
-	df = DataFrame(totalCPM =rowSums(geneExpr),
-		geneExpr / rowSums(geneExpr), check.names=FALSE)
+	df = DataFrame(totalCPM = rowSums2(geneExpr, useNames=TRUE),
+		geneExpr / rowSums2(geneExpr, useNames=TRUE), check.names=FALSE)
 
 	new("cellSpecificityValues", df)
 }
