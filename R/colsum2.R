@@ -3,7 +3,8 @@
 #
 # Faster version of DelayedArray::colsum
 
-#' @import DelayedArray HDF5Array
+#' @importFrom DelayedArray defaultAutoGrid 
+# HDF5Array
 colsum2 = function (x, group, reorder = TRUE, BPPARAM = SerialParam(), verbose=FALSE,...){
 
 	# set block size

@@ -23,7 +23,7 @@
 #'
 #' @seealso \code{processAssays()}
 #' @import BiocParallel 
-#' @import limma 
+#' @importClassesFrom limma EList
 #' @importFrom variancePartition voomWithDreamWeights
 #' @importFrom edgeR calcNormFactors filterByExpr DGEList 
 #' @importFrom methods is new

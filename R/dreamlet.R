@@ -4,7 +4,7 @@
 # dreamlet uses linear mixed models in dream to perform differential expression in single cell data
 
 # local definition so methods in this file have this class
-# setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', by="vector"))
+setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', by="vector"))
 
 #' Class dreamletResult
 #'
@@ -322,6 +322,7 @@ as.dreamletResult = function(fitList, df_details=NULL){
 #' @rdname topTable-methods
 #' @aliases topTable,dreamletResult,dreamletResult-method
 #' @importFrom gtools smartbind
+#' @import variancePartition 
 #' @export
 setMethod("topTable", signature(fit="dreamletResult"),
 	function(fit,       

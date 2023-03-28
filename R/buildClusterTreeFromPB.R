@@ -31,6 +31,7 @@
 #' @importFrom SingleCellExperiment reducedDim colData
 #' @importFrom edgeR filterByExpr DGEList calcNormFactors cpm
 #' @importFrom stats dist hclust
+#' @importFrom MatrixGenerics rowSums2
 #' @export
 buildClusterTreeFromPB = function(pb, method = c("complete", "ward.D", "single", "average", "mcquitty", "median", "centroid", "ward.D2"), dist.method=c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")){
 
@@ -39,7 +40,7 @@ buildClusterTreeFromPB = function(pb, method = c("complete", "ward.D", "single",
 
 	# Combine counts for each cell cluster into a single point
 	geneCounts = lapply(assayNames(pb), function(CT){
-		rowSums(assay(pb, CT))
+		rowSums2(assay(pb, CT))
 	})
 	names(geneCounts) = assayNames(pb)
 	geneCounts = do.call(cbind, geneCounts)
@@ -48,7 +49,7 @@ buildClusterTreeFromPB = function(pb, method = c("complete", "ward.D", "single",
 	keep = filterByExpr(geneCounts, group = rep(1, ncol(geneCounts)))
 	dge = DGEList(geneCounts[keep,])
 	dge = calcNormFactors(dge)
-	geneExpr = cpm(dge, log=TRUE)
+	geneExpr = edgeR::cpm(dge, log=TRUE)
 
 	# evaluate distance between pairs of cell clusters
 	d = dist(t(geneExpr), method=dist.method)

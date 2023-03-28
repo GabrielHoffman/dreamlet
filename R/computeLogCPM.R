@@ -21,6 +21,8 @@
 #' 
 #' normcounts(example_sce) = computeNormCounts(example_sce)
 #' @importFrom DelayedMatrixStats colSums2
+#' @importFrom SingleCellExperiment counts
+#' @importFrom Matrix t
 #' @export
 computeNormCounts = function(sce){
 	# Compute library size
@@ -48,6 +50,7 @@ computeNormCounts = function(sce){
 #' 
 #' logcounts(example_sce) = computeLogCPM(example_sce)
 #' @importFrom DelayedMatrixStats colSums2
+#' @importFrom SingleCellExperiment counts
 #' @export
 computeLogCPM = function(sce, prior.count = 2){
 
