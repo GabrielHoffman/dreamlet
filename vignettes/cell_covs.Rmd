@@ -19,7 +19,7 @@ output:
 
 cd /Users/gabrielhoffman/workspace/repos/dreamlet/vignettes
 
-rmarkdown::render("cell_level_covariates.Rmd")
+rmarkdown::render("cell_covs.Rmd")
 
 
 --->
