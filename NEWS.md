@@ -1,3 +1,7 @@
+# dreamlet 0.99.6
+  - March 29, 2023
+  - fix `topTable()` for `dreamletResult` in the case where one or more cells didn't estimate the coefficient of interest
+
 # dreamlet 0.99.3
   - March 23, 2023
   - reduce compiler time
