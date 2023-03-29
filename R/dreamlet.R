@@ -378,7 +378,14 @@ setMethod("topTable", signature(fit="dreamletResult"),
 		# combine across assays
 		# allow columns to be missing when coef is array
 		# and some cell types dont have all of them
-		res = DataFrame(do.call(smartbind, res))
+		# Update: handle case when coef is not found
+		i = which(!sapply(res, is.null))
+		if( length(i) > 1){
+			res = smartbind(list = res)
+		}else{
+			res = res[[i]]
+		}
+		res = DataFrame(res)
 
 		# remove rownames
 		rownames(res) = c()
