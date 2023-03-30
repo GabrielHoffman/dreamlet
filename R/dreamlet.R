@@ -381,9 +381,9 @@ setMethod("topTable", signature(fit="dreamletResult"),
 		# Update: handle case when coef is not found
 		i = which(!sapply(res, is.null))
 		if( length(i) > 1){
-			res = smartbind(list = res)
+			res = smartbind(list = res[i])
 		}else{
-			res = res[[i]]
+			res = res[i]
 		}
 		res = DataFrame(res)
 
