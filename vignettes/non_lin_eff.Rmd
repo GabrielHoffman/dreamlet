@@ -2,7 +2,7 @@
 title: "Testing non-linear effects"
 subtitle: 'Categories and continuous variables'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
-date: "Run on `r Sys.time()`"
+date: "Run on 2023-03-30 12:24:52"
 documentclass: article
 vignette: >
   %\VignetteIndexEntry{Testing non-linear effects}
@@ -31,16 +31,7 @@ text-align: justify}
 </style>
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  warning=FALSE,
-  message=FALSE,
-  error = FALSE,
-  tidy = FALSE,
-  dev = c("png"),
-  cache = TRUE)
-```
+
 
 Typical analysis using regression models assumes a linear affect of the covariate on the response.  Here we consider testing non-linear effects in the case of 1) continuous and 2) ordered categorical variables.
 
@@ -50,7 +41,8 @@ We demonstrate this feature on a lightly modified analysis of PBMCs from 8 indiv
 # Standard processing
 Here is the code from the main vignette:
 
-```{r preprocess.data}
+
+```r
 library(dreamlet)
 library(muscat)
 library(ExperimentHub)
@@ -87,7 +79,8 @@ pb <- aggregateToPseudoBulk(sce,
 # Continuous variable
 Consider the continuous variable `Age`.  Typical analysis only considers linear effects using a single regression coefficient, but we also want to consider the non-linear effects of age.  We can peform a [basis expansion using splines](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-019-0666-3) instead use 3 coefficients to model the age effect.
 
-```{r Age}
+
+```r
 # Simulate age between 18 and 65
 pb$Age = runif(ncol(pb), 18, 65)
 
@@ -105,10 +98,31 @@ res.dl = dreamlet( res.proc, form)
 # The spline has degree 3, so there are 3 coefficients
 # estimated for Age effects
 coefNames(res.dl)
+```
 
+```
+## [1] "(Intercept)"          "splines::ns(Age, 3)1" "splines::ns(Age, 3)2"
+## [4] "splines::ns(Age, 3)3"
+```
+
+```r
 # Jointly test effects of the 3 spline components
 # The test of the 3 coefficients is performed with an F-statistic
 topTable(res.dl, coef=coefNames(res.dl)[2:4], number=3)
+```
+
+```
+## DataFrame with 3 rows and 9 columns
+##             assay          ID splines..ns.Age..3.1 splines..ns.Age..3.2
+##       <character> <character>            <numeric>            <numeric>
+## 1 Dendritic cells        IDO1              3.91044              9.03922
+## 2 Dendritic cells       HSPB1              6.60737              4.96464
+## 3 Dendritic cells        SOD2              5.16738              6.16502
+##   splines..ns.Age..3.3   AveExpr         F     P.Value adj.P.Val
+##              <numeric> <numeric> <numeric>   <numeric> <numeric>
+## 1            -0.119172  11.37793  10.36053 8.17075e-07 0.0119734
+## 2             0.568471   9.32348   6.43350 2.36942e-04 0.9999917
+## 3            -1.179138  10.25568   6.04753 4.11047e-04 0.9999917
 ```
 
 
@@ -129,13 +143,15 @@ We have multiple options to model the time course.
 * **Ordered categorical:** Here, the trend across ordered time points is modled using orthogonal polynomials.  The trend is decomposed into independent linear, quadratic, etc., effects that can be tested either jointly or by themselves.  
 
     Model using: 
-    ```{r eval=FALSE}
+    
+    ```r
     ord = c('time_1','time_2','time_3'm,'time_4')
     ordered(factor(TimePoint), ord)
     ```
 
 Here we simulated 4 time points, and perform differential expression analysis.
-```{r timepoint}
+
+```r
 # Consider data generated across 4 time points
 # While there are no time points in the real data
 # we can add some for demonstration purposes 
@@ -143,7 +159,15 @@ pb$TimePoint = ordered(paste0("time_", rep(1:4, 4)))
 
 # examine the ordering
 pb$TimePoint
+```
 
+```
+##  [1] time_1 time_2 time_3 time_4 time_1 time_2 time_3 time_4 time_1 time_2
+## [11] time_3 time_4 time_1 time_2 time_3 time_4
+## Levels: time_1 < time_2 < time_3 < time_4
+```
+
+```r
 # Use formula including time point
 form = ~ TimePoint
 
@@ -159,20 +183,69 @@ res.dl = dreamlet( res.proc, form)
 # quadratic (i.e. Q)
 # and cubic (i.e. C) effects
 coefNames(res.dl)
+```
 
+```
+## [1] "(Intercept)" "TimePoint.L" "TimePoint.Q" "TimePoint.C"
+```
+
+```r
 # Test only linear effect
 topTable(res.dl, coef="TimePoint.L", number=3)
+```
 
+```
+## DataFrame with 3 rows and 9 columns
+##             assay          ID     logFC   AveExpr         t     P.Value
+##       <character> <character> <numeric> <numeric> <numeric>   <numeric>
+## 1     CD4 T cells        DCXR -0.678397   6.52867  -5.65493 3.08306e-05
+## 2     CD4 T cells        GGA2 -0.890912   4.98987  -5.27996 6.55506e-05
+## 3 CD14+ Monocytes        CAPG -0.874746   8.83660  -5.18913 1.12897e-04
+##   adj.P.Val         B     z.std
+##   <numeric> <numeric> <numeric>
+## 1  0.451791  2.064035  -5.65493
+## 2  0.460027  0.826826  -5.27996
+## 3  0.460027 -3.020427  -5.18913
+```
+
+```r
 # Test linear, quadratic and cubic effcts
 coefs = c("TimePoint.L", "TimePoint.Q", "TimePoint.C")
 topTable(res.dl, coef=coefs, number=3)
 ```
 
+```
+## DataFrame with 3 rows and 9 columns
+##            assay          ID TimePoint.L TimePoint.Q TimePoint.C   AveExpr
+##      <character> <character>   <numeric>   <numeric>   <numeric> <numeric>
+## 1 Megakaryocytes       TIMP1   -0.191992     1.97379          NA  10.94510
+## 2    CD8 T cells      GPR183   -0.834378     1.12444    1.155308   8.47413
+## 3    CD8 T cells        CD52    0.879689    -1.50610   -0.960712   8.69458
+##           F     P.Value adj.P.Val
+##   <numeric>   <numeric> <numeric>
+## 1   19.9684 1.36276e-06 0.0199699
+## 2   16.5751 1.55974e-05 0.0826416
+## 3   15.9934 1.98237e-05 0.0826416
+```
+
 
 ## Sample filtering
 Due to variation in cell and read count for each sample, `processAssays()` filters out some sample.  This filtering is summarized here:
-```{r details}   
+
+```r
 details(res.dl)
+```
+
+```
+##               assay n_retain    formula formDropsTerms
+## 1           B cells       16 ~TimePoint          FALSE
+## 2   CD14+ Monocytes       16 ~TimePoint          FALSE
+## 3       CD4 T cells       16 ~TimePoint          FALSE
+## 4       CD8 T cells       16 ~TimePoint          FALSE
+## 5   Dendritic cells        5 ~TimePoint          FALSE
+## 6 FCGR3A+ Monocytes       16 ~TimePoint          FALSE
+## 7    Megakaryocytes        9 ~TimePoint          FALSE
+## 8          NK cells       16 ~TimePoint          FALSE
 ```
 
 Whle all 16 samples are detained in B cells, only 9 are retained for megakaryocytes.  This can result in a time point being dropped, and so the polynomial expansion for some cell types can have a lower degree.  The combined results will then have `NA` values for these coefficients.  For example, for `TIMP1` in `Megakaryocytes` above there is not enought data to fit the cubic term, so `TimePoint.C` is `NA`.               
@@ -187,8 +260,124 @@ Whle all 16 samples are detained in B cells, only 9 are retained for megakaryocy
 
 # Session Info
 <details>
-```{r session, echo=FALSE}
-sessionInfo()
+
+```
+## R version 4.2.0 (2022-04-22)
+## Platform: x86_64-apple-darwin19.6.0 (64-bit)
+## Running under: macOS Big Sur/Monterey 10.16
+## 
+## Matrix products: default
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] splines   stats4    stats     graphics  grDevices datasets  utils    
+## [8] methods   base     
+## 
+## other attached packages:
+##  [1] lme4_1.1-32                 Matrix_1.5-3               
+##  [3] muscData_1.10.0             scater_1.24.0              
+##  [5] scuttle_1.6.3               SingleCellExperiment_1.18.1
+##  [7] SummarizedExperiment_1.26.1 Biobase_2.58.0             
+##  [9] GenomicRanges_1.48.0        GenomeInfoDb_1.32.4        
+## [11] IRanges_2.30.1              S4Vectors_0.34.0           
+## [13] MatrixGenerics_1.8.1        matrixStats_0.63.0         
+## [15] ExperimentHub_2.4.0         AnnotationHub_3.4.0        
+## [17] BiocFileCache_2.4.0         dbplyr_2.3.1               
+## [19] BiocGenerics_0.44.0         muscat_1.11.2              
+## [21] dreamlet_0.99.6             variancePartition_1.28.9   
+## [23] BiocParallel_1.32.0         limma_3.54.0               
+## [25] ggplot2_3.4.1              
+## 
+## loaded via a namespace (and not attached):
+##   [1] estimability_1.4.1            rappdirs_0.3.3               
+##   [3] scattermore_0.8               mashr_0.2.57                 
+##   [5] coda_0.19-4                   tidyr_1.3.0                  
+##   [7] clusterGeneration_1.3.7       bit64_4.0.5                  
+##   [9] knitr_1.42                    irlba_2.3.5.1                
+##  [11] multcomp_1.4-23               DelayedArray_0.22.0          
+##  [13] data.table_1.14.8             KEGGREST_1.36.3              
+##  [15] RCurl_1.98-1.10               doParallel_1.0.17            
+##  [17] generics_0.1.3                ScaledMatrix_1.4.1           
+##  [19] RhpcBLASctl_0.23-42           TH.data_1.1-1                
+##  [21] RSQLite_2.3.0                 future_1.32.0                
+##  [23] bit_4.0.5                     httpuv_1.6.9                 
+##  [25] assertthat_0.2.1              viridis_0.6.2                
+##  [27] xfun_0.37                     hms_1.1.2                    
+##  [29] babelgene_22.9                evaluate_0.20                
+##  [31] promises_1.2.0.1              fansi_1.0.4                  
+##  [33] progress_1.2.2                caTools_1.18.2               
+##  [35] Rgraphviz_2.40.0              DBI_1.1.3                    
+##  [37] geneplotter_1.74.0            purrr_1.0.1                  
+##  [39] ellipsis_0.3.2                dplyr_1.1.0                  
+##  [41] backports_1.4.1               annotate_1.74.0              
+##  [43] aod_1.3.2                     sparseMatrixStats_1.8.0      
+##  [45] vctrs_0.5.2                   abind_1.4-5                  
+##  [47] cachem_1.0.7                  withr_2.5.0                  
+##  [49] emmeans_1.8.5                 sctransform_0.3.5            
+##  [51] prettyunits_1.1.1             softImpute_1.4-1             
+##  [53] cluster_2.1.4                 crayon_1.5.2                 
+##  [55] genefilter_1.78.0             edgeR_3.38.4                 
+##  [57] pkgconfig_2.0.3               labeling_0.4.2               
+##  [59] nlme_3.1-160                  vipor_0.4.5                  
+##  [61] blme_1.0-5                    rlang_1.1.0                  
+##  [63] globals_0.16.2                lifecycle_1.0.3              
+##  [65] sandwich_3.0-2                filelock_1.0.2               
+##  [67] rsvd_1.0.5                    invgamma_1.1                 
+##  [69] graph_1.74.0                  ashr_2.2-54                  
+##  [71] boot_1.3-28.1                 zoo_1.8-11                   
+##  [73] beeswarm_0.4.0                GlobalOptions_0.1.2          
+##  [75] png_0.1-8                     viridisLite_0.4.1            
+##  [77] rjson_0.2.21                  bitops_1.0-7                 
+##  [79] KernSmooth_2.23-20            EnrichmentBrowser_2.26.0     
+##  [81] Biostrings_2.64.1             blob_1.2.3                   
+##  [83] DelayedMatrixStats_1.18.2     shape_1.4.6                  
+##  [85] mixsqp_0.3-48                 stringr_1.5.0                
+##  [87] SQUAREM_2021.1                parallelly_1.34.0            
+##  [89] remaCor_0.0.11                rmeta_3.0                    
+##  [91] beachmat_2.12.0               scales_1.2.1                 
+##  [93] memoise_2.0.1                 GSEABase_1.58.0              
+##  [95] magrittr_2.0.3                plyr_1.8.8                   
+##  [97] gplots_3.1.3                  zlibbioc_1.42.0              
+##  [99] compiler_4.2.0                RColorBrewer_1.1-3           
+## [101] clue_0.3-64                   KEGGgraph_1.56.0             
+## [103] DESeq2_1.36.0                 cli_3.6.0                    
+## [105] XVector_0.36.0                lmerTest_3.1-3               
+## [107] listenv_0.9.0                 TMB_1.9.1                    
+## [109] MASS_7.3-58.3                 tidyselect_1.2.0             
+## [111] stringi_1.7.12                highr_0.10                   
+## [113] zenith_1.1.1                  yaml_2.3.7                   
+## [115] BiocSingular_1.12.0           locfit_1.5-9.7               
+## [117] ggrepel_0.9.3                 grid_4.2.0                   
+## [119] tools_4.2.0                   future.apply_1.10.0          
+## [121] parallel_4.2.0                circlize_0.4.15              
+## [123] foreach_1.5.2                 gridExtra_2.3                
+## [125] farver_2.1.1                  RcppZiggurat_0.1.6           
+## [127] digest_0.6.31                 BiocManager_1.30.20          
+## [129] shiny_1.7.4                   Rcpp_1.0.10                  
+## [131] broom_1.0.4                   BiocVersion_3.15.2           
+## [133] later_1.3.0                   httr_1.4.5                   
+## [135] AnnotationDbi_1.58.0          ComplexHeatmap_2.12.1        
+## [137] Rdpack_2.4                    colorspace_2.1-0             
+## [139] XML_3.99-0.13                 truncnorm_1.0-8              
+## [141] xtable_1.8-4                  nloptr_2.0.3                 
+## [143] Rfast_2.0.6                   R6_2.5.1                     
+## [145] RUnit_0.4.32                  pillar_1.8.1                 
+## [147] htmltools_0.5.4               mime_0.12                    
+## [149] glue_1.6.2                    fastmap_1.1.1                
+## [151] minqa_1.2.5                   BiocNeighbors_1.14.0         
+## [153] interactiveDisplayBase_1.34.0 codetools_0.2-19             
+## [155] mvtnorm_1.1-3                 utf8_1.2.3                   
+## [157] lattice_0.20-45               tibble_3.2.0                 
+## [159] numDeriv_2016.8-1.1           pbkrtest_0.5.2               
+## [161] curl_5.0.0                    ggbeeswarm_0.7.1             
+## [163] gtools_3.9.4                  survival_3.5-5               
+## [165] glmmTMB_1.1.5                 munsell_0.5.0                
+## [167] GetoptLong_1.0.5              GenomeInfoDbData_1.2.8       
+## [169] iterators_1.0.14              reshape2_1.4.4               
+## [171] gtable_0.3.1                  msigdbr_7.5.1                
+## [173] rbibutils_2.2.13
 ```
 </details>
 
