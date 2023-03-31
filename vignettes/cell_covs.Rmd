@@ -2,7 +2,7 @@
 title: "Modeling continuous cell-level covariates"
 subtitle: 'Collapse using mean value for pseudobulk data'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
-date: "Run on 2023-03-30 12:21:15"
+date: "Run on `r Sys.time()`"
 documentclass: article
 vignette: >
   %\VignetteIndexEntry{Modeling continuous cell-level covariates}
@@ -31,7 +31,16 @@ text-align: justify}
 </style>
 
 
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning=FALSE,
+  message=FALSE,
+  error = FALSE,
+  tidy = FALSE,
+  dev = c("png"),
+  cache = TRUE)
+```
 
 Since read counts are summed across cells in a pseudobulk approach, modeling continuous cell-level covariates also requires a collapsing step.  Here we summarize the values of a variable from a set of cells using the mean, and store the value for each cell type.  Including these variables in a regression formula uses the summarized values from the corresponding cell type.   
 
@@ -42,8 +51,7 @@ We demonstrate this feature on a lightly modified analysis of PBMCs from 8 indiv
 
 Here is the code from the main vignette:
 
-
-```r
+```{r preprocess.data}
 library(dreamlet)
 library(muscat)
 library(ExperimentHub)
@@ -69,8 +77,7 @@ sce$StimStatus = sce$stim
 ```
 
 In many datasets, continuous cell-level variables could be mapped reads, gene count, mitochondrial rate, etc. There are no continuous cell-level variables in this dataset, so we can simulate two from a normal distribution:
-
-```r
+```{r variable}
 sce$value1 = rnorm(ncol(sce))
 sce$value2 = rnorm(ncol(sce))
 ```
@@ -78,8 +85,7 @@ sce$value2 = rnorm(ncol(sce))
 # Pseudobulk
 Now compute the pseudobulk using standard code:
 
-
-```r
+```{r aggregate}
 sce$id <- paste0(sce$StimStatus, sce$ind)
 
 # Create pseudobulk 
@@ -92,27 +98,8 @@ pb <- aggregateToPseudoBulk(sce,
 
 The means per variable, cell type, and sample are stored in the pseudobulk `SingleCellExperiment` object:
 
-
-```r
+```{r aggr_means}
 metadata(pb)$aggr_means
-```
-
-```
-## # A tibble: 128 × 5
-## # Groups:   cell [8]
-##    cell    id       cluster   value1   value2
-##    <fct>   <fct>      <dbl>    <dbl>    <dbl>
-##  1 B cells ctrl101     3.96  0.205    0.0599 
-##  2 B cells ctrl1015    4.00 -0.0310   0.0521 
-##  3 B cells ctrl1016    4     0.146    0.00301
-##  4 B cells ctrl1039    4.04 -0.266   -0.134  
-##  5 B cells ctrl107     4    -0.0142  -0.179  
-##  6 B cells ctrl1244    4    -0.0586   0.203  
-##  7 B cells ctrl1256    4.01  0.00828  0.125  
-##  8 B cells ctrl1488    4.02  0.107    0.0833 
-##  9 B cells stim101     4.09  0.0105  -0.0870 
-## 10 B cells stim1015    4.06  0.111    0.00333
-## # … with 118 more rows
 ```
 
 # Analysis
@@ -120,8 +107,7 @@ Including these variables in a regression formula uses the summarized values fro
 
 Variance partition and hypothesis testing proceeds as ususal:
 
-
-```r
+```{r processAssays, fig.height=12}
 form = ~ StimStatus + value1 + value2
 
 # Normalize and apply voom/voomWithDreamWeights
@@ -132,11 +118,7 @@ vp.lst = fitVarPart( res.proc, form)
 
 # Summarize variance fractions genome-wide for each cell type
 plotVarPart(vp.lst, label.angle=60) 
-```
 
-![plot of chunk processAssays](figure/processAssays-1.png)
-
-```r
 # Differential expression analysis within each assay
 res.dl = dreamlet( res.proc, form)
 
@@ -144,139 +126,13 @@ res.dl = dreamlet( res.proc, form)
 res.dl
 ```
 
-```
-## class: dreamletResult 
-## assays(8): B cells CD14+ Monocytes ... Megakaryocytes NK cells
-## Genes:
-##  min: 182 
-##  max: 5262 
-## details(4): assay n_retain formula formDropsTerms
-## coefNames(4): (Intercept) StimStatusstim value1 value2
-```
-
 
 
 
 # Session Info
 <details>
-
-```
-## R version 4.2.0 (2022-04-22)
-## Platform: x86_64-apple-darwin19.6.0 (64-bit)
-## Running under: macOS Big Sur/Monterey 10.16
-## 
-## Matrix products: default
-## 
-## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-## 
-## attached base packages:
-## [1] splines   stats4    stats     graphics  grDevices datasets  utils    
-## [8] methods   base     
-## 
-## other attached packages:
-##  [1] lme4_1.1-32                 Matrix_1.5-3               
-##  [3] muscData_1.10.0             scater_1.24.0              
-##  [5] scuttle_1.6.3               SingleCellExperiment_1.18.1
-##  [7] SummarizedExperiment_1.26.1 Biobase_2.58.0             
-##  [9] GenomicRanges_1.48.0        GenomeInfoDb_1.32.4        
-## [11] IRanges_2.30.1              S4Vectors_0.34.0           
-## [13] MatrixGenerics_1.8.1        matrixStats_0.63.0         
-## [15] ExperimentHub_2.4.0         AnnotationHub_3.4.0        
-## [17] BiocFileCache_2.4.0         dbplyr_2.3.1               
-## [19] BiocGenerics_0.44.0         muscat_1.11.2              
-## [21] dreamlet_0.99.6             variancePartition_1.28.9   
-## [23] BiocParallel_1.32.0         limma_3.54.0               
-## [25] ggplot2_3.4.1              
-## 
-## loaded via a namespace (and not attached):
-##   [1] estimability_1.4.1            rappdirs_0.3.3               
-##   [3] scattermore_0.8               mashr_0.2.57                 
-##   [5] coda_0.19-4                   tidyr_1.3.0                  
-##   [7] clusterGeneration_1.3.7       bit64_4.0.5                  
-##   [9] knitr_1.42                    irlba_2.3.5.1                
-##  [11] multcomp_1.4-23               DelayedArray_0.22.0          
-##  [13] data.table_1.14.8             KEGGREST_1.36.3              
-##  [15] RCurl_1.98-1.10               doParallel_1.0.17            
-##  [17] generics_0.1.3                ScaledMatrix_1.4.1           
-##  [19] RhpcBLASctl_0.23-42           TH.data_1.1-1                
-##  [21] RSQLite_2.3.0                 future_1.32.0                
-##  [23] bit_4.0.5                     httpuv_1.6.9                 
-##  [25] assertthat_0.2.1              viridis_0.6.2                
-##  [27] xfun_0.37                     hms_1.1.2                    
-##  [29] babelgene_22.9                evaluate_0.20                
-##  [31] promises_1.2.0.1              fansi_1.0.4                  
-##  [33] progress_1.2.2                caTools_1.18.2               
-##  [35] Rgraphviz_2.40.0              DBI_1.1.3                    
-##  [37] geneplotter_1.74.0            purrr_1.0.1                  
-##  [39] ellipsis_0.3.2                dplyr_1.1.0                  
-##  [41] backports_1.4.1               annotate_1.74.0              
-##  [43] aod_1.3.2                     sparseMatrixStats_1.8.0      
-##  [45] vctrs_0.5.2                   abind_1.4-5                  
-##  [47] cachem_1.0.7                  withr_2.5.0                  
-##  [49] emmeans_1.8.5                 sctransform_0.3.5            
-##  [51] prettyunits_1.1.1             softImpute_1.4-1             
-##  [53] cluster_2.1.4                 crayon_1.5.2                 
-##  [55] genefilter_1.78.0             edgeR_3.38.4                 
-##  [57] pkgconfig_2.0.3               labeling_0.4.2               
-##  [59] nlme_3.1-160                  vipor_0.4.5                  
-##  [61] blme_1.0-5                    rlang_1.1.0                  
-##  [63] globals_0.16.2                lifecycle_1.0.3              
-##  [65] sandwich_3.0-2                filelock_1.0.2               
-##  [67] rsvd_1.0.5                    invgamma_1.1                 
-##  [69] graph_1.74.0                  ashr_2.2-54                  
-##  [71] boot_1.3-28.1                 zoo_1.8-11                   
-##  [73] beeswarm_0.4.0                GlobalOptions_0.1.2          
-##  [75] png_0.1-8                     viridisLite_0.4.1            
-##  [77] rjson_0.2.21                  bitops_1.0-7                 
-##  [79] KernSmooth_2.23-20            EnrichmentBrowser_2.26.0     
-##  [81] Biostrings_2.64.1             blob_1.2.3                   
-##  [83] DelayedMatrixStats_1.18.2     shape_1.4.6                  
-##  [85] mixsqp_0.3-48                 stringr_1.5.0                
-##  [87] SQUAREM_2021.1                parallelly_1.34.0            
-##  [89] remaCor_0.0.11                rmeta_3.0                    
-##  [91] beachmat_2.12.0               scales_1.2.1                 
-##  [93] memoise_2.0.1                 GSEABase_1.58.0              
-##  [95] magrittr_2.0.3                plyr_1.8.8                   
-##  [97] gplots_3.1.3                  zlibbioc_1.42.0              
-##  [99] compiler_4.2.0                RColorBrewer_1.1-3           
-## [101] clue_0.3-64                   KEGGgraph_1.56.0             
-## [103] DESeq2_1.36.0                 cli_3.6.0                    
-## [105] XVector_0.36.0                lmerTest_3.1-3               
-## [107] listenv_0.9.0                 TMB_1.9.1                    
-## [109] MASS_7.3-58.3                 tidyselect_1.2.0             
-## [111] stringi_1.7.12                highr_0.10                   
-## [113] zenith_1.1.1                  yaml_2.3.7                   
-## [115] BiocSingular_1.12.0           locfit_1.5-9.7               
-## [117] ggrepel_0.9.3                 grid_4.2.0                   
-## [119] tools_4.2.0                   future.apply_1.10.0          
-## [121] parallel_4.2.0                circlize_0.4.15              
-## [123] foreach_1.5.2                 gridExtra_2.3                
-## [125] farver_2.1.1                  RcppZiggurat_0.1.6           
-## [127] digest_0.6.31                 BiocManager_1.30.20          
-## [129] shiny_1.7.4                   Rcpp_1.0.10                  
-## [131] broom_1.0.4                   BiocVersion_3.15.2           
-## [133] later_1.3.0                   httr_1.4.5                   
-## [135] AnnotationDbi_1.58.0          ComplexHeatmap_2.12.1        
-## [137] Rdpack_2.4                    colorspace_2.1-0             
-## [139] XML_3.99-0.13                 truncnorm_1.0-8              
-## [141] xtable_1.8-4                  nloptr_2.0.3                 
-## [143] Rfast_2.0.6                   R6_2.5.1                     
-## [145] RUnit_0.4.32                  pillar_1.8.1                 
-## [147] htmltools_0.5.4               mime_0.12                    
-## [149] glue_1.6.2                    fastmap_1.1.1                
-## [151] minqa_1.2.5                   BiocNeighbors_1.14.0         
-## [153] interactiveDisplayBase_1.34.0 codetools_0.2-19             
-## [155] mvtnorm_1.1-3                 utf8_1.2.3                   
-## [157] lattice_0.20-45               tibble_3.2.0                 
-## [159] numDeriv_2016.8-1.1           pbkrtest_0.5.2               
-## [161] curl_5.0.0                    ggbeeswarm_0.7.1             
-## [163] gtools_3.9.4                  survival_3.5-5               
-## [165] glmmTMB_1.1.5                 munsell_0.5.0                
-## [167] GetoptLong_1.0.5              GenomeInfoDbData_1.2.8       
-## [169] iterators_1.0.14              reshape2_1.4.4               
-## [171] gtable_0.3.1                  msigdbr_7.5.1                
-## [173] rbibutils_2.2.13
+```{r session, echo=FALSE}
+sessionInfo()
 ```
 </details>
 
