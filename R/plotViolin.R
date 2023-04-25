@@ -41,7 +41,6 @@ setGeneric("plotViolin",
 #' # across all cell types.  For K cell types, this is 1/K
 #' plotViolin(df)
 #' @importFrom reshape2 melt
-#' @import ggplot2 
 #' @rdname plotViolin-methods
 #' @aliases plotViolin,cellSpecificityValues,cellSpecificityValues-method
 setMethod("plotViolin", "cellSpecificityValues",
@@ -52,7 +51,7 @@ setMethod("plotViolin", "cellSpecificityValues",
 
 	# omit column totalCPM, if it exists
 	i = which(colnames(x) == "totalCPM")
-	if( length(i) > 0) x = x[,-1]
+	if( length(i) > 0) x = x[,-1,drop=FALSE]
 
 	# intersect preserving order from assays
 	assays = intersect(assays, colnames(x))

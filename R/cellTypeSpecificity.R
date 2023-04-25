@@ -83,7 +83,7 @@ cellTypeSpecificity = function(pb,...){
 
 	if(length(idx) > 0){
 
-		geneExpr = geneExpr[-idx,]
+		geneExpr = geneExpr[-idx,,drop=FALSE]
 		txt = paste("There are", length(idx), "genes with no reads in this dataset. They are excluded here")
 		warning(txt)
 	}

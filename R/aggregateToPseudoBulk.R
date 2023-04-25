@@ -179,7 +179,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
     }
     md$agg_pars <- list(assay = assay, by = by, fun = fun, scale = scale)
     pb <- SingleCellExperiment(pb, rowData = rowData(x), metadata = md)
-    cd <- data.frame(colData(x)[, by])
+    cd <- data.frame(colData(x)[, by,drop=FALSE])
     for (i in names(cd)) if (is.factor(cd[[i]])) 
         cd[[i]] <- droplevels(cd[[i]])
     ns <- table(cd)
@@ -195,7 +195,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
 
         # keep columns if there is a unique value in each sample
         counts <- vapply(ids, function(u) {
-            m <- as.logical(match(cd[, by[2]], u, nomatch = 0))
+            m <- as.logical(match(cd[, by[2],drop=TRUE], u, nomatch = 0))
             vapply(cd[m, ], function(u) length(unique(u)), numeric(1))
         }, numeric(ncol(colData(x))))
         cd_keep <- apply(counts, 1, function(u) all(u == 1))
@@ -267,7 +267,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         M = assay(x,y)
         idx1 = seq(1, min(1000, nrow(M)))
         idx2 = seq(1, min(50, ncol(M)))
-        values = as.matrix(M[idx1,idx2])
+        values = as.matrix(M[idx1,idx2,drop=FALSE])
         values = values[values!=0]
 
         if( any(values < 0) ){

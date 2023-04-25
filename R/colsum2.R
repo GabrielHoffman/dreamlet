@@ -64,7 +64,7 @@ compute_ugroup <- function(group, expected_group_len, reorder=TRUE){
 		block_ans <- .compute_colsum_for_block(x, grid, i, j,
 											   group, na.rm=na.rm)
 		m <- match(colnames(block_ans), ugroup)
-		ans[ , m] <- ans[ , m] + block_ans
+		ans[ , m] <- ans[ , m,drop=FALSE] + block_ans
 		if (verbose)
 			message("OK", appendLF=FALSE)
 	}

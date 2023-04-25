@@ -38,7 +38,6 @@
 #' # plot for first two cell types
 #' plotVoom(res.proc[1:2])
 #' 
-#' @import ggplot2
 #' @export
 #' @docType methods
 #' @rdname plotVoom-methods

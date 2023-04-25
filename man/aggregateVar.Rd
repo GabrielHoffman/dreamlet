@@ -52,3 +52,16 @@ For each cell cluster, samples with at least min.cells are retained. Only cluste
  
 The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd / sqrt(n)} and \code{n} is the number of cells.
 }
+\examples{
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# Compute variance for each sample and cell cluster
+pbVar <- aggregateVar(example_sce, 
+   assay = "counts",    
+   cluster_id = 'cluster_id', 
+   sample_id = 'sample_id',
+   verbose=FALSE)
+}

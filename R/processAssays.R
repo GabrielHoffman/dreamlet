@@ -22,7 +22,7 @@
 #' @return \code{EList} object storing log2 CPM and precision weights
 #'
 #' @seealso \code{processAssays()}
-#' @import BiocParallel 
+#' @importFrom BiocParallel SerialParam
 #' @importClassesFrom limma EList
 #' @importFrom variancePartition voomWithDreamWeights
 #' @importFrom edgeR calcNormFactors filterByExpr DGEList 
@@ -170,7 +170,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 #' # evaluated on the voom normalized data 
 #' res.dl = dreamlet( res.proc, ~ group_id)
 #'
-#' @import BiocParallel  
+#' @importFrom BiocParallel SerialParam 
 #' @importFrom S4Vectors metadata as.data.frame
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
 #'

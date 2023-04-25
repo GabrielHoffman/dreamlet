@@ -1,3 +1,8 @@
+# dreamlet 0.99.10
+  - April 19, 2023
+  - Fix issue in raised in Bioconductor submission: https://github.com/Bioconductor/Contributions/issues/2955#issuecomment-1498070980
+  - Compatibility with variancePartition v2.0.0
+
 # dreamlet 0.99.6
   - March 29, 2023
   - fix `topTable()` for `dreamletResult` in the case where one or more cells didn't estimate the coefficient of interest

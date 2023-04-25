@@ -46,7 +46,6 @@
 #' # volcano plot for first two cell types
 #' plotVolcano(res.dl[1:2], coef="group_idstim")
 #'
-#' @import ggplot2 ggrepel
 #' @export
 #' @docType methods
 #' @rdname plotVolcano-methods
@@ -59,6 +58,7 @@ setGeneric("plotVolcano",
 
 
 #' @importFrom data.table as.data.table
+#' @importFrom ggrepel geom_text_repel
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,list,list-method
 setMethod("plotVolcano", "list",
@@ -71,7 +71,7 @@ setMethod("plotVolcano", "list",
   df_combine = topTable(x, coef=coef, number=Inf)
   df_combine = as.data.table(df_combine)
   idx = df_combine$assay %in% assays
-  df_combine = df_combine[idx,]
+  df_combine = df_combine[idx,,drop=FALSE]
 
   # Pass R CMD check
   .SD = logFC = P.Value = isSignif = Gene = ID = NULL
@@ -93,10 +93,10 @@ setMethod("plotVolcano", "list",
   df_combine$assay = factor(df_combine$assay, assays)
   # order by assay, then p-value
   ord = order(df_combine$assay, df_combine$P.Value)
-  df_combine = df_combine[ord,]
+  df_combine = df_combine[ord,,drop=FALSE]
 
   # top significant genes in each cell type
-  df2 = df_combine[,head(.SD, nGenes), by="assay"]
+  df2 = df_combine[,head(.SD, nGenes), by="assay",drop=FALSE]
 
   # reverse order to plot significant points last
   fig = ggplot(df_combine, aes(logFC, -log10(P.Value), color=isSignif)) + 
@@ -124,6 +124,7 @@ setMethod("plotVolcano", "list",
 
 
 #' @importFrom data.table data.table
+#' @importFrom ggrepel geom_text_repel
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,MArrayLM,MArrayLM-method
 setMethod("plotVolcano", "MArrayLM",
@@ -152,7 +153,7 @@ setMethod("plotVolcano", "MArrayLM",
   df2 = df_combine[,head(.SD, nGenes)]
 
   # reverse order to plot significant points last
-  ggplot(df_combine[seq(nrow(df_combine), 1)], aes(logFC, -log10(P.Value), color=isSignif)) + 
+  ggplot(df_combine[seq(nrow(df_combine), 1),,drop=FALSE], aes(logFC, -log10(P.Value), color=isSignif)) + 
     geom_point() + 
     theme_classic(size) + 
     theme(aspect.ratio=1, legend.position="none", plot.title = element_text(hjust = 0.5)) + 
@@ -168,6 +169,7 @@ setMethod("plotVolcano", "MArrayLM",
 
 
 #' @importFrom data.table data.table
+#' @importFrom ggrepel geom_text_repel
 #' @importFrom reshape2 melt
 #' @rdname plotVolcano-methods
 #' @aliases plotVolcano,dreamlet_mash_result,dreamlet_mash_result-method
@@ -190,7 +192,7 @@ setMethod("plotVolcano", "dreamlet_mash_result",
   df = data.table(df[!is.na(df$logFC),])
 
   # sort by lFSR
-  df = df[order(df$lFSR),]
+  df = df[order(df$lFSR),,drop=FALSE]
 
   # sort facets by original sorting of assays
   df$ID.x = factor(df$ID.x, colnames(x$logFC.original))
@@ -202,7 +204,7 @@ setMethod("plotVolcano", "dreamlet_mash_result",
   df$lFSR = pmax(minp, df$lFSR )
 
   # filter based on assays
-  df = df[df$ID.x %in% assays,]
+  df = df[df$ID.x %in% assays,,drop=FALSE]
   df$ID.x = factor(df$ID.x, assays)
 
   xmax = max(abs(df$logFC))
@@ -213,10 +215,7 @@ setMethod("plotVolcano", "dreamlet_mash_result",
 
   # order by assay, then lFSR
   ord = order(df$ID.x, df$lFSR)
-  df = df[ord,]
-
-  # reverse order to plot significant points last
-  # df = df[seq(nrow(df), 1)]
+  df = df[ord,,drop=FALSE]
 
   fig = ggplot(df, aes(logFC, -log10(lFSR), color=isSignif)) + 
     geom_point() + 

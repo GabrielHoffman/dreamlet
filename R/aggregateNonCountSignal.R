@@ -107,13 +107,13 @@ aggregateNonCountSignal = function(sce, assay = NULL, sample_id = NULL, cluster_
 
 		# inclusion criteria for samples
 		include = (number[1,] >= min.cells)
-		obj = obj[,include]
+		obj = obj[,include,drop=FALSE]
 
 		# inclusion criteria for genes
 		keep = apply(obj$E, 1, function(x){
 			sum(x >= min.signal) >= min.prop*length(x)
 			} )
-		obj = obj[keep,]
+		obj = obj[keep,,drop=FALSE]
 
 		# if weight is Inf, set to largest finite value per row
 		if( any(!is.finite(obj$weights)) ){

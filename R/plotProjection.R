@@ -26,7 +26,7 @@
 #' data(example_sce)
 #' 
 #' plotProjection(example_sce, "TSNE", 'cluster_id', 1)
-#' @import dplyr ggplot2 
+#' @import ggplot2
 #' @importFrom scattermore geom_scattermore
 #' @importFrom SingleCellExperiment reducedDims colData
 #' @export

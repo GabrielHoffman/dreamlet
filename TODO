@@ -1,4 +1,39 @@
 
+
+# April 19
+	variancePartition::dream doesnt scale weights as it should
+
+	voomWithDreamWeights() with weights
+	 	scale weights?
+	 	fix weighting based on Ryan's comments?
+
+	Fix Important
+	https://github.com/Bioconductor/Contributions/issues/2955
+	BiocStyle vignettes
+
+	Confirm this works on real data
+	Implement error checking using new vp 2.0.0
+	Check parallel processing and memory usage
+
+	refit is not used on dream model
+		https://github.com/lme4/lme4/issues/678#issuecomment-1513839764
+
+	F-tests with contestMD
+
+
+
+	# Handle errors in dreamlet/dream
+
+	# makeContrastsDream
+	# Handle errors when terms are missing
+	#  handle zeros different from non-zeros?
+	Run makeContrastsDream early in dreamlet() to check terms in 
+		contrasts match formula ever before samples are filtered
+
+
+
+
+
 new lines in zenith_gsa
 
 March 6, 

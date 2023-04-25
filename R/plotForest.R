@@ -61,10 +61,10 @@ setMethod("plotForest", signature(x="dreamletResult"),
  	df = topTable(x, coef=coef, number=Inf)
  	df$se = df$logFC / df$t
 	df = as.data.frame(df)
-	df = df[df$assay %in% assays,]
+	df = df[df$assay %in% assays,,drop=FALSE]
 	df$assay = factor(df$assay, assays)
 
-	ggplot(df[df$ID == gene, ], aes(assay, logFC,  color=-log10(pmax(1e-4,adj.P.Val)) )) + 
+	ggplot(df[df$ID == gene, ,drop=FALSE], aes(assay, logFC,  color=-log10(pmax(1e-4,adj.P.Val)) )) + 
 		geom_point() + 
 		geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0) + 
 		theme_classic() + 
@@ -107,14 +107,14 @@ setMethod("plotForest", signature(x="dreamlet_mash_result"),
 	df = merge(df_logFC, df_lfsr, by='key')
 	df = merge(df, df_se, by='key')
 
-	df = df[df$ID %in% assays,]
+	df = df[df$ID %in% assays,,drop=FALSE]
 	df$ID = factor(df$ID, assays)
 
 	# drop NA values
-	df = df[!is.na(df$logFC),]
+	df = df[!is.na(df$logFC),,drop=FALSE]
 
 	# make plot
-	ggplot(df[df$Gene.x == gene, ], aes(ID, logFC,  color=-log10(pmax(1e-4,lFSR)) )) + 
+	ggplot(df[df$Gene.x == gene, ,drop=FALSE], aes(ID, logFC,  color=-log10(pmax(1e-4,lFSR)) )) + 
 		geom_point() + 
 		geom_errorbar(aes(ymin = logFC - 1.96*se, ymax = logFC + 1.96*se), width=0) + 
 		theme_classic() + 
