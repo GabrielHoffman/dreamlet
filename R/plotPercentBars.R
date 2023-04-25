@@ -40,7 +40,6 @@ setClass("vpDF", contains="DFrame", slots=c(df_details = "data.frame"))
 #' @rdname plotPercentBars-methods
 #' @aliases plotPercentBars,vpDF,vpDF-method
 #' @importFrom reshape2 melt
-#' @import ggplot2
 setMethod("plotPercentBars", "vpDF",
 	function( x, col=c(ggColorHue(ncol(x)-3), "grey85"), genes=unique(x$gene), width=NULL, ncol = 3,...){
 	
@@ -53,10 +52,10 @@ setMethod("plotPercentBars", "vpDF",
 	}
 
 	# subset based on assays
-	x = x[x$assay %in% unique(assays),]	
+	x = x[x$assay %in% unique(assays),,drop=FALSE]	
 
 	# subset based on specified genes
-	x = x[x$gene %in% unique(genes),]	
+	x = x[x$gene %in% unique(genes),,drop=FALSE]	
 
 	# convert matrix to tall data.frame
 	df = melt( as.data.frame(x), id.vars=c("assay", "gene"))
@@ -104,7 +103,6 @@ setMethod("plotPercentBars", "vpDF",
 #' @rdname plotPercentBars-methods
 #' @aliases plotPercentBars,cellSpecificityValues,cellSpecificityValues-method
 #' @importFrom reshape2 melt
-#' @import ggplot2
 setMethod("plotPercentBars", "cellSpecificityValues",
 	function( x, col=ggColorHue(ncol(x)), genes=rownames(x), width=NULL,...){
 		
@@ -132,9 +130,9 @@ setMethod("plotPercentBars", "cellSpecificityValues",
 
 	# omit column totalCPM, if it exists
 	i = which(colnames(x) == "totalCPM")
-	if( length(i) > 0) x= x[,-1]
+	if( length(i) > 0) x= x[,-1,drop=FALSE]
 
-	df = data.frame(x[idx,], check.names=FALSE)
+	df = data.frame(x[idx,,drop=FALSE], check.names=FALSE)
 	df$gene = rownames(df)
 	df_melt = melt(df, id.vars="gene")
 

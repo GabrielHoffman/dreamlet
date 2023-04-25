@@ -96,7 +96,7 @@ setMethod("sortCols", "vpDF",
  		}
 
  		# perform storting without the first two annotation columns
-		res = sortCols(as.data.frame(x[,-c(1,2)]), FUN, decreasing, last, ... )
+		res = sortCols(as.data.frame(x[,-c(1,2),drop=FALSE]), FUN, decreasing, last, ... )
 
 		# add the annotation columns back to the sorted data.frame
 		new("vpDF", DataFrame(x[,c(1,2)], res), df_details=x@df_details)

@@ -307,7 +307,7 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 	# since vobj contains a subset of cells, also subset the data
 	idx = match(colnames(vobj), rownames(data))
-	data = data[idx,]
+	data = data[idx,,drop=FALSE]
 
 	# describe samples dropped by filtering	
 	n.samples2 = length(unique(data$Sample))
@@ -340,10 +340,10 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 
 			tab = table(data2$Sample) > 1
 			keep = data2$Sample %in% names(tab)[tab]
-			data2 = data2[keep,]
+			data2 = data2[keep,,drop=FALSE]
 			tab = table(data2$cellCluster) > 1
 			keep = data2$cellCluster %in% names(tab)[tab]
-			data2 = data2[keep,]
+			data2 = data2[keep,,drop=FALSE]
 			
 			if( nrow(data2) == n_remaining) break
 			n_remaining = nrow(data2)
@@ -360,8 +360,8 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 		}
 		# retain only these samples
 		idx = match(rownames(data2), rownames(data))
-		data = droplevels(data[idx,])
-		vobj = vobj[,idx]
+		data = droplevels(data[idx,,drop=FALSE])
+		vobj = vobj[,idx,drop=FALSE]
 
 		if( collapse){
 			# keep only retained cellCluster

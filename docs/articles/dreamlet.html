@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,8 +90,8 @@ analysis of pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-03-29
-12:33:39</h4>
+            <h4 data-toc-skip class="date">Run on 2023-04-20
+18:14:18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -119,6 +119,9 @@ devtools::reload("/Users/gabrielhoffman/workspace/repos/zenith")
 body {
 text-align: justify}
 </style>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>As the scale of single cell/nucleus RNA-seq has increased, so has the
 complexity of study designs. Analysis of datasets with simple study
 designs can be performed using linear model as in the <a href="https://bioconductor.org/packages/muscat" class="external-link">muscat package</a>. Yet
@@ -133,6 +136,17 @@ linear models and facilitates application of 1) <a href="https://bioconductor.or
 to quantify the contribution of multiple variables to expression
 variation, and 2) <a href="https://github.com/GabrielHoffman/zenith" class="external-link">zenith</a> to perform
 gene set analysis on the differential expression signatures.</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>To install this package, start R (version “4.3”) and enter:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"variancePartition"</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level2">
 <h2 id="process-single-cell-count-data">Process single cell count data<a class="anchor" aria-label="anchor" href="#process-single-cell-count-data"></a>
 </h2>
@@ -147,7 +161,7 @@ workflow.</p>
 <h3 id="preprocess-data">Preprocess data<a class="anchor" aria-label="anchor" href="#preprocess-data"></a>
 </h3>
 <p>Here, single cell RNA-seq data is downloaded from <a href="https://bioconductor.org/packages/ExperimentHub/" class="external-link">ExperimentHub</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://DiseaseNeurogenomics.github.io/dreamlet" class="external-link">dreamlet</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/muscat" class="external-link">muscat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span>
@@ -179,7 +193,7 @@ workflow.</p>
 summing <u>raw counts</u> across cells for a given sample and cell type.
 <code>aggregateToPseudoBulk</code> is substantially faster for large
 on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.html" class="external-link"><code>muscat::aggregateData</code></a>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Since 'ind' is the individual and 'StimStatus' is the stimulus status,</span></span>
 <span><span class="co"># create unique identifier for each sample</span></span>
 <span><span class="va">sce</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span>, <span class="va">sce</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span></span>
@@ -208,7 +222,7 @@ on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.htm
 <p>Apply <a href="https://rdrr.io/bioc/limma/man/voom.html" class="external-link">voom</a>-style
 normalization for pseudobulk counts within each cell cluster using <a href="https://gabrielhoffman.github.io/variancePartition/reference/voomWithDreamWeights.html" class="external-link">voomWithDreamWeights</a>
 to handle random effects (if specified).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Normalize and apply voom/voomWithDreamWeights</span></span>
 <span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">StimStatus</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
 <span></span>
@@ -239,7 +253,7 @@ type. The number of samples retained and the resulting formula used in
 each cell type can be accessed as follows. In this analysis, samples are
 dropped from 3 cell types but the original formula remains valid in each
 case.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># view details of dropping samples</span></span>
 <span><span class="fu"><a href="../reference/details-methods.html">details</a></span><span class="op">(</span><span class="va">res.proc</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 8 rows and 3 columns</span></span>
@@ -257,11 +271,11 @@ case.</p>
 Cell types with sufficient number of cells and reads show a clear
 mean-variance trend. While in rare cell types like megakaryocytes, fewer
 genes have sufficient reads and the trend is less apparent.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># show voom plot for each cell clusters  </span></span>
 <span><span class="fu"><a href="../reference/plotVoom-methods.html">plotVoom</a></span><span class="op">(</span> <span class="va">res.proc</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/voom.plots-1.png" width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Show plots for subset of cell clusters</span></span>
 <span><span class="co"># plotVoom( res.proc[1:3] )</span></span>
 <span></span>
@@ -278,15 +292,15 @@ gene it fits a linear (mixed) model and evalutes the fraction of
 expression variation explained by each variable.</p>
 <p>Variance fractions can be visualized at the gene-level for each cell
 type using a bar plot, or genome-wide using a violin plot.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run variance partitioning analysis</span></span>
 <span><span class="va">vp.lst</span> <span class="op">=</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">StimStatus</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Show variance fractions at the gene-level for each cell type</span></span>
 <span><span class="va">genes</span> <span class="op">=</span> <span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
 <span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.barplt-1.png" width="700"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize variance fractions genome-wide for each cell type</span></span>
 <span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotVarPart-method.html" class="external-link">plotVarPart</a></span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.violin-1.png" width="700"></p>
@@ -301,7 +315,7 @@ larger datasets can include covariates and random effects. With formula
 <code>~ StimStatus</code>, an intercept is fit and coefficient
 <code>StimStatusstim</code> log fold change between simulated and
 controls.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Differential expression analysis within each assay,</span></span>
 <span><span class="co"># evaluated on the voom normalized data </span></span>
 <span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">StimStatus</span><span class="op">)</span></span>
@@ -309,7 +323,7 @@ controls.</p>
 <span><span class="co"># names of estimated coefficients</span></span>
 <span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span> </span></code></pre></div>
 <pre><code><span><span class="co">## [1] "(Intercept)"    "StimStatusstim"</span></span></code></pre>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># the resulting object of class dreamletResult</span></span>
 <span><span class="co"># stores results and other information</span></span>
 <span><span class="va">res.dl</span></span></code></pre></div>
@@ -326,7 +340,7 @@ controls.</p>
 <p>The volcano plot can indicate the strength of the differential
 expression signal with each cell type. Red points indicate FDR &lt;
 0.05.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotVolcano-1.png" width="768"></p>
 </div>
@@ -336,7 +350,7 @@ expression signal with each cell type. Red points indicate FDR &lt;
 <p>For each cell type and specified gene, show z-statistic from
 <code>dreamlet</code> analysis. Grey indicates that insufficient reads
 were observed to include the gene in the analysis.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ISG20"</span>, <span class="st">"ISG15"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotGeneHeatmap-methods.html">plotGeneHeatmap</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span>, genes<span class="op">=</span><span class="va">genes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotGeneHeatmap-1.png" width="700"></p>
@@ -349,7 +363,7 @@ and results can be extracted using <code>topTable()</code> as in
 <code>limma</code> by specifying the coefficient of interest. The
 results shows the gene name, log fold change, average expression,
 t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># results from full analysis</span></span>
 <span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
@@ -377,7 +391,7 @@ t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <span><span class="co">## 8  3.73169e-16   34.4771   26.4388</span></span>
 <span><span class="co">## 9  5.57062e-16   33.8603   25.7287</span></span>
 <span><span class="co">## 10 5.57062e-16   33.7695   23.8766</span></span></code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># only B cells</span></span>
 <span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           logFC   AveExpr        t      P.Value    adj.P.Val        B</span></span>
@@ -397,7 +411,7 @@ t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 </h3>
 <p>A forest plot shows the log fold change and standard error of a given
 gene across all cell types. The color indicates the FDR.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotForest-methods.html">plotForest</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span>, gene <span class="op">=</span> <span class="st">'ISG20'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/forrest-1.png" width="700"></p>
 </div>
@@ -408,7 +422,7 @@ gene across all cell types. The color indicates the FDR.</p>
 coefficients can be performed using contrasts. The contrast matrix is
 evaluated for each cell type in the backend, so only the contrast string
 must be supplied to <code><a href="../reference/dreamlet.html">dreamlet()</a></code>.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a contrasts called 'Diff' that is the difference between expression</span></span>
 <span><span class="co"># in the stimulated and controls.</span></span>
 <span><span class="co"># More than one can be specified</span></span>
@@ -422,7 +436,7 @@ must be supplied to <code><a href="../reference/dreamlet.html">dreamlet()</a></c
 <span><span class="co"># see estimated coefficients</span></span>
 <span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Diff"           "StimStatusctrl" "StimStatusstim"</span></span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Volcano plot of Diff</span></span>
 <span><span class="fu"><a href="../reference/plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">'Diff'</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/dreamlet.contrasts-1.png" width="700"></p>
@@ -453,7 +467,7 @@ genes.</p>
 <p>Here, <code>zenith_gsa</code> takes a <code>dreamletResult</code>
 object, the coefficient of interest, and gene sets as a
 <code>GeneSetCollection</code> object from <a href="https://bioconductor.org/packages/GSEABase/" class="external-link">GSEABase</a>.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Gene Ontology database </span></span>
 <span><span class="co"># use gene 'SYMBOL', or 'ENSEMBL' id</span></span>
 <span><span class="co"># use get_MSigDB() to load MSigDB</span></span>
@@ -496,7 +510,7 @@ object, the coefficient of interest, and gene sets as a
 <div class="section level3">
 <h3 id="heatmap-of-top-genesets">Heatmap of top genesets<a class="anchor" aria-label="anchor" href="#heatmap-of-top-genesets"></a>
 </h3>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># for each cell type select 5 genesets with largest t-statistic</span></span>
 <span><span class="co"># and 1 geneset with the lowest</span></span>
 <span><span class="co"># Grey boxes indicate the gene set could not be evaluted because</span></span>
@@ -507,7 +521,7 @@ object, the coefficient of interest, and gene sets as a
 <h4 id="all-gene-sets-with-fdr-30">All gene sets with FDR &lt; 30%<a class="anchor" aria-label="anchor" href="#all-gene-sets-with-fdr-30"></a>
 </h4>
 <p>Here, show all genes with FDR &lt; 5% in any cell type</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get genesets with FDR &lt; 30%</span></span>
 <span><span class="co"># Few significant genesets because uses Cellular Component (i.e. CC) </span></span>
 <span><span class="va">gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">FDR</span> <span class="op">&lt;</span> <span class="fl">0.3</span><span class="op">]</span><span class="op">)</span></span>
@@ -527,7 +541,7 @@ object, the coefficient of interest, and gene sets as a
 <p>Identifying genes that are differentially expressed between cell
 clusters incorporates a paired analysis design, since each individual is
 observed for each cell cluster.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># test differential expression between B cells and the rest of the cell clusters</span></span>
 <span><span class="va">ct.pairs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"rest"</span><span class="op">)</span></span>
 <span> </span>
@@ -558,7 +572,7 @@ observed for each cell cluster.</p>
 </h2>
 <p>Evaluate the specificity of each gene for each cluster, retaining
 only highly expressed genes:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_cts</span> <span class="op">=</span> <span class="fu"><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span> <span class="va">pb</span> <span class="op">)</span></span>
 <span> </span>
 <span><span class="co"># retain only genes with total CPM summed across cell type &gt; 100</span></span>
@@ -569,11 +583,11 @@ only highly expressed genes:</p>
 <p><img src="dreamlet_files/figure-html/cellTypeSpecificity-1.png" width="700"></p>
 <p>Highlight expression fraction for most specific gene from each cell
 type:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-1.png" width="700"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-2.png" width="700"></p>
 </div>

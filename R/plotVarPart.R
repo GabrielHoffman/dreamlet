@@ -40,7 +40,6 @@
 #' @aliases plotVarPart,DataFrame,DataFrame-method
 #' @importFrom reshape2 melt
 #' @importFrom S4Vectors as.data.frame
-#' @import ggplot2
 setMethod("plotVarPart", "DataFrame",
 	function( obj, col=c(ggColorHue(base::ncol(obj)-3), "grey85"), label.angle=20, main="", ylab = "", convertToPercent = TRUE, ncol = 3,...){
 

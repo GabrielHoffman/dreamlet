@@ -69,18 +69,17 @@ setGeneric("plotGeneHeatmap",
 #' @rdname plotGeneHeatmap-methods
 #' @aliases plotGeneHeatmap,dreamletResult,dreamletResult-method
 #' @importFrom tidyr complete
-#' @import ggplot2
 setMethod("plotGeneHeatmap", "dreamletResult",
 	function(x, coef, genes, assays=assayNames(x), zmax=NULL, transpose=FALSE){
 
 	# extract gene-level results
 	tab = topTable(x, coef=coef, number=Inf)
-	tab = tab[tab$ID %in% genes,c("assay", "ID", "z.std", 'adj.P.Val')]
+	tab = tab[tab$ID %in% genes,c("assay", "ID", "z.std", 'adj.P.Val'),drop=FALSE]
 	tab$ID <- factor(tab$ID, levels=genes)
 
 	if( nrow(tab) == 0) stop("No genes retained")
 
-	tab = as.data.frame(tab[tab$assay %in% assays,])
+	tab = as.data.frame(tab[tab$assay %in% assays,,drop=FALSE])
 	tab = droplevels(tab)
 	tab$assay = factor(tab$assay, assays)
 

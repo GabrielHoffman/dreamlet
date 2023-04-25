@@ -45,7 +45,6 @@ setGeneric("plotHeatmap",
 #' dreamlet::plotHeatmap( df, genes = genes)
 #' @export
 #' @importFrom reshape2 melt
-#' @import ggplot2 
 #' @rdname plotHeatmap-methods
 #' @aliases plotHeatmap,cellSpecificityValues,cellSpecificityValues-method
 setMethod("plotHeatmap", "cellSpecificityValues",
@@ -58,14 +57,14 @@ setMethod("plotHeatmap", "cellSpecificityValues",
 	x = x[,assays,drop=FALSE]
 
 	# subset based on specified genes
-	x = x[rownames(x) %in% unique(genes),]	
+	x = x[rownames(x) %in% unique(genes),,drop=FALSE]	
 
 	# pass R CMD check
 	value = variable = gene = NA
 
 	# omit column totalCPM, if it exists
 	i = which(colnames(x) == "totalCPM")
-	if( length(i) > 0) x = x[,-1]
+	if( length(i) > 0) x = x[,-1,drop=FALSE]
 
   df = data.frame(gene = rownames(x), x, check.names=FALSE)
 
@@ -92,7 +91,6 @@ setMethod("plotHeatmap", "cellSpecificityValues",
 
 #' @export
 #' @importFrom reshape2 melt
-#' @import ggplot2 
 #' @rdname plotHeatmap-methods
 #' @aliases plotHeatmap,matrix,matrix-method
 setMethod("plotHeatmap", "matrix",
@@ -105,7 +103,7 @@ setMethod("plotHeatmap", "matrix",
 	x = x[,assays,drop=FALSE]
 
 	# subset based on specified genes
-	x = x[rownames(x) %in% unique(genes),]	
+	x = x[rownames(x) %in% unique(genes),,drop=FALSE]	
 
 	# pass R CMD check
 	value = variable = gene = NA

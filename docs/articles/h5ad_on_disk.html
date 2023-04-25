@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,6 +111,9 @@ rmarkdown::render("h5ad_on_disk.Rmd")
 body {
 text-align: justify}
 </style>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>As the scale of single cell RNA-seq datasets continues to increase,
 loading the entire dataset into memory is often impractical. Dreamlet
 can take advantage of efficient data storage through the <a href="https://bioconductor.org" class="external-link">Bioconductor’s</a> <a href="https://bioconductor.org/packages/SingleCellExperiment/" class="external-link">SingleCellExperiment</a>
@@ -141,7 +144,9 @@ Instead of loading the entire dataset into memory, we adopt an on-disk approach 
 
 This enables any analysis designed for the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class to take advantage of seamless on-disk access to large-scale datasets.
 
----><div class="section level2">
+--->
+</div>
+<div class="section level2">
 <h2 id="on-disk-storage-zellkonverter">On-disk storage: zellkonverter<a class="anchor" aria-label="anchor" href="#on-disk-storage-zellkonverter"></a>
 </h2>
 <p><a href="https://github.com/theislab/zellkonverter" class="external-link">zellkonverter</a>

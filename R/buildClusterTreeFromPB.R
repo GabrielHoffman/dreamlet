@@ -47,7 +47,7 @@ buildClusterTreeFromPB = function(pb, method = c("complete", "ward.D", "single",
 
 	# compute log2 CPM for genes with sufficient expression
 	keep = filterByExpr(geneCounts, group = rep(1, ncol(geneCounts)))
-	dge = DGEList(geneCounts[keep,])
+	dge = DGEList(geneCounts[keep,,drop=FALSE])
 	dge = calcNormFactors(dge)
 	geneExpr = edgeR::cpm(dge, log=TRUE)
 

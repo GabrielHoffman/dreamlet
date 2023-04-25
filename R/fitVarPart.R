@@ -41,7 +41,7 @@
 #' # Summarize variance fractions genome-wide for each cell type
 #' plotVarPart(vp)
 #'
-#' @import BiocParallel  
+#' @importFrom BiocParallel SerialParam
 #' @export
 setGeneric("fitVarPart", 
 	function( x, formula, data = colData(x), assays = assayNames(x), quiet = FALSE, BPPARAM = SerialParam(),...){

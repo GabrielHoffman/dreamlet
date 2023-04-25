@@ -13,7 +13,7 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 #' @name dreamletResult-class
 #' @rdname dreamletResult-class
 #' @exportClass dreamletResult
-setClass("dreamletResult", contains="list", slots=c(df_details = "data.frame"))
+setClass("dreamletResult", contains="list", slots=c(df_details = "data.frame", errors = 'list', error.initial = 'list'))
 
 
 
@@ -128,7 +128,69 @@ setMethod("coefNames", "dreamletResult",
 })
 
 
+#' Get error text
+#' 
+#' Get error text
+#'
+#' @param obj A \code{dreamletResult} object
+#' @param initial if TRUE, report \code{error.initial}, else report \code{error}
+#'
+#' @return \code{tibble} storing error text
+#'
+#' @examples
+#' library(muscat)
+#' library(SingleCellExperiment)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce, 
+#'    assay = "counts",    
+#'    cluster_id = 'cluster_id', 
+#'    sample_id = 'sample_id',
+#'    verbose=FALSE)
+#'
+#' # voom-style normalization
+#' res.proc = processAssays( pb, ~ group_id)
+#' 
+#' # Differential expression analysis within each assay,
+#' # evaluated on the voom normalized data 
+#' res.dl = dreamlet( res.proc, ~ group_id)
+#' 
+#' # show errors
+#' # but none are reported
+#' seeErrors(res.dl)
+#'
+#' @rdname seeErrors-methods
+#' @export
+setGeneric('seeErrors', function(obj, initial=FALSE){
+	standardGeneric("seeErrors")
+	})
 
+#' @export
+#' @rdname seeErrors-methods
+#' @aliases seeErrors,dreamletResult-method
+#' @importFrom dplyr as_tibble
+setMethod("seeErrors", "dreamletResult",
+	function(obj, initial=FALSE){
+
+	if( ! initial ){
+		df = lapply( names(obj@errors), function(id){
+			if( length(obj@errors[[id]]) == 0) return( NULL )
+			data.frame(assay = id, 
+						feature = names(obj@errors[[id]]),
+						errorText = obj@errors[[id]])
+			})
+	}else{
+		df = lapply( names(obj@error.initial), function(id){
+			message(id)
+			if( length(obj@error.initial[[id]]) == 0) return( NULL )
+			data.frame(assay = id, 
+						errorTextInitial = obj@error.initial[[id]])
+			})
+	}
+	as_tibble(do.call(rbind, df))
+})
 
 
 setGeneric('assayNames', SummarizedExperiment::assayNames)
@@ -322,7 +384,6 @@ as.dreamletResult = function(fitList, df_details=NULL){
 #' @rdname topTable-methods
 #' @aliases topTable,dreamletResult,dreamletResult-method
 #' @importFrom gtools smartbind
-#' @import variancePartition 
 #' @export
 setMethod("topTable", signature(fit="dreamletResult"),
 	function(fit,       
@@ -359,7 +420,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 				}
 
 				if( nrow(tab) > 0 ){
-					tab = tab[!is.na(tab$ID),]
+					tab = tab[!is.na(tab$ID),,drop=FALSE]
 
 					# if doesn't have z.std, add it
 					if( ! "z.std" %in% colnames(tab) ){
@@ -379,7 +440,7 @@ setMethod("topTable", signature(fit="dreamletResult"),
 		# allow columns to be missing when coef is array
 		# and some cell types dont have all of them
 		# Update: handle case when coef is not found
-		i = which(!sapply(res, is.null))
+		i = which(!vapply(res, is.null, logical(1)))
 		if( length(i) > 1){
 			res = smartbind(list = res[i])
 		}else{
@@ -580,7 +641,7 @@ setMethod("getTreat", signature(fit="dreamletResult"),
 #' # adj.P.Val gives study-wide FDR
 #' topTable(res.dl, coef="group_idstim", number=3)
 #' 
-#' @import BiocParallel  
+#' @importFrom BiocParallel SerialParam
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
 #' @seealso \code{variancePartition::dream()}, \code{variancePartition::makeContrastsDream()}
@@ -629,6 +690,16 @@ setMethod("dreamlet", "dreamletProcessedData",
 	    data_constant = droplevels(data_constant[-idx,,drop=FALSE])
 	}
 
+	if( ! is.null(contrasts) ){
+		tryCatch({
+			L = makeContrastsDream( formula, data_constant, contrasts=contrasts, nullOnError=TRUE)}, 
+		error = function(e){
+			txt = paste0("Issue evaluating formula.\nMake sure specified variables and levels are valid:\n", e$message)
+			stop(txt)
+		}
+		)
+	}
+
 	# for each assay
 	resList = lapply( assays, function( k ){
 
@@ -662,11 +733,20 @@ setMethod("dreamlet", "dreamletProcessedData",
 				L = NULL
 			}			
 
-			fit = tryCatch( {
-				# fit linear (mixed) model for each gene		
-				dream( geneExpr, form_mod, data2, L = L, BPPARAM=BPPARAM,..., quiet=TRUE)
-				}, 
-				error = function(e) NULL)
+
+			fit = dream( geneExpr, form_mod, data2, L = L, BPPARAM=BPPARAM,..., hideErrorsInBackend=TRUE)
+
+			errorArray = attr(fit, "errors")
+
+			if( ! is.null(attr(fit, "error.initial")) ){
+				if( !quiet ) message(format(Sys.time() - startTime, digits=2))
+				return(list(fit = NULL, 
+							formula = form_mod, 
+							n_retain = ncol(geneExpr),
+							errors = errorArray, 
+							error.initial = attr(fit, "error.initial")))
+
+			}
 
 			# if model is degenerate
 			if( !is.null(fit) && ! any(is.na(fit$sigma)) ){
@@ -696,7 +776,11 @@ setMethod("dreamlet", "dreamletProcessedData",
 
 		if( !quiet ) message(format(Sys.time() - startTime, digits=2))
 
-		list(fit = fit, formula = form_mod, n_retain = ncol(geneExpr))
+		list(fit = fit, 
+			formula = form_mod, 
+			n_retain = ncol(geneExpr),
+			errors = errorArray, 
+			error.initial = attr(fit, "error.initial"))
 	})
 	# name each result by the assay name
 	names(resList) = assays
@@ -710,13 +794,23 @@ setMethod("dreamlet", "dreamletProcessedData",
 	# NUll is returned when coef of interest is dropped
 	fitList = fitList[!vapply(fitList, is.null, FUN.VALUE=logical(1))]
 
+	# get error messages
+	error.initial = lapply(resList, function(x) 
+		x$error.initial)
+	names(error.initial) = names(resList)
+	errors = lapply(resList, function(x) 
+		x$errors)
+	names(errors) = names(resList)
+
 	# extract details
 	df_details = lapply( names(resList), function(id){
 
 		data.frame( assay = id,
 			n_retain = resList[[id]]$n_retain,
 			formula = Reduce(paste, deparse(resList[[id]]$formula)),
-			formDropsTerms = ! equalFormulas( resList[[id]]$formula, formula)	)
+			formDropsTerms = ! equalFormulas( resList[[id]]$formula, formula), 
+			n_errors = length(resList[[id]]$errors),
+			error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE))
 	})
 	df_details = do.call(rbind, df_details)
 
@@ -726,7 +820,10 @@ setMethod("dreamlet", "dreamletProcessedData",
 		warning("Terms dropped from formulas for ", ndrop, " assays.\n Run details() on result for more information")
 	}
 
-	new("dreamletResult", fitList, df_details = df_details)
+	new("dreamletResult", fitList, 
+		df_details = df_details, 
+		errors = errors,
+		error.initial = error.initial)
 })
 
 

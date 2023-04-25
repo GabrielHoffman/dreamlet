@@ -2,7 +2,7 @@
 title: "mashr analysis after dreamlet"
 subtitle: 'Borrowing information across genes and cell types'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
-date: "Run on 2023-03-31 13:02:36"
+date: "Run on 2023-04-20 10:07:42"
 documentclass: article
 vignette: >
   %\VignetteIndexEntry{mashr analysis following dreamlet}
@@ -40,6 +40,7 @@ text-align: justify}
 
 
 
+# Instroduction
 [mashr](https://cran.r-project.org/web/packages/mashr/index.html) is a Bayesian statistical method to borrow information across genes and cell type [(Urbut, et al, 2019)](https://doi.org/10.1038%2Fs41588-018-0268-8).  [mashr](https://cran.r-project.org/web/packages/mashr/index.html) takes estimated log fold changes and standard errors for each cell type and gene from `dreamlet`, and produces posterior estimates with more accuracy and precision then the original parameter estimates.
 
 
