@@ -1,5 +1,19 @@
 
 
+
+April 25,
+	F-tests with contestMD comapred to topTable()
+	
+	lme4 version dependency
+	
+	voomWithDreamWeights() with weights
+	 	scale weights?
+	 	fix weighting based on Ryan's comments?
+
+
+
+
+
 # April 19
 	variancePartition::dream doesnt scale weights as it should
 
@@ -29,6 +43,7 @@
 	#  handle zeros different from non-zeros?
 	Run makeContrastsDream early in dreamlet() to check terms in 
 		contrasts match formula ever before samples are filtered
+
 
 
 
