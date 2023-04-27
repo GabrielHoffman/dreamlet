@@ -723,6 +723,9 @@ setMethod("dreamlet", "dreamletProcessedData",
 		# Drop variables in a redundant pair
 		form_mod = dropRedundantTerms(form_mod, data2)
 
+		# initialize with no errors
+		errorArray = NULL
+
 		# drop any constant terms from the formula
 		if( length(all.vars(form_mod)) > 0 ){
 

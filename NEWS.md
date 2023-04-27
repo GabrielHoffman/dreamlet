@@ -1,5 +1,5 @@
 # dreamlet 0.99.10
-  - April 19, 2023
+  - April 24, 2023
   - Fix issue in raised in Bioconductor submission: https://github.com/Bioconductor/Contributions/issues/2955#issuecomment-1498070980
   - Compatibility with variancePartition v2.0.0
 
