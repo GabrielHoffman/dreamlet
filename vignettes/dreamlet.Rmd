@@ -56,11 +56,17 @@ knitr::opts_chunk$set(
 # Installation
 To install this package, start R (version "4.3") and enter:
 
-```{r install}
+```{r install, eval=FALSE}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("variancePartition")
+# Select release #1 or #2
+
+# 1) Bioconductor release
+BiocManager::install("dreamlet")
+
+# 2) Latest stable release
+devtools::install_github("DiseaseNeurogenomics/dreamlet")
 ```
 
 # Process single cell count data
