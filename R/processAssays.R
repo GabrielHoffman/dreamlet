@@ -91,11 +91,6 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 		# voom uses to compute precision weights
 		geneExpr = voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=quiet)
 
-		# combine empirical weights from voomWithDreamWeights
-		# with weighting by the number of cells
-		# w = w_cells - mean(w_cells)
-		# geneExpr = applyQualityWeights(geneExpr, w_cells)
-
 		# save formula used after dropping constant terms
 		geneExpr$formula = formula
 	}else{
