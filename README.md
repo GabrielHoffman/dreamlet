@@ -40,15 +40,18 @@ Dreamlet builds on previous work on variance partitioning and differential expre
 </div>
 
 ## Install
-`dreamlet >= v0.0.58` is compatible with `BioC v3.16` for `R v4.2`.
+`dreamlet >= 0.99.12` is compatible with `BioC v3.17` for `R v4.3`.
 
 ```r
 # 1) Make sure Bioconductor is installed
 # 2) Install dreamlet and dependencies:
 devtools::install_github("DiseaseNeurogenomics/dreamlet")
+
+# 3) nstall zellkonverter >= v1.10.1
+BiocManager::install("zellkonverter")
 ```
 
-`dreamlet` is also compatible with `BioC v3.14` for `R v4.1` after installing these dependencies:
+`dreamlet` is also compatible with earlier version of R and Bioconductor after installing these dependencies:
 
 ### Dependencies
  In case these aren't installed automatically:

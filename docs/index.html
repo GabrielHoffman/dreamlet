@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,12 +127,15 @@
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
-<p><code>dreamlet &gt;= v0.0.58</code> is compatible with <code>BioC v3.16</code> for <code>R v4.2</code>.</p>
+<p><code>dreamlet &gt;= 0.99.12</code> is compatible with <code>BioC v3.17</code> for <code>R v4.3</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1) Make sure Bioconductor is installed</span></span>
 <span><span class="co"># 2) Install dreamlet and dependencies:</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"DiseaseNeurogenomics/dreamlet"</span><span class="op">)</span></span></code></pre></div>
-<p><code>dreamlet</code> is also compatible with <code>BioC v3.14</code> for <code>R v4.1</code> after installing these dependencies:</p>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"DiseaseNeurogenomics/dreamlet"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 3) nstall zellkonverter &gt;= v1.10.1</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"zellkonverter"</span><span class="op">)</span></span></code></pre></div>
+<p><code>dreamlet</code> is also compatible with earlier version of R and Bioconductor after installing these dependencies:</p>
 <div class="section level3">
 <h3 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
 </h3>

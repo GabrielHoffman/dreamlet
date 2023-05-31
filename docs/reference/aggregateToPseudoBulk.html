@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,7 +129,7 @@ object specifying how aggregation should be parallelized.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Adapted from <code><a href="https://rdrr.io/pkg/muscat/man/aggregateData.html" class="external-link">muscat::aggregateData</a></code> and has simular syntax and same results.  This is much faster for <code>SingleCellExperiment</code> backed by H5AD files using <code>DelayedMatrix</code> because this summarizes counts using <code><a href="https://rdrr.io/pkg/DelayedMatrixStats/man/DelayedMatrixStats.html" class="external-link">DelayedMatrixStats</a></code>.  But this function also includes optmizations for <code>sparseMatrix</code> used by <code><a href="https://satijalab.org/seurat/reference/Seurat-package.html" class="external-link">Seurat</a></code> by using <code>sparseMatrixStats</code>.</p>
+    <p>Adapted from <code><a href="https://rdrr.io/pkg/muscat/man/aggregateData.html" class="external-link">muscat::aggregateData</a></code> and has simular syntax and same results.  This is much faster for <code>SingleCellExperiment</code> backed by H5AD files using <code>DelayedMatrix</code> because this summarizes counts using <code><a href="https://rdrr.io/pkg/DelayedMatrixStats/man/DelayedMatrixStats.html" class="external-link">DelayedMatrixStats</a></code>.  But this function also includes optmizations for <code>sparseMatrix</code> used by <code>Seurat</code> by using <code>sparseMatrixStats</code>.</p>
 <p>Keeps variables from <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code> that are constant within <code>sample_id</code>.  For example, sex will be constant for all cells from the same <code>sample_id</code>, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each <code>sample_id</code>, so it is dropped.</p>
     </div>
     <div class="section level2">
