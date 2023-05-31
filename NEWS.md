@@ -1,3 +1,13 @@
+# dreamlet 0.99.13
+  - May 31, 2023
+  - improved error reporting
+  - Compatibility with variancePartition v2.0.5
+
+# dreamlet 0.99.12
+  - May 24, 2023
+  - required `zellkonverter (>= 1.10.1)` to avoid issues with previous version
+    - issue solved by https://github.com/theislab/zellkonverter/blob/b56718d113327020c024e188d9ac67ea57eaf35d/R/AnnData2SCE.R#L351
+
 # dreamlet 0.99.11
   - May 12, 2023
   - Compatibility with variancePartition v2.0.1
