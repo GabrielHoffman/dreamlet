@@ -47,14 +47,14 @@ Dreamlet builds on previous work on variance partitioning and differential expre
 # 2) Install dreamlet and dependencies:
 devtools::install_github("DiseaseNeurogenomics/dreamlet")
 
-# 3) nstall zellkonverter >= v1.10.1
+# 3) Install zellkonverter >= v1.10.1
 BiocManager::install("zellkonverter")
 ```
 
 `dreamlet` is also compatible with earlier version of R and Bioconductor after installing these dependencies:
 
 ### Dependencies
- In case these aren't installed automatically:
+In case these aren't installed automatically:
 ```r
 devtools::install_github("DiseaseNeurogenomics/variancePartition")
 devtools::install_github("DiseaseNeurogenomics/zenith")
