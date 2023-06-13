@@ -131,7 +131,11 @@ setMethod("plotVolcano", "MArrayLM",
   function(x, coef, nGenes=5, size=12, minp=1.0e-310, cutoff=0.05, ncol=3,...){
 
   tab = topTable(x, coef=coef, number=Inf)
-  df_combine = data.table(ID = rownames(tab), tab)
+  if( "ID" %in% colnames(tab) ){
+    df_combine = data.table(tab)
+  }else{
+    df_combine = data.table(ID = rownames(tab), tab)
+  }
 
   xmax = max(abs(df_combine$logFC))
   ymax = -log10(min(df_combine$P.Value))
