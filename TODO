@@ -1,4 +1,9 @@
 
+June 14
+Colin: 
+I'm trying to understand how well the regulons/non-count variables are specific for microglia subtypes and their differential expression across subclasses/subtypes
+
+Yes but for downstream functions like celltypespecificity or dreamletcompareclusters it requires an SCE object
 
 
 April 25,
