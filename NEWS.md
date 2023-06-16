@@ -1,3 +1,7 @@
+# dreamlet 0.99.14
+  - June 16, 2023
+  - bug fix in `processAssays()` when assays is dropped
+
 # dreamlet 0.99.13
   - May 31, 2023
   - improved error reporting
