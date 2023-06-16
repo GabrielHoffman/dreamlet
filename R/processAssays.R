@@ -89,10 +89,14 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 
 		# weights from w_cells are used in calculating residuals that 
 		# voom uses to compute precision weights
-		geneExpr = voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=quiet)
+		# If model fails return NULL
+		geneExpr = tryCatch(
+			voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=quiet),
+			error = function(e) NULL)
 
 		# save formula used after dropping constant terms
-		geneExpr$formula = formula
+		if( !is.null(geneExpr) ) geneExpr$formula = formula
+
 	}else{
 	 	
 		# assumes already converted to log2 CPM
@@ -110,7 +114,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count
 		geneExpr$formula = ~ 0
 	}
 
-	geneExpr$isCounts = isCounts
+	if( !is.null(geneExpr) ) geneExpr$isCounts = isCounts
 
 	geneExpr 
 }
@@ -237,8 +241,12 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 	})
 	names(resList) = assays
 
+	exclude = vapply(resList, is.null, FUN.VALUE=logical(1))
+
+	warning("Not enough samples retained or model fit fails: ", paste(names(resList)[exclude], collapse=", "))
+
 	# remove empty assays
-	resList = resList[!vapply(resList, is.null, FUN.VALUE=logical(1))]
+	resList = resList[!exclude]
 
 	new("dreamletProcessedData", 
 		resList, 
