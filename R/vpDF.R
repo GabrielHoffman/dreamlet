@@ -55,7 +55,7 @@ setMethod("assay", signature(x="vpDF"),
 #' Sort variance partition statistics
 #'
 #' @param x object returned by \code{fitVarPart()}
-#' @param FUN function giving summary statistic to sort by.  Defaults to median
+#' @param FUN function giving summary statistic to sort by.  Defaults to sum
 #' @param decreasing  logical.  Should the sorting be increasing or decreasing?  
 #' @param last columns to be placed on the right, regardless of values in these columns
 #' @param ... other arguments to sort 
@@ -89,7 +89,7 @@ setMethod("assay", signature(x="vpDF"),
 #' @rdname sortCols-method
 #' @aliases sortCols,vpDF-method
 setMethod("sortCols", "vpDF",
-	function( x, FUN=median, decreasing = TRUE, last=c("Residuals", "Measurement.error"), ... ){
+	function( x, FUN=sum, decreasing = TRUE, last=c("Residuals", "Measurement.error"), ... ){
  		
  		if(nrow(x) == 0){
  			stop("vpDF object has no rows")

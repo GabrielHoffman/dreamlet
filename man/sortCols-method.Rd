@@ -6,7 +6,7 @@
 \usage{
 \S4method{sortCols}{vpDF}(
   x,
-  FUN = median,
+  FUN = sum,
   decreasing = TRUE,
   last = c("Residuals", "Measurement.error"),
   ...
@@ -15,7 +15,7 @@
 \arguments{
 \item{x}{object returned by \code{fitVarPart()}}
 
-\item{FUN}{function giving summary statistic to sort by.  Defaults to median}
+\item{FUN}{function giving summary statistic to sort by.  Defaults to sum}
 
 \item{decreasing}{logical.  Should the sorting be increasing or decreasing?}
 

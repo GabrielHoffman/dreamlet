@@ -18,9 +18,9 @@ Major functionality of `dreamlet` package using the [Bioconductor](https://www.b
 + [`dreamletCompareClusters()`](reference/dreamletCompareClusters.html)  Differential expression analysis across <u>cell clusters</u>
 + [`zenith_gsa()`](reference/zenith_gsa-methods.html)                                      Gene set analysis with <u>full spectrum</u> of test statistics
 
-See [preprint](https://doi.org/10.1101/2023.03.17.533005) on biorxiv
-
-
+## Resources
+ + [Preprint](https://doi.org/10.1101/2023.03.17.533005) on biorxiv
+ + Full [reproducible analysis code](https://github.com/GabrielHoffman/dreamlet_analysis) for 4 large-scale datasets
 
 ## Motivation
 <div style="text-align: justify">
