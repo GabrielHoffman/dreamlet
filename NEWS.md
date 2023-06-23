@@ -5,7 +5,7 @@
 # dreamlet 0.99.13
   - May 31, 2023
   - improved error reporting
-  - Compatibility with variancePartition v2.0.5
+  - Compatibility with variancePartition v2.0.5 (renamed 1.31.1)
 
 # dreamlet 0.99.12
   - May 24, 2023
