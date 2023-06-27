@@ -8,7 +8,8 @@ buildClusterTreeFromPB(
   pb,
   method = c("complete", "ward.D", "single", "average", "mcquitty", "median", "centroid",
     "ward.D2"),
-  dist.method = c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")
+  dist.method = c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"),
+  assays = assayNames(pb)
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ buildClusterTreeFromPB(
 \item{method}{clustering method for \code{hclust()}}
 
 \item{dist.method}{distance metric}
+
+\item{assays}{which assays to include}
 }
 \value{
 hierarchical clustering object of class \code{hclust}

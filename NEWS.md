@@ -1,3 +1,7 @@
+# dreamlet 0.99.18
+  - June 27, 2023
+  - add `assays` argument to `buildClusterTreeFromPB()`
+
 # dreamlet 0.99.14
   - June 16, 2023
   - bug fix in `processAssays()` when assays is dropped
