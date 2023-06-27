@@ -8,6 +8,7 @@
 #' @param pb \code{SingleCellObject} storing pseudobulk for each cell type in in \code{assay()} field
 #' @param method clustering method for \code{hclust()}
 #' @param dist.method distance metric
+#' @param assays which assays to include
 #'
 #' @return hierarchical clustering object of class \code{hclust}
 #' @examples
@@ -33,16 +34,16 @@
 #' @importFrom stats dist hclust
 #' @importFrom MatrixGenerics rowSums2
 #' @export
-buildClusterTreeFromPB = function(pb, method = c("complete", "ward.D", "single", "average", "mcquitty", "median", "centroid", "ward.D2"), dist.method=c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")){
+buildClusterTreeFromPB = function(pb, method = c("complete", "ward.D", "single", "average", "mcquitty", "median", "centroid", "ward.D2"), dist.method=c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"), assays=assayNames(pb)){
 
 	method = match.arg(method)
 	dist.method = match.arg(dist.method)
 
 	# Combine counts for each cell cluster into a single point
-	geneCounts = lapply(assayNames(pb), function(CT){
+	geneCounts = lapply(assays, function(CT){
 		rowSums2(assay(pb, CT))
 	})
-	names(geneCounts) = assayNames(pb)
+	names(geneCounts) = assays
 	geneCounts = do.call(cbind, geneCounts)
 
 	# compute log2 CPM for genes with sufficient expression
