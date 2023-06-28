@@ -243,7 +243,9 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 
 	exclude = vapply(resList, is.null, FUN.VALUE=logical(1))
 
-	warning("Not enough samples retained or model fit fails: ", paste(names(resList)[exclude], collapse=", "))
+	if( length(names(resList)[exclude]) > 0){
+		warning("Not enough samples retained or model fit fails: ", paste(names(resList)[exclude], collapse=", "))
+	}
 
 	# remove empty assays
 	resList = resList[!exclude]
