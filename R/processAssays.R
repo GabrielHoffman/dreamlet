@@ -174,7 +174,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count 
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
 #'
 #' @export
-processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 10, min.count = 10, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
