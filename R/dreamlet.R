@@ -734,8 +734,7 @@ setMethod("dreamlet", "dreamletProcessedData",
 				L = makeContrastsDream( form_mod, data2, contrasts=contrasts, nullOnError=TRUE)
 			}else{
 				L = NULL
-			}			
-
+			}
 
 			fit = dream( geneExpr, form_mod, data2, L = L, BPPARAM=BPPARAM,..., hideErrorsInBackend=TRUE)
 
