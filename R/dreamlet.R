@@ -690,16 +690,6 @@ setMethod("dreamlet", "dreamletProcessedData",
 	    data_constant = droplevels(data_constant[-idx,,drop=FALSE])
 	}
 
-	if( ! is.null(contrasts) ){
-		tryCatch({
-			L = makeContrastsDream( formula, data_constant, contrasts=contrasts, nullOnError=TRUE)}, 
-		error = function(e){
-			txt = paste0("Issue evaluating formula.\nMake sure specified variables and levels are valid:\n", e$message)
-			stop(txt)
-		}
-		)
-	}
-
 	# for each assay
 	resList = lapply( assays, function( k ){
 

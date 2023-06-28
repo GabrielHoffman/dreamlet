@@ -1,3 +1,7 @@
+# dreamlet 0.99.19
+  - June 28, 2023
+  - in `dreamlet()` fix issue when contrasts are specified and formula includes variable from `metadata()`
+
 # dreamlet 0.99.18
   - June 27, 2023
   - add `assays` argument to `buildClusterTreeFromPB()`
