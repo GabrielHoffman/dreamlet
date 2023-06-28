@@ -32,7 +32,7 @@
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
 #'
-processOneAssay = function( y, formula, data, n.cells, min.cells = 10, min.count = 10, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet = TRUE, BPPARAM = SerialParam(),...){
+processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet = TRUE, BPPARAM = SerialParam(),...){
 
 	checkFormula( formula, data)
 	if( is.null(n.cells) ){
