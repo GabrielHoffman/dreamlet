@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.20</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,6 +74,7 @@
 <span>  isCounts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  normalize.method <span class="op">=</span> <span class="st">"TMM"</span>,</span>
 <span>  useCountsWeights <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  span <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -122,6 +123,10 @@
 <dd><p>use cell count weights</p></dd>
 
 
+<dt>span</dt>
+<dd><p>Lowess smoothing parameter using by <code><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/voomWithDreamWeights.html" class="external-link">variancePartition::voomWithDreamWeights()</a></code></p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>show messages</p></dd>
 
@@ -142,7 +147,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For each cell cluster, samples with at least <code>min.cells</code> are retained. Only clusters with at least <code>min.samples</code> retained samples are kept. Genes are retained if they have at least <code>min.count</code> reads in at least <code>min.prop</code> fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of <code>min.cells = 5</code> and <code>min.count = 5</code> are also reasonable if you want to include more genes in the analysis.</p>
+    <p>For each cell cluster, samples with at least <code>min.cells</code> are retained. Only clusters with at least <code>min.samples</code> retained samples are kept. Genes are retained if they have at least <code>min.count</code> reads in at least <code>min.prop</code> fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of <code>min.cells = 2</code> and <code>min.count = 2</code> are also reasonable to include more genes in the analysis.</p>
 <p>The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.</p>
     </div>
 
@@ -229,29 +234,29 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu">processAssays</span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.58 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.11 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.31 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.026 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.12 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.025 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.062 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.041 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Differential expression analysis within each assay,</span></span></span>
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data </span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.14 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.21 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.19 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.15 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.098 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.084 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.18 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.15 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
