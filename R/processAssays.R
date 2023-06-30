@@ -222,12 +222,15 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 		# merge data_constant (data constant for all cell types)
 		# with metadata(sceObj)$aggr_means (data that varies)
 		data = merge_metadata(data_constant, 
-								metadata(sceObj)$aggr_means, 
-								k,
-								metadata(sceObj)$agg_pars$by)
+						metadata(sceObj)$aggr_means, 
+						k,
+						metadata(sceObj)$agg_pars$by)
 
 		# processing counts with voom or log2 CPM
-		res = processOneAssay(y, formula, data, n.cells,
+		res = processOneAssay( y[,rownames(data),drop=FALSE],
+				formula = formula, 
+				data = data, 
+				n.cells = n.cells[rownames(data),,drop=FALSE],
 				min.cells = min.cells,
 				min.count = min.count,
 				min.samples = min.samples, 
@@ -273,7 +276,8 @@ merge_metadata = function(dataIn, md, cellType, by){
 			by.x = "row.names",
 			by.y = by[2])
 	rownames(data) = data$Row.names
-	data = data[rownames(dataIn),,drop=FALSE]
+	id = rownames(dataIn)[rownames(dataIn) %in% rownames(data)]
+	data = data[id,,drop=FALSE]
 	droplevels(data)
 }
 
