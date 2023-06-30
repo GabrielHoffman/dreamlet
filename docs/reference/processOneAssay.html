@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.20</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +75,7 @@
 <span>  isCounts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  normalize.method <span class="op">=</span> <span class="st">"TMM"</span>,</span>
 <span>  useCountsWeights <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  span <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -125,6 +126,10 @@
 
 <dt>useCountsWeights</dt>
 <dd><p>use cell count weights</p></dd>
+
+
+<dt>span</dt>
+<dd><p>Lowess smoothing parameter using by <code><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/voomWithDreamWeights.html" class="external-link">variancePartition::voomWithDreamWeights()</a></code></p></dd>
 
 
 <dt>quiet</dt>
