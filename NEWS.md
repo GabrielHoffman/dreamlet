@@ -1,6 +1,7 @@
 # dreamlet 0.99.20
   - June 29, 2023
   - in `processAssays()` use  `voomWithDreamWeights(..., span="auto")` to estimate the lowess tuning parameter 
+  - rare error in `merge_metadata()` when a cell type is not observed for all donors.
 
 # dreamlet 0.99.19
   - June 28, 2023
