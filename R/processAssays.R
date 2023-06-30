@@ -15,6 +15,7 @@
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param useCountsWeights use cell count weights
+#' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
@@ -32,7 +33,7 @@
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
 #'
-processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet = TRUE, BPPARAM = SerialParam(),...){
+processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(),...){
 
 	checkFormula( formula, data)
 	if( is.null(n.cells) ){
@@ -91,7 +92,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count 
 		# voom uses to compute precision weights
 		# If model fails return NULL
 		geneExpr = tryCatch(
-			voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=quiet),
+			voomWithDreamWeights( y[keep,], formula, data, weights = w_cells, BPPARAM=BPPARAM,..., save.plot=TRUE, quiet=quiet, span=span),
 			error = function(e) NULL)
 
 		# save formula used after dropping constant terms
@@ -139,13 +140,14 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count 
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param useCountsWeights use cell count weights
+#' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
 #' @return Object of class \code{dreamletProcessedData} storing voom-style normalized expression data
 #'
-#' @details  For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 5} and \code{min.count = 5} are also reasonable if you want to include more genes in the analysis.
+#' @details  For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 2} and \code{min.count = 2} are also reasonable to include more genes in the analysis.
 #'
 #' The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.
 #'
@@ -174,7 +176,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count 
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
 #'
 #' @export
-processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, quiet=FALSE, BPPARAM = SerialParam(),...){
+processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples=4, min.prop = .4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights = TRUE, span = "auto", quiet=FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
 	stopifnot( is(sceObj, 'SingleCellExperiment'))
@@ -232,7 +234,8 @@ processAssays = function( sceObj, formula, assays = assayNames(sceObj), min.cell
 				min.prop = min.prop,
 				isCounts = isCounts,
 				normalize.method = normalize.method, 
-				useCountsWeights = useCountsWeights, 
+				useCountsWeights = useCountsWeights,
+				span = span, 
 				BPPARAM = BPPARAM,...)
 
 		if( !quiet ) message(format(Sys.time() - startTime, digits=2))

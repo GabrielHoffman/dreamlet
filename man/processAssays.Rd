@@ -15,6 +15,7 @@ processAssays(
   isCounts = TRUE,
   normalize.method = "TMM",
   useCountsWeights = TRUE,
+  span = "auto",
   quiet = FALSE,
   BPPARAM = SerialParam(),
   ...
@@ -40,6 +41,8 @@ processAssays(
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
 \item{useCountsWeights}{use cell count weights}
+
+\item{span}{Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}}
 
 \item{quiet}{show messages}
 
