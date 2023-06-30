@@ -1,3 +1,7 @@
+# dreamlet 0.99.20
+  - June 29, 2023
+  - in `processAssays()` use  `voomWithDreamWeights(..., span="auto")` to estimate the lowess tuning parameter 
+
 # dreamlet 0.99.19
   - June 28, 2023
   - in `dreamlet()` fix issue when contrasts are specified and formula includes variable from `metadata()`

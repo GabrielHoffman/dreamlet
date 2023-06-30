@@ -16,6 +16,7 @@ processOneAssay(
   isCounts = TRUE,
   normalize.method = "TMM",
   useCountsWeights = TRUE,
+  span = "auto",
   quiet = TRUE,
   BPPARAM = SerialParam(),
   ...
@@ -43,6 +44,8 @@ processOneAssay(
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
 \item{useCountsWeights}{use cell count weights}
+
+\item{span}{Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}}
 
 \item{quiet}{show messages}
 
