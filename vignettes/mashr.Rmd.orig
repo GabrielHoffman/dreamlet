@@ -164,7 +164,7 @@ get_pm(res_mash$model)["ISG20",]
 
 ### Gene set analysis 
 Perform gene set analysis with `zenith` using posterior mean for each coefficient
-```{r zenith, fig.height=10, fig.width=5}
+```{r zenith, fig.height=5, fig.width=9}
 # gene set analysis using mashr results
 library(zenith)
 
