@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.20</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,8 +90,8 @@ across genes and cell types</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-04-24
-22:26:21</h4>
+            <h4 data-toc-skip class="date">Run on 2023-07-03
+15:32:39.278819</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/mashr.Rmd" class="external-link"><code>vignettes/mashr.Rmd</code></a></small>
       <div class="d-none name"><code>mashr.Rmd</code></div>
@@ -150,7 +150,7 @@ estimates.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -190,7 +190,253 @@ estimates.</p>
 <h3 id="dreamlet-for-pseudobulk">
 <code>dreamlet</code> for pseudobulk<a class="anchor" aria-label="anchor" href="#dreamlet-for-pseudobulk"></a>
 </h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Normalize and apply voom/voomWithDreamWeights</span></span>
+<span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">StimStatus</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Differential expression analysis within each assay,</span></span>
+<span><span class="co"># evaluated on the voom normalized data </span></span>
+<span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">StimStatus</span><span class="op">)</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="run-mashr-analysis">Run <code>mashr</code> analysis<a class="anchor" aria-label="anchor" href="#run-mashr-analysis"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># run mashr model to borrow information across genes and</span></span>
+<span><span class="co"># cell types in estimating coefficients' posterior distribution</span></span>
+<span><span class="va">res_mash</span> <span class="op">=</span> <span class="fu"><a href="../reference/run_mash.html">run_mash</a></span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">'StimStatusstim'</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="summarize-mashr-results">Summarize <code>mashr</code> results<a class="anchor" aria-label="anchor" href="#summarize-mashr-results"></a>
+</h4>
+<p>Compute summary of mashr posterior distributions</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephenslab/mashr" class="external-link">mashr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># extract statistics from mashr model</span></span>
+<span><span class="co"># NA values indicate genes not sufficiently expressed</span></span>
+<span><span class="co"># in a given cell type</span></span>
+<span></span>
+<span><span class="co"># original logFC</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##       B cells CD14+ Monocytes CD4 T cells CD8 T cells</span></span>
+<span><span class="co">## A1BG       NA              NA -0.73718671          NA</span></span>
+<span><span class="co">## AAAS       NA              NA -0.56991157          NA</span></span>
+<span><span class="co">## AAED1      NA        1.426001  0.07140051          NA</span></span>
+<span><span class="co">## AAK1       NA              NA -0.91972740          NA</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># posterior mean for logFC</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_pm</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##       B cells CD14+ Monocytes CD4 T cells CD8 T cells</span></span>
+<span><span class="co">## A1BG       NA              NA  -0.6327307          NA</span></span>
+<span><span class="co">## AAAS       NA              NA  -0.4543872          NA</span></span>
+<span><span class="co">## AAED1      NA        1.378843   0.0201326          NA</span></span>
+<span><span class="co">## AAK1       NA              NA  -0.8578750          NA</span></span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># how many gene-by-celltype tests are significant</span></span>
+<span><span class="co"># i.e.  if a gene is significant in 2 celltypes, it is counted twice</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, useNA<span class="op">=</span><span class="st">"ifany"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## FALSE  TRUE  &lt;NA&gt; </span></span>
+<span><span class="co">##  8089  6073 30134</span></span></code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># how many genes are significant in at least one cell type</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">min</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## FALSE  TRUE </span></span>
+<span><span class="co">##  2568  2969</span></span></code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># how many genes are significant in each cell type</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span></span>
+<span><span class="co">##               767              2086              1525               412 </span></span>
+<span><span class="co">##   Dendritic cells FCGR3A+ Monocytes    Megakaryocytes          NK cells </span></span>
+<span><span class="co">##                52               566                36               629</span></span></code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># examine top set of genes</span></span>
+<span><span class="co"># which genes are significant in at least 1 cell type</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/mashr/man/get_significant_results.html" class="external-link">get_significant_results</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1] "ACTB"                  "ACTG1_ENSG00000184009" "ARPC1B"               </span></span>
+<span><span class="co">##  [4] "ATP6V0E1"              "B2M"                   "BTF3"                 </span></span>
+<span><span class="co">##  [7] "BTG1"                  "CALM2"                 "CD74"                 </span></span>
+<span><span class="co">## [10] "CFL1"</span></span></code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># There is a lot of variation in the raw logFC</span></span>
+<span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">[</span><span class="st">"ISG20"</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span></span>
+<span><span class="co">##          3.200534          5.865638          3.060855          3.533391 </span></span>
+<span><span class="co">##   Dendritic cells FCGR3A+ Monocytes    Megakaryocytes          NK cells </span></span>
+<span><span class="co">##          3.593594          4.370017                NA          3.577744</span></span></code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># posterior mean after borrowing across cell type and genes</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_pm</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">[</span><span class="st">"ISG20"</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span></span>
+<span><span class="co">##          3.201633          5.807546          3.063965          3.535864 </span></span>
+<span><span class="co">##   Dendritic cells FCGR3A+ Monocytes    Megakaryocytes          NK cells </span></span>
+<span><span class="co">##          3.601904          4.350143                NA          3.577692</span></span></code></pre>
+</div>
+<div class="section level4">
+<h4 id="gene-set-analysis">Gene set analysis<a class="anchor" aria-label="anchor" href="#gene-set-analysis"></a>
+</h4>
+<p>Perform gene set analysis with <code>zenith</code> using posterior
+mean for each coefficient</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># gene set analysis using mashr results</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://DiseaseNeuroGenomics.github.io/zenith" class="external-link">zenith</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load Gene Ontology database </span></span>
+<span><span class="co"># use gene 'SYMBOL', or 'ENSEMBL' id</span></span>
+<span><span class="co"># use get_MSigDB() to load MSigDB </span></span>
+<span><span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/get_GeneOntology.html" class="external-link">get_GeneOntology</a></span><span class="op">(</span><span class="st">"CC"</span>, to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># valid values for statistic: </span></span>
+<span><span class="co"># "tstatistic", "abs(tstatistic)", "logFC", "abs(logFC)"</span></span>
+<span><span class="va">df_gs</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/zenith_gsa-methods.html" class="external-link">zenith_gsa</a></span><span class="op">(</span><span class="va">res_mash</span>, <span class="va">go.gs</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Heatmap of results</span></span>
+<span><span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/plotZenithResults.html" class="external-link">plotZenithResults</a></span><span class="op">(</span><span class="va">df_gs</span>, <span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="figure/zenith-1.png" alt=""><p class="caption">plot of chunk zenith</p>
+</div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># forest plot based on mashr results</span></span>
+<span><span class="fu"><a href="../reference/plotForest-methods.html">plotForest</a></span><span class="op">(</span><span class="va">res_mash</span>, <span class="st">"ISG20"</span><span class="op">)</span> </span></code></pre></div>
+<div class="figure">
+<img src="figure/forest-1.png" alt=""><p class="caption">plot of chunk forest</p>
+</div>
+<p>Volcano plot based on local False Sign Rate (lFSR) estimated from the
+posterior distribution of each coefficient.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># volcano plot based on mashr results</span></span>
+<span><span class="co"># yaxis uses local false sign rate (lfsr)</span></span>
+<span><span class="fu"><a href="../reference/plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="figure/volcano-1.png" alt=""><p class="caption">plot of chunk volcano</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
+<details><pre><code><span><span class="co">## R version 4.3.0 (2023-04-21)</span></span>
+<span><span class="co">## Platform: x86_64-apple-darwin22.4.0 (64-bit)</span></span>
+<span><span class="co">## Running under: macOS Ventura 13.4</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Matrix products: default</span></span>
+<span><span class="co">## BLAS:   /Users/gabrielhoffman/prog/R-4.3.0/lib/libRblas.dylib </span></span>
+<span><span class="co">## LAPACK: /usr/local/Cellar/r/4.3.0_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.11.0</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## locale:</span></span>
+<span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## time zone: America/New_York</span></span>
+<span><span class="co">## tzcode source: internal</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## attached base packages:</span></span>
+<span><span class="co">## [1] stats4    stats     graphics  grDevices datasets  utils     methods  </span></span>
+<span><span class="co">## [8] base     </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## other attached packages:</span></span>
+<span><span class="co">##  [1] GO.db_3.17.0                org.Hs.eg.db_3.17.0        </span></span>
+<span><span class="co">##  [3] AnnotationDbi_1.62.1        mashr_0.2.69               </span></span>
+<span><span class="co">##  [5] ashr_2.2-54                 muscData_1.14.0            </span></span>
+<span><span class="co">##  [7] scater_1.28.0               scuttle_1.10.1             </span></span>
+<span><span class="co">##  [9] SingleCellExperiment_1.22.0 SummarizedExperiment_1.30.1</span></span>
+<span><span class="co">## [11] Biobase_2.60.0              GenomicRanges_1.52.0       </span></span>
+<span><span class="co">## [13] GenomeInfoDb_1.36.0         IRanges_2.34.0             </span></span>
+<span><span class="co">## [15] S4Vectors_0.38.1            MatrixGenerics_1.12.0      </span></span>
+<span><span class="co">## [17] matrixStats_1.0.0           zenith_1.2.0               </span></span>
+<span><span class="co">## [19] ExperimentHub_2.8.0         AnnotationHub_3.8.0        </span></span>
+<span><span class="co">## [21] BiocFileCache_2.8.0         dbplyr_2.3.2               </span></span>
+<span><span class="co">## [23] BiocGenerics_0.46.0         muscat_1.14.0              </span></span>
+<span><span class="co">## [25] dreamlet_0.99.20            variancePartition_1.31.11  </span></span>
+<span><span class="co">## [27] BiocParallel_1.34.2         limma_3.56.2               </span></span>
+<span><span class="co">## [29] ggplot2_3.4.2              </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## loaded via a namespace (and not attached):</span></span>
+<span><span class="co">##   [1] bitops_1.0-7                  httr_1.4.6                   </span></span>
+<span><span class="co">##   [3] RColorBrewer_1.1-3            doParallel_1.0.17            </span></span>
+<span><span class="co">##   [5] Rgraphviz_2.44.0              numDeriv_2016.8-1.1          </span></span>
+<span><span class="co">##   [7] tools_4.3.0                   sctransform_0.3.5            </span></span>
+<span><span class="co">##   [9] backports_1.4.1               utf8_1.2.3                   </span></span>
+<span><span class="co">##  [11] R6_2.5.1                      GetoptLong_1.0.5             </span></span>
+<span><span class="co">##  [13] withr_2.5.0                   prettyunits_1.1.1            </span></span>
+<span><span class="co">##  [15] gridExtra_2.3                 cli_3.6.1                    </span></span>
+<span><span class="co">##  [17] labeling_0.4.2                KEGGgraph_1.60.0             </span></span>
+<span><span class="co">##  [19] SQUAREM_2021.1                mvtnorm_1.2-2                </span></span>
+<span><span class="co">##  [21] blme_1.0-5                    mixsqp_0.3-48                </span></span>
+<span><span class="co">##  [23] parallelly_1.36.0             invgamma_1.1                 </span></span>
+<span><span class="co">##  [25] RSQLite_2.3.1                 generics_0.1.3               </span></span>
+<span><span class="co">##  [27] shape_1.4.6                   gtools_3.9.4                 </span></span>
+<span><span class="co">##  [29] dplyr_1.1.2                   Matrix_1.5-4.1               </span></span>
+<span><span class="co">##  [31] ggbeeswarm_0.7.2              fansi_1.0.4                  </span></span>
+<span><span class="co">##  [33] abind_1.4-5                   lifecycle_1.0.3              </span></span>
+<span><span class="co">##  [35] yaml_2.3.7                    edgeR_3.42.4                 </span></span>
+<span><span class="co">##  [37] gplots_3.1.3                  grid_4.3.0                   </span></span>
+<span><span class="co">##  [39] blob_1.2.4                    promises_1.2.0.1             </span></span>
+<span><span class="co">##  [41] crayon_1.5.2                  lattice_0.21-8               </span></span>
+<span><span class="co">##  [43] beachmat_2.16.0               msigdbr_7.5.1                </span></span>
+<span><span class="co">##  [45] annotate_1.78.0               KEGGREST_1.40.0              </span></span>
+<span><span class="co">##  [47] pillar_1.9.0                  knitr_1.43                   </span></span>
+<span><span class="co">##  [49] ComplexHeatmap_2.16.0         rjson_0.2.21                 </span></span>
+<span><span class="co">##  [51] boot_1.3-28.1                 corpcor_1.6.10               </span></span>
+<span><span class="co">##  [53] future.apply_1.11.0           codetools_0.2-19             </span></span>
+<span><span class="co">##  [55] glue_1.6.2                    data.table_1.14.8            </span></span>
+<span><span class="co">##  [57] vctrs_0.6.3                   png_0.1-8                    </span></span>
+<span><span class="co">##  [59] Rdpack_2.4                    gtable_0.3.3                 </span></span>
+<span><span class="co">##  [61] assertthat_0.2.1              cachem_1.0.8                 </span></span>
+<span><span class="co">##  [63] xfun_0.39                     rbibutils_2.2.13             </span></span>
+<span><span class="co">##  [65] S4Arrays_1.0.4                mime_0.12                    </span></span>
+<span><span class="co">##  [67] Rfast_2.0.7                   iterators_1.0.14             </span></span>
+<span><span class="co">##  [69] interactiveDisplayBase_1.38.0 ellipsis_0.3.2               </span></span>
+<span><span class="co">##  [71] nlme_3.1-162                  pbkrtest_0.5.2               </span></span>
+<span><span class="co">##  [73] bit64_4.0.5                   progress_1.2.2               </span></span>
+<span><span class="co">##  [75] EnvStats_2.7.0                filelock_1.0.2               </span></span>
+<span><span class="co">##  [77] TMB_1.9.4                     irlba_2.3.5.1                </span></span>
+<span><span class="co">##  [79] vipor_0.4.5                   KernSmooth_2.23-21           </span></span>
+<span><span class="co">##  [81] colorspace_2.1-0              rmeta_3.0                    </span></span>
+<span><span class="co">##  [83] DBI_1.1.3                     DESeq2_1.40.1                </span></span>
+<span><span class="co">##  [85] tidyselect_1.2.0              bit_4.0.5                    </span></span>
+<span><span class="co">##  [87] compiler_4.3.0                curl_5.0.0                   </span></span>
+<span><span class="co">##  [89] graph_1.78.0                  BiocNeighbors_1.18.0         </span></span>
+<span><span class="co">##  [91] DelayedArray_0.26.3           scales_1.2.1                 </span></span>
+<span><span class="co">##  [93] caTools_1.18.2                remaCor_0.0.17               </span></span>
+<span><span class="co">##  [95] rappdirs_0.3.3                stringr_1.5.0                </span></span>
+<span><span class="co">##  [97] digest_0.6.31                 minqa_1.2.5                  </span></span>
+<span><span class="co">##  [99] aod_1.3.2                     XVector_0.40.0               </span></span>
+<span><span class="co">## [101] RhpcBLASctl_0.23-42           htmltools_0.5.5              </span></span>
+<span><span class="co">## [103] pkgconfig_2.0.3               lme4_1.1-33                  </span></span>
+<span><span class="co">## [105] sparseMatrixStats_1.12.0      highr_0.10                   </span></span>
+<span><span class="co">## [107] fastmap_1.1.1                 rlang_1.1.1                  </span></span>
+<span><span class="co">## [109] GlobalOptions_0.1.2           shiny_1.7.4                  </span></span>
+<span><span class="co">## [111] DelayedMatrixStats_1.22.0     farver_2.1.1                 </span></span>
+<span><span class="co">## [113] BiocSingular_1.16.0           RCurl_1.98-1.12              </span></span>
+<span><span class="co">## [115] magrittr_2.0.3                GenomeInfoDbData_1.2.10      </span></span>
+<span><span class="co">## [117] munsell_0.5.0                 Rcpp_1.0.10                  </span></span>
+<span><span class="co">## [119] babelgene_22.9                viridis_0.6.3                </span></span>
+<span><span class="co">## [121] EnrichmentBrowser_2.30.1      RcppZiggurat_0.1.6           </span></span>
+<span><span class="co">## [123] stringi_1.7.12                zlibbioc_1.46.0              </span></span>
+<span><span class="co">## [125] MASS_7.3-60                   plyr_1.8.8                   </span></span>
+<span><span class="co">## [127] parallel_4.3.0                listenv_0.9.0                </span></span>
+<span><span class="co">## [129] ggrepel_0.9.3                 Biostrings_2.68.1            </span></span>
+<span><span class="co">## [131] splines_4.3.0                 hms_1.1.3                    </span></span>
+<span><span class="co">## [133] circlize_0.4.15               locfit_1.5-9.7               </span></span>
+<span><span class="co">## [135] reshape2_1.4.4                ScaledMatrix_1.8.1           </span></span>
+<span><span class="co">## [137] BiocVersion_3.17.1            XML_3.99-0.14                </span></span>
+<span><span class="co">## [139] evaluate_0.21                 BiocManager_1.30.20          </span></span>
+<span><span class="co">## [141] nloptr_2.0.3                  foreach_1.5.2                </span></span>
+<span><span class="co">## [143] httpuv_1.6.11                 tidyr_1.3.0                  </span></span>
+<span><span class="co">## [145] purrr_1.0.1                   future_1.32.0                </span></span>
+<span><span class="co">## [147] clue_0.3-64                   scattermore_1.1              </span></span>
+<span><span class="co">## [149] rsvd_1.0.5                    broom_1.0.5                  </span></span>
+<span><span class="co">## [151] xtable_1.8-4                  fANCOVA_0.6-1                </span></span>
+<span><span class="co">## [153] later_1.3.1                   viridisLite_0.4.2            </span></span>
+<span><span class="co">## [155] truncnorm_1.0-9               tibble_3.2.1                 </span></span>
+<span><span class="co">## [157] lmerTest_3.1-3                glmmTMB_1.1.7                </span></span>
+<span><span class="co">## [159] memoise_2.0.1                 beeswarm_0.4.0               </span></span>
+<span><span class="co">## [161] cluster_2.1.4                 globals_0.16.2               </span></span>
+<span><span class="co">## [163] GSEABase_1.62.0</span></span></code></pre>
+</details>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

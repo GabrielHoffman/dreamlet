@@ -644,6 +644,7 @@ setMethod("getTreat", signature(fit="dreamletResult"),
 #' @importFrom BiocParallel SerialParam
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
+#' @importFrom Rdpack reprompt
 #' @seealso \code{variancePartition::dream()}, \code{variancePartition::makeContrastsDream()}
 #' @export
 setGeneric("dreamlet", 
@@ -659,7 +660,6 @@ setGeneric("dreamlet",
 #' @importFrom variancePartition getContrast dream makeContrastsDream
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
-#' @import Rdpack
 #' @export
 #' @rdname dreamlet
 #' @aliases dreamlet,dreamletProcessedData-method

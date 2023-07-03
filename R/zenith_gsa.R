@@ -126,7 +126,7 @@ setMethod("zenith_gsa", signature(fit="dreamletResult", geneSets = "GeneSetColle
 
 
 
-#'
+#' @return \code{data.frame} of results for each gene set and cell type 
 #' @importFrom limma ids2indices cameraPR
 #' @importFrom zenith zenith
 #' @importFrom GSEABase geneIds
