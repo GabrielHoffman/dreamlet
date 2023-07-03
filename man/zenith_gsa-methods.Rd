@@ -48,6 +48,8 @@
 }
 \value{
 \code{data.frame} of results for each gene set and cell type
+
+\code{data.frame} of results for each gene set and cell type
 }
 \description{
 Perform a competitive gene set analysis accounting for correlation between genes.
