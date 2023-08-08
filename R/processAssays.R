@@ -43,7 +43,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count 
 		y = as.matrix(y)
 	}
 
-	# nCells = extract from y
+	# nCells: extract from y
 
 	# samples to include of they have enough observed cells
 	include = (n.cells >= min.cells)
@@ -83,7 +83,7 @@ processOneAssay = function( y, formula, data, n.cells, min.cells = 5, min.count 
 
 		# get samples with enough cells
 		# filter genes
-		# design = model.matrix( subbars(formula), data)
+		# design: model.matrix( subbars(formula), data)
 		# Design often includes batch and donor, which are very small
 		# 	this causes too many genes to be retained 
 		keep = suppressWarnings(filterByExpr(y, min.count=min.count, min.prop=min.prop))

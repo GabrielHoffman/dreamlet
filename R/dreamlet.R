@@ -4,6 +4,8 @@
 # dreamlet uses linear mixed models in dream to perform differential expression in single cell data
 
 # local definition so methods in this file have this class
+
+#' @return none
 setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', by="vector"))
 
 #' Class dreamletResult
@@ -13,6 +15,7 @@ setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame'
 #' @name dreamletResult-class
 #' @rdname dreamletResult-class
 #' @exportClass dreamletResult
+#' @return none
 setClass("dreamletResult", contains="list", slots=c(df_details = "data.frame", errors = 'list', error.initial = 'list'))
 
 
@@ -474,7 +477,8 @@ setMethod("topTable", signature(fit="dreamletResult"),
 
 		opt = c('logFC', 'AveExpr', 'P', 't', 'B', 'none')
 		if( ! sort.by %in% opt){
-			stop("sort.by must be in: ", paste0(opt, collapse=', '))
+			cmd = paste("sort.by must be in: ", paste0(opt, collapse=', '))
+			stop(cmd)
 		}
 
 		# sorting
@@ -572,7 +576,8 @@ setMethod("getTreat", signature(fit="dreamletResult"),
 
 		opt = c('logFC', 'AveExpr', 'P', 't', 'B', 'none')
 		if( ! tolower(sort.by) %in% tolower(opt)){
-			stop("sort.by must be in: ", paste0(opt, collapse=', '))
+			cmd = paste("sort.by must be in: ", paste0(opt, collapse=', '))
+			stop(cmd)
 		}
 
 		# sorting
@@ -667,7 +672,6 @@ setMethod("dreamlet", "dreamletProcessedData",
 	function( x, formula, data = colData(x), assays = assayNames(x), contrasts=NULL, min.cells = 10, robust=FALSE, quiet=FALSE, BPPARAM = SerialParam(), use.eBayes=TRUE,...){
 
 	# checks
-	# stopifnot( is(x, 'dreamletProcessedData'))
 	stopifnot( is(formula, 'formula'))
 
 	# check if assays are valid

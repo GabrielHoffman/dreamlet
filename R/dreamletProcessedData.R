@@ -6,6 +6,7 @@
 #' @name dreamletProcessedData-class
 #' @rdname dreamletProcessedData-class
 #' @exportClass dreamletProcessedData
+#' @return none
 setClass("dreamletProcessedData", contains="list", slots = c(data = 'data.frame', metadata='data.frame', by="vector"))
 
 #' Subset with brackets

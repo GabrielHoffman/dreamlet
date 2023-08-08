@@ -65,7 +65,6 @@ setMethod("fitVarPart", "dreamletProcessedData",
 	function( x, formula, data = colData(x), assays = assayNames(x), quiet = FALSE, BPPARAM = SerialParam(),...){
 
 	# checks
-	# stopifnot( is(x, 'dreamletProcessedData'))
 	stopifnot( is(formula, 'formula'))
 
 	# check if assays are valid

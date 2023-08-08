@@ -4,6 +4,9 @@
 \name{dreamletResult-class}
 \alias{dreamletResult-class}
 \title{Class dreamletResult}
+\value{
+none
+}
 \description{
 Class \code{dreamletResult} stores results produced by \code{dreamlet()} to give a standard interface for downstream analysis
 }

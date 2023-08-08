@@ -27,7 +27,7 @@ dreamletCompareClusters(
 \arguments{
 \item{pb}{pseudobulk data as SingleCellExperiment object}
 
-\item{assays}{array of two entries specifying assays (i.e. cell clusters) to compare, of a list of two sets of assays.}
+\item{assays}{array of two entries specifying assays (i.e. cell clusters) to compare, or a list of two sets of assays.}
 
 \item{method}{account for repeated measures from donors using a "random" effect, a "fixed" effect, or "none"}
 

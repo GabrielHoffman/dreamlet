@@ -5,6 +5,8 @@
 \alias{plotHeatmap}
 \alias{plotHeatmap,cellSpecificityValues-method}
 \alias{plotHeatmap,cellSpecificityValues,cellSpecificityValues-method}
+\alias{plotHeatmap,data.frame-method}
+\alias{plotHeatmap,data.frame,data.frame-method}
 \alias{plotHeatmap,matrix-method}
 \alias{plotHeatmap,matrix,matrix-method}
 \title{Plot heatmap}
@@ -12,6 +14,8 @@
 plotHeatmap(x, genes = rownames(x), color = "darkblue", ...)
 
 \S4method{plotHeatmap}{cellSpecificityValues}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
+
+\S4method{plotHeatmap}{data.frame}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
 
 \S4method{plotHeatmap}{matrix}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
 }

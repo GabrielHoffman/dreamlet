@@ -1,4 +1,5 @@
 
+#' @return none
 setClass("vpDF", contains="DFrame", slots=c(df_details = "data.frame"))
 
 #' Bar plot of variance fractions
@@ -79,8 +80,6 @@ setMethod("plotPercentBars", "vpDF",
 		panel.border = element_blank(),
 		panel.background = element_blank(), 
 		axis.ticks.y = element_blank(), 
-		# legend.position = "bottom",
-		# plot.margin = unit(c(0,.3,0,.8), "cm"),
 		legend.key = element_blank(),
 		panel.spacing.x = unit(.8, "lines")) +
 		guides(fill=guide_legend(title=NULL)) +

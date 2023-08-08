@@ -10,6 +10,7 @@
 #' @rdname vpDF-class
 #' @exportClass vpDF
 #' @importFrom S4Vectors DataFrame
+#' @return none
 setClass("vpDF", contains="DFrame", slots=c(df_details = "data.frame"))
 
 

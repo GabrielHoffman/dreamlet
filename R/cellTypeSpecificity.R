@@ -8,6 +8,7 @@
 #' @name cellSpecificityValues-class
 #' @rdname cellSpecificityValues-class
 #' @exportClass cellSpecificityValues
+#' @return none
 setClass("cellSpecificityValues", contains="DFrame")
 
 
@@ -95,15 +96,6 @@ cellTypeSpecificity = function(pb,...){
 
 	# evaluate counts per million
 	geneExpr = edgeR::cpm(dge, log=FALSE)
-
-	# # get cell counts
-	# cell_fracs = colSums(cellCounts(pb))
-	# cell_fracs = cell_fracs / sum(cell_fracs)
-
-	# for each gene, compute fraction of expression
-	# geneExpr.fract = t(apply(geneExpr, 1, function(x) x/ sum(x)))
-	# df = DataFrame(geneExpr.fract)
-	# colnames(df) = colnames(geneExpr.fract)
 
 	df = DataFrame(totalCPM = rowSums2(geneExpr, useNames=TRUE),
 		geneExpr / rowSums2(geneExpr, useNames=TRUE), check.names=FALSE)

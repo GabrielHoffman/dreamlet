@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@
 
 
 <dt>assays</dt>
-<dd><p>array of two entries specifying assays (i.e. cell clusters) to compare, of a list of two sets of assays.</p></dd>
+<dd><p>array of two entries specifying assays (i.e. cell clusters) to compare, or a list of two sets of assays.</p></dd>
 
 
 <dt>method</dt>
@@ -206,14 +206,16 @@
 <span class="r-in"><span><span class="co"># B cells compared to CD14+ Monocytes</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -4.848599  9.879829 -25.89485 3.975318e-11 2.325538e-08 15.98925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -4.577045 14.265849 -24.45196 7.347672e-11 2.325538e-08 15.57580</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -4.601219  9.950588 -23.42628 1.162027e-10 2.332814e-08 15.01614</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.755012 10.362616 -22.91042 1.474132e-10 2.332814e-08 14.81014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CD63    -3.827510 10.337664 -21.07885 3.583966e-10 4.537301e-08 13.98842</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.656911 10.097965 -20.25785 5.468162e-10 5.768911e-08 13.57100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -4.847904  9.879829 -26.86110 2.825512e-11 1.392183e-08 16.32620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -4.572385 14.265849 -25.77245 4.398683e-11 1.392183e-08 16.09692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -4.600487  9.950588 -24.15901 8.774247e-11 1.800010e-08 15.29699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.756229 10.362616 -23.57818 1.137447e-10 1.800010e-08 15.07035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CD63    -3.830287 10.337664 -21.49733 3.040694e-10 3.849518e-08 14.15241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.656714 10.097965 -20.74111 4.446902e-10 4.691482e-08 13.77691</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="dreamletCompareClusters-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare B cells versus the rest of the cell types</span></span></span>
@@ -228,16 +230,18 @@
 <span class="r-in"><span><span class="co"># B cells compared to all others</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -3.572948 13.872811 -31.92129 1.235324e-13 8.719211e-11 21.81930</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTH1    -2.390252 15.497594 -30.78086 1.961577e-13 8.719211e-11 21.22020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR7     3.147704 10.115830  25.51214 2.117105e-12 6.273688e-10 18.98513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ID3      3.156260  8.246722  23.83226 5.000020e-12 9.046519e-10 18.10635</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA1   -5.746728  8.777334 -23.79928 5.088031e-12 9.046519e-10 17.38989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.326735 10.182616 -21.77173 1.558915e-11 2.309793e-09 16.79228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTH1    -2.376577 15.497594 -30.10199 2.720572e-13 1.460565e-10 20.85412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -3.575240 13.872811 -29.65679 3.285860e-13 1.460565e-10 20.84073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA1   -5.747309  8.777334 -25.99959 1.734971e-12 5.141296e-10 18.72457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR7     3.146298 10.115830  23.83526 5.185139e-12 1.152397e-09 18.09221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID3      3.159433  8.246722  22.08520 1.350646e-11 2.401449e-09 17.13657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.309272 10.182616 -21.69809 1.685570e-11 2.497453e-09 16.81932</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get genes upregulated in B cells</span></span></span>
 <span class="r-in"><span><span class="va">idx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="dreamletCompareClusters-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD14+ Monocytes"</span>, <span class="st">"FCGR3A+ Monocytes"</span><span class="op">)</span>, </span></span>
@@ -254,23 +258,25 @@
 <span class="r-in"><span><span class="co"># monocytes compared to T cells</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            logFC   AveExpr        t      P.Value    adj.P.Val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     5.179135 13.603905 53.20770 6.227455e-13 5.399204e-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   6.141165 11.076844 42.05931 5.570700e-12 2.414899e-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 5.634299  9.655697 31.17508 9.007218e-11 2.603086e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    3.944125  9.342828 27.87490 2.539599e-10 4.597750e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  4.495667  9.249845 27.54673 2.833683e-10 4.597750e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SOD2                    5.580355  9.919582 27.20378 3.181834e-10 4.597750e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     5.176584 13.603905 56.22838 7.530666e-13 6.529087e-10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   6.146324 11.076844 42.14028 1.020741e-11 4.424911e-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 5.633892  9.655697 32.98143 9.299391e-11 2.687524e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    3.943932  9.342828 28.64602 3.301874e-10 5.638693e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  4.496211  9.249845 28.63987 3.308254e-10 5.638693e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS1                  4.566480  9.290447 27.78169 4.347146e-10 5.638693e-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     20.34056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   18.07378</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 15.27786</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    14.43960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  14.31427</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SOD2                    14.20185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     20.17859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   17.50203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 15.29351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    14.20124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  14.19005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS1                  13.90556</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get genes upregulated in monocytes</span></span></span>
 <span class="r-in"><span><span class="va">idx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="dreamletCompareClusters-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

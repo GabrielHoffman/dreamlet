@@ -14,7 +14,7 @@
 #' Perform differential expression between a pair of assays using linear (mixed) models
 #'
 #' @param pb pseudobulk data as SingleCellExperiment object
-#' @param assays array of two entries specifying assays (i.e. cell clusters) to compare, of a list of two sets of assays.
+#' @param assays array of two entries specifying assays (i.e. cell clusters) to compare, or a list of two sets of assays.
 #' @param method account for repeated measures from donors using a "random" effect, a "fixed" effect, or "none"
 #' @param formula covariates to include in the analysis.
 #' @param collapse if TRUE (default), combine all cell clusters within the test set, and separately the baseline set. If FALSE, estimate coefficient for each cell cluster and then identify differential expression using linear contrasts with \code{variancePartition::makeContrastsDream()}
@@ -115,9 +115,17 @@
 dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "none"), formula = ~ 0, collapse = TRUE, min.cells = 10, min.count = 10, min.samples=4, isCounts = TRUE, normalize.method = 'TMM', useCountsWeights=TRUE, robust=FALSE, quiet=FALSE, contrasts = c(compare = paste('cellClustertest - cellClusterbaseline')), BPPARAM = SerialParam(), errorsAsWarnings=FALSE,...){
 
 	method = match.arg(method)
+	formula = as.formula(formula)
 
 	if( ! is(pb, "SingleCellExperiment") ){
 		stop("pb must be a SingleCellExperiment")
+	}
+
+	if( ! all(all.vars(formula) %in% colnames(metadata(pb)$aggr_means)) ){
+
+		i = which(! all.vars(formula) %in% colnames(metadata(pb)$aggr_means))
+		cmd = paste0("Variables in formula not found: ", paste(all.vars(formula)[i], collapse=", "))
+		stop(cmd)
 	}
 
 	if( is.vector(assays) & ! is.list(assays) ){
@@ -173,6 +181,19 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 		}
 	}
 
+	# extract metadata shared across assays
+	data_constant = as.data.frame(colData(pb))
+
+	# remove samples with missing covariate data
+	idx = lapply(all.vars(formula), function(v) {
+	        which(is.na(data_constant[[v]]))
+    })
+    idx = unique(unlist(idx))    
+
+    if( length(idx) > 1){
+	    data_constant = droplevels(data_constant[-idx,,drop=FALSE])
+	}
+
 	# convert entries to strings
 	assay.lst = lapply(assay.lst, as.character)
 
@@ -217,12 +238,35 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 			})			
 			# sum the multiple clusters in the set
 			geneCounts = Reduce("+", geneCounts)
+
+			# merge with metadata
+			#--------------------
+			# get names of samples to extract from 
+			# intersecting between geneExpr and metadata
+			ids = intersect(colnames(geneCounts), rownames(data_constant)) 
+			geneCounts = geneCounts[,ids,drop=FALSE]
 			colnames(geneCounts) = paste0(clstrSet, '_', colnames(geneCounts))
 
-			df = as.data.frame(colData(pb))
-			df$cellCluster = clstrSet
-			df$Sample = rownames(df)
-			rownames(df) = colnames(geneCounts)
+			# subset and combine metadata
+			aggr_means = as.data.frame(metadata(pb)$aggr_means)
+			include = aggr_means[[metadata(pb)$agg_pars$by[1]]]%in% assay.lst[[clstrSet]]
+			aggr_means = aggr_means[include,,drop=FALSE]
+		
+			lvls = levels(droplevels(aggr_means[[metadata(pb)$agg_pars$by[1]]]))
+			dftmp = lapply(lvls, function(CT){
+				include = aggr_means[[metadata(pb)$agg_pars$by[1]]] == CT
+				tmp = aggr_means[include,,drop=FALSE]
+				rownames(tmp) = tmp[[metadata(pb)$agg_pars$by[2]]]
+				tmp[,all.vars(formula),drop=FALSE]
+				})
+			dftmp = Reduce("+", dftmp) / length(dftmp)
+
+			dftmp[[metadata(pb)$agg_pars$by[1]]] = clstrSet
+			dftmp[[metadata(pb)$agg_pars$by[2]]] = rownames(dftmp)
+			dftmp$cellCluster = clstrSet
+			dftmp$Sample = rownames(dftmp)
+
+			df = merge_metadata(data_constant[ids,,drop=FALSE], dftmp, clstrSet, metadata(pb)$agg_pars$by)
 
 			list(geneCounts = geneCounts, df = df)
 		})
@@ -424,36 +468,6 @@ dreamletCompareClusters = function( pb, assays, method = c("fixed", "random", "n
 	# return fit
 	fit
 }
-
-
-	# extract results
-#	 res = topTable(fit, coef='compare', number=Inf)
-
-# 	res[order(res$P.Value),]
-
-
-# debug(compareClusterPairs)
-
-# source("/Users/gabrielhoffman/workspace/repos/dreamlet/R/compareClusterPairs.R")
-
-# res = dreamletPairs( pb,  assays=assayNames(pb)[1:2] )
-# res1 = dreamletPairs( pb, assays=assayNames(pb)[1:2], method = "fixed" )
-# res2 = dreamletPairs( pb, assays=assayNames(pb)[1:2], method = "none" )
-
-
-
-# df = merge(res1, res, by="row.names")
-
-# plot(df$t.x, df$t.y)
-# abline(0, 1, col="red")
-
-
-
-
-
-
-
-
 
 
 

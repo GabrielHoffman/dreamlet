@@ -2,7 +2,7 @@
 title: "mashr analysis after dreamlet"
 subtitle: 'Borrowing information across genes and cell types'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
-date: "Run on 2023-07-03 15:40:01.91184"
+date: "Run on 2023-08-08 14:47:48.871732"
 documentclass: article
 vignette: >
   %\VignetteIndexEntry{mashr analysis following dreamlet}
@@ -248,7 +248,7 @@ df_gs = zenith_gsa(res_mash, go.gs)
 plotZenithResults(df_gs, 5, 1)
 ```
 
-![](figure/zenith-1.png)
+![plot of chunk zenith](figure/zenith-1.png)
 
 
 ```r
@@ -256,7 +256,7 @@ plotZenithResults(df_gs, 5, 1)
 plotForest(res_mash, "ISG20") 
 ```
 
-![](figure/forest-1.png)
+![plot of chunk forest](figure/forest-1.png)
 
 Volcano plot based on local False Sign Rate (lFSR) estimated from the posterior distribution of each coefficient.
 
@@ -267,7 +267,7 @@ Volcano plot based on local False Sign Rate (lFSR) estimated from the posterior 
 plotVolcano(res_mash)
 ```
 
-![](figure/volcano-1.png)
+![plot of chunk volcano](figure/volcano-1.png)
 
 
 

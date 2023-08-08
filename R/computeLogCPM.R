@@ -60,6 +60,6 @@ computeLogCPM = function(sce, prior.count = 2){
 	# compute prior count scaled by library size 
 	# as in edgeR::cpm() call to C++ function add_prior.cpp
 	pc = prior.count * lib.size / mean(lib.size)
-	# t(log2((t(counts(sce)) + pc) /(lib.size/ 1e6)))
+	
 	t(log2(t(counts(sce)) + pc) - log2(lib.size) + log2(1e6))
 }
