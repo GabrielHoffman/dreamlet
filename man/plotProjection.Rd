@@ -47,5 +47,5 @@ library(SingleCellExperiment)
 
 data(example_sce)
 
-plotProjection(example_sce, "TSNE", 'cluster_id', 1)
+plotProjection(example_sce, "TSNE", "cluster_id", 1)
 }

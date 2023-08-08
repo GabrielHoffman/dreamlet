@@ -25,7 +25,7 @@ library(SingleCellExperiment)
 
 data(example_sce)
 
-counts = computeCellCounts(example_sce, "cluster_id", "sample_id")
+counts <- computeCellCounts(example_sce, "cluster_id", "sample_id")
 
 counts[1:4, 1:4]
 

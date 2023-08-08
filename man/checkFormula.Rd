@@ -20,7 +20,7 @@ Check that variables in formula are present in the data
 \examples{
 
 # Valid formula
-dreamlet:::checkFormula( ~ speed, cars)
+dreamlet:::checkFormula(~speed, cars)
 
 # Not valid formula
 # dreamlet:::checkFormula( ~ speed + a, cars)

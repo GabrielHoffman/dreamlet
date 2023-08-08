@@ -23,9 +23,9 @@ Detect multivariante outliers using Mahalanobis distance using mean and covarian
 The distance follow a chisq distrubtion under the null with standard method for mean and covariance.  It is approximate of robust method is used.  So use \code{qchisq(p = 0.999 , df = 2)} to get cutoff to keep 99.9\% of samples under the null for data with 2 columns.
 }
 \examples{
-data = matrix(rnorm(200), 100, 2)
+data <- matrix(rnorm(200), 100, 2)
 
-res = outlier(data)
+res <- outlier(data)
 
 res[1:4]
 }

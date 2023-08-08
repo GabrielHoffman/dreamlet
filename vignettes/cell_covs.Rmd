@@ -34,12 +34,13 @@ text-align: justify}
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
-  warning=FALSE,
-  message=FALSE,
+  warning = FALSE,
+  message = FALSE,
   error = FALSE,
   tidy = FALSE,
   dev = c("png"),
-  cache = TRUE)
+  cache = TRUE
+)
 ```
 
 # Introduction
@@ -64,7 +65,7 @@ sce <- eh[["EH2259"]]
 
 # only keep singlet cells with sufficient reads
 sce <- sce[rowSums(counts(sce) > 0) > 0, ]
-sce <- sce[,colData(sce)$multiplets == 'singlet']
+sce <- sce[, colData(sce)$multiplets == "singlet"]
 
 # compute QC metrics
 qc <- perCellQCMetrics(sce)
@@ -74,13 +75,13 @@ ol <- isOutlier(metric = qc$detected, nmads = 2, log = TRUE)
 sce <- sce[, !ol]
 
 # set variable indicating stimulated (stim) or control (ctrl)
-sce$StimStatus = sce$stim
+sce$StimStatus <- sce$stim
 ```
 
 In many datasets, continuous cell-level variables could be mapped reads, gene count, mitochondrial rate, etc. There are no continuous cell-level variables in this dataset, so we can simulate two from a normal distribution:
 ```{r variable}
-sce$value1 = rnorm(ncol(sce))
-sce$value2 = rnorm(ncol(sce))
+sce$value1 <- rnorm(ncol(sce))
+sce$value2 <- rnorm(ncol(sce))
 ```
 
 # Pseudobulk
@@ -89,12 +90,13 @@ Now compute the pseudobulk using standard code:
 ```{r aggregate}
 sce$id <- paste0(sce$StimStatus, sce$ind)
 
-# Create pseudobulk 
+# Create pseudobulk
 pb <- aggregateToPseudoBulk(sce,
-    assay = "counts",     
-    cluster_id = "cell",  
-    sample_id = "id",
-    verbose = FALSE)
+  assay = "counts",
+  cluster_id = "cell",
+  sample_id = "id",
+  verbose = FALSE
+)
 ```
 
 The means per variable, cell type, and sample are stored in the pseudobulk `SingleCellExperiment` object:
@@ -109,19 +111,19 @@ Including these variables in a regression formula uses the summarized values fro
 Variance partition and hypothesis testing proceeds as ususal:
 
 ```{r processAssays, fig.height=12}
-form = ~ StimStatus + value1 + value2
+form <- ~ StimStatus + value1 + value2
 
 # Normalize and apply voom/voomWithDreamWeights
-res.proc = processAssays( pb, form, min.count=5)
+res.proc <- processAssays(pb, form, min.count = 5)
 
 # run variance partitioning analysis
-vp.lst = fitVarPart( res.proc, form)
+vp.lst <- fitVarPart(res.proc, form)
 
 # Summarize variance fractions genome-wide for each cell type
-plotVarPart(vp.lst, label.angle=60) 
+plotVarPart(vp.lst, label.angle = 60)
 
 # Differential expression analysis within each assay
-res.dl = dreamlet( res.proc, form)
+res.dl <- dreamlet(res.proc, form)
 
 # dreamlet results include coefficients for value1 and value2
 res.dl

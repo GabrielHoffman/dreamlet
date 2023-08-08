@@ -26,7 +26,7 @@ library(SingleCellExperiment)
 
 data(example_sce)
 
-logcounts(example_sce) = computeLogCPM(example_sce)
+logcounts(example_sce) <- computeLogCPM(example_sce)
 }
 \seealso{
 also \code{edgeR::cpm()}

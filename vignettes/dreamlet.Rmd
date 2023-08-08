@@ -42,12 +42,13 @@ text-align: justify}
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
-  warning=FALSE,
-  message=FALSE,
+  warning = FALSE,
+  message = FALSE,
   error = FALSE,
   tidy = FALSE,
   dev = c("png"),
-  cache = TRUE)
+  cache = TRUE
+)
 ```
 # Introduction
  As the scale of single cell/nucleus RNA-seq has increased, so has the complexity of study designs.  Analysis of datasets with simple study designs can be performed using linear model as in the [muscat package](https://bioconductor.org/packages/muscat).  Yet analysis of datsets with complex study designs such as repeated measures or many technical batches can benefit from linear mixed model analysis to model to correlation structure between samples.  We previously developed [dream](https://doi.org/10.1093/bioinformatics/btaa687) to apply linear mixed models to bulk RNA-seq data using a [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)-style workflow.  Dreamlet extends the previous work of dream and [muscat](https://www.nature.com/articles/s41467-020-19894-4) to apply linear mixed models to pseudobulk data.  Dreamlet also supports linear models and facilitates application of 1) [variancePartition](https://bioconductor.org/packages/variancePartition) to quantify the contribution of multiple variables to expression variation, and 2) [zenith](https://github.com/GabrielHoffman/zenith) to perform gene set analysis on the differential expression signatures. 
@@ -57,8 +58,9 @@ knitr::opts_chunk$set(
 To install this package, start R (version "4.3") and enter:
 
 ```{r install, eval=FALSE}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+if (!require("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
 
 # Select release #1 or #2
 
@@ -90,7 +92,7 @@ sce <- eh[["EH2259"]]
 
 # only keep singlet cells with sufficient reads
 sce <- sce[rowSums(counts(sce) > 0) > 0, ]
-sce <- sce[,colData(sce)$multiplets == 'singlet']
+sce <- sce[, colData(sce)$multiplets == "singlet"]
 
 # compute QC metrics
 qc <- perCellQCMetrics(sce)
@@ -100,7 +102,7 @@ ol <- isOutlier(metric = qc$detected, nmads = 2, log = TRUE)
 sce <- sce[, !ol]
 
 # set variable indicating stimulated (stim) or control (ctrl)
-sce$StimStatus = sce$stim
+sce$StimStatus <- sce$stim
 ```
 
 ## Aggregate to pseudobulk
@@ -117,10 +119,11 @@ sce$id <- paste0(sce$StimStatus, sce$ind)
 # cluster_id: variable in colData(sce) indicating cell clusters
 # sample_id: variable in colData(sce) indicating sample id for aggregating cells
 pb <- aggregateToPseudoBulk(sce,
-    assay = "counts",     
-    cluster_id = "cell",  
-    sample_id = "id",
-    verbose = FALSE)
+  assay = "counts",
+  cluster_id = "cell",
+  sample_id = "id",
+  verbose = FALSE
+)
 
 # one 'assay' per cell type
 assayNames(pb)
@@ -131,9 +134,9 @@ Apply [voom](https://rdrr.io/bioc/limma/man/voom.html)-style normalization for p
 
 ```{r dreamlet, fig.width=8, fig.height=8}
 # Normalize and apply voom/voomWithDreamWeights
-res.proc = processAssays( pb, ~ StimStatus, min.count=5)
+res.proc <- processAssays(pb, ~StimStatus, min.count = 5)
 
-# the resulting object of class dreamletProcessedData stores 
+# the resulting object of class dreamletProcessedData stores
 # normalized data and other information
 res.proc
 ```
@@ -147,8 +150,8 @@ details(res.proc)
 Here the mean-variance trend from voom is shown for each cell type.  Cell types with sufficient number of cells and reads show a clear mean-variance trend.  While in rare cell types like megakaryocytes, fewer genes have sufficient reads and the trend is less apparent.
 
 ```{r voom.plots, fig.height=7}
-# show voom plot for each cell clusters  
-plotVoom( res.proc)
+# show voom plot for each cell clusters
+plotVoom(res.proc)
 
 # Show plots for subset of cell clusters
 # plotVoom( res.proc[1:3] )
@@ -164,18 +167,18 @@ Variance fractions can be visualized at the gene-level for each cell type using 
 
 ```{r vp}
 # run variance partitioning analysis
-vp.lst = fitVarPart( res.proc, ~ StimStatus)
+vp.lst <- fitVarPart(res.proc, ~StimStatus)
 ```
 
 ```{r vp.barplt, fig.height=3}
 # Show variance fractions at the gene-level for each cell type
-genes = vp.lst$gene[2:4]
-plotPercentBars(vp.lst[vp.lst$gene %in% genes,])
+genes <- vp.lst$gene[2:4]
+plotPercentBars(vp.lst[vp.lst$gene %in% genes, ])
 ```
 
 ```{r vp.violin, fig.height=7}
 # Summarize variance fractions genome-wide for each cell type
-plotVarPart(vp.lst, label.angle=60) 
+plotVarPart(vp.lst, label.angle = 60)
 ```
 
 
@@ -185,11 +188,11 @@ Since the normalized expression data and metadata are stored within `res.proc`, 
 
 ```{r test}
 # Differential expression analysis within each assay,
-# evaluated on the voom normalized data 
-res.dl = dreamlet( res.proc, ~ StimStatus)
+# evaluated on the voom normalized data
+res.dl <- dreamlet(res.proc, ~StimStatus)
 
 # names of estimated coefficients
-coefNames(res.dl) 
+coefNames(res.dl)
 
 # the resulting object of class dreamletResult
 # stores results and other information
@@ -200,30 +203,30 @@ res.dl
 ## Volcano plots
 The volcano plot can indicate the strength of the differential expression signal with each cell type.  Red points indicate FDR < 0.05.
 ```{r plotVolcano, fig.width=8, fig.height=8}
-plotVolcano( res.dl, coef = 'StimStatusstim' )
+plotVolcano(res.dl, coef = "StimStatusstim")
 ```
 
 ## Gene-level heatmap
 For each cell type and specified gene, show z-statistic from `dreamlet` analysis.  Grey indicates that insufficient reads were observed to include the gene in the analysis.
 ```{r plotGeneHeatmap, fig.height=3}
-genes = c("ISG20", "ISG15")
-plotGeneHeatmap( res.dl, coef="StimStatusstim", genes=genes)
+genes <- c("ISG20", "ISG15")
+plotGeneHeatmap(res.dl, coef = "StimStatusstim", genes = genes)
 ```
 
 ## Extract results
 Each entry in `res.dl` stores a model fit by [`dream()`](https://rdrr.io/bioc/variancePartition/man/dream-method.html), and results can be extracted using `topTable()` as in `limma` by specifying the coefficient of interest.  The results shows the gene name, log fold change, average expression, t-statistic, p-value, FDR (i.e. adj.P.Val). 
 ```{r extract}
 # results from full analysis
-topTable(res.dl, coef = 'StimStatusstim' )
+topTable(res.dl, coef = "StimStatusstim")
 
 # only B cells
-topTable(res.dl[["B cells"]], coef = 'StimStatusstim' )
+topTable(res.dl[["B cells"]], coef = "StimStatusstim")
 ```
 
 ## Forest plot 
 A forest plot shows the log fold change and standard error of a given gene across all cell types.  The color indicates the FDR. 
 ```{r forrest}
-plotForest( res.dl, coef = 'StimStatusstim', gene = 'ISG20')
+plotForest(res.dl, coef = "StimStatusstim", gene = "ISG20")
 ```
 
 
@@ -234,18 +237,18 @@ A hypothesis test of the _difference_ between two or more coefficients can be pe
 # create a contrasts called 'Diff' that is the difference between expression
 # in the stimulated and controls.
 # More than one can be specified
-contrasts = c(Diff = 'StimStatusstim - StimStatusctrl')
+contrasts <- c(Diff = "StimStatusstim - StimStatusctrl")
 
 # Evalaute the regression model without an intercept term.
 # Instead estimate the mean expression in stimulated, controls and then
 # set Diff to the difference between the two
-res.dl2 = dreamlet( res.proc, ~ 0 + StimStatus, contrasts=contrasts)
+res.dl2 <- dreamlet(res.proc, ~ 0 + StimStatus, contrasts = contrasts)
 
 # see estimated coefficients
 coefNames(res.dl2)
 
 # Volcano plot of Diff
-plotVolcano( res.dl2[1:2], coef = 'Diff' )
+plotVolcano(res.dl2[1:2], coef = "Diff")
 ```
 
 This new `Diff` variable can then be used downstream for analysis asking for a coefficient.  But note that since there is no intercept term in this model, the meaning of `StimStatusstim` changes here.  When the formula is ` 0 + StimStatus` then `StimStatusstim` is the mean expression in stimulated samples.  
@@ -259,14 +262,14 @@ Here, `zenith_gsa` takes a `dreamletResult` object, the coefficient of interest,
 
 
 ```{r zenith}
-# Load Gene Ontology database 
+# Load Gene Ontology database
 # use gene 'SYMBOL', or 'ENSEMBL' id
 # use get_MSigDB() to load MSigDB
 # Use Cellular Component (i.e. CC) to reduce run time here
-go.gs = get_GeneOntology("CC", to="SYMBOL")
-   
+go.gs <- get_GeneOntology("CC", to = "SYMBOL")
+
 # Run zenith gene set analysis on result of dreamlet
-res_zenith = zenith_gsa(res.dl, coef = 'StimStatusstim', go.gs)
+res_zenith <- zenith_gsa(res.dl, coef = "StimStatusstim", go.gs)
 
 # examine results for each ell type and gene set
 head(res_zenith)
@@ -285,11 +288,11 @@ plotZenithResults(res_zenith, 5, 1)
 Here, show all genes with FDR < 5% in any cell type
 ```{r heatmap2, fig.height=10, fig.width=8}
 # get genesets with FDR < 30%
-# Few significant genesets because uses Cellular Component (i.e. CC) 
-gs = unique(res_zenith$Geneset[res_zenith$FDR < 0.3])
+# Few significant genesets because uses Cellular Component (i.e. CC)
+gs <- unique(res_zenith$Geneset[res_zenith$FDR < 0.3])
 
 # keep only results of these genesets
-df = res_zenith[res_zenith$Geneset %in% gs,]
+df <- res_zenith[res_zenith$Geneset %in% gs, ]
 
 # plot results, but with no limit based on the highest/lowest t-statistic
 plotZenithResults(df, Inf, Inf)
@@ -302,13 +305,13 @@ Identifying genes that are differentially expressed between cell clusters incorp
 
 ```{r dreamletCompareClusters}
 # test differential expression between B cells and the rest of the cell clusters
-ct.pairs = c("CD4 T cells", "rest")
- 
-fit = dreamletCompareClusters( pb, ct.pairs, method="fixed")
+ct.pairs <- c("CD4 T cells", "rest")
+
+fit <- dreamletCompareClusters(pb, ct.pairs, method = "fixed")
 
 # The coefficient 'compare' is the value logFC between test and baseline:
-# compare = cellClustertest - cellClusterbaseline 
-df_Bcell = topTable(fit, coef="compare")
+# compare = cellClustertest - cellClusterbaseline
+df_Bcell <- topTable(fit, coef = "compare")
 
 head(df_Bcell)
 ```
@@ -316,21 +319,21 @@ head(df_Bcell)
 # Gene-cluster specificity
 Evaluate the specificity of each gene for each cluster, retaining only highly expressed genes:
 ```{r cellTypeSpecificity}
-df_cts = cellTypeSpecificity( pb )
- 
+df_cts <- cellTypeSpecificity(pb)
+
 # retain only genes with total CPM summed across cell type > 100
-df_cts = df_cts[df_cts$totalCPM > 100,]
+df_cts <- df_cts[df_cts$totalCPM > 100, ]
 
 # Violin plot of specificity score for each cell type
-plotViolin(df_cts) 
+plotViolin(df_cts)
 ```
 
 Highlight expression fraction for most specific gene from each cell type:
 ```{r plotPercentBars}
-genes = rownames(df_cts)[apply(df_cts, 2, which.max)]
-plotPercentBars( df_cts, genes = genes )
-  
-dreamlet::plotHeatmap( df_cts, genes = genes)
+genes <- rownames(df_cts)[apply(df_cts, 2, which.max)]
+plotPercentBars(df_cts, genes = genes)
+
+dreamlet::plotHeatmap(df_cts, genes = genes)
 ```
 
 # Session Info

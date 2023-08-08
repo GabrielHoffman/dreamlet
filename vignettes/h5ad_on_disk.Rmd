@@ -33,13 +33,14 @@ text-align: justify}
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
-  warning=FALSE,
-  message=FALSE,
+  warning = FALSE,
+  message = FALSE,
   error = FALSE,
   eval = FALSE,
   tidy = FALSE,
   dev = c("png"),
-  cache = TRUE)
+  cache = TRUE
+)
 ```
 # Introduction
 As the scale of single cell RNA-seq datasets continues to increase, loading the entire dataset into memory is often impractical.  Dreamlet can take advantage of efficient data storage through the [Bioconductor's](https://bioconductor.org) [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) interface to dramatically reduce memory usage.  There are two general methods for storing large single-cell datasets.  [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/), and therefore `dreamlet`, are compatible with both:
@@ -85,17 +86,17 @@ library(zellkonverter)
 library(SingleCellExperiment)
 
 # Create SingleCellExperiment object that points to on-disk H5AD file
-sce = readH5AD(h5ad_file, use_hdf5=TRUE)
+sce <- readH5AD(h5ad_file, use_hdf5 = TRUE)
 ```
 
 ## Merge multiple datasets
 ```{r example2}
 # Read a series of H5AD files into a list
 # then combine them into a single merged SingleCellExperiment
-sce.lst = lapply( h5ad_files, function(file){
-  readH5AD(file, use_hdf5=TRUE)
-  })
-sce = do.call(cbind, sce.list)
+sce.lst <- lapply(h5ad_files, function(file) {
+  readH5AD(file, use_hdf5 = TRUE)
+})
+sce <- do.call(cbind, sce.list)
 ```
 
 ## Access alternative data
@@ -104,12 +105,12 @@ Some software, including [pegasus](https://pegasus.readthedocs.io/en/stable/), s
 # read raw/ from H5AD file
 # raw = TRUE tells readH5AD() to read alternative data
 # Must use zellkonverter >=1.3.3
-sce_in = readH5AD(h5ad_file, use_hdf5=TRUE, raw=TRUE)
+sce_in <- readH5AD(h5ad_file, use_hdf5 = TRUE, raw = TRUE)
 
 # use `raw` as counts
-sce = swapAltExp(sce_in, "raw") # use raw as main
-counts(sce) = assay(sce, 'X')   # set counts assay to data in X
-assay(sce, 'X') = NULL          # free X 
+sce <- swapAltExp(sce_in, "raw") # use raw as main
+counts(sce) <- assay(sce, "X") # set counts assay to data in X
+assay(sce, "X") <- NULL # free X
 ```
 <!---
 # extract raw counts
@@ -135,7 +136,7 @@ library(SeuratDisk)
 Convert(h5ad_file, dest = "h5seurat")
 
 # load Seurat file
-obj = LoadH5Seurat(h5seurat_file)
+obj <- LoadH5Seurat(h5seurat_file)
 
 # Convert Seurat object to SingleCellExperiment
 sce <- as.SingleCellExperiment(obj)

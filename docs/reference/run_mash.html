@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,48 +117,49 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create pseudobulk for each sample and cell cluster</span></span></span>
-<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span>, </span></span>
-<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,    </span></span>
-<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">'cluster_id'</span>, </span></span>
-<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">'sample_id'</span>,</span></span>
-<span class="r-in"><span>  verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span></span>
+<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>,</span></span>
+<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
-<span class="r-in"><span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.03 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.033 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.043 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.036 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.031 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.034 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.032 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.033 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.032 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Differential expression analysis within each assay,</span></span></span>
-<span class="r-in"><span><span class="co"># evaluated on the voom normalized data </span></span></span>
-<span class="r-in"><span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># evaluated on the voom normalized data</span></span></span>
+<span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.027 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.029 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.027 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.024 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.019 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.025 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.02 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.027 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run MASH model</span></span></span>
 <span class="r-in"><span><span class="co"># This can take 10s of minutes on real data</span></span></span>
 <span class="r-in"><span><span class="co"># This small datasets should take ~30s</span></span></span>
-<span class="r-in"><span><span class="va">res_mash</span> <span class="op">=</span> <span class="fu">run_mash</span><span class="op">(</span> <span class="va">res.dl</span>, <span class="st">'group_idstim'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res_mash</span> <span class="op">&lt;-</span> <span class="fu">run_mash</span><span class="op">(</span><span class="va">res.dl</span>, <span class="st">"group_idstim"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># extract statistics from mashr model</span></span></span>
 <span class="r-in"><span><span class="co"># NA values indicate genes not sufficiently expressed</span></span></span>
-<span class="r-in"><span><span class="co"># in a given cell type </span></span></span>
+<span class="r-in"><span><span class="co"># in a given cell type</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># original logFC</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">)</span></span></span>
@@ -196,19 +197,19 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># how many gene-by-celltype tests are significant</span></span></span>
 <span class="r-in"><span><span class="co"># i.e.  if a gene is significant in 2 celltypes, it is counted twice</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, useNA<span class="op">=</span><span class="st">"ifany"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE  &lt;NA&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   261   114   110 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># how many genes are significant in at least one cell type</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">min</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">min</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    47    50 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># how many genes are significant in each cell type</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_lfsr</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                19                40                12                10 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FCGR3A+ Monocytes </span>
@@ -222,14 +223,14 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Lets examine ENO1</span></span></span>
 <span class="r-in"><span><span class="co"># There is a lot of variation in the raw logFC</span></span></span>
-<span class="r-in"><span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">[</span><span class="st">"ENO1"</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">res_mash</span><span class="op">$</span><span class="va">logFC.original</span><span class="op">[</span><span class="st">"ENO1"</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0.02952939       -1.25091407        0.58319641        0.26899565 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FCGR3A+ Monocytes </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       -0.95317260 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># posterior mean after borrowing across cell type and genes</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_pm</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">[</span><span class="st">"ENO1"</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ashr/man/get_lfdr.html" class="external-link">get_pm</a></span><span class="op">(</span><span class="va">res_mash</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">[</span><span class="st">"ENO1"</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           B cells   CD14+ Monocytes       CD4 T cells       CD8 T cells </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       -0.04718274       -1.12929266        0.40052314        0.18308631 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FCGR3A+ Monocytes </span>

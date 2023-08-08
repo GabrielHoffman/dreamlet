@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@ variables</h3>
 </h4>
             
             <h4 data-toc-skip class="date">Run on 2023-08-08
-14:46:24.281897</h4>
+15:27:42.797611</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/non_lin_eff.Rmd" class="external-link"><code>vignettes/non_lin_eff.Rmd</code></a></small>
       <div class="d-none name"><code>non_lin_eff.Rmd</code></div>
@@ -138,7 +138,7 @@ Nature Biotech</a>).</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -148,16 +148,17 @@ Nature Biotech</a>).</p>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="op">!</span><span class="va">ol</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># set variable indicating stimulated (stim) or control (ctrl)</span></span>
-<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">=</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span>
+<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span>
 <span></span>
 <span><span class="va">sce</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span>, <span class="va">sce</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create pseudobulk </span></span>
+<span><span class="co"># Create pseudobulk</span></span>
 <span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">sce</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"counts"</span>,     </span>
-<span>    cluster_id <span class="op">=</span> <span class="st">"cell"</span>,  </span>
-<span>    sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>  cluster_id <span class="op">=</span> <span class="st">"cell"</span>,</span>
+<span>  sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="continuous-variable">Continuous variable<a class="anchor" aria-label="anchor" href="#continuous-variable"></a>
@@ -170,18 +171,18 @@ expansion using splines</a> instead use 3 coefficients to model the age
 effect.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Simulate age between 18 and 65</span></span>
-<span><span class="va">pb</span><span class="op">$</span><span class="va">Age</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span>, <span class="fl">18</span>, <span class="fl">65</span><span class="op">)</span></span>
+<span><span class="va">pb</span><span class="op">$</span><span class="va">Age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span>, <span class="fl">18</span>, <span class="fl">65</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># formula included non-linear effects of Age</span></span>
 <span><span class="co"># by using a natural spline of degree 3</span></span>
 <span><span class="co"># This corresponds to using 3 coefficients instead of 1</span></span>
-<span><span class="va">form</span> <span class="op">=</span> <span class="op">~</span> <span class="fu">splines</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/splines/ns.html" class="external-link">ns</a></span><span class="op">(</span><span class="va">Age</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">form</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="fu">splines</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/splines/ns.html" class="external-link">ns</a></span><span class="op">(</span><span class="va">Age</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Normalize and apply voom/voomWithDreamWeights</span></span>
-<span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">form</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="va">form</span>, min.count <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Differential expression analysis within each assay</span></span>
-<span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
+<span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The spline has degree 3, so there are 3 coefficients</span></span>
 <span><span class="co"># estimated for Age effects</span></span>
@@ -191,18 +192,18 @@ effect.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Jointly test effects of the 3 spline components</span></span>
 <span><span class="co"># The test of the 3 coefficients is performed with an F-statistic</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, number<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, number <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 3 rows and 9 columns</span></span>
 <span><span class="co">##         assay          ID splines..ns.Age..3.1 splines..ns.Age..3.2</span></span>
 <span><span class="co">##   &lt;character&gt; &lt;character&gt;            &lt;numeric&gt;            &lt;numeric&gt;</span></span>
-<span><span class="co">## 1    NK cells        HCST             0.779518              6.47076</span></span>
-<span><span class="co">## 2    NK cells       NUTF2             1.383123             -2.09056</span></span>
-<span><span class="co">## 3    NK cells    TRAF3IP3            -0.577738              6.15883</span></span>
-<span><span class="co">##   splines..ns.Age..3.3   AveExpr         F     P.Value adj.P.Val</span></span>
-<span><span class="co">##              &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1              1.31306   7.28001   12.6756 0.000118118  0.555049</span></span>
-<span><span class="co">## 2             -2.47219   6.40995   11.7734 0.000181324  0.555049</span></span>
-<span><span class="co">## 3              1.35218   6.52589   11.3674 0.000221430  0.555049</span></span></code></pre>
+<span><span class="co">## 1 CD4 T cells       RPS26            -1.579338             -5.35601</span></span>
+<span><span class="co">## 2     B cells       RPS26            -1.852588             -4.00724</span></span>
+<span><span class="co">## 3 CD4 T cells     SNRNP48             0.401979             -1.32684</span></span>
+<span><span class="co">##   splines..ns.Age..3.3   AveExpr         F     P.Value  adj.P.Val</span></span>
+<span><span class="co">##              &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;  &lt;numeric&gt;</span></span>
+<span><span class="co">## 1            -0.508896   8.83436   39.8082 9.42206e-08 0.00136545</span></span>
+<span><span class="co">## 2            -0.244312   8.52983   20.4815 8.42513e-06 0.06104846</span></span>
+<span><span class="co">## 3            -1.522945   4.77485   16.7947 2.97653e-05 0.14378616</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="ordered-categorical">Ordered categorical<a class="anchor" aria-label="anchor" href="#ordered-categorical"></a>
@@ -233,8 +234,9 @@ ordered time points is modled using orthogonal polynomials. The trend is
 decomposed into independent linear, quadratic, etc., effects that can be
 tested either jointly or by themselves.</p>
 <p>Model using:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ord <span class="ot">=</span> <span class="fu">c</span>(<span class="st">'time_1'</span>,<span class="st">'time_2'</span>,<span class="st">'time_3'</span>m,<span class="st">'time_4'</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ordered</span>(<span class="fu">factor</span>(TimePoint), ord)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time_1"</span>, <span class="st">"time_2"</span>, <span class="st">"time_3"</span>, <span class="st">"time_4"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">ordered</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">TimePoint</span><span class="op">)</span>, <span class="va">ord</span><span class="op">)</span></span></code></pre></div>
 </li>
 </ul>
 <p>Here we simulated 4 time points, and perform differential expression
@@ -242,8 +244,8 @@ analysis.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Consider data generated across 4 time points</span></span>
 <span><span class="co"># While there are no time points in the real data</span></span>
-<span><span class="co"># we can add some for demonstration purposes </span></span>
-<span><span class="va">pb</span><span class="op">$</span><span class="va">TimePoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">ordered</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"time_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># we can add some for demonstration purposes</span></span>
+<span><span class="va">pb</span><span class="op">$</span><span class="va">TimePoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">ordered</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"time_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># examine the ordering</span></span>
 <span><span class="va">pb</span><span class="op">$</span><span class="va">TimePoint</span></span></code></pre></div>
@@ -252,50 +254,50 @@ analysis.</p>
 <span><span class="co">## Levels: time_1 &lt; time_2 &lt; time_3 &lt; time_4</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use formula including time point</span></span>
-<span><span class="va">form</span> <span class="op">=</span> <span class="op">~</span> <span class="va">TimePoint</span></span>
+<span><span class="va">form</span> <span class="op">&lt;-</span> <span class="op">~</span><span class="va">TimePoint</span></span>
 <span></span>
 <span><span class="co"># Normalize and apply voom/voomWithDreamWeights</span></span>
-<span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">form</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="va">form</span>, min.count <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Differential expression analysis within each assay</span></span>
-<span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
+<span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Examine the coefficient estimated</span></span>
-<span><span class="co"># for TimePoint it estimates </span></span>
-<span><span class="co"># linear (i.e. L) </span></span>
+<span><span class="co"># for TimePoint it estimates</span></span>
+<span><span class="co"># linear (i.e. L)</span></span>
 <span><span class="co"># quadratic (i.e. Q)</span></span>
 <span><span class="co"># and cubic (i.e. C) effects</span></span>
 <span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "(Intercept)" "TimePoint.L" "TimePoint.Q" "TimePoint.C"</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Test only linear effect</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">"TimePoint.L"</span>, number<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"TimePoint.L"</span>, number <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 3 rows and 9 columns</span></span>
-<span><span class="co">##             assay          ID     logFC   AveExpr         t     P.Value</span></span>
-<span><span class="co">##       &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1     CD4 T cells        DCXR -0.678397   6.52867  -5.65493 3.08306e-05</span></span>
-<span><span class="co">## 2     CD4 T cells        GGA2 -0.890912   4.98987  -5.27996 6.55506e-05</span></span>
-<span><span class="co">## 3 CD14+ Monocytes        CAPG -0.874746   8.83660  -5.18913 1.12897e-04</span></span>
+<span><span class="co">##         assay                   ID     logFC   AveExpr         t     P.Value</span></span>
+<span><span class="co">##   &lt;character&gt;          &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
+<span><span class="co">## 1 CD4 T cells                 DCXR -0.718560   6.52867  -5.80714 2.65471e-05</span></span>
+<span><span class="co">## 2 CD4 T cells PLP2_ENSG00000102007 -0.861271   8.03139  -5.38637 6.01980e-05</span></span>
+<span><span class="co">## 3 CD8 T cells                 FTH1 -0.950503  14.55380  -5.19906 7.69454e-05</span></span>
 <span><span class="co">##   adj.P.Val         B     z.std</span></span>
 <span><span class="co">##   &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1  0.451791  2.064035  -5.65493</span></span>
-<span><span class="co">## 2  0.460027  0.826826  -5.27996</span></span>
-<span><span class="co">## 3  0.460027 -3.020427  -5.18913</span></span></code></pre>
+<span><span class="co">## 1  0.371697  0.776472  -5.80714</span></span>
+<span><span class="co">## 2  0.371697  0.712977  -5.38637</span></span>
+<span><span class="co">## 3  0.371697  1.617345  -5.19906</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Test linear, quadratic and cubic effcts</span></span>
-<span><span class="va">coefs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TimePoint.L"</span>, <span class="st">"TimePoint.Q"</span>, <span class="st">"TimePoint.C"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="va">coefs</span>, number<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">coefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TimePoint.L"</span>, <span class="st">"TimePoint.Q"</span>, <span class="st">"TimePoint.C"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="va">coefs</span>, number <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 3 rows and 9 columns</span></span>
-<span><span class="co">##            assay          ID TimePoint.L TimePoint.Q TimePoint.C   AveExpr</span></span>
-<span><span class="co">##      &lt;character&gt; &lt;character&gt;   &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1 Megakaryocytes       TIMP1   -0.191992     1.97379          NA  10.94510</span></span>
-<span><span class="co">## 2    CD8 T cells      GPR183   -0.834378     1.12444    1.155308   8.47413</span></span>
-<span><span class="co">## 3    CD8 T cells        CD52    0.879689    -1.50610   -0.960712   8.69458</span></span>
+<span><span class="co">##         assay          ID TimePoint.L TimePoint.Q TimePoint.C   AveExpr</span></span>
+<span><span class="co">##   &lt;character&gt; &lt;character&gt;   &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1 CD8 T cells      GPR183   -1.082064    1.342136    1.251054   8.47413</span></span>
+<span><span class="co">## 2 CD8 T cells        GZMB    0.926243   -0.636498   -1.467278  10.00343</span></span>
+<span><span class="co">## 3 CD4 T cells       CPNE1   -0.209650    0.399800    0.744842   6.28801</span></span>
 <span><span class="co">##           F     P.Value adj.P.Val</span></span>
 <span><span class="co">##   &lt;numeric&gt;   &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   19.9684 1.36276e-06 0.0199699</span></span>
-<span><span class="co">## 2   16.5751 1.55974e-05 0.0826416</span></span>
-<span><span class="co">## 3   15.9934 1.98237e-05 0.0826416</span></span></code></pre>
+<span><span class="co">## 1   16.9778 2.56311e-05  0.120078</span></span>
+<span><span class="co">## 2   16.7349 2.80122e-05  0.120078</span></span>
+<span><span class="co">## 3   16.9678 3.14128e-05  0.120078</span></span></code></pre>
 <div class="section level3">
 <h3 id="sample-filtering">Sample filtering<a class="anchor" aria-label="anchor" href="#sample-filtering"></a>
 </h3>

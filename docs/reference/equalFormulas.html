@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,10 +87,10 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># These formulas are equivalent</span></span></span>
-<span class="r-in"><span><span class="va">formula1</span> <span class="op">=</span> <span class="op">~</span> <span class="va">Size</span> <span class="op">+</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="va">formula2</span> <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">Size</span> </span></span>
+<span class="r-in"><span><span class="va">formula1</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">Size</span> <span class="op">+</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">formula2</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">Size</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">:::</span><span class="fu">equalFormulas</span><span class="op">(</span> <span class="va">formula1</span>, <span class="va">formula2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">:::</span><span class="fu">equalFormulas</span><span class="op">(</span><span class="va">formula1</span>, <span class="va">formula2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

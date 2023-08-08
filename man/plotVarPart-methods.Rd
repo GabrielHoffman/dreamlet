@@ -46,17 +46,18 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
-   assay = "counts",    
-   cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
-   verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # voom-style normalization
-res.proc = processAssays( pb, ~ group_id)
+res.proc <- processAssays(pb, ~group_id)
 
 # variance partitioning analysis
-vp = fitVarPart( res.proc, ~ group_id)
+vp <- fitVarPart(res.proc, ~group_id)
 
 # Summarize variance fractions genome-wide for each cell type
 plotVarPart(vp)

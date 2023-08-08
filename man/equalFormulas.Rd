@@ -20,9 +20,9 @@ Check if two formulas are equal by evaluating the formulas and extracting terms
 \examples{
 
 # These formulas are equivalent
-formula1 = ~ Size + 1
-formula2 = ~ 1 + Size 
+formula1 <- ~ Size + 1
+formula2 <- ~ 1 + Size
 
-dreamlet:::equalFormulas( formula1, formula2)
+dreamlet:::equalFormulas(formula1, formula2)
 
 }

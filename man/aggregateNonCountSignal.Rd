@@ -20,7 +20,7 @@ aggregateNonCountSignal(
 \arguments{
 \item{sce}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
 
-\item{assay}{character string specifying the assay slot to use as 
+\item{assay}{character string specifying the assay slot to use as
 input data. Defaults to the 1st available (\code{assayNames(x)[1]}).}
 
 \item{sample_id}{character string specifying which variable to use as sample id}
@@ -50,7 +50,7 @@ Aggregation of single-cell to pseudobulk data for non-count data.
 The \code{dreamlet} workflow can also be applied to non-count data. In this case, a signal is averaged across all cells from a given sample and cell type. Here \code{aggregateNonCountSignal()} performs the roles of \code{aggregateToPseudoBulk()} followed by \code{processAssays()} but using non-count data.
 
 For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Features are retained if they have at least \code{min.signal} in at least min.prop fraction of the samples.
- 
+
 The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd(signal) / sqrt(n)}, \code{signal} stores the values averaged across cells, and \code{n} is the number of cells.
 }
 \examples{
@@ -61,13 +61,14 @@ data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
 # using non-count signal
-pb.signal <- aggregateNonCountSignal(example_sce, 
-   assay = "logcounts",    
-   cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
-   verbose=FALSE)
+pb.signal <- aggregateNonCountSignal(example_sce,
+  assay = "logcounts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # Differential expression analysis within each assay,
-# evaluated on the voom normalized data 
-res.dl = dreamlet( pb.signal, ~ group_id)
+# evaluated on the voom normalized data
+res.dl <- dreamlet(pb.signal, ~group_id)
 }

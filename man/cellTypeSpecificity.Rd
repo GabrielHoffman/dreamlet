@@ -27,14 +27,15 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
-	assay = "counts",    
-	cluster_id = 'cluster_id', 
-	sample_id = 'sample_id',
-	verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # Compute cell type specificity of each gene
-df = cellTypeSpecificity( pb)
+df <- cellTypeSpecificity(pb)
 
 # Violin plot of specificity scores for each cell type
 # Dashed line indicates genes that are equally expressed
@@ -42,16 +43,16 @@ df = cellTypeSpecificity( pb)
 plotViolin(df)
 
 # Compute the maximum specificity score for each gene
-scoreMax = apply(df, 1, max)
+scoreMax <- apply(df, 1, max)
 head(scoreMax)
 
 # For each cell type, get most specific gene
-genes = rownames(df)[apply(df, 2, which.max)]
-  
+genes <- rownames(df)[apply(df, 2, which.max)]
+
 # Barplot of 5 genes
-plotPercentBars( df, genes = genes)
+plotPercentBars(df, genes = genes)
 
 # heatmap of 5 genes that are most cell type specific
-dreamlet::plotHeatmap( df, genes = genes)
+dreamlet::plotHeatmap(df, genes = genes)
 
 }

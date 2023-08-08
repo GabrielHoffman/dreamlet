@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@ for pseudobulk data</h3>
 </h4>
             
             <h4 data-toc-skip class="date">Run on 2023-08-08
-14:46:07.167989</h4>
+15:23:12.057223</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/cell_covs.Rmd" class="external-link"><code>vignettes/cell_covs.Rmd</code></a></small>
       <div class="d-none name"><code>cell_covs.Rmd</code></div>
@@ -140,7 +140,7 @@ Nature Biotech</a>).</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -150,14 +150,14 @@ Nature Biotech</a>).</p>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="op">!</span><span class="va">ol</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># set variable indicating stimulated (stim) or control (ctrl)</span></span>
-<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">=</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span></code></pre></div>
+<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span></code></pre></div>
 <p>In many datasets, continuous cell-level variables could be mapped
 reads, gene count, mitochondrial rate, etc. There are no continuous
 cell-level variables in this dataset, so we can simulate two from a
 normal distribution:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sce</span><span class="op">$</span><span class="va">value1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">sce</span><span class="op">$</span><span class="va">value2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sce</span><span class="op">$</span><span class="va">value1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sce</span><span class="op">$</span><span class="va">value2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="pseudobulk">Pseudobulk<a class="anchor" aria-label="anchor" href="#pseudobulk"></a>
@@ -166,12 +166,13 @@ normal distribution:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sce</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span>, <span class="va">sce</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create pseudobulk </span></span>
+<span><span class="co"># Create pseudobulk</span></span>
 <span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">sce</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"counts"</span>,     </span>
-<span>    cluster_id <span class="op">=</span> <span class="st">"cell"</span>,  </span>
-<span>    sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>  cluster_id <span class="op">=</span> <span class="st">"cell"</span>,</span>
+<span>  sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The means per variable, cell type, and sample are stored in the
 pseudobulk <code>SingleCellExperiment</code> object:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -202,27 +203,27 @@ stored in <code>colData(pb)</code> and cell-level variables stored in
 <code>metadata(pb)$aggr_means</code>.</p>
 <p>Variance partition and hypothesis testing proceeds as ususal:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">form</span> <span class="op">=</span> <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">value1</span> <span class="op">+</span> <span class="va">value2</span></span>
+<code class="sourceCode R"><span><span class="va">form</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">value1</span> <span class="op">+</span> <span class="va">value2</span></span>
 <span></span>
 <span><span class="co"># Normalize and apply voom/voomWithDreamWeights</span></span>
-<span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">form</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="va">form</span>, min.count <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># run variance partitioning analysis</span></span>
-<span><span class="va">vp.lst</span> <span class="op">=</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
+<span><span class="va">vp.lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Summarize variance fractions genome-wide for each cell type</span></span>
-<span><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></code></pre></div>
 <p><img src="cell_covs_files/figure-html/processAssays-1.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Differential expression analysis within each assay</span></span>
-<span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
+<span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="va">form</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># dreamlet results include coefficients for value1 and value2</span></span>
 <span><span class="va">res.dl</span></span></code></pre></div>
 <pre><code><span><span class="co">## class: dreamletResult </span></span>
 <span><span class="co">## assays(8): B cells CD14+ Monocytes ... Megakaryocytes NK cells</span></span>
 <span><span class="co">## Genes:</span></span>
-<span><span class="co">##  min: 182 </span></span>
+<span><span class="co">##  min: 164 </span></span>
 <span><span class="co">##  max: 5262 </span></span>
 <span><span class="co">## details(6): assay n_retain ... n_errors error_initial</span></span>
 <span><span class="co">## coefNames(4): (Intercept) StimStatusstim value1 value2</span></span></code></pre>
