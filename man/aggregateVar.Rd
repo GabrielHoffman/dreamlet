@@ -49,7 +49,7 @@ Aggregation function for single-cell log-normalized counts to calculate per-samp
 The \code{dreamlet} workflow can also be applied to model gene expression variance. In this case, a per-sample per-gene variance is calculated across all cells from a given sample and cell type. Here \code{aggregateVar()} performs the roles of \code{aggregateToPseudoBulk()} followed by \code{processAssays()} but using log-normalized count data.
 
 For each cell cluster, samples with at least min.cells are retained. Only clusters with at least min.samples retained samples are kept. Features are retained if they have at least min.var in at least min.prop fraction of the samples.
- 
+
 The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as \code{1/sem^2}, where \code{sem = sd / sqrt(n)} and \code{n} is the number of cells.
 }
 \examples{
@@ -59,9 +59,10 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # Compute variance for each sample and cell cluster
-pbVar <- aggregateVar(example_sce, 
-   assay = "counts",    
-   cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
-   verbose=FALSE)
+pbVar <- aggregateVar(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 }

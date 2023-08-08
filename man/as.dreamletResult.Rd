@@ -22,36 +22,37 @@ Useful for combining multiple runs of \code{dreamletCompareClusters()} into a si
 }
 \examples{
 library(muscat)
-library(SingleCellExperiment) 
+library(SingleCellExperiment)
 
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
-  assay = "counts",    
-  cluster_id = 'cluster_id', 
-  sample_id = 'sample_id',
- verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # first comparison
-ct.pairs =  c("B cells", "CD14+ Monocytes")
-fit = dreamletCompareClusters( pb, ct.pairs, method="fixed")
+ct.pairs <- c("B cells", "CD14+ Monocytes")
+fit <- dreamletCompareClusters(pb, ct.pairs, method = "fixed")
 
 # second comparison
-ct.pairs2 =  c("B cells", "CD8 T cells")
-fit2 = dreamletCompareClusters( pb, ct.pairs2, method="fixed")
+ct.pairs2 <- c("B cells", "CD8 T cells")
+fit2 <- dreamletCompareClusters(pb, ct.pairs2, method = "fixed")
 
 # Make a list storing each result with a meaningful name
-fitList = list()
+fitList <- list()
 
-id = paste0('[', ct.pairs[1], ']_vs_[', ct.pairs[2], ']')
-fitList[[id]] = fit
+id <- paste0("[", ct.pairs[1], "]_vs_[", ct.pairs[2], "]")
+fitList[[id]] <- fit
 
-id = paste0('[', ct.pairs2[1], ']_vs_[', ct.pairs2[2], ']')
-fitList[[id]] = fit2
+id <- paste0("[", ct.pairs2[1], "]_vs_[", ct.pairs2[2], "]")
+fitList[[id]] <- fit2
 
 # create a dreamletResult form this list
-res.compare = as.dreamletResult( fitList )
+res.compare <- as.dreamletResult(fitList)
 res.compare
 
 }

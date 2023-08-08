@@ -26,6 +26,6 @@ Adapted from \code{MoEClust::drop_constants}
 removeConstantTerms(~ group + extra, sleep)
 
 # there is no variation in 'group' in this dataset
-removeConstantTerms(~ group + extra, sleep[1:3,])
+removeConstantTerms(~ group + extra, sleep[1:3, ])
 
 }

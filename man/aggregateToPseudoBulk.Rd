@@ -59,29 +59,30 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
-   assay = "counts",    
-   cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
-   verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # pseudobulk data from each cell type
-# is stored as its own assay 
+# is stored as its own assay
 pb
 
-# aggregate by cluster only, 
+# aggregate by cluster only,
 # collapsing all samples into the same pseudobulk
-pb2 <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose=FALSE)
+pb2 <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose = FALSE)
 
-pb2  
+pb2
 
 }
 \references{
-Crowell, HL, Soneson, C, Germain, P-L, Calini, D, 
-Collin, L, Raposo, C, Malhotra, D & Robinson, MD: 
-On the discovery of population-specific state transitions from 
-multi-sample multi-condition single-cell RNA sequencing data. 
-\emph{bioRxiv} \strong{713412} (2018). 
+Crowell, HL, Soneson, C, Germain, P-L, Calini, D,
+Collin, L, Raposo, C, Malhotra, D & Robinson, MD:
+On the discovery of population-specific state transitions from
+multi-sample multi-condition single-cell RNA sequencing data.
+\emph{bioRxiv} \strong{713412} (2018).
 doi: \url{https://doi.org/10.1101/713412}
 }
 \author{

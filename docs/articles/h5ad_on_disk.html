@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -171,7 +171,7 @@ minutes, but subsequent runs will be fast.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create SingleCellExperiment object that points to on-disk H5AD file</span></span>
-<span><span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">h5ad_file</span>, use_hdf5<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">h5ad_file</span>, use_hdf5 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="merge-multiple-datasets">Merge multiple datasets<a class="anchor" aria-label="anchor" href="#merge-multiple-datasets"></a>
@@ -179,10 +179,10 @@ minutes, but subsequent runs will be fast.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read a series of H5AD files into a list</span></span>
 <span><span class="co"># then combine them into a single merged SingleCellExperiment</span></span>
-<span><span class="va">sce.lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">file</span>, use_hdf5<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sce.lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">h5ad_files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">file</span>, use_hdf5 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="va">sce.list</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="access-alternative-data">Access alternative data<a class="anchor" aria-label="anchor" href="#access-alternative-data"></a>
@@ -195,12 +195,12 @@ pegasus.</p>
 <code class="sourceCode R"><span><span class="co"># read raw/ from H5AD file</span></span>
 <span><span class="co"># raw = TRUE tells readH5AD() to read alternative data</span></span>
 <span><span class="co"># Must use zellkonverter &gt;=1.3.3</span></span>
-<span><span class="va">sce_in</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">h5ad_file</span>, use_hdf5<span class="op">=</span><span class="cn">TRUE</span>, raw<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">sce_in</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/zellkonverter/man/readH5AD.html" class="external-link">readH5AD</a></span><span class="op">(</span><span class="va">h5ad_file</span>, use_hdf5 <span class="op">=</span> <span class="cn">TRUE</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># use `raw` as counts</span></span>
-<span><span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/swapAltExp.html" class="external-link">swapAltExp</a></span><span class="op">(</span><span class="va">sce_in</span>, <span class="st">"raw"</span><span class="op">)</span> <span class="co"># use raw as main</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">'X'</span><span class="op">)</span>   <span class="co"># set counts assay to data in X</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">'X'</span><span class="op">)</span> <span class="op">=</span> <span class="cn">NULL</span>          <span class="co"># free X </span></span></code></pre></div>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/swapAltExp.html" class="external-link">swapAltExp</a></span><span class="op">(</span><span class="va">sce_in</span>, <span class="st">"raw"</span><span class="op">)</span> <span class="co"># use raw as main</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"X"</span><span class="op">)</span> <span class="co"># set counts assay to data in X</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"X"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span> <span class="co"># free X</span></span></code></pre></div>
 <!---
 # extract raw counts
 # include Dimnames and colData
@@ -229,7 +229,7 @@ The resulting <code>SingleCellExperiment</code> object stores data as a
 <span><span class="fu">Convert</span><span class="op">(</span><span class="va">h5ad_file</span>, dest <span class="op">=</span> <span class="st">"h5seurat"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load Seurat file</span></span>
-<span><span class="va">obj</span> <span class="op">=</span> <span class="fu">LoadH5Seurat</span><span class="op">(</span><span class="va">h5seurat_file</span><span class="op">)</span></span>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">LoadH5Seurat</span><span class="op">(</span><span class="va">h5seurat_file</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert Seurat object to SingleCellExperiment</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span></code></pre></div>

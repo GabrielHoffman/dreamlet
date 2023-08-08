@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,7 +129,7 @@ object specifying how aggregation should be parallelized.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The <code>dreamlet</code> workflow can also be applied to model gene expression variance. In this case, a per-sample per-gene variance is calculated across all cells from a given sample and cell type. Here <code>aggregateVar()</code> performs the roles of <code><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk()</a></code> followed by <code><a href="processAssays.html">processAssays()</a></code> but using log-normalized count data.</p>
-<p>For each cell cluster, samples with at least min.cells are retained. Only clusters with at least min.samples retained samples are kept. Features are retained if they have at least min.var in at least min.prop fraction of the samples.</p> 
+<p>For each cell cluster, samples with at least min.cells are retained. Only clusters with at least min.samples retained samples are kept. Features are retained if they have at least min.var in at least min.prop fraction of the samples.</p>
 <p>The precision of a measurement is the inverse of its sampling variance. The precision weights are computed as <code>1/sem^2</code>, where <code>sem = sd / sqrt(n)</code> and <code>n</code> is the number of cells.</p>
     </div>
 
@@ -141,11 +141,12 @@ object specifying how aggregation should be parallelized.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Compute variance for each sample and cell cluster</span></span></span>
-<span class="r-in"><span><span class="va">pbVar</span> <span class="op">&lt;-</span> <span class="fu">aggregateVar</span><span class="op">(</span><span class="va">example_sce</span>, </span></span>
-<span class="r-in"><span>   assay <span class="op">=</span> <span class="st">"counts"</span>,    </span></span>
-<span class="r-in"><span>   cluster_id <span class="op">=</span> <span class="st">'cluster_id'</span>, </span></span>
-<span class="r-in"><span>   sample_id <span class="op">=</span> <span class="st">'sample_id'</span>,</span></span>
-<span class="r-in"><span>   verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pbVar</span> <span class="op">&lt;-</span> <span class="fu">aggregateVar</span><span class="op">(</span><span class="va">example_sce</span>,</span></span>
+<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span></span>
+<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>,</span></span>
+<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

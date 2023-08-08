@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@ analysis of pseudobulk data</h3>
 </h4>
             
             <h4 data-toc-skip class="date">Run on 2023-08-08
-14:46:11.032213</h4>
+15:24:51.065809</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -142,8 +142,9 @@ gene set analysis on the differential expression signatures.</p>
 </h2>
 <p>To install this package, start R (version “4.3”) and enter:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Select release #1 or #2</span></span>
 <span></span>
@@ -180,7 +181,7 @@ workflow.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -190,7 +191,7 @@ workflow.</p>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="op">!</span><span class="va">ol</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># set variable indicating stimulated (stim) or control (ctrl)</span></span>
-<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">=</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span></code></pre></div>
+<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="aggregate-to-pseudobulk">Aggregate to pseudobulk<a class="anchor" aria-label="anchor" href="#aggregate-to-pseudobulk"></a>
@@ -210,10 +211,11 @@ on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.htm
 <span><span class="co"># cluster_id: variable in colData(sce) indicating cell clusters</span></span>
 <span><span class="co"># sample_id: variable in colData(sce) indicating sample id for aggregating cells</span></span>
 <span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">sce</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"counts"</span>,     </span>
-<span>    cluster_id <span class="op">=</span> <span class="st">"cell"</span>,  </span>
-<span>    sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>  cluster_id <span class="op">=</span> <span class="st">"cell"</span>,</span>
+<span>  sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># one 'assay' per cell type</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
@@ -230,9 +232,9 @@ normalization for pseudobulk counts within each cell cluster using <a href="http
 to handle random effects (if specified).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Normalize and apply voom/voomWithDreamWeights</span></span>
-<span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">StimStatus</span>, min.count<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">StimStatus</span>, min.count <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># the resulting object of class dreamletProcessedData stores </span></span>
+<span><span class="co"># the resulting object of class dreamletProcessedData stores</span></span>
 <span><span class="co"># normalized data and other information</span></span>
 <span><span class="va">res.proc</span></span></code></pre></div>
 <pre><code><span><span class="co">## class: dreamletProcessedData </span></span>
@@ -240,10 +242,10 @@ to handle random effects (if specified).</p>
 <span><span class="co">## colData(4): ind stim multiplets StimStatus</span></span>
 <span><span class="co">## metadata(3): cell id cluster</span></span>
 <span><span class="co">## Samples:</span></span>
-<span><span class="co">##  min: 5 </span></span>
+<span><span class="co">##  min: 13 </span></span>
 <span><span class="co">##  max: 16</span></span>
 <span><span class="co">## Genes:</span></span>
-<span><span class="co">##  min: 182 </span></span>
+<span><span class="co">##  min: 164 </span></span>
 <span><span class="co">##  max: 5262 </span></span>
 <span><span class="co">## details(3): assay n_retained formula</span></span></code></pre>
 <p><code><a href="../reference/processAssays.html">processAssays()</a></code> retains samples with at least
@@ -278,8 +280,8 @@ Cell types with sufficient number of cells and reads show a clear
 mean-variance trend. While in rare cell types like megakaryocytes, fewer
 genes have sufficient reads and the trend is less apparent.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># show voom plot for each cell clusters  </span></span>
-<span><span class="fu"><a href="../reference/plotVoom-methods.html">plotVoom</a></span><span class="op">(</span> <span class="va">res.proc</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># show voom plot for each cell clusters</span></span>
+<span><span class="fu"><a href="../reference/plotVoom-methods.html">plotVoom</a></span><span class="op">(</span><span class="va">res.proc</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/voom.plots-1.png" width="700"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Show plots for subset of cell clusters</span></span>
@@ -300,15 +302,15 @@ expression variation explained by each variable.</p>
 type using a bar plot, or genome-wide using a violin plot.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run variance partitioning analysis</span></span>
-<span><span class="va">vp.lst</span> <span class="op">=</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">StimStatus</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">vp.lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fitVarPart.html">fitVarPart</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">StimStatus</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Show variance fractions at the gene-level for each cell type</span></span>
-<span><span class="va">genes</span> <span class="op">=</span> <span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
-<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
+<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.barplt-1.png" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize variance fractions genome-wide for each cell type</span></span>
-<span><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle<span class="op">=</span><span class="fl">60</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.violin-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -323,11 +325,11 @@ larger datasets can include covariates and random effects. With formula
 controls.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Differential expression analysis within each assay,</span></span>
-<span><span class="co"># evaluated on the voom normalized data </span></span>
-<span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">StimStatus</span><span class="op">)</span></span>
+<span><span class="co"># evaluated on the voom normalized data</span></span>
+<span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">StimStatus</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># names of estimated coefficients</span></span>
-<span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "(Intercept)"    "StimStatusstim"</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># the resulting object of class dreamletResult</span></span>
@@ -336,7 +338,7 @@ controls.</p>
 <pre><code><span><span class="co">## class: dreamletResult </span></span>
 <span><span class="co">## assays(8): B cells CD14+ Monocytes ... Megakaryocytes NK cells</span></span>
 <span><span class="co">## Genes:</span></span>
-<span><span class="co">##  min: 182 </span></span>
+<span><span class="co">##  min: 164 </span></span>
 <span><span class="co">##  max: 5262 </span></span>
 <span><span class="co">## details(6): assay n_retain ... n_errors error_initial</span></span>
 <span><span class="co">## coefNames(2): (Intercept) StimStatusstim</span></span></code></pre>
@@ -347,7 +349,7 @@ controls.</p>
 expression signal with each cell type. Red points indicate FDR &lt;
 0.05.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotVolcano-1.png" width="768"></p>
 </div>
 <div class="section level3">
@@ -357,8 +359,8 @@ expression signal with each cell type. Red points indicate FDR &lt;
 <code>dreamlet</code> analysis. Grey indicates that insufficient reads
 were observed to include the gene in the analysis.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ISG20"</span>, <span class="st">"ISG15"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plotGeneHeatmap-methods.html">plotGeneHeatmap</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span>, genes<span class="op">=</span><span class="va">genes</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ISG20"</span>, <span class="st">"ISG15"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotGeneHeatmap-methods.html">plotGeneHeatmap</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotGeneHeatmap-1.png" width="700"></p>
 </div>
 <div class="section level3">
@@ -371,46 +373,46 @@ results shows the gene name, log fold change, average expression,
 t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># results from full analysis</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
 <span><span class="co">##              assay          ID     logFC   AveExpr         t     P.Value</span></span>
 <span><span class="co">##        &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1          B cells       ISG15   5.49576  10.20272   30.6252 7.46807e-23</span></span>
-<span><span class="co">## 2          B cells       ISG20   3.25431  11.38360   29.1273 2.86433e-22</span></span>
-<span><span class="co">## 3      CD4 T cells       ISG20   3.08493  10.40388   37.7758 5.09258e-22</span></span>
-<span><span class="co">## 4      CD4 T cells        MT2A   4.32241   7.80640   37.0507 7.85918e-22</span></span>
-<span><span class="co">## 5  CD14+ Monocytes       IL1RN   7.05190   7.79103   39.3498 1.71111e-21</span></span>
-<span><span class="co">## 6      CD4 T cells        IFI6   5.78844   8.52892   34.0945 5.04100e-21</span></span>
-<span><span class="co">## 7      CD4 T cells       HERC5   4.29230   6.74189   33.0579 1.00368e-20</span></span>
-<span><span class="co">## 8         NK cells       ISG15   4.61275  11.01479   27.3330 1.42681e-20</span></span>
-<span><span class="co">## 9      CD4 T cells     TNFSF10   4.49042   7.49081   32.1706 1.84022e-20</span></span>
-<span><span class="co">## 10        NK cells       ISG20   3.70085  10.97479   26.9881 1.95877e-20</span></span>
+<span><span class="co">## 1          B cells       ISG15   5.48064  10.20272   30.2756 9.61688e-23</span></span>
+<span><span class="co">## 2          B cells       ISG20   3.24312  11.38360   29.2493 2.42687e-22</span></span>
+<span><span class="co">## 3      CD4 T cells       ISG20   3.08260  10.40388   37.8837 4.12588e-22</span></span>
+<span><span class="co">## 4      CD4 T cells        MT2A   4.32567   7.80640   36.9444 7.25425e-22</span></span>
+<span><span class="co">## 5  CD14+ Monocytes       IL1RN   7.05735   7.79103   40.4649 9.93267e-22</span></span>
+<span><span class="co">## 6      CD4 T cells        IFI6   5.78542   8.52892   34.1701 4.18122e-21</span></span>
+<span><span class="co">## 7      CD4 T cells       HERC5   4.29449   6.74189   33.3671 7.12237e-21</span></span>
+<span><span class="co">## 8      CD4 T cells     TNFSF10   4.49694   7.49081   32.7019 1.11776e-20</span></span>
+<span><span class="co">## 9         NK cells       ISG15   4.59449  11.01479   27.3810 1.36609e-20</span></span>
+<span><span class="co">## 10        NK cells       ISG20   3.69039  10.97479   27.1972 1.61625e-20</span></span>
 <span><span class="co">##      adj.P.Val         B     z.std</span></span>
 <span><span class="co">##      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1  1.09437e-18   42.2686   30.6252</span></span>
-<span><span class="co">## 2  2.09869e-18   40.9738   29.1273</span></span>
-<span><span class="co">## 3  2.48756e-18   40.5111   37.7758</span></span>
-<span><span class="co">## 4  2.87921e-18   39.9926   37.0507</span></span>
-<span><span class="co">## 5  5.01493e-18   38.2656   39.3498</span></span>
-<span><span class="co">## 6  1.23118e-17   38.2015   34.0945</span></span>
-<span><span class="co">## 7  2.10114e-17   37.4037   33.0579</span></span>
-<span><span class="co">## 8  2.61356e-17   37.0440   27.3330</span></span>
-<span><span class="co">## 9  2.87039e-17   36.9222   32.1706</span></span>
-<span><span class="co">## 10 2.87039e-17   36.7473   26.9881</span></span></code></pre>
+<span><span class="co">## 1  1.39368e-18   42.0134   30.2756</span></span>
+<span><span class="co">## 2  1.75851e-18   41.1344   29.2493</span></span>
+<span><span class="co">## 3  1.99308e-18   40.7029   37.8837</span></span>
+<span><span class="co">## 4  2.62822e-18   40.0663   36.9444</span></span>
+<span><span class="co">## 5  2.87888e-18   38.9383   40.4649</span></span>
+<span><span class="co">## 6  1.00990e-17   38.3790   34.1701</span></span>
+<span><span class="co">## 7  1.47453e-17   37.7451   33.3671</span></span>
+<span><span class="co">## 8  2.02483e-17   37.4053   32.7019</span></span>
+<span><span class="co">## 9  2.19971e-17   37.0951   27.3810</span></span>
+<span><span class="co">## 10 2.34226e-17   36.9488   27.1972</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># only B cells</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           logFC   AveExpr        t      P.Value    adj.P.Val        B</span></span>
-<span><span class="co">## ISG15  5.495757 10.202722 30.62515 7.468067e-23 1.464488e-19 42.26855</span></span>
-<span><span class="co">## ISG20  3.254305 11.383603 29.12732 2.864329e-22 2.808475e-19 40.97377</span></span>
-<span><span class="co">## LY6E   4.205535  8.706648 24.31831 3.482197e-20 2.276196e-17 36.15791</span></span>
-<span><span class="co">## PLSCR1 4.085769  8.271191 23.47482 8.836105e-20 3.556815e-17 35.20946</span></span>
-<span><span class="co">## EPSTI1 3.666105  8.107930 23.45165 9.068880e-20 3.556815e-17 35.18356</span></span>
-<span><span class="co">## SAT1   2.141210  9.657178 21.92490 5.308264e-19 1.631423e-16 33.45779</span></span>
-<span><span class="co">## IRF7   3.665702  8.678591 21.84738 5.823541e-19 1.631423e-16 33.38287</span></span>
-<span><span class="co">## TRIM22 2.934663  7.201113 21.68805 7.051546e-19 1.728510e-16 33.11351</span></span>
-<span><span class="co">## UBE2L6 2.697049  9.241028 21.53019 8.534002e-19 1.859464e-16 32.99410</span></span>
-<span><span class="co">## SOCS1  2.433571  8.588454 21.16992 1.325324e-18 2.598960e-16 32.56550</span></span></code></pre>
+<span><span class="co">## ISG15  5.480637 10.202722 30.27557 9.616879e-23 1.885870e-19 42.01344</span></span>
+<span><span class="co">## ISG20  3.243124 11.383603 29.24930 2.426871e-22 2.379547e-19 41.13437</span></span>
+<span><span class="co">## LY6E   4.217817  8.706648 24.23933 3.622495e-20 2.367904e-17 36.11531</span></span>
+<span><span class="co">## PLSCR1 4.101086  8.271191 23.49514 8.255078e-20 3.462219e-17 35.27361</span></span>
+<span><span class="co">## EPSTI1 3.678013  8.107930 23.43548 8.827688e-20 3.462219e-17 35.20735</span></span>
+<span><span class="co">## SAT1   2.142711  9.657178 22.30462 3.242866e-19 1.059877e-16 33.94669</span></span>
+<span><span class="co">## TRIM22 2.941712  7.201113 21.86658 5.454635e-19 1.493141e-16 33.35913</span></span>
+<span><span class="co">## IRF7   3.669944  8.678591 21.77458 6.091346e-19 1.493141e-16 33.33653</span></span>
+<span><span class="co">## UBE2L6 2.689495  9.241028 21.60027 7.517203e-19 1.637915e-16 33.11849</span></span>
+<span><span class="co">## SOCS1  2.432716  8.588454 21.16233 1.283733e-18 2.517400e-16 32.59602</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="forest-plot">Forest plot<a class="anchor" aria-label="anchor" href="#forest-plot"></a>
@@ -418,7 +420,7 @@ t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <p>A forest plot shows the log fold change and standard error of a given
 gene across all cell types. The color indicates the FDR.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotForest-methods.html">plotForest</a></span><span class="op">(</span> <span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span>, gene <span class="op">=</span> <span class="st">'ISG20'</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotForest-methods.html">plotForest</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span>, gene <span class="op">=</span> <span class="st">"ISG20"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/forrest-1.png" width="700"></p>
 </div>
 <div class="section level3">
@@ -432,19 +434,19 @@ must be supplied to <code><a href="../reference/dreamlet.html">dreamlet()</a></c
 <code class="sourceCode R"><span><span class="co"># create a contrasts called 'Diff' that is the difference between expression</span></span>
 <span><span class="co"># in the stimulated and controls.</span></span>
 <span><span class="co"># More than one can be specified</span></span>
-<span><span class="va">contrasts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Diff <span class="op">=</span> <span class="st">'StimStatusstim - StimStatusctrl'</span><span class="op">)</span></span>
+<span><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Diff <span class="op">=</span> <span class="st">"StimStatusstim - StimStatusctrl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Evalaute the regression model without an intercept term.</span></span>
 <span><span class="co"># Instead estimate the mean expression in stimulated, controls and then</span></span>
 <span><span class="co"># set Diff to the difference between the two</span></span>
-<span><span class="va">res.dl2</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">StimStatus</span>, contrasts<span class="op">=</span><span class="va">contrasts</span><span class="op">)</span></span>
+<span><span class="va">res.dl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">StimStatus</span>, contrasts <span class="op">=</span> <span class="va">contrasts</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># see estimated coefficients</span></span>
 <span><span class="fu"><a href="../reference/coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Diff"           "StimStatusctrl" "StimStatusstim"</span></span></code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Volcano plot of Diff</span></span>
-<span><span class="fu"><a href="../reference/plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span> <span class="va">res.dl2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">'Diff'</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/plotVolcano-methods.html">plotVolcano</a></span><span class="op">(</span><span class="va">res.dl2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">"Diff"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/dreamlet.contrasts-1.png" width="700"></p>
 <p>This new <code>Diff</code> variable can then be used downstream for
 analysis asking for a coefficient. But note that since there is no
@@ -474,14 +476,14 @@ genes.</p>
 object, the coefficient of interest, and gene sets as a
 <code>GeneSetCollection</code> object from <a href="https://bioconductor.org/packages/GSEABase/" class="external-link">GSEABase</a>.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load Gene Ontology database </span></span>
+<code class="sourceCode R"><span><span class="co"># Load Gene Ontology database</span></span>
 <span><span class="co"># use gene 'SYMBOL', or 'ENSEMBL' id</span></span>
 <span><span class="co"># use get_MSigDB() to load MSigDB</span></span>
 <span><span class="co"># Use Cellular Component (i.e. CC) to reduce run time here</span></span>
-<span><span class="va">go.gs</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/get_GeneOntology.html" class="external-link">get_GeneOntology</a></span><span class="op">(</span><span class="st">"CC"</span>, to<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span></span>
-<span>   </span>
+<span><span class="va">go.gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/get_GeneOntology.html" class="external-link">get_GeneOntology</a></span><span class="op">(</span><span class="st">"CC"</span>, to <span class="op">=</span> <span class="st">"SYMBOL"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Run zenith gene set analysis on result of dreamlet</span></span>
-<span><span class="va">res_zenith</span> <span class="op">=</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/zenith_gsa-methods.html" class="external-link">zenith_gsa</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">'StimStatusstim'</span>, <span class="va">go.gs</span><span class="op">)</span></span>
+<span><span class="va">res_zenith</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/zenith_gsa-methods.html" class="external-link">zenith_gsa</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span>, <span class="va">go.gs</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># examine results for each ell type and gene set</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">)</span></span></code></pre></div>
@@ -499,20 +501,20 @@ object, the coefficient of interest, and gene sets as a
 <span><span class="co">## 4 GO0090575: RNA polymerase II transcription regulator complex     37</span></span>
 <span><span class="co">## 5                          GO0000151: ubiquitin ligase complex     34</span></span>
 <span><span class="co">## 6                           GO0005839: proteasome core complex     13</span></span>
-<span><span class="co">##   Correlation     delta        se      p.less   p.greater      PValue Direction</span></span>
-<span><span class="co">## 1        0.01 -1.418199 0.4215391 0.002314999 0.997685001 0.004629999      Down</span></span>
-<span><span class="co">## 2        0.01 -1.435250 0.4925328 0.005661944 0.994338056 0.011323888      Down</span></span>
-<span><span class="co">## 3        0.01 -1.850421 0.6696010 0.007618276 0.992381724 0.015236552      Down</span></span>
-<span><span class="co">## 4        0.01  1.455379 0.5275552 0.992310405 0.007689595 0.015379191        Up</span></span>
-<span><span class="co">## 5        0.01  1.425649 0.5441665 0.989909601 0.010090399 0.020180797        Up</span></span>
-<span><span class="co">## 6        0.01  2.007864 0.8050928 0.987117087 0.012882913 0.025765826        Up</span></span>
+<span><span class="co">##   Correlation     delta        se      p.less  p.greater     PValue Direction</span></span>
+<span><span class="co">## 1        0.01 -1.402396 0.4211789 0.002480205 0.99751980 0.00496041      Down</span></span>
+<span><span class="co">## 2        0.01 -1.419896 0.4920925 0.005991075 0.99400893 0.01198215      Down</span></span>
+<span><span class="co">## 3        0.01 -1.851446 0.6689574 0.007555796 0.99244420 0.01511159      Down</span></span>
+<span><span class="co">## 4        0.01  1.447769 0.5270636 0.992129110 0.00787089 0.01574178        Up</span></span>
+<span><span class="co">## 5        0.01  1.422052 0.5436512 0.989827996 0.01017200 0.02034401        Up</span></span>
+<span><span class="co">## 6        0.01  2.015226 0.8043114 0.987402011 0.01259799 0.02519598        Up</span></span>
 <span><span class="co">##         FDR</span></span>
-<span><span class="co">## 1 0.2561073</span></span>
-<span><span class="co">## 2 0.4296796</span></span>
-<span><span class="co">## 3 0.4457768</span></span>
-<span><span class="co">## 4 0.4457768</span></span>
-<span><span class="co">## 5 0.4587962</span></span>
-<span><span class="co">## 6 0.5008720</span></span></code></pre>
+<span><span class="co">## 1 0.2607076</span></span>
+<span><span class="co">## 2 0.4251923</span></span>
+<span><span class="co">## 3 0.4324924</span></span>
+<span><span class="co">## 4 0.4324924</span></span>
+<span><span class="co">## 5 0.4372868</span></span>
+<span><span class="co">## 6 0.4744349</span></span></code></pre>
 <div class="section level3">
 <h3 id="heatmap-of-top-genesets">Heatmap of top genesets<a class="anchor" aria-label="anchor" href="#heatmap-of-top-genesets"></a>
 </h3>
@@ -529,11 +531,11 @@ object, the coefficient of interest, and gene sets as a
 <p>Here, show all genes with FDR &lt; 5% in any cell type</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get genesets with FDR &lt; 30%</span></span>
-<span><span class="co"># Few significant genesets because uses Cellular Component (i.e. CC) </span></span>
-<span><span class="va">gs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">FDR</span> <span class="op">&lt;</span> <span class="fl">0.3</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co"># Few significant genesets because uses Cellular Component (i.e. CC)</span></span>
+<span><span class="va">gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">FDR</span> <span class="op">&lt;</span> <span class="fl">0.3</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># keep only results of these genesets</span></span>
-<span><span class="va">df</span> <span class="op">=</span> <span class="va">res_zenith</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">gs</span>,<span class="op">]</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">res_zenith</span><span class="op">[</span><span class="va">res_zenith</span><span class="op">$</span><span class="va">Geneset</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">gs</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="co"># plot results, but with no limit based on the highest/lowest t-statistic</span></span>
 <span><span class="fu"><a href="http://gabrielhoffman.github.io/zenith/reference/plotZenithResults.html" class="external-link">plotZenithResults</a></span><span class="op">(</span><span class="va">df</span>, <span class="cn">Inf</span>, <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div>
@@ -549,22 +551,29 @@ clusters incorporates a paired analysis design, since each individual is
 observed for each cell cluster.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># test differential expression between B cells and the rest of the cell clusters</span></span>
-<span><span class="va">ct.pairs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"rest"</span><span class="op">)</span></span>
-<span> </span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span>
+<span><span class="va">ct.pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"rest"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dreamletCompareClusters.html">dreamletCompareClusters</a></span><span class="op">(</span><span class="va">pb</span>, <span class="va">ct.pairs</span>, method <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The coefficient 'compare' is the value logFC between test and baseline:</span></span>
-<span><span class="co"># compare = cellClustertest - cellClusterbaseline </span></span>
-<span><span class="va">df_Bcell</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"compare"</span><span class="op">)</span></span>
+<span><span class="co"># compare = cellClustertest - cellClusterbaseline</span></span>
+<span><span class="va">df_Bcell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_Bcell</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##              logFC   AveExpr         t      P.Value    adj.P.Val        B</span></span>
-<span><span class="co">## TYROBP   -7.409815  7.917618 -74.81920 6.617529e-29 3.110238e-25 55.09105</span></span>
-<span><span class="co">## FTL      -4.920218 13.169468 -53.69652 1.277073e-25 3.001122e-22 48.79651</span></span>
-<span><span class="co">## C15orf48 -7.177537  8.398874 -48.99879 1.024387e-24 1.604873e-21 46.53806</span></span>
-<span><span class="co">## FCER1G   -6.459344  8.016642 -45.02615 6.986218e-24 6.956542e-21 44.69191</span></span>
-<span><span class="co">## CST3     -6.728115  6.935446 -44.61372 8.607869e-24 6.956542e-21 44.41761</span></span>
-<span><span class="co">## CD63     -5.128597  8.760309 -44.55239 8.880692e-24 6.956542e-21 44.53728</span></span></code></pre>
+<pre><code><span><span class="co">##                             logFC   AveExpr         t      P.Value    adj.P.Val</span></span>
+<span><span class="co">## TYROBP                  -7.411557  7.917618 -75.58142 8.068528e-29 3.792208e-25</span></span>
+<span><span class="co">## FTL                     -4.923416 13.169468 -55.04801 1.050828e-25 2.469445e-22</span></span>
+<span><span class="co">## C15orf48                -7.182290  8.398874 -49.27504 1.279783e-24 2.004993e-21</span></span>
+<span><span class="co">## CD63                    -5.130312  8.760309 -45.61225 7.290817e-24 8.566710e-21</span></span>
+<span><span class="co">## FCER1G                  -6.468971  8.016642 -44.71764 1.138599e-23 1.070283e-20</span></span>
+<span><span class="co">## HLA-DRA_ENSG00000204287 -6.419313  8.865795 -42.39682 3.774152e-23 2.956419e-20</span></span>
+<span><span class="co">##                                B</span></span>
+<span><span class="co">## TYROBP                  54.88307</span></span>
+<span><span class="co">## FTL                     48.99873</span></span>
+<span><span class="co">## C15orf48                46.32534</span></span>
+<span><span class="co">## CD63                    44.72390</span></span>
+<span><span class="co">## FCER1G                  44.21862</span></span>
+<span><span class="co">## HLA-DRA_ENSG00000204287 43.11651</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="gene-cluster-specificity">Gene-cluster specificity<a class="anchor" aria-label="anchor" href="#gene-cluster-specificity"></a>
@@ -572,22 +581,22 @@ observed for each cell cluster.</p>
 <p>Evaluate the specificity of each gene for each cluster, retaining
 only highly expressed genes:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_cts</span> <span class="op">=</span> <span class="fu"><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span> <span class="va">pb</span> <span class="op">)</span></span>
-<span> </span>
+<code class="sourceCode R"><span><span class="va">df_cts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># retain only genes with total CPM summed across cell type &gt; 100</span></span>
-<span><span class="va">df_cts</span> <span class="op">=</span> <span class="va">df_cts</span><span class="op">[</span><span class="va">df_cts</span><span class="op">$</span><span class="va">totalCPM</span> <span class="op">&gt;</span> <span class="fl">100</span>,<span class="op">]</span></span>
+<span><span class="va">df_cts</span> <span class="op">&lt;-</span> <span class="va">df_cts</span><span class="op">[</span><span class="va">df_cts</span><span class="op">$</span><span class="va">totalCPM</span> <span class="op">&gt;</span> <span class="fl">100</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Violin plot of specificity score for each cell type</span></span>
-<span><span class="fu"><a href="../reference/plotViolin-methods.html">plotViolin</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu"><a href="../reference/plotViolin-methods.html">plotViolin</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/cellTypeSpecificity-1.png" width="700"></p>
 <p>Highlight expression fraction for most specific gene from each cell
 type:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu">plotPercentBars</span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span> <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-1.png" width="700"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-2.png" width="700"></p>
 </div>
 <div class="section level2">

@@ -28,18 +28,19 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
-   assay = "counts",    
-   cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
-   verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # voom-style normalization
-res.proc = processAssays( pb, ~ group_id)
+res.proc <- processAssays(pb, ~group_id)
 
 # Extract data.frame of colData merged with expression.
 # variables and genes are stored as columns, samples as rows
-df_merge = extractData( res.proc, "B cells")
+df_merge <- extractData(res.proc, "B cells")
 
 dim(df_merge)
 

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,14 +95,15 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create pseudobulk for each sample and cell cluster</span></span></span>
-<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span>, </span></span>
-<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,    </span></span>
-<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">'cluster_id'</span>, </span></span>
-<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">'sample_id'</span>,</span></span>
-<span class="r-in"><span>  verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span>,</span></span>
+<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span></span>
+<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>,</span></span>
+<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Compute cell type specificity of each gene</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu">cellTypeSpecificity</span><span class="op">(</span> <span class="va">pb</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">cellTypeSpecificity</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Violin plot of specificity scores for each cell type</span></span></span>
@@ -112,20 +113,20 @@
 <span class="r-plt img"><img src="cellTypeSpecificity-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Compute the maximum specificity score for each gene</span></span></span>
-<span class="r-in"><span><span class="va">scoreMax</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">scoreMax</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scoreMax</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       HES4      ISG15   AURKAIP1     MRPL20      SSU72       RER1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   585.0935 61555.5769  1012.0795   644.9976   835.4867  1049.8381 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For each cell type, get most specific gene</span></span></span>
-<span class="r-in"><span><span class="va">genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Barplot of 5 genes</span></span></span>
-<span class="r-in"><span><span class="fu">plotPercentBars</span><span class="op">(</span> <span class="va">df</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">df</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="cellTypeSpecificity-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># heatmap of 5 genes that are most cell type specific</span></span></span>
-<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="cellTypeSpecificity-3.png" alt="" width="700" height="433"></span>

@@ -34,14 +34,15 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
-   assay = "counts",    
-   cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
-   verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # Hierarchical clustering of cell types
-hcl = buildClusterTreeFromPB(pb)
+hcl <- buildClusterTreeFromPB(pb)
 
 plot(hcl)
 

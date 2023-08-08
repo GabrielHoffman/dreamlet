@@ -1,3 +1,7 @@
+# dreamlet 0.99.23
+  - August 8, 2023
+  - run `styler::style_pkg()`
+
 # dreamlet 0.99.22
   - August 8, 2023
   - `dreamletCompareClusters()` now allows cell-level covariates in response to https://github.com/GabrielHoffman/dreamlet/issues/11

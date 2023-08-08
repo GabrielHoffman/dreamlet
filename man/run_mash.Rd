@@ -32,27 +32,28 @@ library(SingleCellExperiment)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce[1:100,], 
-	assay = "counts",    
-	cluster_id = 'cluster_id', 
-	sample_id = 'sample_id',
-	verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce[1:100, ],
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # voom-style normalization
-res.proc = processAssays( pb, ~ group_id)
+res.proc <- processAssays(pb, ~group_id)
 
 # Differential expression analysis within each assay,
-# evaluated on the voom normalized data 
-res.dl = dreamlet( res.proc, ~ group_id)
+# evaluated on the voom normalized data
+res.dl <- dreamlet(res.proc, ~group_id)
 
 # run MASH model
 # This can take 10s of minutes on real data
 # This small datasets should take ~30s
-res_mash = run_mash( res.dl, 'group_idstim')
+res_mash <- run_mash(res.dl, "group_idstim")
 
 # extract statistics from mashr model
 # NA values indicate genes not sufficiently expressed
-# in a given cell type 
+# in a given cell type
 
 # original logFC
 head(res_mash$logFC.original)
@@ -62,13 +63,13 @@ head(get_pm(res_mash$model))
 
 # how many gene-by-celltype tests are significant
 # i.e.  if a gene is significant in 2 celltypes, it is counted twice
-table(get_lfsr(res_mash$model) < 0.05, useNA="ifany")
+table(get_lfsr(res_mash$model) < 0.05, useNA = "ifany")
 
 # how many genes are significant in at least one cell type
-table( apply(get_lfsr(res_mash$model), 1, min, na.rm=TRUE) < 0.05)
+table(apply(get_lfsr(res_mash$model), 1, min, na.rm = TRUE) < 0.05)
 
 # how many genes are significant in each cell type
-apply(get_lfsr(res_mash$model), 2, function(x) sum(x < 0.05, na.rm=TRUE))
+apply(get_lfsr(res_mash$model), 2, function(x) sum(x < 0.05, na.rm = TRUE))
 
 # examine top set of genes
 # which genes are significant in at least 1 cell type
@@ -76,10 +77,10 @@ sort(names(get_significant_results(res_mash$model)))[1:10]
 
 # Lets examine ENO1
 # There is a lot of variation in the raw logFC
-res_mash$logFC.original["ENO1",]
+res_mash$logFC.original["ENO1", ]
 
 # posterior mean after borrowing across cell type and genes
-get_pm(res_mash$model)["ENO1",]
+get_pm(res_mash$model)["ENO1", ]
 
 # forest plot based on mashr results
 plotForest(res_mash, "ENO1")

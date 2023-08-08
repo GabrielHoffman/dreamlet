@@ -18,7 +18,7 @@
 # 	cat("\n")
 # 	spMat <- cbind_list_of_sparseMatrix(res, verbose)
 # 	rownames(spMat) = rownames(x)
-# 	colnames(spMat) = colnames(x)	
+# 	colnames(spMat) = colnames(x)
 
 # 	spMat
 # }

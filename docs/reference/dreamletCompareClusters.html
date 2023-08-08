@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -173,36 +173,37 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/muscat" class="external-link">muscat</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create pseudobulk for each sample and cell cluster</span></span></span>
-<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span>, </span></span>
-<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,    </span></span>
-<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">'cluster_id'</span>, </span></span>
-<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">'sample_id'</span>,</span></span>
-<span class="r-in"><span>  verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span>,</span></span>
+<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span></span>
+<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>,</span></span>
+<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Evaluate the specificity of each gene for each cluster</span></span></span>
-<span class="r-in"><span><span class="va">df_cts</span> <span class="op">=</span> <span class="fu"><a href="cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span> <span class="va">pb</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df_cts</span> <span class="op">&lt;-</span> <span class="fu"><a href="cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare first two assays (i.e. cell types)</span></span></span>
-<span class="r-in"><span><span class="va">ct.pairs</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ct.pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run comparison</span></span></span>
 <span class="r-in"><span><span class="co"># use method = 'fixed' here since it is faster</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">ct.pairs</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span><span class="va">pb</span>, <span class="va">ct.pairs</span>, method <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract top 10 differentially expressed genes</span></span></span>
 <span class="r-in"><span><span class="co"># The coefficient 'compare' is the value logFC between test and baseline:</span></span></span>
-<span class="r-in"><span><span class="co"># compare = cellClustertest - cellClusterbaseline </span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">'compare'</span>, number<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># compare = cellClustertest - cellClusterbaseline</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span>, number <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># genes with highest logFC are most highly expressed in </span></span></span>
+<span class="r-in"><span><span class="co"># genes with highest logFC are most highly expressed in</span></span></span>
 <span class="r-in"><span><span class="co"># B cells compared to CD14+ Monocytes</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
@@ -213,20 +214,20 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> CD63    -3.830287 10.337664 -21.49733 3.040694e-10 3.849518e-08 14.15241</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.656714 10.097965 -20.74111 4.446902e-10 4.691482e-08 13.77691</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="dreamletCompareClusters-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare B cells versus the rest of the cell types</span></span></span>
-<span class="r-in"><span><span class="co"># 'rest' is a keyword indicating all other assays  </span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">'rest'</span><span class="op">)</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># 'rest' is a keyword indicating all other assays</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span><span class="va">pb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">"rest"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">'compare'</span>, number<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span>, number <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># genes with highest logFC are most highly expressed in </span></span></span>
+<span class="r-in"><span><span class="co"># genes with highest logFC are most highly expressed in</span></span></span>
 <span class="r-in"><span><span class="co"># B cells compared to all others</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
@@ -238,23 +239,25 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.309272 10.182616 -21.69809 1.685570e-11 2.497453e-09 16.81932</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get genes upregulated in B cells</span></span></span>
-<span class="r-in"><span><span class="va">idx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="dreamletCompareClusters-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">lst</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD14+ Monocytes"</span>, <span class="st">"FCGR3A+ Monocytes"</span><span class="op">)</span>, </span></span>
-<span class="r-in"><span>    baseline<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD14+ Monocytes"</span>, <span class="st">"FCGR3A+ Monocytes"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  baseline <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4 T cells"</span>, <span class="st">"CD8 T cells"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare 2 monocyte clusters to two T cell clusters</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span> <span class="va">pb</span>, <span class="va">lst</span>, method<span class="op">=</span><span class="st">"fixed"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">dreamletCompareClusters</span><span class="op">(</span><span class="va">pb</span>, <span class="va">lst</span>, method <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial filtering...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering for paired samples...</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">'compare'</span>, number<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span>, number <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># genes with highest logFC are most highly expressed in </span></span></span>
+<span class="r-in"><span><span class="co"># genes with highest logFC are most highly expressed in</span></span></span>
 <span class="r-in"><span><span class="co"># monocytes compared to T cells</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            logFC   AveExpr        t      P.Value    adj.P.Val</span>
@@ -273,8 +276,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> LGALS1                  13.90556</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get genes upregulated in monocytes</span></span></span>
-<span class="r-in"><span><span class="va">idx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span> <span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="dreamletCompareClusters-3.png" alt="" width="700" height="433"></span>

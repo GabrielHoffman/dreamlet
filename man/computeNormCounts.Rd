@@ -24,7 +24,7 @@ library(SingleCellExperiment)
 
 data(example_sce)
 
-normcounts(example_sce) = computeNormCounts(example_sce)
+normcounts(example_sce) <- computeNormCounts(example_sce)
 }
 \seealso{
 also \code{edgeR::cpm()}
