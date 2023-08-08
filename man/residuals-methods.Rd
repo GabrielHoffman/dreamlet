@@ -5,7 +5,7 @@
 \alias{residuals,dreamletResult,dreamletResult-method}
 \title{Extract residuls from \code{dreamletResult}}
 \usage{
-\S4method{residuals}{dreamletResult}(object, ...)
+\S4method{residuals}{dreamletResult}(object, y, ..., type = c("response", "pearson"))
 }
 \arguments{
 \item{object}{\code{dreamletResult} object}
@@ -38,8 +38,12 @@ res.proc = processAssays( pb, ~ group_id)
 # evaluated on the voom normalized data 
 res.dl = dreamlet( res.proc, ~ group_id)
 
-# extract residuals for each assay (i.e. cell type)
+# extract typical residuals for each assay (i.e. cell type)
 # Return list with entry for each assay with for retained samples and genes
 resid.lst = residuals(res.dl)
+
+# Get Pearson residuals: 
+# typical residuals scaled by the standard deviation 
+residPearson.lst = residuals(res.dl, res.proc, type="pearson")
 
 }

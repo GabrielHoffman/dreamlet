@@ -113,24 +113,54 @@ equalFormulas = function(formula1, formula2){
 #' # evaluated on the voom normalized data 
 #' res.dl = dreamlet( res.proc, ~ group_id)
 #' 
-#' # extract residuals for each assay (i.e. cell type)
+#' # extract typical residuals for each assay (i.e. cell type)
 #' # Return list with entry for each assay with for retained samples and genes
 #' resid.lst = residuals(res.dl)
+#' 
+#' # Get Pearson residuals: 
+#' # typical residuals scaled by the standard deviation 
+#' residPearson.lst = residuals(res.dl, res.proc, type="pearson")
 #' 
 #' @importMethodsFrom BiocGenerics residuals
 #' @rdname residuals-methods
 #' @aliases residuals,dreamletResult,dreamletResult-method
 #' @export
 setMethod("residuals", "dreamletResult",
-  function(object,...){
+  function(object, y, ..., type = c("response", "pearson")){
+
+    type = match.arg(type)
+    hasy = ! missing(y) 
+
+    if( hasy ){
+        y.type = is(y, 'dreamletProcessedData')
+    }else{
+        y.type = FALSE
+    } 
+
+    if( type == "pearson" & (!hasy | ! y.type) ){
+        stop("When type is 'pearson' specify y as dreamletProcessedData object")
+    }
+
+    if( type == "pearson"){
+        if( ! all(assayNames(object) %in% assayNames(y)) ){
+            stop("Not all cell types object are present in y")
+        }
+    }
 
     res = lapply( names(object), function(key){
-        residuals(object[[key]])
+        if( hasy && type == "pearson"){
+            residuals(object[[key]], y = y[[key]],..., type=type)
+        }else{
+            residuals(object[[key]], ..., type=type)
+        }
     })
     names(res) = names(object)
 
     res
 })
+
+
+
 
 
 

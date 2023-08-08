@@ -1,3 +1,13 @@
+# dreamlet 0.99.22
+  - August 8, 2023
+  - `dreamletCompareClusters()` now allows cell-level covariates in response to https://github.com/GabrielHoffman/dreamlet/issues/11
+  - Fix code for Bioconductor submission
+
+
+# dreamlet 0.99.21
+  - July 17, 2023
+  - Improve functionality and documentation of `dreamlet::residuals()`
+
 # dreamlet 0.99.20
   - June 29, 2023
   - in `processAssays()` use  `voomWithDreamWeights(..., span="auto")` to estimate the lowess tuning parameter 

@@ -7,12 +7,6 @@
 # HDF5Array
 colsum2 = function (x, group, reorder = TRUE, BPPARAM = SerialParam(), verbose=FALSE,...){
 
-	# set block size
-	# progressbar updates after each row chunk
-	# rblock = ceiling(nrow(x)/10)
-	# cblock = getAutoBlockSize() / (rblock*8)
-	# grid = RegularArrayGrid(dim(x), spacings=c(rblock, cblock))
-
 	.local <- function (x, group, reorder = TRUE, na.rm = FALSE, 
 		grid = NULL,...){
 		ugroup <- as.character(compute_ugroup(group, ncol(x), 

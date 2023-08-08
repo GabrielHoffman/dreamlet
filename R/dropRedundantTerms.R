@@ -79,7 +79,7 @@ dropRedundantTerms = function(formula, data, tol=1e-3){
 
 		fterms_new = unique(fterms_new)
 
-		# fterms_new = array(sapply(excludeVar, function(x) gsub(x, '1', fterms)))
+		# old: fterms_new = array(sapply(excludeVar, function(x) gsub(x, '1', fterms)))
 		fterms_new = fterms_new[fterms_new!=""]
 		fterms_new = fterms_new[fterms_new!="1"]
 	}else{

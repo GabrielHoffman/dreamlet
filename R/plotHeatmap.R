@@ -50,41 +50,21 @@ setGeneric("plotHeatmap",
 setMethod("plotHeatmap", "cellSpecificityValues",
   function(x, genes = rownames(x), color="darkblue", assays=colnames(x)){
 
-  # intersect preserving order from assays
-	assays = intersect(assays, colnames(x))
-	if( length(assays) == 0) stop("No valid assays selected")
+  fig = dreamlet::plotHeatmap( as.matrix(x)[,-1], genes, color, assays)
 
-	x = x[,assays,drop=FALSE]
+  fig + 
+  	ggtitle("Cell type specificity scores") +
+		scale_fill_gradient(name = "Fraction of\nexpression", low="white", high=color, limits=c(0, 1))
+})
 
-	# subset based on specified genes
-	x = x[rownames(x) %in% unique(genes),,drop=FALSE]	
 
-	# pass R CMD check
-	value = variable = gene = NA
+#' @export
+#' @rdname plotHeatmap-methods
+#' @aliases plotHeatmap,data.frame,data.frame-method
+setMethod("plotHeatmap", "data.frame",
+  function(x, genes = rownames(x), color="darkblue", assays=colnames(x)){
 
-	# omit column totalCPM, if it exists
-	i = which(colnames(x) == "totalCPM")
-	if( length(i) > 0) x = x[,-1,drop=FALSE]
-
-  df = data.frame(gene = rownames(x), x, check.names=FALSE)
-
-	df_melt = reshape2::melt(df, id.vars="gene")
-
-	df_melt$gene = factor(df_melt$gene, unique(genes))
-	df_melt$variable = factor(df_melt$variable, assays)
-
-	ratio = nlevels(df_melt$gene) / nlevels(df_melt$variable)
-
-	# heatmap of cell type specificity
-	ggplot(df_melt, aes(variable, gene, fill=value)) + 
-		geom_tile() +
-		theme_classic() + 
-		theme(aspect.ratio=ratio, 
-		  plot.title = element_text(hjust = 0.5),
-		  axis.text.x = element_text(angle = 60, vjust = 1, hjust=1)) +
-		scale_fill_gradient(name = "Fraction of\nexpression", low="white", high=color, limits=c(0, 1)) +
-		xlab('') + ylab('') +
-		ggtitle("Cell type specificity scores")
+  dreamlet::plotHeatmap( as.matrix(x), genes, color, assays)
 })
 
 
@@ -96,6 +76,8 @@ setMethod("plotHeatmap", "cellSpecificityValues",
 setMethod("plotHeatmap", "matrix",
   function(x, genes = rownames(x), color="darkblue", assays=colnames(x)){
 
+	genes = genes[!is.na(genes)]
+
   # intersect preserving order from assays
 	assays = intersect(assays, colnames(x))
 	if( length(assays) == 0) stop("No valid assays selected")
@@ -114,6 +96,7 @@ setMethod("plotHeatmap", "matrix",
 
 	df_melt$gene = factor(df_melt$gene, unique(genes))
 	df_melt$variable = factor(df_melt$variable, assays)
+	df_melt = droplevels(df_melt)
 
 	ratio = nlevels(df_melt$gene) / nlevels(df_melt$variable)
 
@@ -124,8 +107,10 @@ setMethod("plotHeatmap", "matrix",
 		theme(aspect.ratio=ratio, 
 		  plot.title = element_text(hjust = 0.5),
 		  axis.text.x = element_text(angle = 60, vjust = 1, hjust=1)) +
-		scale_fill_gradient(name = bquote(log[2]~CPM), low="white", high=color) +
-		xlab('') + ylab('') 
+		scale_fill_gradient(name = "value", low="white", high=color) +
+		xlab('') + 
+		ylab('') 
+		# bquote(log[2]~CPM)
 })
 
 

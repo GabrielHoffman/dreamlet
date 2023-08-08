@@ -42,10 +42,6 @@ tabToMatrix = function(tab, col, rn = "ID", cn = "assay"){
 	i = match(tab[[rn]], rnlvl)
 	j = match(tab[[cn]], cnlvl)
 
-	# A = matrix(NA, length(rnlvl), length(cnlvl), 
-	# 	dimnames = list(rnlvl, cnlvl))
-	# A[i,j] = tab[[col]]
-
 	# convert row,col,value to sparse matrix
 	# empty entries are set to 0
 	M = sparseMatrix(i,j, x=tab[[col]], 

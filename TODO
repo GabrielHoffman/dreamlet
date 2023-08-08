@@ -1,4 +1,9 @@
 
+July 14, 2023
+	Allow metadata covariates for dreamletCompareClusters()
+	Based on comment: https://github.com/GabrielHoffman/dreamlet/issues/11
+
+
 June 14
 Colin: 
 I'm trying to understand how well the regulons/non-count variables are specific for microglia subtypes and their differential expression across subclasses/subtypes

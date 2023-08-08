@@ -31,7 +31,7 @@
         #message(i)
         fill <- setdiff(unique(y[[by[2]]]), colnames(ys[[i]]))
         if (length(fill != 0)) {
-            #foo <- matrix(0, nrow(x), length(fill))
+            #foo === matrix(0, nrow(x), length(fill))
             foo <- sparseMatrix(i=1, j=1, x=0, dims=c(nrow(x), length(fill)))
             colnames(foo) <- fill
             foo <- cbind(ys[[i]], foo)
@@ -263,7 +263,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         # check that assay is integers
         #-----------------------------
         # get nonzero values from first samples 
-        # values = as.matrix(assay(x,y)[,seq(1,10)])
+        # values === as.matrix(assay(x,y)[,seq(1,10)])
         M = assay(x,y)
         idx1 = seq(1, min(1000, nrow(M)))
         idx2 = seq(1, min(50, ncol(M)))
@@ -365,7 +365,7 @@ aggregateToPseudoBulk = function (x, assay = NULL, sample_id = NULL, cluster_id 
         collected = list(sum = as(countsMatrix, "sparseMatrix"))
     }else if( (length(statistics) == 1) & (statistics[1] == "sum") & is(x, "DelayedMatrix") ){
 
-         # countsMatrix <- colsum_fast(x, ids, BPPARAM=BPPARAM)
+        # countsMatrix === colsum_fast(x, ids, BPPARAM=BPPARAM)
         verbose = BPPARAM$progressbar
         BPPARAM$progressbar = FALSE
         countsMatrix <- colsum2(x, ids, BPPARAM=BPPARAM, verbose=verbose)        
