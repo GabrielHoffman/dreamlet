@@ -89,7 +89,11 @@ equalFormulas <- function(formula1, formula2) {
 #' Extract residuls from \code{dreamletResult}
 #'
 #' @param object \code{dreamletResult} object
+#' @param y \code{dreamletProcessedData} object
 #' @param ... other arguments
+#' @param type compute either \code{"response"} residuals or \code{"pearson"} residuals.
+#'
+#' @details \code{"response"} residuals are the typical residuals returned from \code{lm()}. \code{"pearson"} residuals divides each residual value by its estimated standard error.  This requires specifying \code{y} 
 #'
 #' @return residuals from model fit
 #' @examples

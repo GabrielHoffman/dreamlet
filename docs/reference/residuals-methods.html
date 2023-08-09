@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.24</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,8 +73,16 @@
 <dd><p><code>dreamletResult</code> object</p></dd>
 
 
+<dt>y</dt>
+<dd><p><code>dreamletProcessedData</code> object</p></dd>
+
+
 <dt>...</dt>
 <dd><p>other arguments</p></dd>
+
+
+<dt>type</dt>
+<dd><p>compute either <code>"response"</code> residuals or <code>"pearson"</code> residuals.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -82,6 +90,10 @@
     
 
 <p>residuals from model fit</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><code>"response"</code> residuals are the typical residuals returned from <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>. <code>"pearson"</code> residuals divides each residual value by its estimated standard error.  This requires specifying <code>y</code></p>
     </div>
 
     <div class="section level2">
@@ -102,13 +114,13 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.12 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.73 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.21 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.27 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.14 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.072 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.071 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
 <span class="r-in"><span></span></span>
@@ -116,15 +128,15 @@
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data</span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.18 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.18 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.14 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.084 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.1 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.16 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.19 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># extract typical residuals for each assay (i.e. cell type)</span></span></span>
