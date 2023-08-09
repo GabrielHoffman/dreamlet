@@ -10,13 +10,20 @@
 \arguments{
 \item{object}{\code{dreamletResult} object}
 
+\item{y}{\code{dreamletProcessedData} object}
+
 \item{...}{other arguments}
+
+\item{type}{compute either \code{"response"} residuals or \code{"pearson"} residuals.}
 }
 \value{
 residuals from model fit
 }
 \description{
 Extract residuls from \code{dreamletResult}
+}
+\details{
+\code{"response"} residuals are the typical residuals returned from \code{lm()}. \code{"pearson"} residuals divides each residual value by its estimated standard error.  This requires specifying \code{y}
 }
 \examples{
 library(muscat)
