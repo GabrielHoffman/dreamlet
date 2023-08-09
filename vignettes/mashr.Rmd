@@ -2,7 +2,7 @@
 title: "mashr analysis after dreamlet"
 subtitle: 'Borrowing information across genes and cell types'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
-date: "Run on 2023-08-08 14:47:48.871732"
+date: "Run on 2023-08-09 09:18:56.878897"
 documentclass: article
 vignette: >
   %\VignetteIndexEntry{mashr analysis following dreamlet}
@@ -279,7 +279,7 @@ plotVolcano(res_mash)
 ```
 ## R version 4.3.0 (2023-04-21)
 ## Platform: x86_64-apple-darwin22.4.0 (64-bit)
-## Running under: macOS Ventura 13.4
+## Running under: macOS Ventura 13.5
 ## 
 ## Matrix products: default
 ## BLAS:   /Users/gabrielhoffman/prog/R-4.3.0/lib/libRblas.dylib 
@@ -296,21 +296,19 @@ plotVolcano(res_mash)
 ## [8] base     
 ## 
 ## other attached packages:
-##  [1] GO.db_3.17.0                org.Hs.eg.db_3.17.0        
-##  [3] AnnotationDbi_1.62.1        mashr_0.2.69               
-##  [5] ashr_2.2-54                 muscData_1.14.0            
-##  [7] scater_1.28.0               scuttle_1.10.1             
-##  [9] SingleCellExperiment_1.22.0 SummarizedExperiment_1.30.1
-## [11] Biobase_2.60.0              GenomicRanges_1.52.0       
-## [13] GenomeInfoDb_1.36.0         IRanges_2.34.0             
-## [15] S4Vectors_0.38.1            MatrixGenerics_1.12.0      
-## [17] matrixStats_1.0.0           zenith_1.2.0               
-## [19] ExperimentHub_2.8.0         AnnotationHub_3.8.0        
-## [21] BiocFileCache_2.8.0         dbplyr_2.3.2               
-## [23] BiocGenerics_0.46.0         muscat_1.14.0              
-## [25] dreamlet_0.99.20            variancePartition_1.31.11  
-## [27] BiocParallel_1.34.2         limma_3.56.2               
-## [29] ggplot2_3.4.2              
+##  [1] mashr_0.2.69                ashr_2.2-54                
+##  [3] muscData_1.14.0             scater_1.28.0              
+##  [5] scuttle_1.10.1              SingleCellExperiment_1.22.0
+##  [7] SummarizedExperiment_1.30.1 Biobase_2.60.0             
+##  [9] GenomicRanges_1.52.0        GenomeInfoDb_1.36.1        
+## [11] IRanges_2.34.1              S4Vectors_0.38.1           
+## [13] MatrixGenerics_1.12.0       matrixStats_1.0.0          
+## [15] zenith_1.3.0                ExperimentHub_2.8.0        
+## [17] AnnotationHub_3.8.0         BiocFileCache_2.8.0        
+## [19] dbplyr_2.3.2                BiocGenerics_0.46.0        
+## [21] muscat_1.14.0               dreamlet_0.99.23           
+## [23] variancePartition_1.31.11   BiocParallel_1.34.2        
+## [25] limma_3.56.2                ggplot2_3.4.2              
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] bitops_1.0-7                  httr_1.4.6                   
@@ -361,7 +359,7 @@ plotVolcano(res_mash)
 ##  [91] DelayedArray_0.26.3           scales_1.2.1                 
 ##  [93] caTools_1.18.2                remaCor_0.0.17               
 ##  [95] rappdirs_0.3.3                stringr_1.5.0                
-##  [97] digest_0.6.31                 minqa_1.2.5                  
+##  [97] digest_0.6.33                 minqa_1.2.5                  
 ##  [99] aod_1.3.2                     XVector_0.40.0               
 ## [101] RhpcBLASctl_0.23-42           htmltools_0.5.5              
 ## [103] pkgconfig_2.0.3               lme4_1.1-33                  
@@ -371,7 +369,7 @@ plotVolcano(res_mash)
 ## [111] DelayedMatrixStats_1.22.0     farver_2.1.1                 
 ## [113] BiocSingular_1.16.0           RCurl_1.98-1.12              
 ## [115] magrittr_2.0.3                GenomeInfoDbData_1.2.10      
-## [117] munsell_0.5.0                 Rcpp_1.0.10                  
+## [117] munsell_0.5.0                 Rcpp_1.0.11                  
 ## [119] babelgene_22.9                viridis_0.6.3                
 ## [121] EnrichmentBrowser_2.30.1      RcppZiggurat_0.1.6           
 ## [123] stringi_1.7.12                zlibbioc_1.46.0              
@@ -393,8 +391,8 @@ plotVolcano(res_mash)
 ## [155] truncnorm_1.0-9               tibble_3.2.1                 
 ## [157] lmerTest_3.1-3                glmmTMB_1.1.7                
 ## [159] memoise_2.0.1                 beeswarm_0.4.0               
-## [161] cluster_2.1.4                 globals_0.16.2               
-## [163] GSEABase_1.62.0
+## [161] AnnotationDbi_1.62.1          cluster_2.1.4                
+## [163] globals_0.16.2                GSEABase_1.62.0
 ```
 </details>
 
