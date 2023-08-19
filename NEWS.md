@@ -1,3 +1,7 @@
+# dreamlet 0.99.26
+  - August 18, 2026
+  - Update error handling and documentation
+
 # dreamlet 0.99.23
   - August 8, 2023
   - run `styler::style_pkg()`
