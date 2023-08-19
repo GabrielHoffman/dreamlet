@@ -86,6 +86,12 @@ res.proc <- processAssays(pb, ~group_id)
 # evaluated on the voom normalized data
 res.dl <- dreamlet(res.proc, ~group_id)
 
+# Examine results
+res.dl
+
+# Examine details for each assay
+details(res.dl)
+
 # show coefficients estimated for each cell type
 coefNames(res.dl)
 

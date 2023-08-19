@@ -62,6 +62,18 @@ setMethod(
 
     # show coef names
     coolcat("coefNames(%d): %s\n", coefNames(object))
+
+    # failure rate
+    df_details = details(object)
+
+    if( nrow(df_details) > 0){
+      failure_frac = sum(df_details$n_errors) / sum(df_details$n_genes)
+
+      if( failure_frac > 0 ){
+        txt = paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+        cat(txt)
+      }
+    }
   }
 )
 
@@ -663,6 +675,12 @@ setMethod(
 #' # evaluated on the voom normalized data
 #' res.dl <- dreamlet(res.proc, ~group_id)
 #'
+#' # Examine results
+#' res.dl
+#'
+#' # Examine details for each assay
+#' details(res.dl)
+#'
 #' # show coefficients estimated for each cell type
 #' coefNames(res.dl)
 #'
@@ -806,7 +824,7 @@ setMethod(
     # name each result by the assay name
     names(resList) <- assays
 
-    if (!quiet) message("\n")
+    # if (!quiet) message("\n")
 
     # extract fit
     fitList <- lapply(resList, function(x) x$fit)
@@ -814,6 +832,9 @@ setMethod(
     # only keep entries that are not NULL
     # NUll is returned when coef of interest is dropped
     fitList <- fitList[!vapply(fitList, is.null, FUN.VALUE = logical(1))]
+
+    # Handle errors
+    #--------------
 
     # get error messages
     error.initial <- lapply(resList, function(x) {
@@ -832,6 +853,7 @@ setMethod(
         n_retain = resList[[id]]$n_retain,
         formula = Reduce(paste, deparse(resList[[id]]$formula)),
         formDropsTerms = !equalFormulas(resList[[id]]$formula, formula),
+        n_genes = nrow(x[[id]]),
         n_errors = length(resList[[id]]$errors),
         error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE)
       )
@@ -842,6 +864,13 @@ setMethod(
 
     if (ndrop > 0) {
       warning("Terms dropped from formulas for ", ndrop, " assays.\n Run details() on result for more information")
+    }
+
+    failure_frac = sum(df_details$n_errors) / sum(df_details$n_genes)
+
+    if( failure_frac > 0 ){
+      txt = paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+      message(txt)
     }
 
     new("dreamletResult", fitList,

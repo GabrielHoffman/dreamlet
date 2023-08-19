@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.26</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
+    <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
     <a class="dropdown-item" href="../articles/non_lin_eff.html">Testing non-linear effects</a>
@@ -90,8 +91,8 @@ across genes and cell types</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-08-08
-14:47:48.871732</h4>
+            <h4 data-toc-skip class="date">Run on 2023-08-09
+09:18:56.878897</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/mashr.Rmd" class="external-link"><code>vignettes/mashr.Rmd</code></a></small>
       <div class="d-none name"><code>mashr.Rmd</code></div>
@@ -320,7 +321,7 @@ posterior distribution of each coefficient.</p>
 </h2>
 <details><pre><code><span><span class="co">## R version 4.3.0 (2023-04-21)</span></span>
 <span><span class="co">## Platform: x86_64-apple-darwin22.4.0 (64-bit)</span></span>
-<span><span class="co">## Running under: macOS Ventura 13.4</span></span>
+<span><span class="co">## Running under: macOS Ventura 13.5</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /Users/gabrielhoffman/prog/R-4.3.0/lib/libRblas.dylib </span></span>
@@ -337,21 +338,19 @@ posterior distribution of each coefficient.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] GO.db_3.17.0                org.Hs.eg.db_3.17.0        </span></span>
-<span><span class="co">##  [3] AnnotationDbi_1.62.1        mashr_0.2.69               </span></span>
-<span><span class="co">##  [5] ashr_2.2-54                 muscData_1.14.0            </span></span>
-<span><span class="co">##  [7] scater_1.28.0               scuttle_1.10.1             </span></span>
-<span><span class="co">##  [9] SingleCellExperiment_1.22.0 SummarizedExperiment_1.30.1</span></span>
-<span><span class="co">## [11] Biobase_2.60.0              GenomicRanges_1.52.0       </span></span>
-<span><span class="co">## [13] GenomeInfoDb_1.36.0         IRanges_2.34.0             </span></span>
-<span><span class="co">## [15] S4Vectors_0.38.1            MatrixGenerics_1.12.0      </span></span>
-<span><span class="co">## [17] matrixStats_1.0.0           zenith_1.2.0               </span></span>
-<span><span class="co">## [19] ExperimentHub_2.8.0         AnnotationHub_3.8.0        </span></span>
-<span><span class="co">## [21] BiocFileCache_2.8.0         dbplyr_2.3.2               </span></span>
-<span><span class="co">## [23] BiocGenerics_0.46.0         muscat_1.14.0              </span></span>
-<span><span class="co">## [25] dreamlet_0.99.20            variancePartition_1.31.11  </span></span>
-<span><span class="co">## [27] BiocParallel_1.34.2         limma_3.56.2               </span></span>
-<span><span class="co">## [29] ggplot2_3.4.2              </span></span>
+<span><span class="co">##  [1] mashr_0.2.69                ashr_2.2-54                </span></span>
+<span><span class="co">##  [3] muscData_1.14.0             scater_1.28.0              </span></span>
+<span><span class="co">##  [5] scuttle_1.10.1              SingleCellExperiment_1.22.0</span></span>
+<span><span class="co">##  [7] SummarizedExperiment_1.30.1 Biobase_2.60.0             </span></span>
+<span><span class="co">##  [9] GenomicRanges_1.52.0        GenomeInfoDb_1.36.1        </span></span>
+<span><span class="co">## [11] IRanges_2.34.1              S4Vectors_0.38.1           </span></span>
+<span><span class="co">## [13] MatrixGenerics_1.12.0       matrixStats_1.0.0          </span></span>
+<span><span class="co">## [15] zenith_1.3.0                ExperimentHub_2.8.0        </span></span>
+<span><span class="co">## [17] AnnotationHub_3.8.0         BiocFileCache_2.8.0        </span></span>
+<span><span class="co">## [19] dbplyr_2.3.2                BiocGenerics_0.46.0        </span></span>
+<span><span class="co">## [21] muscat_1.14.0               dreamlet_0.99.23           </span></span>
+<span><span class="co">## [23] variancePartition_1.31.11   BiocParallel_1.34.2        </span></span>
+<span><span class="co">## [25] limma_3.56.2                ggplot2_3.4.2              </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] bitops_1.0-7                  httr_1.4.6                   </span></span>
@@ -402,7 +401,7 @@ posterior distribution of each coefficient.</p>
 <span><span class="co">##  [91] DelayedArray_0.26.3           scales_1.2.1                 </span></span>
 <span><span class="co">##  [93] caTools_1.18.2                remaCor_0.0.17               </span></span>
 <span><span class="co">##  [95] rappdirs_0.3.3                stringr_1.5.0                </span></span>
-<span><span class="co">##  [97] digest_0.6.31                 minqa_1.2.5                  </span></span>
+<span><span class="co">##  [97] digest_0.6.33                 minqa_1.2.5                  </span></span>
 <span><span class="co">##  [99] aod_1.3.2                     XVector_0.40.0               </span></span>
 <span><span class="co">## [101] RhpcBLASctl_0.23-42           htmltools_0.5.5              </span></span>
 <span><span class="co">## [103] pkgconfig_2.0.3               lme4_1.1-33                  </span></span>
@@ -412,7 +411,7 @@ posterior distribution of each coefficient.</p>
 <span><span class="co">## [111] DelayedMatrixStats_1.22.0     farver_2.1.1                 </span></span>
 <span><span class="co">## [113] BiocSingular_1.16.0           RCurl_1.98-1.12              </span></span>
 <span><span class="co">## [115] magrittr_2.0.3                GenomeInfoDbData_1.2.10      </span></span>
-<span><span class="co">## [117] munsell_0.5.0                 Rcpp_1.0.10                  </span></span>
+<span><span class="co">## [117] munsell_0.5.0                 Rcpp_1.0.11                  </span></span>
 <span><span class="co">## [119] babelgene_22.9                viridis_0.6.3                </span></span>
 <span><span class="co">## [121] EnrichmentBrowser_2.30.1      RcppZiggurat_0.1.6           </span></span>
 <span><span class="co">## [123] stringi_1.7.12                zlibbioc_1.46.0              </span></span>
@@ -434,8 +433,8 @@ posterior distribution of each coefficient.</p>
 <span><span class="co">## [155] truncnorm_1.0-9               tibble_3.2.1                 </span></span>
 <span><span class="co">## [157] lmerTest_3.1-3                glmmTMB_1.1.7                </span></span>
 <span><span class="co">## [159] memoise_2.0.1                 beeswarm_0.4.0               </span></span>
-<span><span class="co">## [161] cluster_2.1.4                 globals_0.16.2               </span></span>
-<span><span class="co">## [163] GSEABase_1.62.0</span></span></code></pre>
+<span><span class="co">## [161] AnnotationDbi_1.62.1          cluster_2.1.4                </span></span>
+<span><span class="co">## [163] globals_0.16.2                GSEABase_1.62.0</span></span></code></pre>
 </details>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

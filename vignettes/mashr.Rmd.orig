@@ -2,7 +2,7 @@
 title: "mashr analysis after dreamlet"
 subtitle: 'Borrowing information across genes and cell types'
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
-date: "Run on `r Sys.time()`"
+date: "Run on `r format(Sys.time())`"
 documentclass: article
 vignette: >
   %\VignetteIndexEntry{mashr analysis following dreamlet}

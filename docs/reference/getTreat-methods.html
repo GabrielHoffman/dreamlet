@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.23</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.26</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
+    <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
     <a class="dropdown-item" href="../articles/non_lin_eff.html">Testing non-linear effects</a>
@@ -124,7 +125,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.14 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.099 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.071 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
 <span class="r-in"><span></span></span>
@@ -132,16 +133,15 @@
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data</span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.14 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.15 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.16 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.2 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.14 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.088 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.086 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.84 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.15 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># show coefficients estimated for each cell type</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="coefNames-methods.html">coefNames</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span></span></span>
