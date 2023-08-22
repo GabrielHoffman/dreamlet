@@ -88,7 +88,7 @@ setMethod(
     validAssays <- droplevels(factor(unique(df_range)$id, assays))
 
     # make data.frame of points
-    df.list <- lapply(validAssays, function(id) {
+    df.list <- lapply(levels(validAssays), function(id) {
       with(x[[id]]$voom.xy, data.frame(id, x, y))
     })
     df_points <- do.call(rbind, df.list)
@@ -96,7 +96,7 @@ setMethod(
     df_points <- df_points[order(df_points$id), ]
 
     # make data.frame of curves
-    df.list <- lapply(validAssays, function(id) {
+    df.list <- lapply(levels(validAssays), function(id) {
       with(x[[id]]$voom.line, data.frame(id, x, y))
     })
     df_curve <- do.call(rbind, df.list)
