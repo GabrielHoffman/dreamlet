@@ -4,6 +4,9 @@
 \name{dreamlet_mash_result-class}
 \alias{dreamlet_mash_result-class}
 \title{Class dreamlet_mash_result}
+\value{
+\code{dreamlet_mash_result} class
+}
 \description{
 Class \code{dreamlet_mash_result}
 }

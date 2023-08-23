@@ -64,13 +64,13 @@ setMethod(
     coolcat("coefNames(%d): %s\n", coefNames(object))
 
     # failure rate
-    df_details = details(object)
+    df_details <- details(object)
 
     if( nrow(df_details) > 0){
-      failure_frac = sum(df_details$n_errors) / sum(df_details$n_genes)
+      failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
 
       if( failure_frac > 0 ){
-        txt = paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+        txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
         cat(txt)
       }
     }
@@ -866,10 +866,10 @@ setMethod(
       warning("Terms dropped from formulas for ", ndrop, " assays.\n Run details() on result for more information")
     }
 
-    failure_frac = sum(df_details$n_errors) / sum(df_details$n_genes)
+    failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
 
     if( failure_frac > 0 ){
-      txt = paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+      txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
       message(txt)
     }
 

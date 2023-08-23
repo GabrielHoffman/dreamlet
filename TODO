@@ -1,4 +1,7 @@
 
+August 22, 
+	in processAssays(), voomWithDreamWeights(), fitVarPartModel(), also capture errors
+
 July 14, 2023
 	Allow metadata covariates for dreamletCompareClusters()
 	Based on comment: https://github.com/GabrielHoffman/dreamlet/issues/11

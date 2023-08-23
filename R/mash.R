@@ -8,6 +8,7 @@
 #' @name dreamlet_mash_result-class
 #' @rdname dreamlet_mash_result-class
 #' @exportClass dreamlet_mash_result
+#' @return \code{dreamlet_mash_result} class
 setClass("dreamlet_mash_result", contains = "list")
 
 
