@@ -1,6 +1,70 @@
 
+
+
 August 22, 
 	in processAssays(), voomWithDreamWeights(), fitVarPartModel(), also capture errors
+
+See code: 
+
+library(dreamlet)
+library(muscat)
+library(ExperimentHub)
+library(zenith)
+library(scater)
+library(zellkonverter)
+library(dplyr)
+library(edgeR)
+setwd("/sc/arion/projects/CommonMind/mpjanic/CHPLEX/")
+library(crumblr)
+library(ggtree)
+library(aplot)
+
+matrx= readH5AD("CHPLEX_10_10000_dreamlet_braak_prs_PC_ctrl.h5ad", raw=TRUE, use_hdf5=TRUE)
+
+raw <- assay(altExp(matrx, "raw", withDimnames=TRUE, withColData=TRUE), "X")
+
+sce <- SingleCellExperiment(list(counts=raw),
+                                colData=colData(matrx),
+                                rowData=rowData(matrx),
+                                reducedDims=reducedDims(matrx))
+
+pb <- aggregateToPseudoBulk(sce, assay ="counts", cluster_id = "clusters", sample_id="SubID_vS", verbose=FALSE)
+
+
+
+# Including (1|set) here causes the model to fail
+form = ~ (1|set) + scale(age) + AD_Bellenguez + (1|gender) + scale(PC1) + scale(PC2) + 1
+
+res.proc = processAssays(pb, form, assays=CT[1])
+
+res.dl = dreamlet( res.proc, form)
+
+
+# form = ~ 1
+form = ~ scale(age) + AD_Bellenguez + (1|gender) + scale(PC1) + scale(PC2) + 1
+CT = c('Epithelial','Mesenchymal','Macrophages','Fibroblasts','Endothelial')
+res.proc = processAssays(pb, form, assays=CT[1])
+
+
+details(res.proc)
+
+
+
+
+
+tab = topTable(res.dl, coef="AD_Bellenguez", number=Inf)
+
+
+res = tab %>%
+    as_tibble %>%
+    group_by(assay) %>%
+    mutate(FDR.within = p.adjust(P.Value, "fdr"))
+
+# counts results
+table(res$adj.P.Val < 0.05)
+table(res$FDR.within < 0.05)
+
+
 
 July 14, 2023
 	Allow metadata covariates for dreamletCompareClusters()

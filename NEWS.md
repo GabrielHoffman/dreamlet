@@ -1,3 +1,7 @@
+# dreamlet 0.99.28
+  - Sept 5, 2026
+  - Update error handling for `processAssays()` and `fitVarPart()`
+
 # dreamlet 0.99.26
   - August 18, 2026
   - Update error handling and documentation

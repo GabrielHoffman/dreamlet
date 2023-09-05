@@ -28,5 +28,5 @@ Get assayNames
 
 Get assayNames
 
-Get aassayNames
+Get assayNames
 }
