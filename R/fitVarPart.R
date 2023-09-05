@@ -113,7 +113,7 @@ setMethod(
       if (length(all.vars(form_mod)) > 0) {
         # fit linear mixed model for each gene
         # TODO add , L=L
-        res <- fitExtractVarPartModel(geneExpr, form_mod, data2, BPPARAM = BPPARAM, ..., quiet = TRUE)
+        res <- fitExtractVarPartModel(geneExpr, form_mod, data2, BPPARAM = BPPARAM, ..., quiet = TRUE, hideErrorsInBackend=TRUE)
       } else {
         res <- data.frame()
       }
@@ -151,13 +151,29 @@ setMethod(
       df$assay <- factor(df$assay, names(resList))
     }
 
+      # Handle errors
+    #--------------
+
+    # get error messages
+    error.initial <- lapply(vplst, function(x) {
+      x$error.initial
+    })
+    names(error.initial) <- names(vplst)
+    errors <- lapply(vplst, function(x) {
+      x$errors
+    })
+    names(errors) <- names(vplst)
+
     # extract details
     df_details <- lapply(names(resList), function(id) {
       data.frame(
         assay = id,
         n_retain = resList[[id]]$n_retain,
         formula = Reduce(paste, deparse(resList[[id]]$formula)),
-        formDropsTerms = !equalFormulas(resList[[id]]$formula, formula)
+        formDropsTerms = !equalFormulas(resList[[id]]$formula, formula),
+        n_genes = nrow(resList[[id]]$df),
+        n_errors = length(resList[[id]]$errors),
+        error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE)
       )
     })
     df_details <- do.call(rbind, df_details)
@@ -168,6 +184,20 @@ setMethod(
       warning("Terms dropped from formulas for ", ndrop, " assays.\n Run details() on result for more information")
     }
 
-    new("vpDF", DataFrame(df), df_details = df_details)
+    failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
+
+    if( is.nan(failure_frac) ){
+      stop("All models failed.  Consider changing formula")
+    }
+
+    if( failure_frac > 0 ){
+      txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+      message(txt)
+    }
+
+    new("vpDF", DataFrame(df), 
+      df_details = df_details,
+      errors = errors,
+      error.initial = error.initial)
   }
 )

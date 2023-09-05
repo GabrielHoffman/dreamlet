@@ -7,13 +7,13 @@
 #' @exportClass vpDF
 #' @importFrom S4Vectors DataFrame
 #' @return none
-setClass("vpDF", contains = "DFrame", slots = c(df_details = "data.frame"))
+setClass("vpDF", contains = "DFrame", slots = c(df_details = "data.frame", errors = "list", error.initial = "list"))
 
 
 
 #' Get assayNames
 #'
-#' Get aassayNames
+#' Get assayNames
 #'
 #' @param x vpDF object
 #' @param ... additional arguments
@@ -112,5 +112,39 @@ setMethod(
   "details", "vpDF",
   function(object) {
     object@df_details
+  }
+)
+
+#' @export
+#' @rdname seeErrors-methods
+#' @aliases seeErrors,vpDF-method
+#' @importFrom dplyr as_tibble
+setMethod(
+  "seeErrors", "vpDF",
+  function(obj, initial = FALSE) {
+    if (!initial) {
+      df <- lapply(names(obj@errors), function(id) {
+        if (length(obj@errors[[id]]) == 0) {
+          return(NULL)
+        }
+        data.frame(
+          assay = id,
+          feature = names(obj@errors[[id]]),
+          errorText = obj@errors[[id]]
+        )
+      })
+    } else {
+      df <- lapply(names(obj@error.initial), function(id) {
+        message(id)
+        if (length(obj@error.initial[[id]]) == 0) {
+          return(NULL)
+        }
+        data.frame(
+          assay = id,
+          errorTextInitial = obj@error.initial[[id]]
+        )
+      })
+    }
+    as_tibble(do.call(rbind, df))
   }
 )

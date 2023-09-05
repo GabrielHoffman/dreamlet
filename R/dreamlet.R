@@ -224,6 +224,8 @@ setMethod(
 )
 
 
+
+
 setGeneric("assayNames", SummarizedExperiment::assayNames)
 setGeneric("assay", SummarizedExperiment::assay)
 # setGeneric('colData', SummarizedExperiment::colData)

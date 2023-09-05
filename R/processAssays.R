@@ -87,10 +87,14 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     # weights from w_cells are used in calculating residuals that
     # voom uses to compute precision weights
     # If model fails return NULL
-    geneExpr <- tryCatch(
-      voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span),
-      error = function(e) NULL
-    )
+    # geneExpr <- tryCatch(
+    #   voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span),
+    #   error = function(e) NULL
+    # )
+
+    geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
+
+    errorArray <- attr(geneExpr, "errors")
 
     # save formula used after dropping constant terms
     if (!is.null(geneExpr)) geneExpr$formula <- formula
@@ -253,11 +257,58 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
   # remove empty assays
   resList <- resList[!exclude]
 
+  # Handle errors
+  #--------------
+
+  # get error messages
+  error.initial <- lapply(resList, function(x) {
+    x$error.initial
+  })
+  names(error.initial) <- names(resList)
+  errors <- lapply(resList, function(x) {
+    x$errors
+  })
+  names(errors) <- names(resList)
+
+  # extract details
+  df_details <- lapply(names(resList), function(id) {
+    data.frame(
+      assay = id,
+      n_retain = ncol(resList[[id]]),
+      formula = Reduce(paste, deparse(resList[[id]]$formula)),
+      formDropsTerms = !equalFormulas(resList[[id]]$formula, formula),
+      n_genes = nrow(resList[[id]]),
+      n_errors = length(resList[[id]]$errors),
+      error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE)
+    )
+  })
+  df_details <- do.call(rbind, df_details)
+
+  ndrop <- sum(df_details$formDropsTerms)
+
+  if (ndrop > 0) {
+    warning("Terms dropped from formulas for ", ndrop, " assays.\n Run details() on result for more information")
+  }
+
+  failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
+
+  if( is.nan(failure_frac) ){
+    stop("All models failed.  Consider changing formula")
+  }
+
+  if( failure_frac > 0 ){
+    txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+    message(txt)
+  }
+
   new("dreamletProcessedData",
     resList,
     data = data_constant,
     metadata = metadata(sceObj)$aggr_means,
-    by = metadata(sceObj)$agg_pars$by
+    by = metadata(sceObj)$agg_pars$by,
+    df_details = df_details,
+    errors = errors,
+    error.initial = error.initial
   )
 }
 

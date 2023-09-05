@@ -6,7 +6,7 @@
 #' @rdname dreamletProcessedData-class
 #' @exportClass dreamletProcessedData
 #' @return none
-setClass("dreamletProcessedData", contains = "list", slots = c(data = "data.frame", metadata = "data.frame", by = "vector"))
+setClass("dreamletProcessedData", contains = "list", slots = c(data = "data.frame", metadata = "data.frame", by = "vector", df_details = "data.frame", errors = "list", error.initial = "list" ))
 
 #' Subset with brackets
 #'
@@ -290,19 +290,7 @@ setGeneric("details", getGeneric("details", package = "GSEABase"))
 setMethod(
   "details", "dreamletProcessedData",
   function(object) {
-    df <- lapply(assayNames(object), function(k) {
-      obj <- assay(object, k)
-
-      if (is(obj, "EList")) {
-        res <- DataFrame(assay = k, n_retained = ncol(obj), formula = paste(as.character(obj$formula), collapse = ""))
-      } else {
-        res <- DataFrame(assay = k, n_retained = ncol(obj))
-      }
-      res
-    })
-    df <- do.call(rbind, df)
-
-    df
+    object@df_details
   }
 )
 
@@ -381,3 +369,40 @@ setMethod(
     merge(colData(x), t(assay(x, assay)$E), by = "row.names")
   }
 )
+
+
+#' @export
+#' @rdname seeErrors-methods
+#' @aliases seeErrors,dreamletProcessedData-method
+#' @importFrom dplyr as_tibble
+setMethod(
+  "seeErrors", "dreamletProcessedData",
+  function(obj, initial = FALSE) {
+    if (!initial) {
+      df <- lapply(names(obj@errors), function(id) {
+        if (length(obj@errors[[id]]) == 0) {
+          return(NULL)
+        }
+        data.frame(
+          assay = id,
+          feature = names(obj@errors[[id]]),
+          errorText = obj@errors[[id]]
+        )
+      })
+    } else {
+      df <- lapply(names(obj@error.initial), function(id) {
+        message(id)
+        if (length(obj@error.initial[[id]]) == 0) {
+          return(NULL)
+        }
+        data.frame(
+          assay = id,
+          errorTextInitial = obj@error.initial[[id]]
+        )
+      })
+    }
+    as_tibble(do.call(rbind, df))
+  }
+)
+
+
