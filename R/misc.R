@@ -40,13 +40,10 @@ checkFormula <- function(formula, data) {
   found <- v %in% colnames(data)
 
   if (any(!found)) {
-    stop("Variables in formula are not found in data:\n   ", paste(v[!found], collapse = ", "))
+    txt = paste("Variables in formula are not found in data:\n   ", paste(v[!found], collapse = ", "))
+    stop(txt)
   }
 }
-
-
-
-
 
 
 #' Check if two formulas are equal

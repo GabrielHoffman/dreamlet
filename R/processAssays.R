@@ -84,14 +84,6 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     # 	this causes too many genes to be retained
     keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
 
-    # weights from w_cells are used in calculating residuals that
-    # voom uses to compute precision weights
-    # If model fails return NULL
-    # geneExpr <- tryCatch(
-    #   voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span),
-    #   error = function(e) NULL
-    # )
-
     geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
 
     errorArray <- attr(geneExpr, "errors")

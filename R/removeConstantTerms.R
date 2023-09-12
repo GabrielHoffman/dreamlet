@@ -77,8 +77,6 @@ removeConstantTerms <- function(formula, data) {
     # gsub can overwrite other variables
     fterms_new <- fterms
     for (x in excludeVar) {
-      # old: fterms_new = gsub(x, '1', fterms_new)
-
       # make sure string goes to end, or end followed by )
       fterms_new <- gsub(paste0(x, "$"), "1", fterms_new)
       fterms_new <- gsub(paste0(x, "\\)"), "1)", fterms_new)
@@ -86,7 +84,6 @@ removeConstantTerms <- function(formula, data) {
 
     fterms_new <- unique(fterms_new)
 
-    # old: fterms_new = array(sapply(excludeVar, function(x) gsub(x, '1', fterms)))
     fterms_new <- fterms_new[fterms_new != ""]
   } else {
     fterms_new <- fterms

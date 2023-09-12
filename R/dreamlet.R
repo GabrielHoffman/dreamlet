@@ -826,8 +826,6 @@ setMethod(
     # name each result by the assay name
     names(resList) <- assays
 
-    # if (!quiet) message("\n")
-
     # extract fit
     fitList <- lapply(resList, function(x) x$fit)
 

@@ -13,7 +13,7 @@ colsum2 <- function(x, group, reorder = TRUE, BPPARAM = SerialParam(), verbose =
       reorder
     ))
     if (na.rm) stop("na.rm = TRUE is not currently supported")
-    # grid <- DelayedArray:::normarg_grid(grid, x)
+
     grid <- defaultAutoGrid(x)
     block_results <- bplapply(seq_len(nrow(grid)), function(i) {
       .compute_colsum_for_grid_row(x, grid, i, group, ugroup,
@@ -83,7 +83,7 @@ compute_ugroup <- function(group, expected_group_len, reorder = TRUE) {
   viewport <- grid[[i, j]]
   block <- .read_matrix_block(x, viewport)
   group2 <- extractROWS(group, ranges(viewport)[2L])
-  # colsum(block, group2, reorder=FALSE, na.rm=na.rm)
+
   colsum_beachmat(block, group2)
 }
 

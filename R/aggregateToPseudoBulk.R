@@ -32,7 +32,6 @@
   ys <- purrr::map(is, ~ assay(y)[, ., drop = FALSE])
 
   for (i in seq_along(ys)) {
-    # message(i)
     fill <- setdiff(unique(y[[by[2]]]), colnames(ys[[i]]))
     if (length(fill != 0)) {
       # foo === matrix(0, nrow(x), length(fill))
