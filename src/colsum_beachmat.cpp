@@ -38,23 +38,6 @@ NumericMatrix colsum_beachmat_matrix(RObject mat, IntegerVector groupHsh, Intege
 }
 
 
-// *manual* version with explicit loop
-// assign values for each row r
-// for(size_t r = 0; r < ptr->get_nrow(); ++r) {
-
-//     // subtract 1 to convert from 1-based in R to 0-based in C++
-//     output(r, groupHsh(i)-1) +=  colptr[r];
-// }
-
-// implicit version:
-/// initialize NumericVector with values, then assign to matrix
-// NumericVector tmp = NumericVector::import(colptr,colptr + ptr->get_nrow());
-
-// Rcout << colptr[0] << ' ' << tmp(0) << std::endl;
-
-// output(_, groupHsh(i)-1) = output(_, groupHsh(i)-1)+ NumericVector::import(colptr, colptr + ptr->get_nrow());
-
-
 // [[Rcpp::export(rng=false)]]
 NumericMatrix colsum_beachmat_sparseMatrix(RObject mat, IntegerVector groupHsh, IntegerVector grpUnq) {
 
@@ -91,16 +74,3 @@ NumericMatrix colsum_beachmat_sparseMatrix(RObject mat, IntegerVector groupHsh, 
 
 
 
-
-
-// output[i] = std::accumulate(colptr, colptr + ptr->get_nrow(), 0.0);
-
-// std::vector<double> to_vect(ptr->get_nrow());
-// std::copy(colptr, colptr + ptr->get_nrow(), to_vect);
-
-
-// set row and column names of result
-// only works with matrix, not sparseMatrix.  So just do in R
-// Rcpp::CharacterVector myIntToStr(grpUnq.begin(), grpUnq.end());
-// colnames(output) = myIntToStr;
-// rownames(output) = rownames(mat);

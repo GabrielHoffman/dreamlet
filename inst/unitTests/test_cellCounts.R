@@ -1,6 +1,4 @@
 
-library(RUnit)
-
 test_cellCounts = function(){
 
 	library(muscat)

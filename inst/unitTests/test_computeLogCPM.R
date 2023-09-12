@@ -1,7 +1,4 @@
 
-library(RUnit)
-
-
 test_computeNormCounts = function(){
 
 	library(SingleCellExperiment)
@@ -23,11 +20,6 @@ test_computeNormCounts = function(){
 
 
 test_computeLogCPM = function(){
-
-	library(SingleCellExperiment)
-	library(muscat)
-	library(edgeR)
-	library(dreamlet)
 
 	data(example_sce)
 

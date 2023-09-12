@@ -19,7 +19,7 @@ library(crumblr)
 library(ggtree)
 library(aplot)
 
-matrx= readH5AD("CHPLEX_10_10000_dreamlet_braak_prs_PC_ctrl.h5ad", raw=TRUE, use_hdf5=TRUE)
+matrx = readH5AD("CHPLEX_10_10000_dreamlet_braak_prs_PC_ctrl.h5ad", raw=TRUE, use_hdf5=TRUE)
 
 raw <- assay(altExp(matrx, "raw", withDimnames=TRUE, withColData=TRUE), "X")
 
@@ -30,19 +30,27 @@ sce <- SingleCellExperiment(list(counts=raw),
 
 pb <- aggregateToPseudoBulk(sce, assay ="counts", cluster_id = "clusters", sample_id="SubID_vS", verbose=FALSE)
 
+# saveRDS(pb, file="pb.RDS")
+pb = readRDS("pb.RDS")
 
+CT = c('Epithelial','Mesenchymal','Macrophages','Fibroblasts','Endothelial')
 
 # Including (1|set) here causes the model to fail
 form = ~ (1|set) + scale(age) + AD_Bellenguez + (1|gender) + scale(PC1) + scale(PC2) + 1
 
-res.proc = processAssays(pb, form, assays=CT[1])
+res.proc = processAssays(pb[1:1000,], form, assays=CT[1])
 
 res.dl = dreamlet( res.proc, form)
 
 
+res.proc = processAssays(pb[1:1000,], ~1, assays=CT[1])
+
+res = fitVarPart( res.proc, form)
+
+
 # form = ~ 1
 form = ~ scale(age) + AD_Bellenguez + (1|gender) + scale(PC1) + scale(PC2) + 1
-CT = c('Epithelial','Mesenchymal','Macrophages','Fibroblasts','Endothelial')
+
 res.proc = processAssays(pb, form, assays=CT[1])
 
 

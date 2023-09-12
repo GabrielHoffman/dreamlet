@@ -114,6 +114,5 @@ setMethod(
       scale_fill_gradient(name = "value", low = "white", high = color) +
       xlab("") +
       ylab("")
-    # bquote(log[2]~CPM)
   }
 )
