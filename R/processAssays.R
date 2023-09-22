@@ -60,7 +60,8 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   }
 
   # sample-level weights based on cell counts
-  w_cells <- n.cells[include]
+  # these are _precision_ weights, so invert
+  w_cells <- 1 / n.cells[include]
 
   if (!useCountsWeights) {
     w_cells[] <- 1
