@@ -30,6 +30,7 @@
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
+#' @importFrom MatrixGenerics colMeans2
 #'
 processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(), ...) {
   checkFormula(formula, data)
@@ -59,8 +60,8 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     return(NULL)
   }
 
-  # sample-level weights based on cell counts
-  w_cells <- n.cells[include]
+  # sample-level weights based on cell counts and mean library size
+  w_cells <- n.cells[include] * colMeans2(y, useNames=FALSE)
 
   if (!useCountsWeights) {
     w_cells[] <- 1
