@@ -54,6 +54,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   # subset expression and data
   y <- y[, include, drop = FALSE]
   data <- droplevels(data[include, , drop = FALSE])
+  n.cells <- n.cells[include]
 
   # if there are too few remaining samples
   if (nrow(data) < min.samples) {
@@ -61,10 +62,11 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   }
 
   # sample-level weights based on cell counts and mean library size
-  w_cells <- n.cells[include] / colMeans2(y, useNames=FALSE)
-
-  if (!useCountsWeights) {
-    w_cells[] <- 1
+  if (useCountsWeights) {
+    w_cells <- n.cells^2 / colMeans2(y, useNames=FALSE)
+    w_cells <- w_cells / mean(w_cells)
+  } else {
+    w_cells[] <- rep(1, length(n.cells))
   }
 
   if (isCounts) {
