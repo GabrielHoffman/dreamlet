@@ -61,7 +61,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   }
 
   # sample-level weights based on cell counts and mean library size
-  w_cells <- n.cells[include] * colMeans2(y, useNames=FALSE)
+  w_cells <- n.cells[include] / colMeans2(y, useNames=FALSE)
 
   if (!useCountsWeights) {
     w_cells[] <- 1
