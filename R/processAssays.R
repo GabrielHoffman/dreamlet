@@ -67,7 +67,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     w_cells <- n.cells * colSums2(y, useNames=FALSE)
     w_cells <- w_cells / mean(w_cells)
   } else {
-    w_cells[] <- rep(1, length(n.cells))
+    w_cells <- rep(1, length(n.cells))
   }
 
   if (isCounts) {
