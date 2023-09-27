@@ -31,7 +31,75 @@
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
 #' @importFrom MatrixGenerics colMeans2
-#'
+# #'
+# processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(), ...) {
+#   checkFormula(formula, data)
+#   if (is.null(n.cells)) {
+#     stop("n_cells must not be NULL")
+#   }
+#   if (!is.matrix(y)) {
+#     y <- as.matrix(y)
+#   }
+
+#   # samples to include of they have enough observed cells
+#   include <- (n.cells >= min.cells)
+
+#   # if no samples are retained
+#   if (sum(include) == 0) {
+#     return(NULL)
+#   }
+
+#   # subset expression and data
+#   y <- y[, include, drop = FALSE]
+#   data <- droplevels(data[include, , drop = FALSE])
+#   n.cells <- n.cells[include]
+
+#   # if there are too few remaining samples
+#   if (nrow(data) < min.samples) {
+#     return(NULL)
+#   }
+
+#   if ( ! isCounts ) {
+#     stop("isCounts = FALSE is not supported")
+#   }
+
+#   # Get count data and normalize
+#   y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
+#   y <- calcNormFactors(y, method = normalize.method)
+
+#   # sample-level weights based on cell counts and mean library size
+#   if (useCountsWeights) {
+#     w_cells <- n.cells / y$samples$lib.size
+#   } else {
+#     w_cells <- rep(1, length(n.cells))
+#   }
+#   w_cells <- w_cells / mean(w_cells)
+
+#   # drop any constant terms from the formula
+#   formula <- removeConstantTerms(formula, data)
+
+#   # Drop variables in a redundant pair
+#   formula <- dropRedundantTerms(formula, data)
+
+#   # get samples with enough cells
+#   # filter genes
+#   # design: model.matrix( subbars(formula), data)
+#   # Design often includes batch and donor, which are very small
+#   # 	this causes too many genes to be retained
+#   keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
+
+#   geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
+
+#   errorArray <- attr(geneExpr, "errors")
+
+#   # save formula used after dropping constant terms
+#   if (!is.null(geneExpr)) geneExpr$formula <- formula
+#   if (!is.null(geneExpr)) geneExpr$isCounts <- isCounts
+
+#   geneExpr
+# }
+
+
 processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(), ...) {
   checkFormula(formula, data)
   if (is.null(n.cells)) {
@@ -40,8 +108,6 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   if (!is.matrix(y)) {
     y <- as.matrix(y)
   }
-
-  # nCells: extract from y
 
   # samples to include of they have enough observed cells
   include <- (n.cells >= min.cells)
@@ -61,59 +127,47 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     return(NULL)
   }
 
+  if ( ! isCounts ) {
+    stop("isCounts = FALSE is not supported")
+  }
+
+  # Get count data and normalize
+  y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
+  y <- calcNormFactors(y, method = normalize.method)
+
+  # drop any constant terms from the formula
+  formula <- removeConstantTerms(formula, data)
+
+  # Drop variables in a redundant pair
+  formula <- dropRedundantTerms(formula, data)
+
+  # get samples with enough cells
+  # filter genes
+  # design: model.matrix( subbars(formula), data)
+  # Design often includes batch and donor, which are very small
+  #   this causes too many genes to be retained
+  keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
+
   # sample-level weights based on cell counts and mean library size
   if (useCountsWeights) {
-    # w_cells <- n.cells^2 / colMeans2(y, useNames=FALSE)
-    w_cells <- n.cells * colSums2(y, useNames=FALSE)
-    w_cells <- w_cells / mean(w_cells)
+    w_cells <- n.cells * (cpm(y)/1000)^2  # adjust scaling  
+    w_cells <- w_cells / rowMeans2(w_cells, useNames=FALSE)
+    w_cells <- w_cells[keep,]
   } else {
     w_cells <- rep(1, length(n.cells))
   }
 
-  if (isCounts) {
-    # Get count data and normalize
-    y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
-    y <- calcNormFactors(y, method = normalize.method)
+  geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
 
-    # drop any constant terms from the formula
-    formula <- removeConstantTerms(formula, data)
+  errorArray <- attr(geneExpr, "errors")
 
-    # Drop variables in a redundant pair
-    formula <- dropRedundantTerms(formula, data)
-
-    # get samples with enough cells
-    # filter genes
-    # design: model.matrix( subbars(formula), data)
-    # Design often includes batch and donor, which are very small
-    # 	this causes too many genes to be retained
-    keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
-
-    geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
-
-    errorArray <- attr(geneExpr, "errors")
-
-    # save formula used after dropping constant terms
-    if (!is.null(geneExpr)) geneExpr$formula <- formula
-  } else {
-    # assumes already converted to log2 CPM
-
-    # only include genes that show variation,
-    # and have at least 5 nonzero values
-    include <- apply(y, 1, function(x) {
-      (var(x) > 0) & (sum(x != 0) > 5)
-    })
-
-    # if data is already log2 CPM
-    # create EList object storing gene expression and sample weights
-    geneExpr <- new("EList", list(E = y[include, , drop = FALSE], weights = w_cells))
-
-    geneExpr$formula <- ~0
-  }
-
+  # save formula used after dropping constant terms
+  if (!is.null(geneExpr)) geneExpr$formula <- formula
   if (!is.null(geneExpr)) geneExpr$isCounts <- isCounts
 
   geneExpr
 }
+
 
 
 # since precision weights are not used, use the trend in the eBayes step
