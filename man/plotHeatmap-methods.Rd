@@ -11,13 +11,37 @@
 \alias{plotHeatmap,matrix,matrix-method}
 \title{Plot heatmap}
 \usage{
-plotHeatmap(x, genes = rownames(x), color = "darkblue", ...)
+plotHeatmap(
+  x,
+  genes = rownames(x),
+  color = "darkblue",
+  assays = colnames(x),
+  useFillScale = TRUE
+)
 
-\S4method{plotHeatmap}{cellSpecificityValues}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
+\S4method{plotHeatmap}{cellSpecificityValues}(
+  x,
+  genes = rownames(x),
+  color = "darkblue",
+  assays = colnames(x),
+  useFillScale = TRUE
+)
 
-\S4method{plotHeatmap}{data.frame}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
+\S4method{plotHeatmap}{data.frame}(
+  x,
+  genes = rownames(x),
+  color = "darkblue",
+  assays = colnames(x),
+  useFillScale = TRUE
+)
 
-\S4method{plotHeatmap}{matrix}(x, genes = rownames(x), color = "darkblue", assays = colnames(x))
+\S4method{plotHeatmap}{matrix}(
+  x,
+  genes = rownames(x),
+  color = "darkblue",
+  assays = colnames(x),
+  useFillScale = TRUE
+)
 }
 \arguments{
 \item{x}{fractions for each gene}
@@ -26,9 +50,11 @@ plotHeatmap(x, genes = rownames(x), color = "darkblue", ...)
 
 \item{color}{color of heatmap}
 
-\item{...}{other arguments}
-
 \item{assays}{array of assays to plot}
+
+\item{useFillScale}{default TRUE. add scale_fill_gradient() to plot}
+
+\item{...}{other arguments}
 }
 \value{
 heatmap
