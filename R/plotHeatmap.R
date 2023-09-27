@@ -6,6 +6,7 @@
 #' @param genes name of genes to plot
 #' @param color color of heatmap
 #' @param assays array of assays to plot
+#' @param useFillScale default TRUE. add scale_fill_gradient() to plot
 #' @param ... other arguments
 #'
 #' @return heatmap
@@ -15,7 +16,7 @@
 #' @rdname plotHeatmap-methods
 setGeneric(
   "plotHeatmap",
-  function(x, genes = rownames(x), color = "darkblue", ...) {
+  function(x, genes = rownames(x), color = "darkblue", assays = colnames(x), useFillScale = TRUE) {
     standardGeneric("plotHeatmap")
   }
 )
@@ -49,12 +50,17 @@ setGeneric(
 #' @aliases plotHeatmap,cellSpecificityValues,cellSpecificityValues-method
 setMethod(
   "plotHeatmap", "cellSpecificityValues",
-  function(x, genes = rownames(x), color = "darkblue", assays = colnames(x)) {
-    fig <- dreamlet::plotHeatmap(as.matrix(x)[, -1], genes, color, assays)
+  function(x, genes = rownames(x), color = "darkblue", assays = colnames(x), useFillScale = TRUE) {
 
-    fig +
-      ggtitle("Cell type specificity scores") +
-      scale_fill_gradient(name = "Fraction of\nexpression", low = "white", high = color, limits = c(0, 1))
+    fig <- dreamlet::plotHeatmap(as.matrix(x)[, -1], genes, color, assays, useFillScale = FALSE)
+
+    fig <- fig +
+      ggtitle("Cell type specificity scores")
+
+    if( useFillScale ){
+      fig <- fig + scale_fill_gradient(name = "Fraction of\nexpression", low = "white", high = color, limits = c(0, 1))
+    }
+    fig
   }
 )
 
@@ -64,8 +70,8 @@ setMethod(
 #' @aliases plotHeatmap,data.frame,data.frame-method
 setMethod(
   "plotHeatmap", "data.frame",
-  function(x, genes = rownames(x), color = "darkblue", assays = colnames(x)) {
-    dreamlet::plotHeatmap(as.matrix(x), genes, color, assays)
+  function(x, genes = rownames(x), color = "darkblue", assays = colnames(x), useFillScale = TRUE) {
+    dreamlet::plotHeatmap(as.matrix(x), genes, color, assays, useFillScale = useFillScale)
   }
 )
 
@@ -77,7 +83,7 @@ setMethod(
 #' @aliases plotHeatmap,matrix,matrix-method
 setMethod(
   "plotHeatmap", "matrix",
-  function(x, genes = rownames(x), color = "darkblue", assays = colnames(x)) {
+  function(x, genes = rownames(x), color = "darkblue", assays = colnames(x), useFillScale = TRUE) {
     genes <- genes[!is.na(genes)]
 
     # intersect preserving order from assays
@@ -103,7 +109,7 @@ setMethod(
     ratio <- nlevels(df_melt$gene) / nlevels(df_melt$variable)
 
     # heatmap of cell type specificity
-    ggplot(df_melt, aes(variable, gene, fill = value)) +
+    fig <- ggplot(df_melt, aes(variable, gene, fill = value)) +
       geom_tile() +
       theme_classic() +
       theme(
@@ -111,8 +117,12 @@ setMethod(
         plot.title = element_text(hjust = 0.5),
         axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1)
       ) +
-      scale_fill_gradient(name = "value", low = "white", high = color) +
       xlab("") +
-      ylab("")
+      ylab("") 
+
+    if( useFillScale ){
+        fig <- fig + scale_fill_gradient(name = "value", low = "white", high = color)
+    }
+    fig
   }
 )
