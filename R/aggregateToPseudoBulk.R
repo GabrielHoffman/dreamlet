@@ -72,6 +72,7 @@
 #'   object specifying how aggregation should be parallelized.
 #' @param verbose logical. Should information on progress be reported?
 #' @param checkValues logical. Should we check that signal values are positive integers?
+#' @param h5adBlockSizes set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.
 #'
 #' @return a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 # \itemize{
@@ -111,17 +112,16 @@
 #' @author Gabriel Hoffman, Helena L Crowell & Mark D Robinson
 #'
 #' @details
-#' Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
+#' Adapted from \code{muscat::aggregateData} and has similar syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
 #'
 #' Keeps variables from \code{colData()} that are constant within \code{sample_id}.  For example, sex will be constant for all cells from the same \code{sample_id}, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each \code{sample_id}, so it is dropped.
 #'
 #' @references
 #' Crowell, HL, Soneson, C, Germain, P-L, Calini, D,
 #' Collin, L, Raposo, C, Malhotra, D & Robinson, MD:
-#' On the discovery of population-specific state transitions from
-#' multi-sample multi-condition single-cell RNA sequencing data.
-#' \emph{bioRxiv} \strong{713412} (2018).
-#' doi: \url{https://doi.org/10.1101/713412}
+#' Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data.
+#' \emph{Nature Communications} \strong{11(1):6077} (2020).
+#' doi: \url{https://doi.org/10.1038/s41467-020-19894-4}
 #'
 #' @importFrom Matrix colSums
 #' @importFrom purrr map
@@ -129,12 +129,18 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment reducedDims<- int_colData<-
 #' @importFrom SummarizedExperiment rowData colData colData<- metadata<-
 #' @importFrom dplyr as_tibble group_by summarise_at `%>%` group_by_at
+#' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
 aggregateToPseudoBulk <- function(
     x, assay = NULL, sample_id = NULL, cluster_id = NULL,
     fun = c("sum", "mean", "median", "prop.detected", "num.detected", "sem", "number"),
-    scale = FALSE, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose), checkValues = TRUE) {
+    scale = FALSE, verbose = TRUE, BPPARAM = SerialParam(progressbar = verbose), checkValues = TRUE, h5adBlockSizes = 1e9) {
   fun <- match.arg(fun)
+
+  # update block size for reading h5ad file from disk
+  tmp = getAutoBlockSize()
+  suppressMessages(setAutoBlockSize(h5adBlockSizes))
+  on.exit(suppressMessages(setAutoBlockSize(tmp)))
 
   colData(x) <- droplevels(colData(x))
 
