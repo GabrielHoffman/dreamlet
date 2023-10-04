@@ -1,6 +1,7 @@
 # dreamlet 0.99.30
   - Sept 22, 2026
   - Fix issue with precision weights from cell number
+  - Include `setAutoBlockSize()` update within `aggregateToPseudoBulk()`
 
 # dreamlet 0.99.28
   - Sept 5, 2023
