@@ -151,10 +151,6 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   # sample-level weights based on cell counts and mean library size
   if (useCountsWeights) {
     w_cells <- sqrt(n.cells)
-    # w_cells <-  n.cells #* (cpm(y)/1000)^2  # adjust scaling  
-    # w_cells <- w_cells / rowMeans2(w_cells, useNames=FALSE)
-    # w_cells <- w_cells[keep,]
-    # w_cells <- y$samples$lib.size
   } else {
     w_cells <- rep(1, length(n.cells))
   }

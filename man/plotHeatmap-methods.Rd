@@ -53,8 +53,6 @@ plotHeatmap(
 \item{assays}{array of assays to plot}
 
 \item{useFillScale}{default TRUE. add scale_fill_gradient() to plot}
-
-\item{...}{other arguments}
 }
 \value{
 heatmap
