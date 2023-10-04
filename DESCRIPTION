@@ -40,7 +40,7 @@ biocViews:
     Software
 Depends:
     R (>= 4.3.0),
-    variancePartition (>= 1.31.19),
+    variancePartition (>= 1.31.20),
     ggplot2
 Imports:
     edgeR,

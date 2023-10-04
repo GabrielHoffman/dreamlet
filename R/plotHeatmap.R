@@ -7,7 +7,6 @@
 #' @param color color of heatmap
 #' @param assays array of assays to plot
 #' @param useFillScale default TRUE. add scale_fill_gradient() to plot
-#' @param ... other arguments
 #'
 #' @return heatmap
 #'
