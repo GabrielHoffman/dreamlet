@@ -31,77 +31,11 @@
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
 #' @importFrom MatrixGenerics colMeans2
-# #'
-# processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(), ...) {
-#   checkFormula(formula, data)
-#   if (is.null(n.cells)) {
-#     stop("n_cells must not be NULL")
-#   }
-#   if (!is.matrix(y)) {
-#     y <- as.matrix(y)
-#   }
-
-#   # samples to include of they have enough observed cells
-#   include <- (n.cells >= min.cells)
-
-#   # if no samples are retained
-#   if (sum(include) == 0) {
-#     return(NULL)
-#   }
-
-#   # subset expression and data
-#   y <- y[, include, drop = FALSE]
-#   data <- droplevels(data[include, , drop = FALSE])
-#   n.cells <- n.cells[include]
-
-#   # if there are too few remaining samples
-#   if (nrow(data) < min.samples) {
-#     return(NULL)
-#   }
-
-#   if ( ! isCounts ) {
-#     stop("isCounts = FALSE is not supported")
-#   }
-
-#   # Get count data and normalize
-#   y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
-#   y <- calcNormFactors(y, method = normalize.method)
-
-#   # sample-level weights based on cell counts and mean library size
-#   if (useCountsWeights) {
-#     w_cells <- n.cells / y$samples$lib.size
-#   } else {
-#     w_cells <- rep(1, length(n.cells))
-#   }
-#   w_cells <- w_cells / mean(w_cells)
-
-#   # drop any constant terms from the formula
-#   formula <- removeConstantTerms(formula, data)
-
-#   # Drop variables in a redundant pair
-#   formula <- dropRedundantTerms(formula, data)
-
-#   # get samples with enough cells
-#   # filter genes
-#   # design: model.matrix( subbars(formula), data)
-#   # Design often includes batch and donor, which are very small
-#   # 	this causes too many genes to be retained
-#   keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
-
-#   geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
-
-#   errorArray <- attr(geneExpr, "errors")
-
-#   # save formula used after dropping constant terms
-#   if (!is.null(geneExpr)) geneExpr$formula <- formula
-#   if (!is.null(geneExpr)) geneExpr$isCounts <- isCounts
-
-#   geneExpr
-# }
-
-
+#'
 processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(), ...) {
+
   checkFormula(formula, data)
+
   if (is.null(n.cells)) {
     stop("n_cells must not be NULL")
   }
@@ -128,7 +62,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   }
 
   if ( ! isCounts ) {
-    stop("isCounts = FALSE is not supported")
+    stop("isCounts = FALSE is not currently supported")
   }
 
   # Get count data and normalize
@@ -150,14 +84,12 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 
   # sample-level weights based on cell counts and mean library size
   if (useCountsWeights) {
-    w_cells <- sqrt(n.cells)
+    w_cells <- n.cells
   } else {
     w_cells <- rep(1, length(n.cells))
   }
 
   geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
-
-  errorArray <- attr(geneExpr, "errors")
 
   # save formula used after dropping constant terms
   if (!is.null(geneExpr)) geneExpr$formula <- formula
@@ -314,7 +246,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
   })
   names(error.initial) <- names(resList)
   errors <- lapply(resList, function(x) {
-    x$errors
+    attr(x, "errors")
   })
   names(errors) <- names(resList)
 
@@ -326,7 +258,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       formula = Reduce(paste, deparse(resList[[id]]$formula)),
       formDropsTerms = !equalFormulas(resList[[id]]$formula, formula),
       n_genes = nrow(resList[[id]]),
-      n_errors = length(resList[[id]]$errors),
+      n_errors = length(attr(resList[[id]], "errors")),
       error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE)
     )
   })
