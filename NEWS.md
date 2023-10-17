@@ -1,3 +1,11 @@
+# dreamlet 0.99.32
+  - Oct 16, 2026
+  - update `variancePartition` version dependency
+
+# dreamlet 0.99.31
+  - Oct 12, 2026
+  - fix error reporting in `processAssays()`
+
 # dreamlet 0.99.30
   - Sept 22, 2026
   - Fix issue with precision weights from cell number
