@@ -1,6 +1,7 @@
 # dreamlet 0.99.32
-  - Oct 16, 2026
+  - Oct 18, 2026
   - update `variancePartition` version dependency
+  - add `getWeightsList()`
 
 # dreamlet 0.99.31
   - Oct 12, 2026
