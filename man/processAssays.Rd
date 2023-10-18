@@ -17,6 +17,7 @@ processAssays(
   useCountsWeights = TRUE,
   span = "auto",
   quiet = FALSE,
+  weightsList = NULL,
   BPPARAM = SerialParam(),
   ...
 )
@@ -45,6 +46,8 @@ processAssays(
 \item{span}{Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}}
 
 \item{quiet}{show messages}
+
+\item{weightsList}{list storing matrix of precision weights for each cell type}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

@@ -15,6 +15,7 @@
 #' @param useCountsWeights use cell count weights
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
+#' @param weights matrix of precision weights 
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -32,7 +33,7 @@
 #' @importFrom lme4 subbars
 #' @importFrom MatrixGenerics colMeans2
 #'
-processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(), ...) {
+processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, weights=NULL, BPPARAM = SerialParam(), ...) {
 
   checkFormula(formula, data)
 
@@ -83,13 +84,13 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
 
   # sample-level weights based on cell counts and mean library size
-  if (useCountsWeights) {
-    w_cells <- n.cells
+  if (useCountsWeights & !is.null(weights) ) {
+    precWeights <- weights[rownames(y)[keep],colnames(y)]
   } else {
-    w_cells <- rep(1, length(n.cells))
+    precWeights <- rep(1, length(n.cells))
   }
 
-  geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
+  geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = precWeights, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
 
   # save formula used after dropping constant terms
   if (!is.null(geneExpr)) geneExpr$formula <- formula
@@ -121,6 +122,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @param useCountsWeights use cell count weights
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
+#' @param weightsList list storing matrix of precision weights for each cell type
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -156,7 +158,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
 #'
 #' @export
-processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = FALSE, BPPARAM = SerialParam(), ...) {
+processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = FALSE, weightsList = NULL, BPPARAM = SerialParam(), ...) {
   # checks
   stopifnot(is(sceObj, "SingleCellExperiment"))
   stopifnot(is(formula, "formula"))
@@ -219,7 +221,8 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       normalize.method = normalize.method,
       useCountsWeights = useCountsWeights,
       span = span,
-      BPPARAM = BPPARAM, ...
+      BPPARAM = BPPARAM, ...,
+      weights = weightsList[[k]][,rownames(data),drop=FALSE]
     )
 
     if (!quiet) message(format(Sys.time() - startTime, digits = 2))

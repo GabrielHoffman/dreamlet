@@ -18,6 +18,7 @@ processOneAssay(
   useCountsWeights = TRUE,
   span = "auto",
   quiet = TRUE,
+  weights = NULL,
   BPPARAM = SerialParam(),
   ...
 )
@@ -48,6 +49,8 @@ processOneAssay(
 \item{span}{Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}}
 
 \item{quiet}{show messages}
+
+\item{weights}{matrix of precision weights}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
