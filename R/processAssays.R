@@ -84,10 +84,10 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
 
   # sample-level weights based on cell counts and mean library size
-  if (useCountsWeights & !is.null(weights) ) {
+  if ( ! is.null(weights) & ! is(weights, "function") ) {
     precWeights <- weights[rownames(y)[keep],colnames(y)]
   } else {
-    precWeights <- rep(1, length(n.cells))
+    precWeights <- rep(1, ncol(y))
   }
 
   geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = precWeights, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
@@ -208,6 +208,10 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       metadata(sceObj)$agg_pars$by
     )
 
+    if( ! is.null(weightsList) ){
+      weights <- weightsList[[k]][,rownames(data),drop=FALSE]
+    }
+
     # processing counts with voom or log2 CPM
     res <- processOneAssay(y[, rownames(data), drop = FALSE],
       formula = formula,
@@ -222,7 +226,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       useCountsWeights = useCountsWeights,
       span = span,
       BPPARAM = BPPARAM, ...,
-      weights = weightsList[[k]][,rownames(data),drop=FALSE]
+      weights = weights
     )
 
     if (!quiet) message(format(Sys.time() - startTime, digits = 2))
