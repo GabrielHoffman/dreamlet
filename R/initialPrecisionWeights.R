@@ -31,7 +31,7 @@ getWeightFromCounts = function(countMatrix){
 }
 
 #' @export
-getWeightsForCellType = function(sce, cluster_id, sample_id, CT){
+getWeightsForCellType = function(sce, cluster_id, sample_id, CT, weightCap){
 
 	W <- lapply( unique(sce[[sample_id]]), function(ID){
 
@@ -41,6 +41,15 @@ getWeightsForCellType = function(sce, cluster_id, sample_id, CT){
 		getWeightFromCounts( countMatrix )
 		})
 	W <- do.call(cbind, W)
+
+	# scale each gene by min value
+	# so lowest weight is now 1
+	W <- W / rowMins( W, useNames=FALSE)
+
+	# set a weight cap at weightCap
+	W[W > weightCap] <- weightCap
+
+	# scale each gene to have a mean of 1
 	W <- W / rowMeans2(W, useNames=FALSE)
 
 	colnames(W) <- unique(sce[[sample_id]])
@@ -49,10 +58,12 @@ getWeightsForCellType = function(sce, cluster_id, sample_id, CT){
 }
 
 #' @export
-getWeightsList = function(sce, cluster_id, sample_id){
+getWeightsList = function(sce, cluster_id, sample_id, weightCap = 10){
 	W.list <- lapply( unique(sce[[cluster_id]]), function(CT){
-		getWeightsForCellType( sce, cluster_id, sample_id, CT)
+		getWeightsForCellType( sce, cluster_id, sample_id, CT, weightCap)
 	})
 	names(W.list)<- unique(sce[[cluster_id]])
  	W.list
- }
+}
+
+
