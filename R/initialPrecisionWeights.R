@@ -59,11 +59,48 @@ getWeightsForCellType = function(sce, cluster_id, sample_id, CT, weightCap){
 
 #' @export
 getWeightsList = function(sce, cluster_id, sample_id, weightCap = 10){
+
+	if( ! cluster_id %in% colnames(colData(sce)) ){
+		msg <- paste0("sample_id entry not found in colData(sce): ", cluster_id)
+		stop( msg )
+	}
+	if( ! sample_id %in% colnames(colData(sce)) ){
+		msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
+		stop( msg )
+	}
+
 	W.list <- lapply( unique(sce[[cluster_id]]), function(CT){
 		getWeightsForCellType( sce, cluster_id, sample_id, CT, weightCap)
 	})
 	names(W.list)<- unique(sce[[cluster_id]])
  	W.list
+}
+
+
+
+#' @export
+trimWeightOutliersGene = function(x, zmax){
+
+	# compute z-score
+	zscore = scale(x)
+
+	# extract parameters of transform
+	# z-score = (x - mu) / s
+	mu = attr(zscore,"scaled:center")
+	s = attr(zscore,"scaled:scale")
+	
+	# if x exceeds original value giving z-score of zmax, 
+	# replace with that orginal value
+	x[x > zmax * s + mu] = zmax * s + mu
+
+	# normalize values to have a mean of 1
+	x / mean(x)
+}
+
+#' @export
+trimWeightOutliers = function(W, zmax = 5){
+
+	t(apply(W, 1, trimWeightOutliersGene, zmax = zmax))
 }
 
 
