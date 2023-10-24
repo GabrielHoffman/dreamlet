@@ -1,3 +1,6 @@
+# dreamlet 0.99.33
+  - `computeLogCPM()` now returns `matrix` instead of `sparseMatrix`
+
 # dreamlet 0.99.32
   - Oct 18, 2026
   - update `variancePartition` version dependency

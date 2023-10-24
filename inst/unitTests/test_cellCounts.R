@@ -1,9 +1,6 @@
 
 test_cellCounts = function(){
 
-	library(muscat)
-	library(SingleCellExperiment)
-
 	data(example_sce)
 
 	# create pseudobulk for each sample and cell cluster

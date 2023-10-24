@@ -12,7 +12,6 @@
 #' @param min.prop minimum proportion of retained samples with non-zero counts
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
-#' @param useCountsWeights use cell count weights
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
 #' @param weights matrix of precision weights 
@@ -33,7 +32,7 @@
 #' @importFrom lme4 subbars
 #' @importFrom MatrixGenerics colMeans2
 #'
-processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, weights=NULL, BPPARAM = SerialParam(), ...) {
+processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights=NULL, BPPARAM = SerialParam(), ...) {
 
   checkFormula(formula, data)
 
@@ -55,7 +54,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   # subset expression and data
   y <- y[, include, drop = FALSE]
   data <- droplevels(data[include, , drop = FALSE])
-  n.cells <- n.cells[include]
+  # n.cells <- n.cells[include]
 
   # if there are too few remaining samples
   if (nrow(data) < min.samples) {
@@ -119,7 +118,6 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be retained
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
-#' @param useCountsWeights use cell count weights
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
 #' @param weightsList list storing matrix of precision weights for each cell type
@@ -158,7 +156,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
 #'
 #' @export
-processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = FALSE, weightsList = NULL, BPPARAM = SerialParam(), ...) {
+processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = FALSE, weightsList = NULL, BPPARAM = SerialParam(), ...) {
   # checks
   stopifnot(is(sceObj, "SingleCellExperiment"))
   stopifnot(is(formula, "formula"))
@@ -223,10 +221,10 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       min.prop = min.prop,
       isCounts = isCounts,
       normalize.method = normalize.method,
-      useCountsWeights = useCountsWeights,
       span = span,
-      BPPARAM = BPPARAM, ...,
-      weights = weights
+      weights = weights,
+      BPPARAM = BPPARAM, 
+      ...
     )
 
     if (!quiet) message(format(Sys.time() - startTime, digits = 2))
