@@ -1,11 +1,6 @@
 
 test_computeNormCounts = function(){
 
-	library(SingleCellExperiment)
-	library(muscat)
-	library(edgeR)
-	library(dreamlet)
-
 	data(example_sce)
 
 	# compute CPM using edgeR

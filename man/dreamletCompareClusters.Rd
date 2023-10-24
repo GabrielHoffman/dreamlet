@@ -15,7 +15,6 @@ dreamletCompareClusters(
   min.samples = 4,
   isCounts = TRUE,
   normalize.method = "TMM",
-  useCountsWeights = TRUE,
   robust = FALSE,
   quiet = FALSE,
   contrasts = c(compare = paste("cellClustertest - cellClusterbaseline")),
@@ -44,8 +43,6 @@ dreamletCompareClusters(
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
-
-\item{useCountsWeights}{use cell count weights}
 
 \item{robust}{logical, use eBayes method that is robust to outlier genes}
 

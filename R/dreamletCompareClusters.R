@@ -23,7 +23,6 @@
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
-#' @param useCountsWeights use cell count weights
 #' @param robust logical, use eBayes method that is robust to outlier genes
 #' @param quiet show messages
 #' @param contrasts cell type is encoded in variable \code{cellCluster} with levels \code{test} and \code{baseline}. \code{contrasts} specifies contrasts passed to \code{variancePartition::makeContrastsDream()}.  Note, advanced users only.
@@ -115,7 +114,7 @@
 #'
 #' @importFrom variancePartition dream eBayes topTable makeContrastsDream
 #' @export
-dreamletCompareClusters <- function(pb, assays, method = c("fixed", "random", "none"), formula = ~0, collapse = TRUE, min.cells = 10, min.count = 10, min.samples = 4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, robust = FALSE, quiet = FALSE, contrasts = c(compare = paste("cellClustertest - cellClusterbaseline")), BPPARAM = SerialParam(), errorsAsWarnings = FALSE, ...) {
+dreamletCompareClusters <- function(pb, assays, method = c("fixed", "random", "none"), formula = ~0, collapse = TRUE, min.cells = 10, min.count = 10, min.samples = 4, isCounts = TRUE, normalize.method = "TMM", robust = FALSE, quiet = FALSE, contrasts = c(compare = paste("cellClustertest - cellClusterbaseline")), BPPARAM = SerialParam(), errorsAsWarnings = FALSE, ...) {
   method <- match.arg(method)
   formula <- as.formula(formula)
 
@@ -326,7 +325,6 @@ dreamletCompareClusters <- function(pb, assays, method = c("fixed", "random", "n
         isCounts = isCounts,
         normalize.method = normalize.method,
         quiet = quiet,
-        useCountsWeights = useCountsWeights,
         BPPARAM = BPPARAM, ...
       )
     },

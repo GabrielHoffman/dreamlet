@@ -1,3 +1,24 @@
+
+# dreamlet 1.0.1 / 1.1.1
+  - bug fix in Bioc 3.18 and devel
+
+# dreamlet 0.99.33
+  - `computeLogCPM()` now returns `matrix` instead of `sparseMatrix`
+
+# dreamlet 0.99.32
+  - Oct 18, 2026
+  - update `variancePartition` version dependency
+  - add `getWeightsList()`
+
+# dreamlet 0.99.31
+  - Oct 12, 2026
+  - fix error reporting in `processAssays()`
+
+# dreamlet 0.99.30
+  - Sept 22, 2026
+  - Fix issue with precision weights from cell number
+  - Include `setAutoBlockSize()` update within `aggregateToPseudoBulk()`
+
 # dreamlet 0.99.28
   - Sept 5, 2026
   - Update error handling for `processAssays()` and `fitVarPart()`
@@ -14,7 +35,6 @@
   - August 8, 2023
   - `dreamletCompareClusters()` now allows cell-level covariates in response to https://github.com/GabrielHoffman/dreamlet/issues/11
   - Fix code for Bioconductor submission
-
 
 # dreamlet 0.99.21
   - July 17, 2023

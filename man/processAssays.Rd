@@ -14,9 +14,9 @@ processAssays(
   min.prop = 0.4,
   isCounts = TRUE,
   normalize.method = "TMM",
-  useCountsWeights = TRUE,
   span = "auto",
   quiet = FALSE,
+  weightsList = NULL,
   BPPARAM = SerialParam(),
   ...
 )
@@ -40,11 +40,11 @@ processAssays(
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 
-\item{useCountsWeights}{use cell count weights}
-
 \item{span}{Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}}
 
 \item{quiet}{show messages}
+
+\item{weightsList}{list storing matrix of precision weights for each cell type}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
