@@ -15,7 +15,6 @@ processOneAssay(
   min.prop = 0.4,
   isCounts = TRUE,
   normalize.method = "TMM",
-  useCountsWeights = TRUE,
   span = "auto",
   quiet = TRUE,
   weights = NULL,
@@ -43,8 +42,6 @@ processOneAssay(
 \item{isCounts}{logical, indicating if data is raw counts}
 
 \item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
-
-\item{useCountsWeights}{use cell count weights}
 
 \item{span}{Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}}
 
