@@ -1,9 +1,7 @@
 
-library(BiocParallel)
-library(DelayedArray)
 library(Matrix)
-library(SingleCellExperiment)
 library(dreamlet)
+library(DelayedArray)
 library(edgeR)
 library(muscat)
 library(RUnit)

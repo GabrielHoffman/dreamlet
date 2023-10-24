@@ -9,9 +9,9 @@ test_pseudobulk_example = function(){
 
 	ids <- sample(LETTERS[1:5], ncol(example_sce), replace=TRUE)
 
-	out <- scuttle::summarizeAssayByGroup(example_sce, ids)
+	out <- suppressWarnings(scuttle::summarizeAssayByGroup(example_sce, ids))
 
-	out2 <- dreamlet:::summarizeAssayByGroup2(example_sce, ids, statistics = c("mean", "sum", "num.detected", "prop.detected", "median"))
+	out2 <- suppressWarnings(dreamlet:::summarizeAssayByGroup2(example_sce, ids, statistics = c("mean", "sum", "num.detected", "prop.detected", "median")))
 
 	checkEquals(out, out2)
 }
@@ -37,7 +37,8 @@ test_aggregateData = function(){
 	pb2 <- dreamlet::aggregateToPseudoBulk(example_sce, assay = "cpm",
 			cluster_id = "cluster_id",
 			sample_id = "sample_id", 
-			scale = TRUE) 
+			scale = TRUE, 
+			checkValues = FALSE) 
 
 	metadata(pb2)$aggr_means = c()
 

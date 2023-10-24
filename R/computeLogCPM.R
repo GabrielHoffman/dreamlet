@@ -60,5 +60,13 @@ computeLogCPM <- function(sce, prior.count = 2) {
   # as in edgeR::cpm() call to C++ function add_prior.cpp
   pc <- prior.count * lib.size / mean(lib.size)
 
-  t(log2(t(counts(sce)) + pc) - log2(lib.size) + log2(1e6))
+  countMatrix = counts(sce)
+
+  # if countMatrix is dgeMatrix
+  # convert to matrix, since result is not sparse
+  if( is(countMatrix, "sparseMatrix") ){
+    countMatrix = as.matrix(countMatrix)
+  }
+
+  t(log2(t(countMatrix) + pc) - log2(lib.size) + log2(1e6))
 }

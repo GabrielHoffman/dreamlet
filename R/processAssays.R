@@ -12,9 +12,9 @@
 #' @param min.prop minimum proportion of retained samples with non-zero counts
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
-#' @param useCountsWeights use cell count weights
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
+#' @param weights matrix of precision weights 
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -30,17 +30,18 @@
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
 #' @importFrom lme4 subbars
+#' @importFrom MatrixGenerics colMeans2
 #'
-processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = TRUE, BPPARAM = SerialParam(), ...) {
+processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights=NULL, BPPARAM = SerialParam(), ...) {
+
   checkFormula(formula, data)
+
   if (is.null(n.cells)) {
     stop("n_cells must not be NULL")
   }
   if (!is.matrix(y)) {
     y <- as.matrix(y)
   }
-
-  # nCells: extract from y
 
   # samples to include of they have enough observed cells
   include <- (n.cells >= min.cells)
@@ -53,63 +54,50 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   # subset expression and data
   y <- y[, include, drop = FALSE]
   data <- droplevels(data[include, , drop = FALSE])
+  # n.cells <- n.cells[include]
 
   # if there are too few remaining samples
   if (nrow(data) < min.samples) {
     return(NULL)
   }
 
-  # sample-level weights based on cell counts
-  w_cells <- n.cells[include]
-
-  if (!useCountsWeights) {
-    w_cells[] <- 1
+  if ( ! isCounts ) {
+    stop("isCounts = FALSE is not currently supported")
   }
 
-  if (isCounts) {
-    # Get count data and normalize
-    y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
-    y <- calcNormFactors(y, method = normalize.method)
+  # Get count data and normalize
+  y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
+  y <- calcNormFactors(y, method = normalize.method)
 
-    # drop any constant terms from the formula
-    formula <- removeConstantTerms(formula, data)
+  # drop any constant terms from the formula
+  formula <- removeConstantTerms(formula, data)
 
-    # Drop variables in a redundant pair
-    formula <- dropRedundantTerms(formula, data)
+  # Drop variables in a redundant pair
+  formula <- dropRedundantTerms(formula, data)
 
-    # get samples with enough cells
-    # filter genes
-    # design: model.matrix( subbars(formula), data)
-    # Design often includes batch and donor, which are very small
-    # 	this causes too many genes to be retained
-    keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
+  # get samples with enough cells
+  # filter genes
+  # design: model.matrix( subbars(formula), data)
+  # Design often includes batch and donor, which are very small
+  #   this causes too many genes to be retained
+  keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
 
-    geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = w_cells, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
-
-    errorArray <- attr(geneExpr, "errors")
-
-    # save formula used after dropping constant terms
-    if (!is.null(geneExpr)) geneExpr$formula <- formula
+  # sample-level weights based on cell counts and mean library size
+  if ( ! is.null(weights) & ! is(weights, "function") ) {
+    precWeights <- weights[rownames(y)[keep],colnames(y)]
   } else {
-    # assumes already converted to log2 CPM
-
-    # only include genes that show variation,
-    # and have at least 5 nonzero values
-    include <- apply(y, 1, function(x) {
-      (var(x) > 0) & (sum(x != 0) > 5)
-    })
-
-    # if data is already log2 CPM
-    # create EList object storing gene expression and sample weights
-    geneExpr <- new("EList", list(E = y[include, , drop = FALSE], weights = w_cells))
-
-    geneExpr$formula <- ~0
+    precWeights <- rep(1, ncol(y))
   }
 
+  geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = precWeights, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
+
+  # save formula used after dropping constant terms
+  if (!is.null(geneExpr)) geneExpr$formula <- formula
   if (!is.null(geneExpr)) geneExpr$isCounts <- isCounts
 
   geneExpr
 }
+
 
 
 # since precision weights are not used, use the trend in the eBayes step
@@ -130,9 +118,9 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be retained
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
-#' @param useCountsWeights use cell count weights
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
+#' @param weightsList list storing matrix of precision weights for each cell type
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -168,7 +156,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
 #'
 #' @export
-processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", useCountsWeights = TRUE, span = "auto", quiet = FALSE, BPPARAM = SerialParam(), ...) {
+processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = FALSE, weightsList = NULL, BPPARAM = SerialParam(), ...) {
   # checks
   stopifnot(is(sceObj, "SingleCellExperiment"))
   stopifnot(is(formula, "formula"))
@@ -218,6 +206,10 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       metadata(sceObj)$agg_pars$by
     )
 
+    if( ! is.null(weightsList) ){
+      weights <- weightsList[[k]][,rownames(data),drop=FALSE]
+    }
+
     # processing counts with voom or log2 CPM
     res <- processOneAssay(y[, rownames(data), drop = FALSE],
       formula = formula,
@@ -229,9 +221,10 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       min.prop = min.prop,
       isCounts = isCounts,
       normalize.method = normalize.method,
-      useCountsWeights = useCountsWeights,
       span = span,
-      BPPARAM = BPPARAM, ...
+      weights = weights,
+      BPPARAM = BPPARAM, 
+      ...
     )
 
     if (!quiet) message(format(Sys.time() - startTime, digits = 2))
@@ -258,7 +251,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
   })
   names(error.initial) <- names(resList)
   errors <- lapply(resList, function(x) {
-    x$errors
+    attr(x, "errors")
   })
   names(errors) <- names(resList)
 
@@ -270,7 +263,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       formula = Reduce(paste, deparse(resList[[id]]$formula)),
       formDropsTerms = !equalFormulas(resList[[id]]$formula, formula),
       n_genes = nrow(resList[[id]]),
-      n_errors = length(resList[[id]]$errors),
+      n_errors = length(attr(resList[[id]], "errors")),
       error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE)
     )
   })
