@@ -10,11 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-<<<<<<< HEAD
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
-=======
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.32</small>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,10 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
-<<<<<<< HEAD
-=======
     <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
     <a class="dropdown-item" href="../articles/non_lin_eff.html">Testing non-linear effects</a>
@@ -80,12 +73,8 @@
 <span>  scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span>progressbar <span class="op">=</span> <span class="va">verbose</span><span class="op">)</span>,</span>
-<<<<<<< HEAD
-<span>  checkValues <span class="op">=</span> <span class="cn">TRUE</span></span>
-=======
 <span>  checkValues <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  h5adBlockSizes <span class="op">=</span> <span class="fl">1e+09</span></span>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -130,13 +119,10 @@ object specifying how aggregation should be parallelized.</p></dd>
 <dt>checkValues</dt>
 <dd><p>logical. Should we check that signal values are positive integers?</p></dd>
 
-<<<<<<< HEAD
-=======
 
 <dt>h5adBlockSizes</dt>
 <dd><p>set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.</p></dd>
 
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -149,27 +135,16 @@ object specifying how aggregation should be parallelized.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-<<<<<<< HEAD
-    <p>Adapted from <code><a href="https://rdrr.io/pkg/muscat/man/aggregateData.html" class="external-link">muscat::aggregateData</a></code> and has simular syntax and same results.  This is much faster for <code>SingleCellExperiment</code> backed by H5AD files using <code>DelayedMatrix</code> because this summarizes counts using <code><a href="https://rdrr.io/pkg/DelayedMatrixStats/man/DelayedMatrixStats.html" class="external-link">DelayedMatrixStats</a></code>.  But this function also includes optmizations for <code>sparseMatrix</code> used by <code><a href="https://satijalab.org/seurat/reference/Seurat-package.html" class="external-link">Seurat</a></code> by using <code>sparseMatrixStats</code>.</p>
-=======
     <p>Adapted from <code><a href="https://rdrr.io/pkg/muscat/man/aggregateData.html" class="external-link">muscat::aggregateData</a></code> and has similar syntax and same results.  This is much faster for <code>SingleCellExperiment</code> backed by H5AD files using <code>DelayedMatrix</code> because this summarizes counts using <code><a href="https://rdrr.io/pkg/DelayedMatrixStats/man/DelayedMatrixStats.html" class="external-link">DelayedMatrixStats</a></code>.  But this function also includes optmizations for <code>sparseMatrix</code> used by <code><a href="https://satijalab.org/seurat/reference/Seurat-package.html" class="external-link">Seurat</a></code> by using <code>sparseMatrixStats</code>.</p>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <p>Keeps variables from <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code> that are constant within <code>sample_id</code>.  For example, sex will be constant for all cells from the same <code>sample_id</code>, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each <code>sample_id</code>, so it is dropped.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Crowell, HL, Soneson, C, Germain, P-L, Calini, D,
 Collin, L, Raposo, C, Malhotra, D &amp; Robinson, MD:
-<<<<<<< HEAD
-On the discovery of population-specific state transitions from
-multi-sample multi-condition single-cell RNA sequencing data.
-<em>bioRxiv</em> <strong>713412</strong> (2018).
-doi: <a href="https://doi.org/10.1101/713412" class="external-link">https://doi.org/10.1101/713412</a></p>
-=======
 Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data.
 <em>Nature Communications</em> <strong>11(1):6077</strong> (2020).
 doi: <a href="https://doi.org/10.1038/s41467-020-19894-4" class="external-link">https://doi.org/10.1038/s41467-020-19894-4</a></p>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
