@@ -13,7 +13,8 @@ aggregateToPseudoBulk(
   scale = FALSE,
   verbose = TRUE,
   BPPARAM = SerialParam(progressbar = verbose),
-  checkValues = TRUE
+  checkValues = TRUE,
+  h5adBlockSizes = 1e+09
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ with the effective library size & multiplied by 1M?}
 object specifying how aggregation should be parallelized.}
 
 \item{checkValues}{logical. Should we check that signal values are positive integers?}
+
+\item{h5adBlockSizes}{set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.}
 }
 \value{
 a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
@@ -48,7 +51,7 @@ a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggregateData} and has same syntax and results.  But can be much faster for \code{SingleCellExperiment} backed by H5AD files using on-disk storage.
 }
 \details{
-Adapted from \code{muscat::aggregateData} and has simular syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
+Adapted from \code{muscat::aggregateData} and has similar syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
 
 Keeps variables from \code{colData()} that are constant within \code{sample_id}.  For example, sex will be constant for all cells from the same \code{sample_id}, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each \code{sample_id}, so it is dropped.
 }
@@ -80,10 +83,9 @@ pb2
 \references{
 Crowell, HL, Soneson, C, Germain, P-L, Calini, D,
 Collin, L, Raposo, C, Malhotra, D & Robinson, MD:
-On the discovery of population-specific state transitions from
-multi-sample multi-condition single-cell RNA sequencing data.
-\emph{bioRxiv} \strong{713412} (2018).
-doi: \url{https://doi.org/10.1101/713412}
+Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data.
+\emph{Nature Communications} \strong{11(1):6077} (2020).
+doi: \url{https://doi.org/10.1038/s41467-020-19894-4}
 }
 \author{
 Gabriel Hoffman, Helena L Crowell & Mark D Robinson

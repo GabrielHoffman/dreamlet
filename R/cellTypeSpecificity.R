@@ -79,7 +79,7 @@ cellTypeSpecificity <- function(pb, ...) {
   rownames(geneExpr) <- rownames(pb)
 
   # identify genes with no reads
-  idx <- which(rowSums2(geneExpr) == 0)
+  idx <- which(rowSums2(geneExpr, useNames = TRUE) == 0)
 
   if (length(idx) > 0) {
     geneExpr <- geneExpr[-idx, , drop = FALSE]

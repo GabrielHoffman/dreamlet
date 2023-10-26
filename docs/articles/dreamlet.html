@@ -33,7 +33,11 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
+<<<<<<< HEAD
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+=======
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.32</small>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +56,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
+<<<<<<< HEAD
+=======
+    <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
     <a class="dropdown-item" href="../articles/non_lin_eff.html">Testing non-linear effects</a>
@@ -90,8 +98,13 @@ analysis of pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
+<<<<<<< HEAD
             <h4 data-toc-skip class="date">Run on 2023-10-26
 15:19:03</h4>
+=======
+            <h4 data-toc-skip class="date">Run on 2023-10-24
+15:42:39</h4>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -181,7 +194,11 @@ workflow.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
+<<<<<<< HEAD
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
+=======
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -218,7 +235,11 @@ on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.htm
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># one 'assay' per cell type</span></span>
+<<<<<<< HEAD
 <span><span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
+=======
+<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <pre><code><span><span class="co">## [1] "B cells"           "CD14+ Monocytes"   "CD4 T cells"      </span></span>
 <span><span class="co">## [4] "CD8 T cells"       "Dendritic cells"   "FCGR3A+ Monocytes"</span></span>
 <span><span class="co">## [7] "Megakaryocytes"    "NK cells"</span></span></code></pre>
@@ -384,6 +405,7 @@ t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
 <span><span class="co">##              assay          ID     logFC   AveExpr         t     P.Value</span></span>
 <span><span class="co">##        &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
+<<<<<<< HEAD
 <span><span class="co">## 1      CD4 T cells        IFI6   5.66980   8.52892   33.8111 3.41996e-22</span></span>
 <span><span class="co">## 2      CD4 T cells       ISG20   3.05455  10.40388   33.7251 3.63713e-22</span></span>
 <span><span class="co">## 3      CD4 T cells        MT2A   4.32697   7.80640   30.2424 5.04106e-21</span></span>
@@ -406,10 +428,35 @@ t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <span><span class="co">## 8  1.62045e-16   35.2559   23.8127</span></span>
 <span><span class="co">## 9  2.33447e-16   34.6442   24.3935</span></span>
 <span><span class="co">## 10 2.33447e-16   34.7039   26.1714</span></span></code></pre>
+=======
+<span><span class="co">## 1          B cells       ISG15   5.51820  10.20272   28.0526 2.16702e-22</span></span>
+<span><span class="co">## 2      CD4 T cells       ISG20   3.07099  10.40388   35.2136 3.88955e-22</span></span>
+<span><span class="co">## 3      CD4 T cells        IFI6   5.72708   8.52892   34.1873 7.79328e-22</span></span>
+<span><span class="co">## 4      CD4 T cells        MT2A   4.32767   7.80640   33.5285 1.23044e-21</span></span>
+<span><span class="co">## 5          B cells       ISG20   3.28680  11.38360   26.0584 1.66073e-21</span></span>
+<span><span class="co">## 6  CD14+ Monocytes       IL1RN   7.07165   7.79103   37.6596 2.41868e-21</span></span>
+<span><span class="co">## 7      CD4 T cells       HERC5   4.26222   6.74189   31.5666 5.05491e-21</span></span>
+<span><span class="co">## 8         NK cells       ISG15   4.68024  11.01479   25.9496 9.10622e-21</span></span>
+<span><span class="co">## 9      CD4 T cells     TNFSF10   4.45390   7.49081   29.2038 3.11180e-20</span></span>
+<span><span class="co">## 10     CD4 T cells       ISG15   5.24048  10.06906   28.7233 4.58066e-20</span></span>
+<span><span class="co">##      adj.P.Val         B     z.std</span></span>
+<span><span class="co">##      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1  2.81837e-18   41.1173   28.0526</span></span>
+<span><span class="co">## 2  2.81837e-18   40.7567   35.2136</span></span>
+<span><span class="co">## 3  3.76467e-18   39.9694   34.1873</span></span>
+<span><span class="co">## 4  4.45789e-18   39.5243   33.5285</span></span>
+<span><span class="co">## 5  4.81345e-18   39.1877   26.0584</span></span>
+<span><span class="co">## 6  5.84192e-18   38.0971   37.6596</span></span>
+<span><span class="co">## 7  1.04651e-17   38.0134   31.5666</span></span>
+<span><span class="co">## 8  1.64959e-17   37.4244   25.9496</span></span>
+<span><span class="co">## 9  5.01069e-17   36.3643   29.2038</span></span>
+<span><span class="co">## 10 6.63829e-17   36.0392   28.7233</span></span></code></pre>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># only B cells</span></span>
 <span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           logFC   AveExpr        t      P.Value    adj.P.Val        B</span></span>
+<<<<<<< HEAD
 <span><span class="co">## ISG15  5.530786 10.202722 26.32180 6.514301e-21 1.277454e-17 37.74241</span></span>
 <span><span class="co">## ISG20  3.331031 11.383603 23.81268 8.945370e-20 8.770935e-17 35.25586</span></span>
 <span><span class="co">## LY6E   4.331290  8.706648 19.41890 1.717362e-17 1.122582e-14 29.96907</span></span>
@@ -420,6 +467,18 @@ t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <span><span class="co">## IFITM2 2.999742  8.731566 18.05452 1.088608e-16 2.668450e-14 28.18655</span></span>
 <span><span class="co">## SAT1   2.206045  9.657178 17.55506 2.205281e-16 4.805063e-14 27.46246</span></span>
 <span><span class="co">## SOCS1  2.432287  8.588454 16.59286 9.023818e-16 1.769571e-13 26.08723</span></span></code></pre>
+=======
+<span><span class="co">## ISG15  5.518198 10.202722 28.05258 2.167018e-22 4.249522e-19 41.11732</span></span>
+<span><span class="co">## ISG20  3.286799 11.383603 26.05839 1.660726e-21 1.628342e-18 39.18767</span></span>
+<span><span class="co">## LY6E   4.285036  8.706648 21.61156 2.753542e-19 1.799898e-16 34.04016</span></span>
+<span><span class="co">## PLSCR1 4.134285  8.271191 21.04159 5.669185e-19 2.779318e-16 33.29265</span></span>
+<span><span class="co">## EPSTI1 3.707817  8.107930 20.62535 9.712582e-19 3.809275e-16 32.76930</span></span>
+<span><span class="co">## IRF7   3.703594  8.678591 20.35573 1.383601e-18 4.522070e-16 32.47318</span></span>
+<span><span class="co">## UBE2L6 2.714217  9.241028 19.90855 2.511075e-18 7.034597e-16 31.89778</span></span>
+<span><span class="co">## SAT1   2.161357  9.657178 19.53205 4.185498e-18 1.025970e-15 31.37186</span></span>
+<span><span class="co">## IFITM2 2.924303  8.731566 18.69084 1.352583e-17 2.947128e-15 30.22422</span></span>
+<span><span class="co">## TRIM22 2.957850  7.201113 18.51317 1.742862e-17 3.417753e-15 29.88577</span></span></code></pre>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 </div>
 <div class="section level3">
 <h3 id="forest-plot">Forest plot<a class="anchor" aria-label="anchor" href="#forest-plot"></a>
@@ -503,6 +562,7 @@ object, the coefficient of interest, and gene sets as a
 <span><span class="co">## 6 B cells StimStatusstim</span></span>
 <span><span class="co">##                                                        Geneset NGenes</span></span>
 <span><span class="co">## 1                                GO0022626: cytosolic ribosome     74</span></span>
+<<<<<<< HEAD
 <span><span class="co">## 2                          GO0000151: ubiquitin ligase complex     34</span></span>
 <span><span class="co">## 3                 GO0022625: cytosolic large ribosomal subunit     45</span></span>
 <span><span class="co">## 4                             GO0031256: leading edge membrane     20</span></span>
@@ -522,6 +582,27 @@ object, the coefficient of interest, and gene sets as a
 <span><span class="co">## 4 0.4868312</span></span>
 <span><span class="co">## 5 0.5052574</span></span>
 <span><span class="co">## 6 0.5099256</span></span></code></pre>
+=======
+<span><span class="co">## 2                 GO0022625: cytosolic large ribosomal subunit     45</span></span>
+<span><span class="co">## 3                             GO0031256: leading edge membrane     20</span></span>
+<span><span class="co">## 4                          GO0000151: ubiquitin ligase complex     34</span></span>
+<span><span class="co">## 5 GO0090575: RNA polymerase II transcription regulator complex     37</span></span>
+<span><span class="co">## 6                                   GO0032587: ruffle membrane     13</span></span>
+<span><span class="co">##   Correlation     delta        se      p.less  p.greater      PValue Direction</span></span>
+<span><span class="co">## 1        0.01 -1.233515 0.3858222 0.003228787 0.99677121 0.006457574      Down</span></span>
+<span><span class="co">## 2        0.01 -1.216670 0.4507852 0.008645201 0.99135480 0.017290403      Down</span></span>
+<span><span class="co">## 3        0.01 -1.608029 0.6127150 0.010001200 0.98999880 0.020002399      Down</span></span>
+<span><span class="co">## 4        0.01  1.297388 0.4978363 0.989634214 0.01036579 0.020731572        Up</span></span>
+<span><span class="co">## 5        0.01  1.246819 0.4827837 0.989149486 0.01085051 0.021701028        Up</span></span>
+<span><span class="co">## 6        0.01 -1.778405 0.7366115 0.015017075 0.98498292 0.030034151      Down</span></span>
+<span><span class="co">##         FDR</span></span>
+<span><span class="co">## 1 0.2766211</span></span>
+<span><span class="co">## 2 0.4148657</span></span>
+<span><span class="co">## 3 0.4328533</span></span>
+<span><span class="co">## 4 0.4328533</span></span>
+<span><span class="co">## 5 0.4415662</span></span>
+<span><span class="co">## 6 0.5225274</span></span></code></pre>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <div class="section level3">
 <h3 id="heatmap-of-top-genesets">Heatmap of top genesets<a class="anchor" aria-label="anchor" href="#heatmap-of-top-genesets"></a>
 </h3>
@@ -568,6 +649,7 @@ observed for each cell cluster.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_Bcell</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                             logFC   AveExpr         t      P.Value    adj.P.Val</span></span>
+<<<<<<< HEAD
 <span><span class="co">## TYROBP                  -7.414914  7.917618 -90.80445 6.842120e-32 3.215797e-28</span></span>
 <span><span class="co">## FTL                     -4.940092 13.169468 -66.22295 1.268317e-28 2.980544e-25</span></span>
 <span><span class="co">## CD63                    -5.078535  8.760309 -59.02003 1.962995e-27 3.075358e-24</span></span>
@@ -581,6 +663,21 @@ observed for each cell cluster.</p>
 <span><span class="co">## C15orf48                51.05221</span></span>
 <span><span class="co">## HLA-DRA_ENSG00000204287 50.11427</span></span>
 <span><span class="co">## CCL2                    49.86496</span></span></code></pre>
+=======
+<span><span class="co">## TYROBP                  -7.414953  7.917618 -84.24636 1.124720e-30 5.286182e-27</span></span>
+<span><span class="co">## FTL                     -4.926872 13.169468 -60.77813 2.339440e-27 5.497684e-24</span></span>
+<span><span class="co">## C15orf48                -7.218145  8.398874 -53.46662 4.660155e-26 7.300910e-23</span></span>
+<span><span class="co">## CD63                    -5.109126  8.760309 -52.37698 7.531810e-26 8.849877e-23</span></span>
+<span><span class="co">## HLA-DRA_ENSG00000204287 -6.418672  8.865795 -47.72448 6.575537e-25 6.181005e-22</span></span>
+<span><span class="co">## FCER1G                  -6.534198  8.016642 -47.06305 9.098642e-25 6.409721e-22</span></span>
+<span><span class="co">##                                B</span></span>
+<span><span class="co">## TYROBP                  58.93678</span></span>
+<span><span class="co">## FTL                     52.78484</span></span>
+<span><span class="co">## C15orf48                49.59619</span></span>
+<span><span class="co">## CD63                    49.22679</span></span>
+<span><span class="co">## HLA-DRA_ENSG00000204287 47.11376</span></span>
+<span><span class="co">## FCER1G                  46.72703</span></span></code></pre>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 </div>
 <div class="section level2">
 <h2 id="gene-cluster-specificity">Gene-cluster specificity<a class="anchor" aria-label="anchor" href="#gene-cluster-specificity"></a>
@@ -631,6 +728,7 @@ type:</p>
 <span><span class="co">##  [1] GO.db_3.17.0                org.Hs.eg.db_3.17.0        </span></span>
 <span><span class="co">##  [3] AnnotationDbi_1.62.1        muscData_1.14.0            </span></span>
 <span><span class="co">##  [5] scater_1.28.0               scuttle_1.10.1             </span></span>
+<<<<<<< HEAD
 <span><span class="co">##  [7] zenith_1.3.1                ExperimentHub_2.8.1        </span></span>
 <span><span class="co">##  [9] AnnotationHub_3.8.0         BiocFileCache_2.8.0        </span></span>
 <span><span class="co">## [11] dbplyr_2.3.2                muscat_1.14.0              </span></span>
@@ -642,6 +740,19 @@ type:</p>
 <span><span class="co">## [23] matrixStats_1.0.0           variancePartition_1.32.1   </span></span>
 <span><span class="co">## [25] BiocParallel_1.34.2         limma_3.56.2               </span></span>
 <span><span class="co">## [27] ggplot2_3.4.4               BiocStyle_2.28.0           </span></span>
+=======
+<span><span class="co">##  [7] SingleCellExperiment_1.22.0 SummarizedExperiment_1.30.1</span></span>
+<span><span class="co">##  [9] Biobase_2.60.0              GenomicRanges_1.52.0       </span></span>
+<span><span class="co">## [11] GenomeInfoDb_1.36.1         IRanges_2.34.1             </span></span>
+<span><span class="co">## [13] S4Vectors_0.38.1            MatrixGenerics_1.12.0      </span></span>
+<span><span class="co">## [15] matrixStats_1.0.0           zenith_1.3.1               </span></span>
+<span><span class="co">## [17] ExperimentHub_2.8.1         AnnotationHub_3.8.0        </span></span>
+<span><span class="co">## [19] BiocFileCache_2.8.0         dbplyr_2.3.2               </span></span>
+<span><span class="co">## [21] BiocGenerics_0.46.0         muscat_1.14.0              </span></span>
+<span><span class="co">## [23] dreamlet_0.99.30            variancePartition_1.31.20  </span></span>
+<span><span class="co">## [25] BiocParallel_1.34.2         limma_3.56.2               </span></span>
+<span><span class="co">## [27] ggplot2_3.4.2               BiocStyle_2.28.0           </span></span>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] fs_1.6.2                      bitops_1.0-7                 </span></span>
@@ -726,7 +837,11 @@ type:</p>
 <span><span class="co">## [159] XML_3.99-0.14                 evaluate_0.21                </span></span>
 <span><span class="co">## [161] BiocManager_1.30.20           httpuv_1.6.11                </span></span>
 <span><span class="co">## [163] nloptr_2.0.3                  foreach_1.5.2                </span></span>
+<<<<<<< HEAD
 <span><span class="co">## [165] tidyr_1.3.0                   purrr_1.0.2                  </span></span>
+=======
+<span><span class="co">## [165] tidyr_1.3.0                   purrr_1.0.1                  </span></span>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span><span class="co">## [167] future_1.32.0                 clue_0.3-64                  </span></span>
 <span><span class="co">## [169] scattermore_1.1               ashr_2.2-54                  </span></span>
 <span><span class="co">## [171] rsvd_1.0.5                    broom_1.0.5                  </span></span>
