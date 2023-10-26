@@ -10,7 +10,11 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
+<<<<<<< HEAD
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+=======
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.32</small>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +32,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
+<<<<<<< HEAD
+=======
+    <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
     <a class="dropdown-item" href="../articles/non_lin_eff.html">Testing non-linear effects</a>
@@ -74,6 +82,10 @@
 <span>  min.samples <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  isCounts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  normalize.method <span class="op">=</span> <span class="st">"TMM"</span>,</span>
+<<<<<<< HEAD
+=======
+<span>  useCountsWeights <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span>  robust <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  contrasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>compare <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"cellClustertest - cellClusterbaseline"</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -125,6 +137,13 @@
 <dd><p>normalization method to be used by <code>calcNormFactors</code></p></dd>
 
 
+<<<<<<< HEAD
+=======
+<dt>useCountsWeights</dt>
+<dd><p>use cell count weights</p></dd>
+
+
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <dt>robust</dt>
 <dd><p>logical, use eBayes method that is robust to outlier genes</p></dd>
 
@@ -182,7 +201,10 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Evaluate the specificity of each gene for each cluster</span></span></span>
 <span class="r-in"><span><span class="va">df_cts</span> <span class="op">&lt;-</span> <span class="fu"><a href="cellTypeSpecificity.html">cellTypeSpecificity</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></span>
+<<<<<<< HEAD
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
+=======
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare first two assays (i.e. cell types)</span></span></span>
 <span class="r-in"><span><span class="va">ct.pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B cells"</span>, <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
@@ -210,8 +232,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.674191 10.097965 -19.29905 6.665193e-10 7.031778e-08 13.35939</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></span>
+<<<<<<< HEAD
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
+=======
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span class="r-plt img"><img src="dreamletCompareClusters-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare B cells versus the rest of the cell types</span></span></span>
@@ -236,8 +261,11 @@
 <span class="r-in"><span><span class="co"># Get genes upregulated in B cells</span></span></span>
 <span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
+<<<<<<< HEAD
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
+=======
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span class="r-plt img"><img src="dreamletCompareClusters-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
@@ -273,8 +301,11 @@
 <span class="r-in"><span><span class="co"># Get genes upregulated in monocytes</span></span></span>
 <span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span></span></span>
+<<<<<<< HEAD
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
+=======
+>>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span class="r-plt img"><img src="dreamletCompareClusters-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

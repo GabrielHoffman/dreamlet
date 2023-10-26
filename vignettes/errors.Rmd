@@ -1,0 +1,145 @@
+---
+title: "Error handling"
+author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
+date: "Run on `r format(Sys.time())`"
+documentclass: article
+vignette: >
+  %\VignetteIndexEntry{Error handling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[utf8]{inputenc}
+# output:
+#   BiocStyle::html_document:
+#     toc: true
+#     toc_float: true
+---
+
+<!---
+
+cd /Users/gabrielhoffman/workspace/repos/dreamlet/vignettes
+
+rmarkdown::render("errors.Rmd")
+
+
+--->
+
+
+<style>
+body {
+text-align: justify}
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  error = FALSE,
+  tidy = FALSE,
+  dev = c("png"),
+  cache = TRUE
+)
+```
+
+`dreamlet()` evaluates precision-weighted linear (mixed) models on each gene that passes standard filters.  The linear mixed model used by `dream()` can be a little fragile for small sample sizes and correlated covariates. `dreamlet()` runs `variancePartition::dream()` in the backend for each cell cluster.  `dream()` reports model failures for each cell cluster and `dreamlet()` reports these failures to the user. `dreamlet()` returns all **successful** model fits to be used for downstream analysis.         
+
+# Errors at the gene level
+ The most common issue is when `dreamlet()` analysis succeeds for most genes, but a handful of genes fail in each cell cluster.  These genes can fail if the iterative process of fitting the linear mixed model does not converge, or if the estimated covariance matrix that is supposed be positive definite has an eigen-value that is negative or too close to zero due to rounding errors in floating point arithmetic.  
+
+ In these cases, `dreamlet()` stores a summary of these failures for all cell clusters that is accessible with `details()`.  Specific failure messages for each cell cluster and gene can be extracted using `seeErrors()`
+  
+ Here we demonstrate how `dreamlet()` handles model failures:
+
+```{r error, eval=FALSE}
+library(dreamlet)
+library(muscat)
+library(SingleCellExperiment)
+
+data(example_sce)
+
+# create pseudobulk for each sample and cell cluster
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE)
+
+# voom-style normalization for each cell cluster
+res.proc <- processAssays(pb[1:300,], 
+  ~ group_id)
+
+# Redundant formula
+# This example is an extreme example of redundancy
+# but more subtle cases often show up in real data
+form = ~ group_id + (1|group_id)
+
+# fit dreamlet model
+res.dl <- dreamlet(res.proc, form)
+##  B cells...7.9 secs
+##  CD14+ Monocytes...10 secs
+##  CD4 T cells...9 secs
+##  CD8 T cells...4.4 secs
+##  FCGR3A+ Monocytes...11 secs
+##
+## Of 1,062 models fit across all assays, 96.2% failed
+
+# summary of models
+res.dl
+## class: dreamletResult 
+## assays(5): B cells CD14+ Monocytes CD4 T cells CD8 T cells FCGR3A+ Monocytes
+## Genes:
+##  min: 3 
+##  max: 11 
+## details(7): assay n_retain ... n_errors error_initial
+## coefNames(2): (Intercept) group_idstim
+## 
+## Of 1,062 models fit across all assays, 96.2% failed
+
+# summary of models for each cell cluster
+details(res.dl)
+##               assay n_retain                    formula formDropsTerms n_genes n_errors error_initial
+## 1           B cells        4 ~group_id + (1 | group_id)          FALSE     201      190         FALSE
+## 2   CD14+ Monocytes        4 ~group_id + (1 | group_id)          FALSE     269      263         FALSE
+## 3       CD4 T cells        4 ~group_id + (1 | group_id)          FALSE     216      207         FALSE
+## 4       CD8 T cells        4 ~group_id + (1 | group_id)          FALSE     118      115         FALSE
+## 5 FCGR3A+ Monocytes        4 ~group_id + (1 | group_id)          FALSE     258      247         FALSE
+
+# Extract errors as a tibble
+seeErrors(res.dl)
+## # A tibble: 1,022 × 3
+##   assay   feature  errorText                                                   
+##   <chr>   <chr>    <chr> 
+##  1 B cells ISG15    "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
+##  2 B cells AURKAIP1 "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
+
+# Extract gene-level errors for B cells
+clustID = "B cells"
+attr(res.dl[[clustID]])[1:2]
+## ISG15 
+##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) 
+## Model may not have converged with 1 eigenvalue close to zero: 3.2e-11\n" 
+## 
+## AURKAIP1 
+##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) 
+## Model may not have converged with 1 eigenvalue close to zero: -2.9e-11\n"  
+```
+
+
+# Errors at the cluster level
+ Some model failures affect every gene in an assay.  `dreamlet()` tests an initial model fit before analysis of each gene.  If the initial fit fails for a cell cluster, then `details(res.dl)$error_initial` will be `TRUE`.
+
+
+
+# Session Info
+<details>
+```{r session, echo=FALSE}
+sessionInfo()
+```
+</details>
+
+
+
+
+
+
