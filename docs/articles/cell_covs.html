@@ -33,11 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-<<<<<<< HEAD
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
-=======
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.32</small>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,10 +52,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
-<<<<<<< HEAD
-=======
     <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
     <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
     <a class="dropdown-item" href="../articles/non_lin_eff.html">Testing non-linear effects</a>
@@ -98,13 +91,8 @@ for pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-<<<<<<< HEAD
             <h4 data-toc-skip class="date">Run on 2023-10-26
-15:22:42</h4>
-=======
-            <h4 data-toc-skip class="date">Run on 2023-10-24
 15:42:35</h4>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/cell_covs.Rmd" class="external-link"><code>vignettes/cell_covs.Rmd</code></a></small>
       <div class="d-none name"><code>cell_covs.Rmd</code></div>
@@ -153,11 +141,7 @@ Nature Biotech</a>).</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<<<<<<< HEAD
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
-=======
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -196,31 +180,18 @@ pseudobulk <code>SingleCellExperiment</code> object:</p>
 <code class="sourceCode R"><span><span class="fu">metadata</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">$</span><span class="va">aggr_means</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 128 × 5</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   cell [8]</span></span></span>
-<span><span class="co">##    cell    id       cluster  value1   value2</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<<<<<<< HEAD
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> B cells ctrl101     3.96  0.022<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">0.064</span><span style="color: #BB0000; text-decoration: underline;">2</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> B cells ctrl1015    4.00  0.019<span style="text-decoration: underline;">8</span>  0.012<span style="text-decoration: underline;">9</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> B cells ctrl1016    4    -<span style="color: #BB0000;">0.054</span><span style="color: #BB0000; text-decoration: underline;">6</span>  0.090<span style="text-decoration: underline;">3</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> B cells ctrl1039    4.04  0.067<span style="text-decoration: underline;">7</span>  0.201  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> B cells ctrl107     4    -<span style="color: #BB0000;">0.043</span><span style="color: #BB0000; text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.080</span><span style="color: #BB0000; text-decoration: underline;">3</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> B cells ctrl1244    4     0.076<span style="text-decoration: underline;">4</span>  0.040<span style="text-decoration: underline;">1</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> B cells ctrl1256    4.01 -<span style="color: #BB0000;">0.014</span><span style="color: #BB0000; text-decoration: underline;">1</span> -<span style="color: #BB0000;">0.029</span><span style="color: #BB0000; text-decoration: underline;">9</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> B cells ctrl1488    4.02  0.053<span style="text-decoration: underline;">3</span> -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">83</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> B cells stim101     4.09 -<span style="color: #BB0000;">0.087</span><span style="color: #BB0000; text-decoration: underline;">3</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">82</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> B cells stim1015    4.06 -<span style="color: #BB0000;">0.014</span><span style="color: #BB0000; text-decoration: underline;">6</span> -<span style="color: #BB0000;">0.078</span><span style="color: #BB0000; text-decoration: underline;">0</span> </span></span>
-=======
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> B cells ctrl101     3.96 -<span style="color: #BB0000;">0.147</span>   0.110  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> B cells ctrl1015    4.00  0.037<span style="text-decoration: underline;">2</span>  0.014<span style="text-decoration: underline;">1</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> B cells ctrl1016    4     0.063<span style="text-decoration: underline;">3</span>  0.037<span style="text-decoration: underline;">2</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> B cells ctrl1039    4.04 -<span style="color: #BB0000;">0.179</span>   0.215  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> B cells ctrl107     4     0.137   0.004<span style="text-decoration: underline;">83</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> B cells ctrl1244    4     0.115   0.073<span style="text-decoration: underline;">2</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> B cells ctrl1256    4.01  0.117  -<span style="color: #BB0000;">0.013</span><span style="color: #BB0000; text-decoration: underline;">5</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> B cells ctrl1488    4.02 -<span style="color: #BB0000;">0.053</span><span style="color: #BB0000; text-decoration: underline;">0</span> -<span style="color: #BB0000;">0.022</span><span style="color: #BB0000; text-decoration: underline;">7</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> B cells stim101     4.09 -<span style="color: #BB0000;">0.138</span>  -<span style="color: #BB0000;">0.035</span><span style="color: #BB0000; text-decoration: underline;">6</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> B cells stim1015    4.06 -<span style="color: #BB0000;">0.023</span><span style="color: #BB0000; text-decoration: underline;">8</span>  0.063<span style="text-decoration: underline;">2</span> </span></span>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
+<span><span class="co">##    cell    id       cluster   value1    value2</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> B cells ctrl101     3.96  0.004<span style="text-decoration: underline;">25</span>  0.157   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> B cells ctrl1015    4.00  0.046<span style="text-decoration: underline;">5</span>   0.002<span style="text-decoration: underline;">72</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> B cells ctrl1016    4     0.036<span style="text-decoration: underline;">4</span>   0.011<span style="text-decoration: underline;">3</span>  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> B cells ctrl1039    4.04 -<span style="color: #BB0000;">0.023</span><span style="color: #BB0000; text-decoration: underline;">0</span>   0.077<span style="text-decoration: underline;">3</span>  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> B cells ctrl107     4    -<span style="color: #BB0000;">0.025</span><span style="color: #BB0000; text-decoration: underline;">5</span>  -<span style="color: #BB0000;">0.254</span>   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> B cells ctrl1244    4     0.110    0.119   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> B cells ctrl1256    4.01  0.015<span style="text-decoration: underline;">3</span>   0.112   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> B cells ctrl1488    4.02 -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">27</span>  0.000<span style="text-decoration: underline;">484</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> B cells stim101     4.09 -<span style="color: #BB0000;">0.073</span><span style="color: #BB0000; text-decoration: underline;">2</span>   0.016<span style="text-decoration: underline;">9</span>  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> B cells stim1015    4.06  0.062<span style="text-decoration: underline;">8</span>  -<span style="color: #BB0000;">0.091</span><span style="color: #BB0000; text-decoration: underline;">4</span>  </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 118 more rows</span></span></span></code></pre>
 </div>
 <div class="section level2">
@@ -281,7 +252,6 @@ stored in <code>colData(pb)</code> and cell-level variables stored in
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">##  [1] muscData_1.14.0             scater_1.28.0              </span></span>
-<<<<<<< HEAD
 <span><span class="co">##  [3] scuttle_1.10.1              ExperimentHub_2.8.1        </span></span>
 <span><span class="co">##  [5] AnnotationHub_3.8.0         BiocFileCache_2.8.0        </span></span>
 <span><span class="co">##  [7] dbplyr_2.3.2                muscat_1.14.0              </span></span>
@@ -293,19 +263,6 @@ stored in <code>colData(pb)</code> and cell-level variables stored in
 <span><span class="co">## [19] matrixStats_1.0.0           variancePartition_1.32.1   </span></span>
 <span><span class="co">## [21] BiocParallel_1.34.2         limma_3.56.2               </span></span>
 <span><span class="co">## [23] ggplot2_3.4.4               BiocStyle_2.28.0           </span></span>
-=======
-<span><span class="co">##  [3] scuttle_1.10.1              SingleCellExperiment_1.22.0</span></span>
-<span><span class="co">##  [5] SummarizedExperiment_1.30.1 Biobase_2.60.0             </span></span>
-<span><span class="co">##  [7] GenomicRanges_1.52.0        GenomeInfoDb_1.36.1        </span></span>
-<span><span class="co">##  [9] IRanges_2.34.1              S4Vectors_0.38.1           </span></span>
-<span><span class="co">## [11] MatrixGenerics_1.12.0       matrixStats_1.0.0          </span></span>
-<span><span class="co">## [13] ExperimentHub_2.8.1         AnnotationHub_3.8.0        </span></span>
-<span><span class="co">## [15] BiocFileCache_2.8.0         dbplyr_2.3.2               </span></span>
-<span><span class="co">## [17] BiocGenerics_0.46.0         muscat_1.14.0              </span></span>
-<span><span class="co">## [19] dreamlet_0.99.30            variancePartition_1.31.20  </span></span>
-<span><span class="co">## [21] BiocParallel_1.34.2         limma_3.56.2               </span></span>
-<span><span class="co">## [23] ggplot2_3.4.2               BiocStyle_2.28.0           </span></span>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] fs_1.6.2                      bitops_1.0-7                 </span></span>
@@ -391,11 +348,7 @@ stored in <code>colData(pb)</code> and cell-level variables stored in
 <span><span class="co">## [161] evaluate_0.21                 BiocManager_1.30.20          </span></span>
 <span><span class="co">## [163] httpuv_1.6.11                 nloptr_2.0.3                 </span></span>
 <span><span class="co">## [165] foreach_1.5.2                 tidyr_1.3.0                  </span></span>
-<<<<<<< HEAD
 <span><span class="co">## [167] purrr_1.0.2                   future_1.32.0                </span></span>
-=======
-<span><span class="co">## [167] purrr_1.0.1                   future_1.32.0                </span></span>
->>>>>>> a2b5f071aa39d4fcc963cf98c450727ccecdb45e
 <span><span class="co">## [169] clue_0.3-64                   scattermore_1.1              </span></span>
 <span><span class="co">## [171] ashr_2.2-54                   rsvd_1.0.5                   </span></span>
 <span><span class="co">## [173] broom_1.0.5                   xtable_1.8-4                 </span></span>

@@ -110,7 +110,7 @@ Including these variables in a regression formula uses the summarized values fro
 
 Variance partition and hypothesis testing proceeds as ususal:
 
-```{r processAssays, fig.height=12}
+```{r processAssays, fig.height=8}
 form <- ~ StimStatus + value1 + value2
 
 # Normalize and apply voom/voomWithDreamWeights
