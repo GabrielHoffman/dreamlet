@@ -4,10 +4,12 @@
 \alias{computeLogCPM}
 \title{Compute log normalized counts}
 \usage{
-computeLogCPM(sce, prior.count = 2)
+computeLogCPM(sce, lib.size = colSums2(counts(sce)), prior.count = 2)
 }
 \arguments{
 \item{sce}{\code{SingleCellExperiment} with counts stored as \code{counts(sce)}}
+
+\item{lib.size}{library size for each cell}
 
 \item{prior.count}{average count to be added to each observation to avoid taking log of zero}
 }

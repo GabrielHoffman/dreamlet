@@ -1,4 +1,8 @@
 
+# dreamlet 1.1.2
+  - Nov 13 2023
+  - `computeLogCPM()` uses `augmentPriorCount()`
+
 # dreamlet 1.0.1 / 1.1.1
   - bug fix in Bioc 3.18 and devel
 
@@ -6,16 +10,16 @@
   - `computeLogCPM()` now returns `matrix` instead of `sparseMatrix`
 
 # dreamlet 0.99.32
-  - Oct 18, 2026
+  - Oct 18, 2023
   - update `variancePartition` version dependency
   - add `getWeightsList()`
 
 # dreamlet 0.99.31
-  - Oct 12, 2026
+  - Oct 12, 2023
   - fix error reporting in `processAssays()`
 
 # dreamlet 0.99.30
-  - Sept 22, 2026
+  - Sept 22, 2023
   - Fix issue with precision weights from cell number
   - Include `setAutoBlockSize()` update within `aggregateToPseudoBulk()`
 

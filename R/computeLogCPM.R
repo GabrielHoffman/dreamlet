@@ -36,6 +36,7 @@ computeNormCounts <- function(sce) {
 #' Compute normalized counts as log2 counts per million
 #'
 #' @param sce \code{SingleCellExperiment} with counts stored as \code{counts(sce)}
+#' @param lib.size library size for each cell
 #' @param prior.count average count to be added to each observation to avoid taking log of zero
 #'
 #' @details This function gives same result as \code{edgeR::cpm(counts(sce), log=TRUE)}
@@ -50,23 +51,23 @@ computeNormCounts <- function(sce) {
 #'
 #' logcounts(example_sce) <- computeLogCPM(example_sce)
 #' @importFrom DelayedMatrixStats colSums2
+#' @importFrom Matrix t
 #' @importFrom SingleCellExperiment counts
+#' @importFrom variancePartition augmentPriorCount
 #' @export
-computeLogCPM <- function(sce, prior.count = 2) {
-  # Compute library size
-  lib.size <- colSums2(counts(sce))
+computeLogCPM <- function(sce, lib.size = colSums2(counts(sce)), prior.count = 2) {
+ 
+  stopifnot(length(lib.size) == ncol(sce))
 
-  # compute prior count scaled by library size
-  # as in edgeR::cpm() call to C++ function add_prior.cpp
-  pc <- prior.count * lib.size / mean(lib.size)
-
-  countMatrix = counts(sce)
-
-  # if countMatrix is dgeMatrix
+  countMatrix = augmentPriorCount(counts(sce), 
+                  lib.size = lib.size, 
+                  prior.count = prior.count)
+  
+  # if countMatrix is dgeMatrix or sparseMatrix
   # convert to matrix, since result is not sparse
-  if( is(countMatrix, "sparseMatrix") ){
+  if( is(countMatrix, "sparseMatrix") || is(countMatrix, "dgeMatrix") ){
     countMatrix = as.matrix(countMatrix)
   }
 
-  t(log2(t(countMatrix) + pc) - log2(lib.size) + log2(1e6))
+  t(log2(t(countMatrix)) - log2(lib.size) + log2(1e6))
 }

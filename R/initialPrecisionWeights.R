@@ -1,394 +1,112 @@
 
-# # TODO
-# # Estimateimate sigmaSq by ML
-# # fastest for DealyedArray
 
-#' @export
-getWeightFromCounts = function(countMatrix){
+#' @importFrom dplyr tibble bind_rows
+getVarFromCounts = function(countMatrix, lib.size, prior.count = .25){
 
-	count.gene <- rowSums2(countMatrix, useNames=FALSE)
-	count.lib <- colSums2(countMatrix, useNames=FALSE)
-	ncell <- ncol(countMatrix)
-	sclSq <- sum(count.lib^2)
+    stopifnot( ncol(countMatrix) == length(lib.size))
 
-	# add pseudocount
-	count.gene <- count.gene + 0.25
-	count.lib <- count.lib + 1
+    countMatrix = countMatrix + prior.count
 
-	# normalize counts by library size
-	# add pseudocount to counts here
-	normCounts <- scale(countMatrix + 0.25, 
-					scale = count.lib, 
-					cente = FALSE)
-	# compute variance for each row
-	sigmaSq.hat.gene <- rowVars(normCounts, useNames=FALSE)
-	sigmaSq.hat.gene[is.na(sigmaSq.hat.gene)] <- 0
+    # pseudobulk
+    count.gene <- rowSums2(countMatrix, useNames=FALSE)
 
-	# compute variance
-	# vectorize
-	v.hat <- 1 / count.gene + (sigmaSq.hat.gene * sclSq) / (ncell^2 *count.gene^2)
-	1 / v.hat
-}
+    # normalize counts by library size
+    # add pseudocount to counts here
+    normCounts <- scale(countMatrix, 
+                    scale = lib.size + 1, 
+                    center = FALSE)
 
-#' @export
-getWeightsForCellType = function(sce, cluster_id, sample_id, CT, weightCap){
+    # compute variance for each row
+    sigSq.hat <- rowVars(normCounts, useNames=FALSE)
+    sigSq.hat[is.na(sigSq.hat)] <- 0
 
-	W <- lapply( unique(sce[[sample_id]]), function(ID){
-
-		idx <- sce[[cluster_id]] == CT & sce[[sample_id]] == ID
-		countMatrix = counts(sce)[,idx,drop=FALSE]
-
-		getWeightFromCounts( countMatrix )
-		})
-	W <- do.call(cbind, W)
-
-	# scale each gene by min value
-	# so lowest weight is now 1
-	W <- W / rowMins( W, useNames=FALSE)
-
-	# set a weight cap at weightCap
-	W[W > weightCap] <- weightCap
-
-	# scale each gene to have a mean of 1
-	W <- W / rowMeans2(W, useNames=FALSE)
-
-	colnames(W) <- unique(sce[[sample_id]])
-	rownames(W) <- rownames(sce)
-	W
-}
-
-#' @export
-getWeightsList = function(sce, cluster_id, sample_id, weightCap = 10){
-
-	if( ! cluster_id %in% colnames(colData(sce)) ){
-		msg <- paste0("sample_id entry not found in colData(sce): ", cluster_id)
-		stop( msg )
-	}
-	if( ! sample_id %in% colnames(colData(sce)) ){
-		msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
-		stop( msg )
-	}
-
-	W.list <- lapply( unique(sce[[cluster_id]]), function(CT){
-		getWeightsForCellType( sce, cluster_id, sample_id, CT, weightCap)
-	})
-	names(W.list)<- unique(sce[[cluster_id]])
- 	W.list
+    # return values to compute variance later
+    tibble(Gene = rownames(countMatrix), 
+            count.gene = count.gene ,
+            sigSq.hat = sigSq.hat, 
+            zeta = sum(lib.size^2), 
+            ncell = ncol(countMatrix))
 }
 
 
+getVarForCellType = function(sce, cluster_id, sample_id, CT, prior.count){
 
-# #' @export
-# trimWeightOutliersGene = function(x, zmax){
+    idx <- which(sce[[cluster_id]] == CT)
+    lib.size <- colSums2(counts(sce), cols=idx, useNames=TRUE)
+    
+    # Scale prior count so that an observed count of 0,
+    # gives zero variance across samples
+    # Add small value to each cell, so that across n_i cells
+    # it the augment sum to a mean of prior.count
+    df_pc <- data.frame(ID = sce[[sample_id]][idx], 
+        cellType = sce[[cluster_id]][idx], 
+        prior.count = prior.count * lib.size/mean(lib.size)) %>%
+        group_by(cellType, ID) %>%
+        summarize(n=length(ID), prior.count = mean(prior.count) / n, .groups="drop_last")
 
-# 	# compute z-score
-# 	zscore = scale(x)
+    # get variance estimates for each ID and gene
+    df <- lapply( unique(sce[[sample_id]]), function(ID){
 
-# 	# extract parameters of transform
-# 	# z-score = (x - mu) / s
-# 	mu = attr(zscore,"scaled:center")
-# 	s = attr(zscore,"scaled:scale")
-	
-# 	# if x exceeds original value giving z-score of zmax, 
-# 	# replace with that orginal value
-# 	x[x > zmax * s + mu] = zmax * s + mu
+        idx <- sce[[cluster_id]] == CT & sce[[sample_id]] == ID
+        countMatrix <- counts(sce)[,idx,drop=FALSE]
 
-# 	# normalize values to have a mean of 1
-# 	x / mean(x)
-# }
+        pc <- df_pc$prior.count[df_pc$ID == ID]
+        
+        res <- getVarFromCounts( countMatrix, 
+                lib.size = lib.size[colnames(countMatrix)], 
+                prior.count = pc)
+        res$ID <- ID
+        res
+        })
+    bind_rows(df)
+}
 
-# #' @export
-# trimWeightOutliers = function(W, zmax = 5){
+#' @importFrom limma squeezeVar
+#' @importFrom Matrix sparseMatrix
+#' @importFrom dplyr mutate
+#' @export
+getVarList = function(sce, cluster_id, sample_id, shrink, prior.count = 0.5){
 
-# 	t(apply(W, 1, trimWeightOutliersGene, zmax = zmax))
-# }
+    if( ! cluster_id %in% colnames(colData(sce)) ){
+        msg <- paste0("sample_id entry not found in colData(sce): ", cluster_id)
+        stop( msg )
+    }
+    if( ! sample_id %in% colnames(colData(sce)) ){
+        msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
+        stop( msg )
+    }
 
-# # bootstraps cells
+    # for each cell type
+    var.list <- lapply( unique(sce[[cluster_id]]), function(CT){
 
-countMatrix <- assay(pb, CT)
-    	lib.size <- colSums2(countMatrix)
-    	names(lib.size) = colnames(countMatrix)
-    	# prior.count <- lambda * lib.size/mean(lib.size)
-    	df = data.frame(prior.count, n = tab[names(prior.count),CT])
-    	prior.count = lambda * df$n
-    	prior.count = prior.count / mean(prior.count)
-    	names(prior.count) = names(lib.size)
+        df <- getVarForCellType( sce, cluster_id, sample_id, CT, prior.count) %>%
+                mutate(Gene = factor(Gene, rownames(sce)),
+                        ID = factor(ID))
 
-
-getBootLCPM = function(sce, cluster_id, sample_id, df_pc, ndraws = NULL){
-    # interate thu donors, cell types and bootstrap reps
-    df_grid = expand.grid(cellType = unique(sce[[cluster_id]]),
-                        ID =  unique(sce[[sample_id]]))
-
-    # bootstrap indeces
-    idx = sapply( seq(nrow(df_grid)), function(i){
-
-        # filter
-        idx = which(df_grid$cellType[i] == sce[[cluster_id]] & df_grid$ID[i] == sce[[sample_id]])
-
-        # bootstrap cells
-        if( is.null(ndraws) ){
-            idx2 = idx[sample.int(length(idx), length(idx), replace=TRUE)]
-        }else{          
-            idx2 = idx[sample.int(length(idx), min(length(idx), ndraws), replace=TRUE)]
+        if( shrink ){      
+            # shrink sample variances     
+            res <- squeezeVar( df$sigSq.hat, df$ncell-1, robust=FALSE)
+            # plot(df$sigSq.hat, res$var.post, main=CT, log="xy")
+            # abline(0, 1, col="red")
+            # browser()
+            df$sigSq.hat <- res$var.post
         }
-        idx2
-        })
-    idx = sort(unlist(idx))
 
-    # pseudobulk of boostrap
-    pb <- aggregateToPseudoBulk(sce[,idx],
-      assay = "counts",
-      cluster_id = cluster_id,
-      sample_id = sample_id,
-      verbose = FALSE)
+        # delta approximation of variance
+        df = df %>%
+            mutate( vhat = 1 / count.gene * (1 + sigSq.hat*zeta / (count.gene/ncell)))
 
-    geneExpr = lapply( assayNames(pb), function(CT){
-
-    	df_sub = df_pc %>% filter(cellType == CT)
-    	pc = df_sub$prior.count
-    	names(pc) = df_sub$ID
-    		
-    	countMatrix = assay(pb, CT)
-    	pcMat = lapply(colnames(countMatrix), function(id)
-    				rpois(nrow(countMatrix), pc[id]))
-    	pcMat = do.call(cbind, pcMat)
-    	colnames(pcMat) = colnames(countMatrix)
-
-        dge = DGEList(counts = countMatrix + pcMat, 
-        					lib.size = colSums2(countMatrix))
-        # dge = calcNormFactors(dge)
-        edgeR::cpm(dge, log=TRUE, prior.count=.25)
-        })
-    names(geneExpr) = assayNames(pb)
-
-    geneExpr
-}
-
-summarizeBootstraps = function(geneExprBoot){
-    # interate thu donors, cell types and bootstrap reps
-    CT.names = names(geneExprBoot[[1]])
-    id.names = colnames(geneExprBoot[[1]][[1]])
-
-    df_var = lapply( CT.names, function(CT){
-
-        df_var = lapply(id.names, function(id){
-
-            # create matrix of boostrap samples for cell type and id
-            Y = lapply( seq(length(geneExprBoot)), function(j){
-                geneExprBoot[[j]][[CT]][,id,drop=FALSE]
-            })
-            Y = do.call(cbind, Y)
-
-            # y.mean = rowMeans2(Y, useNames=FALSE)
-
-            # sampling variance of mean from boostraps
-            y.var = rowVars(Y, useNames=TRUE) / ncol(Y)
-
-            y.var = data.frame(var = y.var)
-            colnames(y.var) = id
-
-            y.var
-        })
-        as.matrix(do.call(cbind, df_var))
+        mat <- sparseMatrix(df$Gene, df$ID, 
+            x = df$vhat, 
+            dims = c(nlevels(df$Gene), nlevels(df$ID)),
+            dimnames = list(levels(df$Gene), levels(df$ID)))
+        as.matrix(mat)
     })
-    names(df_var) = CT.names
-    df_var
+    names(var.list) <- unique(sce[[cluster_id]])
+    var.list
 }
 
-library(edgeR)
 
-lambda = 2
-
-CT = "Megakaryocytes"
-sceSub = sce[,sce$cell == CT]
-colData(sceSub) = droplevels(colData(sceSub))
-
-# options(dplyr.summarise.inform = FALSE)
-
-tab = table(sceSub$id, sceSub$cell)
-
-# prior count *per cell* scaled by variation in library size
-lib.size <- colSums2(counts(sceSub))
-prior.count <- lambda * lib.size/mean(lib.size)
-df_pc = data.frame(ID = sceSub[['id']], 
-	cellType = sceSub[['cell']], 
-	prior.count = prior.count) %>%
-	group_by(cellType, ID) %>%
-	summarize(prior.count = sum(prior.count), n=length(ID))
-
-
-nboots = 103
-res = lapply(seq(nboots), function(i) getBootLCPM(sceSub, "cell", "id", df_pc ))
-
-
-res2 = summarizeBootstraps(res)
-
-V = res2[[CT]]
-
-# n cells
-tab = t(with(colData(sce), table(cell, id)))
-
-df = (tab[colnames(V),CT,drop=FALSE])
-df = matrix(df, nrow=nrow(V), ncol=length(df), byrow=TRUE)
-df[] = nboots
-
-res = limma::squeezeVar( as.numeric(V), as.numeric(df))
-
-par(mfrow=c(1,3))
-hist(V)
-hist(res$var.post)
-
-plot(as.numeric(V), res$var.post, log="xy")
-abline(0, 1, col='red')
-
-
-
-A = 
-nboots = 103
-res = lapply(seq(nboots), function(i) getBootLCPM(sceSub, "cell", "id", df_pc ))
-
-
-res2 = summarizeBootstraps(res)
-
-V = res2[[CT]]
-
-# n cells
-tab = t(with(colData(sce), table(cell, id)))
-
-df = (tab[colnames(V),CT,drop=FALSE])
-df = matrix(df, nrow=nrow(V), ncol=length(df), byrow=TRUE)
-df[] = nboots
-
-res = limma::squeezeVar( as.numeric(V), as.numeric(df))
-
-par(mfrow=c(1,3))
-hist(V)
-hist(res$var.post)
-
-plot(as.numeric(V), res$var.post, log="xy")
-abline(0, 1, col='red')
-
-A = V / rowMeans(V)
-
-
-
-A = V / rowMeans(V)
-
-
-
-
-
-
-# n cells
-tab = with(colData(sce), table(cell, id))
-
-CT = "B cells"
-
-rv = rowVars(res2[[CT]], useNames=FALSE)
-i = which(rv > 0)
-
-df = data.frame(var = res2[[CT]][4,])
-df = merge(df, data.frame(n = tab[CT,]), by="row.names")
-
-with(df, plot(n, var))
-# x = seq(1, 500)
-# lines(x, 1/(lambda*x))
-
-# ratio
-max(df$var) / min(df$var)
-w = 1/df$var
-w = w / mean(w)
-hist(w)
-
-
-df = cellCounts(sce)[,"B cells",drop=FALSE]
-V = res2[[1]]
-res = limma::squeezeVar( as.numeric(V), 75)
-
-par(mfrow=c(1,3))
-hist(V)
-hist(res$var.post)
-
-plot(as.numeric(V), res$var.post)
-abline(0, 1, col='red')
-
-
-
-
-
-
-
-values = sapply(i, function(j){
-	df = data.frame(var = res2[[CT]][j,])
-	df = merge(df, data.frame(n = tab[CT,]), by="row.names")
-	with(df, cor(n, var, method="sp"))
-})
-
-
-hist(values)
-
-
-
-
-
-
-res = lapply(seq(200), function(i) getBootLCPM(sce, "cluster_id", "sample_id"))
-
-
-
-res2 = summarizeBootstraps(res)
-
-
-df = data.frame(n = 2:500)
-nboot = 2033
-lib.size = 50005
-df$var = sapply( df$n, function(n){
-
-	s = sapply(seq(nboot), function(i){
-		value = sum(rpois(n, .25)) / (lib.size*n)
-		value = value / 1e6
-		log(value)
-	})
-	var(s)
-})
-
-
-with(df, plot(n, var))
-# lines(df$n, lambda*df$n / (lib.size * df$n)^2 / 1e12, col="red")
-lines(df$n, 1 / (lambda*df$n) , col="red")
-
-
-# weights proportional to N if 
-# Poisson with equal rate
-with(df, plot(n, 1/var))
-# lines(df$n, lambda*df$n / (lib.size * df$n)^2 / 1e12, col="red")
-lines(df$n, lambda*df$n , col="red")
-
-
-
-n = 100
-lambda = 0.25
-
-n*lambda / lib.size*n
-
-lambda / lib.size
-
-
-
-x = rpois(1, lambda*n)
-lambda*n / (lib.size * n)^2
-
-
-
-
-
-    	# average pseudocount of 2
-    	pc = rpois(nrow(countMatrix), lambda)
-
-        dge = DGEList(counts = countMatrix + pc,
-        					lib.size = colSums(countMatrix))
-        # dge = calcNormFactors(dge)
 
 
 
