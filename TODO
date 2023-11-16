@@ -1,4 +1,10 @@
 
+Nov 16
+	combine assays as columns
+	cbind(assay(pb, 1), assay(pb, 2),...)
+	and rbind colData()
+	change sample names by concating assay name
+
 Nov 10:
 	https://github.com/GabrielHoffman/dreamlet/issues/14#issuecomment-1805930963
 	
