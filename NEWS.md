@@ -1,6 +1,10 @@
 
+# dreamlet 1.1.3
+  - Nov 16, 2023
+  - add `stackAssays()`
+
 # dreamlet 1.1.2
-  - Nov 13 2023
+  - Nov 13, 2023
   - `computeLogCPM()` uses `augmentPriorCount()`
 
 # dreamlet 1.0.1 / 1.1.1
