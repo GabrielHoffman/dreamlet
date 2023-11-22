@@ -24,7 +24,7 @@ getVarFromCounts = function(countMatrix, lib.size, prior.count = .25){
     tibble(Gene = rownames(countMatrix), 
             count.gene = count.gene ,
             sigSq.hat = sigSq.hat, 
-            zeta = sum(lib.size^2), 
+            zeta = mean(lib.size^2), 
             ncell = ncol(countMatrix))
 }
 
@@ -86,15 +86,12 @@ getVarList = function(sce, cluster_id, sample_id, shrink, prior.count = 0.5){
         if( shrink ){      
             # shrink sample variances     
             res <- squeezeVar( df$sigSq.hat, df$ncell-1, robust=FALSE)
-            # plot(df$sigSq.hat, res$var.post, main=CT, log="xy")
-            # abline(0, 1, col="red")
-            # browser()
             df$sigSq.hat <- res$var.post
         }
 
         # delta approximation of variance
-        df = df %>%
-            mutate( vhat = 1 / count.gene * (1 + sigSq.hat*zeta / (count.gene/ncell)))
+        df <- df %>%
+            mutate( vhat = 1 / count.gene * (1 + ncell*sigSq.hat*zeta / count.gene)) 
 
         mat <- sparseMatrix(df$Gene, df$ID, 
             x = df$vhat, 
@@ -105,6 +102,7 @@ getVarList = function(sce, cluster_id, sample_id, shrink, prior.count = 0.5){
     names(var.list) <- unique(sce[[cluster_id]])
     var.list
 }
+
 
 
 

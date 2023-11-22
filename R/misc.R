@@ -81,9 +81,9 @@ equalFormulas <- function(formula1, formula2) {
 }
 
 
-#' Extract residuls from \code{dreamletResult}
+#' Extract residuals from \code{dreamletResult}
 #'
-#' Extract residuls from \code{dreamletResult}
+#' Extract residuals from \code{dreamletResult}
 #'
 #' @param object \code{dreamletResult} object
 #' @param y \code{dreamletProcessedData} object

@@ -45,7 +45,7 @@
 #'
 #' # Interaction model using random effects
 #' form <- ~ (1|group_id) + (1|stackedAssay) + (1|group_id:stackedAssay)
-#' @importFrom SingleCellExperiment assayNames<-
+#' @importFrom SummarizedExperiment assayNames<-
 #' @export
 stackAssays <- function(pb, assays = assayNames(pb)){
 
