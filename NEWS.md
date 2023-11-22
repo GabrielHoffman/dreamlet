@@ -1,7 +1,9 @@
 
 # dreamlet 1.1.3
-  - Nov 16, 2023
+  - Nov 22, 2023
   - add `stackAssays()`
+  - add `diffVar()`
+  - fix `getVarFromCounts)` so `zeta` is a mean, not a sum
 
 # dreamlet 1.1.2
   - Nov 13, 2023

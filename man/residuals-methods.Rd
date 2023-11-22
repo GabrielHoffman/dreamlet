@@ -3,7 +3,7 @@
 \name{residuals,dreamletResult-method}
 \alias{residuals,dreamletResult-method}
 \alias{residuals,dreamletResult,dreamletResult-method}
-\title{Extract residuls from \code{dreamletResult}}
+\title{Extract residuals from \code{dreamletResult}}
 \usage{
 \S4method{residuals}{dreamletResult}(object, y, ..., type = c("response", "pearson"))
 }
@@ -20,7 +20,7 @@
 residuals from model fit
 }
 \description{
-Extract residuls from \code{dreamletResult}
+Extract residuals from \code{dreamletResult}
 }
 \details{
 \code{"response"} residuals are the typical residuals returned from \code{lm()}. \code{"pearson"} residuals divides each residual value by its estimated standard error.  This requires specifying \code{y}
