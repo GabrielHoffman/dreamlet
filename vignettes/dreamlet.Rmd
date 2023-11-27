@@ -230,6 +230,24 @@ plotForest(res.dl, coef = "StimStatusstim", gene = "ISG20")
 ```
 
 
+## Box plot 
+Examine the expression of ISG20  between stimulation conditions within CD14+ Monocytes.  Use `extractData()` to create a `tibble` with gene expression data and metadata from `colData()` from one cell type.
+```{r boxplot}
+# get data
+df = extractData(res.proc, "CD14+ Monocytes", genes="ISG20")
+
+# set theme
+thm = theme_classic() +
+  theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) 
+
+# make plot
+ggplot(df, aes(StimStatus, ISG20)) +
+  geom_boxplot() +
+  thm +
+  ylab(bquote(Expression~(log[2]~CPM))) +
+  ggtitle('ISG20')
+```
+
 ## Advanced used of contrasts
 A hypothesis test of the _difference_ between two or more coefficients can be performed using contrasts.  The contrast matrix is evaluated for each cell type in the backend, so only the contrast string must be supplied to `dreamlet()`.  
 

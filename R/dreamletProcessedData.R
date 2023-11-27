@@ -309,23 +309,28 @@ setMethod(
 
 
 
-#' Extract expression and colData
+#' Extract normalized expression and \code{colData}
 #'
+#' Extract normalized expression and \code{colData}
 #'
-#' @param x A \code{dreamletProcessedData} object
+#' @param x \code{dreamletProcessedData} object
 #' @param assay assay to extract
+#' @param cols columns in \code{colData(x)} to extract.  defaults to all columns as \code{colnames(colData(x))}
+#' @param genes genes to extract from \code{assay(x, assay)$E}. defaults to all genes as \code{rownames(x)}
 #'
 #' @rdname extractData-methods
 #' @export
-setGeneric("extractData", function(x, assay) standardGeneric("extractData"))
+setGeneric("extractData", function(x, assay, cols = colnames(colData(x)), genes = rownames(x)) standardGeneric("extractData"))
 
 
-#' Extract expression and \code{colData}
+#' Extract normalized expression and \code{colData}
 #'
-#' Extract expression and \code{colData} from \code{dreamletProcessedData}
+#' Extract normalized (i.e. log2 CPM) expression and \code{colData} from \code{dreamletProcessedData}
 #'
-#' @param x A \code{dreamletProcessedData} object
+#' @param x \code{dreamletProcessedData} object
 #' @param assay assay to extract
+#' @param cols columns in \code{colData(x)} to extract.  defaults to all columns as \code{colnames(colData(x))}
+#' @param genes genes to extract from \code{assay(x, assay)$E}. defaults to all genes as \code{rownames(x)}
 #'
 #' @return \code{data.frame} or \code{DataFrame} of merged expression and colData
 #'
@@ -346,30 +351,59 @@ setGeneric("extractData", function(x, assay) standardGeneric("extractData"))
 #' # voom-style normalization
 #' res.proc <- processAssays(pb, ~group_id)
 #'
-#' # Extract data.frame of colData merged with expression.
+#' # Extract all:
+#' # Extract tibble of colData merged with expression.
 #' # variables and genes are stored as columns, samples as rows
 #' df_merge <- extractData(res.proc, "B cells")
-#'
-#' dim(df_merge)
 #'
 #' # first few columns
 #' df_merge[, 1:6]
 #'
+#' # Extract subset:
+#' df_merge <- extractData(res.proc, "B cells", cols="group_id", genes = c("SSU72", "U2AF1"))
+#'
+#' df_merge
+#'
+#' # Boxplot of expression
+#' boxplot(SSU72 ~ group_id, df_merge)
+#
 #' @importFrom S4Vectors merge
+#' @importFrom dplyr as_tibble
 #' @rdname extractData-methods
 #' @aliases extractData,dreamletProcessedData-method
 #' @export
 setMethod(
   "extractData", c(x = "dreamletProcessedData", assay = "character"),
-  function(x, assay) {
+  function(x, assay, cols = colnames(colData(x)), genes = rownames(assay(x, assay))) {
+
+    # Check requested assay
     if (!assay %in% assayNames(x)) {
       stop("assay not found: ", assay)
     }
 
-    merge(colData(x), t(assay(x, assay)$E), by = "row.names")
+    # Check requested columns of colData(x)
+    cols <- unique(cols)
+    notFound <- cols[!cols %in% colnames(colData(x))]
+    if ( length(notFound) > 0) {
+      txt <- paste(notFound[seq(min(5, length(notFound)))], collapse=', ')
+      stop("columns not found: ", txt)
+    }
+
+    # Check requested genes
+    genes <- unique(genes)
+    notFound <- genes[!genes %in% rownames(assay(x, assay))]
+    if ( length(notFound) > 0) {
+      txt = paste(notFound[seq(min(5, length(notFound)))], collapse=', ')
+      stop("genes not found: ", txt)
+    }
+
+    # merge data
+    df <- merge(colData(x)[,cols,drop=FALSE], 
+      t(assay(x, assay)$E[genes,,drop=FALSE]), by = "row.names")
+
+    as_tibble(df)
   }
 )
-
 
 #' @export
 #' @rdname seeErrors-methods

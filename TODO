@@ -1,4 +1,9 @@
 
+# Nov 27,
+	getNormExpr(): https://github.com/GabrielHoffman/dreamlet/issues/12
+
+
+
 Nov 16
 	combine assays as columns
 	cbind(assay(pb, 1), assay(pb, 2),...)
