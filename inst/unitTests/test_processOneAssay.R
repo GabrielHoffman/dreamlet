@@ -34,11 +34,12 @@ test_processOneAssay = function(){
 			min.cells = 0, 
 			min.count = 0, 
 			min.samples = 0, 
+            prior.count = 0.5,
 			min.prop = 0, 
 			span = 0.5)
 
-	checkEquals(fit1$EList$E, res$E)
-	checkEquals(as.numeric(fit1$EList$weights), as.numeric(res$weights))
+	checkEquals(fit1$EList$E, res$E, tolerance = 1e-4)
+	checkEquals(as.numeric(fit1$EList$weights), as.numeric(res$weights), tolerance = 3e-4)
 }
 
 

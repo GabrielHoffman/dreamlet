@@ -2,6 +2,7 @@
 % Please edit documentation in R/diffVar.R
 \name{diffVar,dreamletResult-method}
 \alias{diffVar,dreamletResult-method}
+\alias{diffVar,dreamletResult,dreamletResult-method}
 \title{Test differential variance}
 \usage{
 \S4method{diffVar}{dreamletResult}(
@@ -16,6 +17,8 @@
 \item{fit}{model fit from \code{dream()}}
 
 \item{method}{transform the residuals using absolute deviation ("AD") or squared deviation ("SQ").}
+
+\item{scale}{scale each observation by "leverage", or no scaling ("none")}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
@@ -90,4 +93,6 @@ boxplot(y ~ x,
 }
 \seealso{
 \code{variancePartition::diffVar()}
+
+\code{variancePartition::diffVar()}, \code{missMethyl::diffVar()}
 }

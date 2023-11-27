@@ -29,7 +29,9 @@ getVarFromCounts = function(countMatrix, lib.size, prior.count = .25){
 }
 
 
-getVarForCellType = function(sce, cluster_id, sample_id, CT, prior.count){
+getVarForCellType = function(sce, sample_id, cluster_id, CT, prior.count){
+
+    cellType = ID = NULL
 
     idx <- which(sce[[cluster_id]] == CT)
     lib.size <- colSums2(counts(sce), cols=idx, useNames=TRUE)
@@ -64,8 +66,9 @@ getVarForCellType = function(sce, cluster_id, sample_id, CT, prior.count){
 #' @importFrom limma squeezeVar
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
-#' @export
-getVarList = function(sce, cluster_id, sample_id, shrink, prior.count = 0.5){
+getVarList = function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5){
+
+    Gene = ID = count.gene = ncell = zeta = sigSq.hat = NULL
 
     if( ! cluster_id %in% colnames(colData(sce)) ){
         msg <- paste0("sample_id entry not found in colData(sce): ", cluster_id)
@@ -76,10 +79,10 @@ getVarList = function(sce, cluster_id, sample_id, shrink, prior.count = 0.5){
         stop( msg )
     }
 
-    # for each cell type
+    # Compute variance for each observation for each cell type
     var.list <- lapply( unique(sce[[cluster_id]]), function(CT){
 
-        df <- getVarForCellType( sce, cluster_id, sample_id, CT, prior.count) %>%
+        df <- getVarForCellType( sce, sample_id, cluster_id, CT, prior.count) %>%
                 mutate(Gene = factor(Gene, rownames(sce)),
                         ID = factor(ID))
 
@@ -100,10 +103,53 @@ getVarList = function(sce, cluster_id, sample_id, shrink, prior.count = 0.5){
         as.matrix(mat)
     })
     names(var.list) <- unique(sce[[cluster_id]])
+
     var.list
 }
 
+#' Compute observation weights for pseudobulk
+#' 
+#' Compute observation weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample.
+#' 
+#' @param sce \code{SingleCellExperiment} of where \code{counts(sce)} stores the raw count data at the single cell level
+#' @param sample_id character string specifying which variable to use as sample id
+#' @param cluster_id character string specifying which variable to use as cluster id
+#' @param shrink Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample
+#' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
+#' @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add quantile(x, quantileOffset) before taking the reciprocal.
+#'
+#' @examples
+#' library(muscat)
+#'
+#' data(example_sce)
+#'
+#' # create pseudobulk for each sample and cell cluster
+#' pb <- aggregateToPseudoBulk(example_sce,
+#'   assay = "counts",
+#'   cluster_id = "cluster_id",
+#'   sample_id = "sample_id",
+#'   verbose = FALSE
+#' )
+#' 
+#' # Create precision weights for pseudobulk
+#' weightsList = pbWeights(example_sce, 
+#'     cluster_id = "cluster_id",
+#'     sample_id = "sample_id")
+#' 
+#' @importFrom stats quantile
+#' @export
+pbWeights = function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1){
 
+    # compute variances
+    var.lst = getVarList(sce, sample_id, cluster_id, shrink, prior.count)
+
+    # regularize reciprocal with quantile offset
+    W.list = lapply(var.lst, function(x){
+        1 / ( x + quantile(x, quantileOffset))
+    })
+
+    W.list
+}
 
 
 

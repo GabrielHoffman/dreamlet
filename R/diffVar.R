@@ -9,13 +9,16 @@
 setClass("dreamletResult", contains = "list", slots = c(df_details = "data.frame", errors = "list", error.initial = "list"))
 
 
+
+setGeneric("diffVar", variancePartition::diffVar)
+
 #' Test differential variance
 #'
 #' Test the association between a covariate of interest and the response's deviation from expectation.
 #'
 #' @param fit model fit from \code{dream()}
 #' @param method transform the residuals using absolute deviation ("AD") or squared deviation ("SQ").
-# @param scale scale each observation by "leverage", or no scaling ("none")
+#' @param scale scale each observation by "leverage", or no scaling ("none")
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other parameters passed to \code{dream()}
 #'
@@ -81,11 +84,13 @@ setClass("dreamletResult", contains = "list", slots = c(df_details = "data.frame
 #' 	xlab = "Stimulation status", 
 #' 	ylab = "Gene expression",
 #' 	main = paste(cellType, gene))
-#' @export
-#' @rdname diffVar-method
-#' @aliases diffVar,dreamletResult-method
+#
+#' @seealso \code{variancePartition::diffVar()}, \code{missMethyl::diffVar()} 
+#' @rdname diffVar-methods
+#' @aliases diffVar,dreamletResult,dreamletResult-method
 setMethod("diffVar", "dreamletResult",
 	function( fit, method = c("AD", "SQ"),
+		scale = c("leverage", "none"),
 		BPPARAM = SerialParam(), ...){
 
 	# run diffVar for each cell type
@@ -95,7 +100,7 @@ setMethod("diffVar", "dreamletResult",
 		if( any(abs(x$hatvalues - 1.0) <= .Machine$double.eps) ){
 			result = NULL
 		}else{
-			result = diffVar(x, method=method, BPPARAM=BPPARAM,... )
+			result = diffVar(x, method=method, scale = scale, BPPARAM=BPPARAM,... )
 		}
 		result
 		})
