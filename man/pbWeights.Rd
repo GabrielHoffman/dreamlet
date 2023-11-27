@@ -10,7 +10,8 @@ pbWeights(
   cluster_id,
   shrink = TRUE,
   prior.count = 0.5,
-  quantileOffset = 0.1
+  quantileOffset = 0.1,
+  h5adBlockSizes = 1e+09
 )
 }
 \arguments{
@@ -24,7 +25,9 @@ pbWeights(
 
 \item{prior.count}{Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level}
 
-\item{quantileOffset}{Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add quantile(x, quantileOffset) before taking the reciprocal.}
+\item{quantileOffset}{Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.}
+
+\item{h5adBlockSizes}{set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.}
 }
 \description{
 Compute observation weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample.
@@ -43,7 +46,7 @@ pb <- aggregateToPseudoBulk(example_sce,
 )
 
 # Create precision weights for pseudobulk
-weightsList = pbWeights(example_sce, 
+weightsList <- pbWeights(example_sce, 
     cluster_id = "cluster_id",
     sample_id = "sample_id")
 

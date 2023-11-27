@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,8 @@
 <span>  <span class="va">cluster_id</span>,</span>
 <span>  shrink <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  prior.count <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  quantileOffset <span class="op">=</span> <span class="fl">0.1</span></span>
+<span>  quantileOffset <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  h5adBlockSizes <span class="op">=</span> <span class="fl">1e+09</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -97,7 +98,11 @@
 
 
 <dt>quantileOffset</dt>
-<dd><p>Defaults to <code>0.1</code>. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array <code>x</code>, add quantile(x, quantileOffset) before taking the reciprocal.</p></dd>
+<dd><p>Defaults to <code>0.1</code>. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array <code>x</code>, add <code>quantile(x, quantileOffset)</code> before taking the reciprocal.</p></dd>
+
+
+<dt>h5adBlockSizes</dt>
+<dd><p>set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.</p></dd>
 
 </dl></div>
 
@@ -116,7 +121,7 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create precision weights for pseudobulk</span></span></span>
-<span class="r-in"><span><span class="va">weightsList</span> <span class="op">=</span> <span class="fu">pbWeights</span><span class="op">(</span><span class="va">example_sce</span>, </span></span>
+<span class="r-in"><span><span class="va">weightsList</span> <span class="op">&lt;-</span> <span class="fu">pbWeights</span><span class="op">(</span><span class="va">example_sce</span>, </span></span>
 <span class="r-in"><span>    cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>,</span></span>
 <span class="r-in"><span>    sample_id <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
