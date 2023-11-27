@@ -1,11 +1,11 @@
 
 
 #' @importFrom dplyr tibble bind_rows
-getVarFromCounts = function(countMatrix, lib.size, prior.count = .25){
+getVarFromCounts <- function(countMatrix, lib.size, prior.count = .25){
 
     stopifnot( ncol(countMatrix) == length(lib.size))
 
-    countMatrix = countMatrix + prior.count
+    countMatrix <- countMatrix + prior.count
 
     # pseudobulk
     count.gene <- rowSums2(countMatrix, useNames=FALSE)
@@ -29,9 +29,13 @@ getVarFromCounts = function(countMatrix, lib.size, prior.count = .25){
 }
 
 
-getVarForCellType = function(sce, sample_id, cluster_id, CT, prior.count){
+getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count){
 
-    cellType = ID = NULL
+    cellType <- ID <- NULL
+
+    if( ! "counts" %in% assayNames(sce) ){
+        stop("SCE does not contain assay: counts")
+    }
 
     idx <- which(sce[[cluster_id]] == CT)
     lib.size <- colSums2(counts(sce), cols=idx, useNames=TRUE)
@@ -66,7 +70,7 @@ getVarForCellType = function(sce, sample_id, cluster_id, CT, prior.count){
 #' @importFrom limma squeezeVar
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
-getVarList = function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5){
+getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5){
 
     Gene = ID = count.gene = ncell = zeta = sigSq.hat = NULL
 
@@ -116,7 +120,8 @@ getVarList = function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0
 #' @param cluster_id character string specifying which variable to use as cluster id
 #' @param shrink Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample
 #' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
-#' @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add quantile(x, quantileOffset) before taking the reciprocal.
+#' @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
+#' @param h5adBlockSizes set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.
 #'
 #' @examples
 #' library(muscat)
@@ -132,19 +137,25 @@ getVarList = function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0
 #' )
 #' 
 #' # Create precision weights for pseudobulk
-#' weightsList = pbWeights(example_sce, 
+#' weightsList <- pbWeights(example_sce, 
 #'     cluster_id = "cluster_id",
 #'     sample_id = "sample_id")
 #' 
 #' @importFrom stats quantile
+#' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights = function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1){
+pbWeights <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, h5adBlockSizes = 1e9){
+
+    # update block size for reading h5ad file from disk
+    tmp <- getAutoBlockSize()
+    suppressMessages(setAutoBlockSize(h5adBlockSizes))
+    on.exit(suppressMessages(setAutoBlockSize(tmp)))
 
     # compute variances
-    var.lst = getVarList(sce, sample_id, cluster_id, shrink, prior.count)
+    var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count)
 
     # regularize reciprocal with quantile offset
-    W.list = lapply(var.lst, function(x){
+    W.list <- lapply(var.lst, function(x){
         1 / ( x + quantile(x, quantileOffset))
     })
 
