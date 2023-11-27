@@ -4,22 +4,33 @@
 \alias{extractData}
 \alias{extractData,dreamletProcessedData,character-method}
 \alias{extractData,dreamletProcessedData-method}
-\title{Extract expression and colData}
+\title{Extract normalized expression and \code{colData}}
 \usage{
-extractData(x, assay)
+extractData(x, assay, cols = colnames(colData(x)), genes = rownames(x))
 
-\S4method{extractData}{dreamletProcessedData,character}(x, assay)
+\S4method{extractData}{dreamletProcessedData,character}(
+  x,
+  assay,
+  cols = colnames(colData(x)),
+  genes = rownames(assay(x, assay))
+)
 }
 \arguments{
-\item{x}{A \code{dreamletProcessedData} object}
+\item{x}{\code{dreamletProcessedData} object}
 
 \item{assay}{assay to extract}
+
+\item{cols}{columns in \code{colData(x)} to extract.  defaults to all columns as \code{colnames(colData(x))}}
+
+\item{genes}{genes to extract from \code{assay(x, assay)$E}. defaults to all genes as \code{rownames(x)}}
 }
 \value{
 \code{data.frame} or \code{DataFrame} of merged expression and colData
 }
 \description{
-Extract expression and \code{colData} from \code{dreamletProcessedData}
+Extract normalized expression and \code{colData}
+
+Extract normalized (i.e. log2 CPM) expression and \code{colData} from \code{dreamletProcessedData}
 }
 \examples{
 library(muscat)
@@ -38,13 +49,19 @@ pb <- aggregateToPseudoBulk(example_sce,
 # voom-style normalization
 res.proc <- processAssays(pb, ~group_id)
 
-# Extract data.frame of colData merged with expression.
+# Extract all:
+# Extract tibble of colData merged with expression.
 # variables and genes are stored as columns, samples as rows
 df_merge <- extractData(res.proc, "B cells")
-
-dim(df_merge)
 
 # first few columns
 df_merge[, 1:6]
 
+# Extract subset:
+df_merge <- extractData(res.proc, "B cells", cols="group_id", genes = c("SSU72", "U2AF1"))
+
+df_merge
+
+# Boxplot of expression
+boxplot(SSU72 ~ group_id, df_merge)
 }

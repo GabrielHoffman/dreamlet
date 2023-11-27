@@ -1,3 +1,7 @@
+# dreamlet 1.1.4
+  - Nov 27, 2023
+  - add `pbWeights()` to compute precision weights for pseudobulk counts
+  - extend `extractData()` and include it in vignette
 
 # dreamlet 1.1.3
   - Nov 22, 2023
