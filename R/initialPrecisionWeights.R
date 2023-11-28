@@ -111,13 +111,14 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
     var.list
 }
 
-#' Compute observation weights for pseudobulk
+#' Compute precision weights for pseudobulk
 #' 
-#' Compute observation weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample.
+#' Compute precision weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample.
 #' 
 #' @param sce \code{SingleCellExperiment} of where \code{counts(sce)} stores the raw count data at the single cell level
 #' @param sample_id character string specifying which variable to use as sample id
 #' @param cluster_id character string specifying which variable to use as cluster id
+#' @param method select method to compute precision weights. \code{'ncells'} use the number of cells, this is faster. Subsequent arguments are ignored. \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power.   
 #' @param shrink Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample
 #' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
 #' @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
@@ -131,36 +132,78 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 #' # create pseudobulk for each sample and cell cluster
 #' pb <- aggregateToPseudoBulk(example_sce,
 #'   assay = "counts",
-#'   cluster_id = "cluster_id",
 #'   sample_id = "sample_id",
+#'   cluster_id = "cluster_id",
 #'   verbose = FALSE
 #' )
 #' 
 #' # Create precision weights for pseudobulk
-#' weightsList <- pbWeights(example_sce, 
-#'     cluster_id = "cluster_id",
-#'     sample_id = "sample_id")
+#' weightsList <- pbWeights(example_sce,
+#'     sample_id = "sample_id",
+#'     cluster_id = "cluster_id")
 #' 
+#' # voom-style normalization using initial weights
+#' res.proc <- processAssays(pb, ~ group_id, weightsList = weightsList)
+#
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, h5adBlockSizes = 1e9){
+pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, h5adBlockSizes = 1e9){
 
-    # update block size for reading h5ad file from disk
-    tmp <- getAutoBlockSize()
-    suppressMessages(setAutoBlockSize(h5adBlockSizes))
-    on.exit(suppressMessages(setAutoBlockSize(tmp)))
+    method = match.arg(method)
 
-    # compute variances
-    var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count)
+    if( method == "ncells" ){
+        W.list = .pbWeights_ncells(sce, sample_id, cluster_id)
+    }else{
 
-    # regularize reciprocal with quantile offset
-    W.list <- lapply(var.lst, function(x){
-        1 / ( x + quantile(x, quantileOffset))
-    })
+        # delta approximation
+
+        # update block size for reading h5ad file from disk
+        tmp <- getAutoBlockSize()
+        suppressMessages(setAutoBlockSize(h5adBlockSizes))
+        on.exit(suppressMessages(setAutoBlockSize(tmp)))
+
+        # compute variances
+        var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count)
+
+        # regularize reciprocal with quantile offset
+        W.list <- lapply(var.lst, function(x){
+            1 / ( x + quantile(x, quantileOffset))
+        })
+    }
 
     W.list
 }
+
+
+
+
+.pbWeights_ncells = function(sce, sample_id, cluster_id){
+
+    if( ! sample_id %in% colnames(colData(sce)) ){
+        txt = paste("sample_id not found:", sample_id)
+        stop(txt)
+    }
+    if( ! cluster_id %in% colnames(colData(sce)) ){
+        txt = paste("cluster_id not found:", cluster_id)
+        stop(txt)        
+    }
+
+    # number of cells
+    df_cc <- table(sce[[sample_id]], sce[[cluster_id]])
+
+    W.list <-  lapply( unique(sce[[cluster_id]]), function(k){
+
+        W <-  matrix(df_cc[,k], ncol=nrow(df_cc), nrow=nrow(sce), byrow=TRUE)
+        colnames(W) <- rownames(df_cc)
+        rownames(W) <- rownames(sce)
+        W
+    })
+    names(W.list) <- unique(sce[[cluster_id]])
+    W.list
+}
+
+
 
 
 

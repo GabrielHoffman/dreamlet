@@ -2,12 +2,13 @@
 % Please edit documentation in R/initialPrecisionWeights.R
 \name{pbWeights}
 \alias{pbWeights}
-\title{Compute observation weights for pseudobulk}
+\title{Compute precision weights for pseudobulk}
 \usage{
 pbWeights(
   sce,
   sample_id,
   cluster_id,
+  method = c("ncells", "delta"),
   shrink = TRUE,
   prior.count = 0.5,
   quantileOffset = 0.1,
@@ -21,6 +22,8 @@ pbWeights(
 
 \item{cluster_id}{character string specifying which variable to use as cluster id}
 
+\item{method}{select method to compute precision weights. \code{'ncells'} use the number of cells, this is faster. Subsequent arguments are ignored. \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power.}
+
 \item{shrink}{Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample}
 
 \item{prior.count}{Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level}
@@ -30,7 +33,7 @@ pbWeights(
 \item{h5adBlockSizes}{set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.}
 }
 \description{
-Compute observation weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample.
+Compute precision weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample.
 }
 \examples{
 library(muscat)
@@ -40,14 +43,16 @@ data(example_sce)
 # create pseudobulk for each sample and cell cluster
 pb <- aggregateToPseudoBulk(example_sce,
   assay = "counts",
-  cluster_id = "cluster_id",
   sample_id = "sample_id",
+  cluster_id = "cluster_id",
   verbose = FALSE
 )
 
 # Create precision weights for pseudobulk
-weightsList <- pbWeights(example_sce, 
-    cluster_id = "cluster_id",
-    sample_id = "sample_id")
+weightsList <- pbWeights(example_sce,
+    sample_id = "sample_id",
+    cluster_id = "cluster_id")
 
+# voom-style normalization using initial weights
+res.proc <- processAssays(pb, ~ group_id, weightsList = weightsList)
 }
