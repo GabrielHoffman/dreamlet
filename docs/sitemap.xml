@@ -88,6 +88,12 @@
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/details-methods.html</loc>
   </url>
   <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/diffVar-method.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/diffVar-methods.html</loc>
+  </url>
+  <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamlet.html</loc>
   </url>
   <url>
@@ -128,6 +134,9 @@
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/outlier.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/pbWeights.html</loc>
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotCellComposition.html</loc>
@@ -185,6 +194,9 @@
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/sortCols-method.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/stackAssays.html</loc>
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/tabToMatrix.html</loc>

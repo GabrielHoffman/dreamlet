@@ -5,6 +5,9 @@ getVarFromCounts <- function(countMatrix, lib.size, prior.count = .25){
 
     stopifnot( ncol(countMatrix) == length(lib.size))
 
+    # if lib.size is NA, set it to zero
+    lib.size[is.na(lib.size)] = 0
+
     countMatrix <- countMatrix + prior.count
 
     # pseudobulk
@@ -22,14 +25,14 @@ getVarFromCounts <- function(countMatrix, lib.size, prior.count = .25){
 
     # return values to compute variance later
     tibble(Gene = rownames(countMatrix), 
-            count.gene = count.gene ,
+            count.gene = count.gene,
             sigSq.hat = sigSq.hat, 
             zeta = mean(lib.size^2), 
             ncell = ncol(countMatrix))
 }
 
 
-getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count){
+getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count, verbose=TRUE){
 
     cellType <- ID <- NULL
 
@@ -37,8 +40,15 @@ getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count){
         stop("SCE does not contain assay: counts")
     }
 
+    if( verbose ) message("  Computing library sizes...")
+
     idx <- which(sce[[cluster_id]] == CT)
-    lib.size <- colSums2(counts(sce), cols=idx, useNames=TRUE)
+
+    if( is(counts(sce), "DelayedArray") ){
+        lib.size <- colSums2(counts(sce), cols=idx, useNames=TRUE)
+    }else{
+        lib.size <- colSums2(counts(sce)[,idx], useNames=TRUE)        
+    }
     
     # Scale prior count so that an observed count of 0,
     # gives zero variance across samples
@@ -50,6 +60,8 @@ getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count){
         group_by(cellType, ID) %>%
         summarize(n=length(ID), prior.count = mean(prior.count) / n, .groups="drop_last")
 
+    if( verbose ) message("  Processing samples...")
+
     # get variance estimates for each ID and gene
     df <- lapply( unique(sce[[sample_id]]), function(ID){
 
@@ -58,46 +70,61 @@ getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count){
 
         pc <- df_pc$prior.count[df_pc$ID == ID]
         
-        res <- getVarFromCounts( countMatrix, 
-                lib.size = lib.size[colnames(countMatrix)], 
-                prior.count = pc)
+        if( ncol(countMatrix) > 0){
+
+            res <- getVarFromCounts( countMatrix, 
+                    lib.size = lib.size[colnames(countMatrix)], 
+                    prior.count = pc)
+        }else{
+            # if no cells are observed for this cell type and sample
+            res <- tibble( Gene = rownames(sce), 
+                        count.gene = 0,
+                        sigSq.hat = 0,
+                        zeta = 0,
+                        ncell = 0)
+        }
         res$ID <- ID
         res
-        })
+    })
     bind_rows(df)
 }
 
 #' @importFrom limma squeezeVar
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
-getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5){
+getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, verbose=TRUE){
 
     Gene = ID = count.gene = ncell = zeta = sigSq.hat = NULL
 
-    if( ! cluster_id %in% colnames(colData(sce)) ){
-        msg <- paste0("sample_id entry not found in colData(sce): ", cluster_id)
-        stop( msg )
-    }
     if( ! sample_id %in% colnames(colData(sce)) ){
         msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
+        stop( msg )
+    }
+    if( ! cluster_id %in% colnames(colData(sce)) ){
+        msg <- paste0("cluster_id entry not found in colData(sce): ", cluster_id)
         stop( msg )
     }
 
     # Compute variance for each observation for each cell type
     var.list <- lapply( unique(sce[[cluster_id]]), function(CT){
 
-        df <- getVarForCellType( sce, sample_id, cluster_id, CT, prior.count) %>%
+        if( verbose ) message("Processing: ", CT)
+
+        df <- getVarForCellType( sce, sample_id, cluster_id, CT, prior.count, verbose) %>%
                 mutate(Gene = factor(Gene, rownames(sce)),
                         ID = factor(ID))
 
         if( shrink ){      
             # shrink sample variances     
-            res <- squeezeVar( df$sigSq.hat, df$ncell-1, robust=FALSE)
+            # use small offset to handle cases with zero variance
+            # use pmax to ensure df > 1
+            res <- squeezeVar( df$sigSq.hat + 1e-7, pmax(1, df$ncell-1), robust=FALSE)
             df$sigSq.hat <- res$var.post
         }
 
         # delta approximation of variance
         df <- df %>%
+            mutate(count.gene = count.gene + 1e-4) %>%
             mutate( vhat = 1 / count.gene * (1 + ncell*sigSq.hat*zeta / count.gene)) 
 
         mat <- sparseMatrix(df$Gene, df$ID, 
@@ -113,7 +140,7 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 
 #' Compute precision weights for pseudobulk
 #' 
-#' Compute precision weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample.
+#' Compute precision weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample. By default, used number of cells; if specified use delta method.  Note that \code{processAssays()} uses number of cells as weights when no weights are specificed
 #' 
 #' @param sce \code{SingleCellExperiment} of where \code{counts(sce)} stores the raw count data at the single cell level
 #' @param sample_id character string specifying which variable to use as sample id
@@ -123,6 +150,7 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 #' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
 #' @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
 #' @param h5adBlockSizes set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.
+#' @param verbose Show messages, defaults to TRUE
 #'
 #' @examples
 #' library(muscat)
@@ -138,6 +166,9 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 #' )
 #' 
 #' # Create precision weights for pseudobulk
+#' # By default, weights are set to cell count, 
+#' which is the default in processAssays() 
+#' even when no weights are specified
 #' weightsList <- pbWeights(example_sce,
 #'     sample_id = "sample_id",
 #'     cluster_id = "cluster_id")
@@ -148,9 +179,17 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, h5adBlockSizes = 1e9){
+pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, h5adBlockSizes = 1e9, verbose=TRUE){
 
     method = match.arg(method)
+
+    # check for NA values
+    if( any(is.na(sce[[sample_id]])) ){
+        stop("NA values are not allowed in sample_id column")
+    }
+      if( any(is.na(sce[[cluster_id]])) ){
+        stop("NA values are not allowed in cluster_id column")
+    }
 
     if( method == "ncells" ){
         W.list = .pbWeights_ncells(sce, sample_id, cluster_id)
@@ -164,7 +203,7 @@ pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"),
         on.exit(suppressMessages(setAutoBlockSize(tmp)))
 
         # compute variances
-        var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count)
+        var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count, verbose = verbose)
 
         # regularize reciprocal with quantile offset
         W.list <- lapply(var.lst, function(x){

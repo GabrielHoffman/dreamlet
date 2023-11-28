@@ -76,10 +76,9 @@ pb <- aggregateToPseudoBulk(example_sce,
 )
 
 # voom-style normalization
-res.proc <- processAssays(pb, ~group_id)
+res.proc <- processAssays(pb, ~ group_id)
 
 # Differential expression analysis within each assay,
 # evaluated on the voom normalized data
-res.dl <- dreamlet(res.proc, ~group_id)
-
+res.dl <- dreamlet(res.proc, ~ group_id)
 }

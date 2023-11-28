@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,8 +91,8 @@ analysis of pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-11-27
-13:55:56</h4>
+            <h4 data-toc-skip class="date">Run on 2023-11-28
+15:25:05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -314,11 +314,11 @@ type using a bar plot, or genome-wide using a violin plot.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Show variance fractions at the gene-level for each cell type</span></span>
 <span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
-<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.barplt-1.png" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize variance fractions genome-wide for each cell type</span></span>
-<span><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotVarPart-method.html" class="external-link">plotVarPart</a></span><span class="op">(</span><span class="va">vp.lst</span>, label.angle <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.violin-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -375,52 +375,52 @@ were observed to include the gene in the analysis.</p>
 <h3 id="extract-results">Extract results<a class="anchor" aria-label="anchor" href="#extract-results"></a>
 </h3>
 <p>Each entry in <code>res.dl</code> stores a model fit by <a href="https://rdrr.io/bioc/variancePartition/man/dream-method.html" class="external-link"><code>dream()</code></a>,
-and results can be extracted using <code><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable()</a></code> as in
+and results can be extracted using <code>topTable()</code> as in
 <code>limma</code> by specifying the coefficient of interest. The
 results shows the gene name, log fold change, average expression,
 t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># results from full analysis</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
 <span><span class="co">##              assay          ID     logFC   AveExpr         t     P.Value</span></span>
 <span><span class="co">##        &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1      CD4 T cells       ISG20   3.05610  10.40321   33.5696 9.18317e-22</span></span>
-<span><span class="co">## 2      CD4 T cells        IFI6   5.67176   8.52278   33.2757 1.13043e-21</span></span>
-<span><span class="co">## 3      CD4 T cells        MT2A   4.32789   7.80016   29.7341 1.60395e-20</span></span>
-<span><span class="co">## 4  CD14+ Monocytes       IL1RN   7.06934   7.78556   34.5741 1.85359e-20</span></span>
-<span><span class="co">## 5      CD4 T cells       HERC5   4.22862   6.72836   28.7289 3.59738e-20</span></span>
-<span><span class="co">## 6          B cells       ISG15   5.51990  10.19452   25.3775 4.58647e-20</span></span>
-<span><span class="co">## 7      CD4 T cells       ISG15   5.18954  10.06753   28.0038 6.55056e-20</span></span>
-<span><span class="co">## 8          B cells       ISG20   3.33510  11.38145   23.3850 3.62953e-19</span></span>
-<span><span class="co">## 9      CD4 T cells     TNFSF10   4.40485   7.48063   25.4094 6.34843e-19</span></span>
-<span><span class="co">## 10        NK cells       ISG15   4.75893  11.00679   23.6605 6.97237e-19</span></span>
+<span><span class="co">## 1          B cells       ISG15   5.46383  10.19452   29.8807 3.82697e-22</span></span>
+<span><span class="co">## 2      CD4 T cells       ISG20   3.08327  10.40321   37.7709 6.82462e-22</span></span>
+<span><span class="co">## 3          B cells       ISG20   3.23736  11.38145   28.4318 1.39774e-21</span></span>
+<span><span class="co">## 4      CD4 T cells        MT2A   4.32138   7.80016   36.4780 1.47906e-21</span></span>
+<span><span class="co">## 5  CD14+ Monocytes       IL1RN   7.04042   7.78556   39.9678 1.48612e-21</span></span>
+<span><span class="co">## 6      CD4 T cells        IFI6   5.78194   8.52278   33.9813 7.12211e-21</span></span>
+<span><span class="co">## 7      CD4 T cells       HERC5   4.28329   6.72836   33.1920 1.19816e-20</span></span>
+<span><span class="co">## 8      CD4 T cells     TNFSF10   4.48757   7.48063   32.2412 2.27814e-20</span></span>
+<span><span class="co">## 9         NK cells       ISG15   4.60250  11.00679   26.9896 2.57986e-20</span></span>
+<span><span class="co">## 10        NK cells       ISG20   3.69323  10.96970   26.7509 3.21371e-20</span></span>
 <span><span class="co">##      adj.P.Val         B     z.std</span></span>
 <span><span class="co">##      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1  8.19112e-18   39.9116   33.5696</span></span>
-<span><span class="co">## 2  8.19112e-18   39.5351   33.2757</span></span>
-<span><span class="co">## 3  6.71554e-17   36.9785   29.7341</span></span>
-<span><span class="co">## 4  6.71554e-17   36.0976   34.5741</span></span>
-<span><span class="co">## 5  1.04267e-16   35.9843   28.7289</span></span>
-<span><span class="co">## 6  1.10779e-16   35.8509   25.3775</span></span>
-<span><span class="co">## 7  1.35615e-16   35.6762   28.0038</span></span>
-<span><span class="co">## 8  6.57489e-16   33.8803   23.3850</span></span>
-<span><span class="co">## 9  1.01044e-15   33.3638   25.4094</span></span>
-<span><span class="co">## 10 1.01044e-15   33.1809   23.6605</span></span></code></pre>
+<span><span class="co">## 1  4.30737e-18   40.6512   29.8807</span></span>
+<span><span class="co">## 2  4.30737e-18   40.2095   37.7709</span></span>
+<span><span class="co">## 3  4.30737e-18   39.4170   28.4318</span></span>
+<span><span class="co">## 4  4.30737e-18   39.3739   36.4780</span></span>
+<span><span class="co">## 5  4.30737e-18   38.5477   39.9678</span></span>
+<span><span class="co">## 6  1.72023e-17   37.8585   33.9813</span></span>
+<span><span class="co">## 7  2.48053e-17   37.2367   33.1920</span></span>
+<span><span class="co">## 8  4.12685e-17   36.7118   32.2412</span></span>
+<span><span class="co">## 9  4.15415e-17   36.4711   26.9896</span></span>
+<span><span class="co">## 10 4.65731e-17   36.2740   26.7509</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># only B cells</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           logFC   AveExpr        t      P.Value    adj.P.Val        B</span></span>
-<span><span class="co">## ISG15  5.519904 10.194524 25.37753 4.586471e-20 8.994069e-17 35.85088</span></span>
-<span><span class="co">## ISG20  3.335104 11.381452 23.38500 3.629530e-19 3.558754e-16 33.88033</span></span>
-<span><span class="co">## LY6E   4.320109  8.690971 18.18076 1.905704e-16 1.062564e-13 27.61063</span></span>
-<span><span class="co">## UBE2L6 2.731236  9.233683 18.08549 2.167392e-16 1.062564e-13 27.52584</span></span>
-<span><span class="co">## IRF7   3.691412  8.662936 17.90402 2.773866e-16 1.087910e-13 27.26493</span></span>
-<span><span class="co">## IFITM2 2.986288  8.721233 17.37978 5.726620e-16 1.791531e-13 26.56404</span></span>
-<span><span class="co">## PLSCR1 4.111782  8.256238 17.30109 6.395063e-16 1.791531e-13 26.39259</span></span>
-<span><span class="co">## SAT1   2.201007  9.651797 17.00632 9.707414e-16 2.379530e-13 25.99625</span></span>
-<span><span class="co">## EPSTI1 3.692197  8.089555 16.80794 1.289974e-15 2.810711e-13 25.70714</span></span>
-<span><span class="co">## SOCS1  2.440598  8.581121 16.31245 2.656929e-15 5.210237e-13 25.03722</span></span></code></pre>
+<span><span class="co">## ISG15  5.463825 10.194524 29.88069 3.826968e-22 7.504683e-19 40.65119</span></span>
+<span><span class="co">## ISG20  3.237359 11.381452 28.43176 1.397743e-21 1.370487e-18 39.41704</span></span>
+<span><span class="co">## LY6E   4.199663  8.690971 23.65134 1.631076e-19 1.066180e-16 34.64028</span></span>
+<span><span class="co">## PLSCR1 4.070973  8.256238 22.90123 3.725818e-19 1.718635e-16 33.79523</span></span>
+<span><span class="co">## EPSTI1 3.652905  8.089555 22.75648 4.382038e-19 1.718635e-16 33.63648</span></span>
+<span><span class="co">## SAT1   2.140671  9.651797 21.92936 1.127706e-18 3.685718e-16 32.73085</span></span>
+<span><span class="co">## IRF7   3.655292  8.662936 21.37136 2.173109e-18 6.087810e-16 32.09392</span></span>
+<span><span class="co">## UBE2L6 2.688268  9.233683 21.17978 2.731666e-18 6.370928e-16 31.85761</span></span>
+<span><span class="co">## TRIM22 2.906534  7.160498 21.12311 2.923934e-18 6.370928e-16 31.70909</span></span>
+<span><span class="co">## SOCS1  2.427295  8.581121 21.00831 3.357573e-18 6.584201e-16 31.66236</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="forest-plot">Forest plot<a class="anchor" aria-label="anchor" href="#forest-plot"></a>
@@ -527,25 +527,25 @@ object, the coefficient of interest, and gene sets as a
 <span><span class="co">## 6 B cells StimStatusstim</span></span>
 <span><span class="co">##                                                        Geneset NGenes</span></span>
 <span><span class="co">## 1                                GO0022626: cytosolic ribosome     74</span></span>
-<span><span class="co">## 2                             GO0031256: leading edge membrane     20</span></span>
-<span><span class="co">## 3                          GO0000151: ubiquitin ligase complex     34</span></span>
-<span><span class="co">## 4                 GO0022625: cytosolic large ribosomal subunit     45</span></span>
-<span><span class="co">## 5 GO0090575: RNA polymerase II transcription regulator complex     37</span></span>
-<span><span class="co">## 6                                          GO0005844: polysome     32</span></span>
-<span><span class="co">##   Correlation     delta        se      p.less  p.greater      PValue Direction</span></span>
-<span><span class="co">## 1        0.01 -1.070890 0.3485128 0.004134011 0.99586599 0.008268023      Down</span></span>
-<span><span class="co">## 2        0.01 -1.454310 0.5532753 0.009921304 0.99007870 0.019842608      Down</span></span>
-<span><span class="co">## 3        0.01  1.161605 0.4495613 0.989176903 0.01082310 0.021646194        Up</span></span>
-<span><span class="co">## 4        0.01 -1.028564 0.4071906 0.012108847 0.98789115 0.024217694      Down</span></span>
-<span><span class="co">## 5        0.01  1.053612 0.4360762 0.985035082 0.01496492 0.029929837        Up</span></span>
-<span><span class="co">## 6        0.01 -1.084006 0.4599492 0.016763088 0.98323691 0.033526176      Down</span></span>
+<span><span class="co">## 2                 GO0022625: cytosolic large ribosomal subunit     45</span></span>
+<span><span class="co">## 3                             GO0031256: leading edge membrane     20</span></span>
+<span><span class="co">## 4 GO0090575: RNA polymerase II transcription regulator complex     37</span></span>
+<span><span class="co">## 5                          GO0000151: ubiquitin ligase complex     34</span></span>
+<span><span class="co">## 6                           GO0005839: proteasome core complex     13</span></span>
+<span><span class="co">##   Correlation     delta        se      p.less   p.greater      PValue Direction</span></span>
+<span><span class="co">## 1        0.01 -1.359918 0.4149538 0.002752843 0.997247157 0.005505685      Down</span></span>
+<span><span class="co">## 2        0.01 -1.374381 0.4847978 0.006618402 0.993381598 0.013236805      Down</span></span>
+<span><span class="co">## 3        0.01 -1.858272 0.6589135 0.006813596 0.993186404 0.013627192      Down</span></span>
+<span><span class="co">## 4        0.01  1.424376 0.5191995 0.992075627 0.007924373 0.015848745        Up</span></span>
+<span><span class="co">## 5        0.01  1.392016 0.5355516 0.989495380 0.010504620 0.021009240        Up</span></span>
+<span><span class="co">## 6        0.01  1.993645 0.7922932 0.987661570 0.012338430 0.024676860        Up</span></span>
 <span><span class="co">##         FDR</span></span>
-<span><span class="co">## 1 0.2814592</span></span>
-<span><span class="co">## 2 0.4420393</span></span>
-<span><span class="co">## 3 0.4507369</span></span>
-<span><span class="co">## 4 0.4632595</span></span>
-<span><span class="co">## 5 0.4898308</span></span>
-<span><span class="co">## 6 0.5158281</span></span></code></pre>
+<span><span class="co">## 1 0.2741364</span></span>
+<span><span class="co">## 2 0.4283927</span></span>
+<span><span class="co">## 3 0.4283927</span></span>
+<span><span class="co">## 4 0.4289412</span></span>
+<span><span class="co">## 5 0.4407344</span></span>
+<span><span class="co">## 6 0.4693180</span></span></code></pre>
 <div class="section level3">
 <h3 id="heatmap-of-top-genesets">Heatmap of top genesets<a class="anchor" aria-label="anchor" href="#heatmap-of-top-genesets"></a>
 </h3>
@@ -588,7 +588,7 @@ observed for each cell cluster.</p>
 <span></span>
 <span><span class="co"># The coefficient 'compare' is the value logFC between test and baseline:</span></span>
 <span><span class="co"># compare = cellClustertest - cellClusterbaseline</span></span>
-<span><span class="va">df_Bcell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span><span class="op">)</span></span>
+<span><span class="va">df_Bcell</span> <span class="op">&lt;-</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_Bcell</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                             logFC   AveExpr         t      P.Value    adj.P.Val</span></span>
@@ -624,7 +624,7 @@ only highly expressed genes:</p>
 type:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-1.png" width="700"></p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
@@ -658,7 +658,7 @@ type:</p>
 <span><span class="co">##  [7] zenith_1.4.1                ExperimentHub_2.8.1        </span></span>
 <span><span class="co">##  [9] AnnotationHub_3.8.0         BiocFileCache_2.8.0        </span></span>
 <span><span class="co">## [11] dbplyr_2.3.2                muscat_1.14.0              </span></span>
-<span><span class="co">## [13] dreamlet_1.1.4              SingleCellExperiment_1.22.0</span></span>
+<span><span class="co">## [13] dreamlet_1.1.5              SingleCellExperiment_1.22.0</span></span>
 <span><span class="co">## [15] SummarizedExperiment_1.30.1 Biobase_2.60.0             </span></span>
 <span><span class="co">## [17] GenomicRanges_1.52.0        GenomeInfoDb_1.36.1        </span></span>
 <span><span class="co">## [19] IRanges_2.34.1              S4Vectors_0.38.1           </span></span>
