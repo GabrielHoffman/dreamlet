@@ -145,16 +145,16 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' )
 #'
 #' # voom-style normalization
-#' res.proc <- processAssays(pb, ~group_id)
+#' res.proc <- processAssays(pb, ~ group_id)
 #'
 #' # Differential expression analysis within each assay,
 #' # evaluated on the voom normalized data
-#' res.dl <- dreamlet(res.proc, ~group_id)
-#'
+#' res.dl <- dreamlet(res.proc, ~ group_id)
+#
 #' @importFrom BiocParallel SerialParam
 #' @importFrom S4Vectors metadata as.data.frame
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
-#'
+#
 #' @export
 processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = FALSE, weightsList = NULL, BPPARAM = SerialParam(), ...) {
   # checks
@@ -207,7 +207,14 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
     )
 
     if( ! is.null(weightsList) ){
+      # use specified weights
       weights <- weightsList[[k]][,rownames(data),drop=FALSE]
+    }else{
+      # use cell count weights
+      weights <- n.cells[rownames(data),]
+      weights <- matrix(weights, nrow = nrow(y), ncol = length(weights), byrow=TRUE)
+      colnames(weights) = rownames(n.cells)
+      rownames(weights) = rownames(y)
     }
 
     # processing counts with voom or log2 CPM

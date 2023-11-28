@@ -1,3 +1,8 @@
+# dreamlet 1.1.5
+  - Nov 28, 2023
+  - fix edge cases in `pbWeights()` 
+  - cell weights is not default in `dreamlet()`
+
 # dreamlet 1.1.4
   - Nov 27, 2023
   - add `pbWeights()` to compute precision weights for pseudobulk counts
