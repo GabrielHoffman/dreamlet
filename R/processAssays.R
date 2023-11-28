@@ -120,7 +120,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
-#' @param weightsList list storing matrix of precision weights for each cell type
+#' @param weightsList list storing matrix of precision weights for each cell type. If \code{NULL} precision weights are set to cell count
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -128,7 +128,9 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #'
 #' @details  For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 2} and \code{min.count = 2} are also reasonable to include more genes in the analysis.
 #'
-#' The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.
+#' The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.  
+#' 
+#' If \code{weightsList} is \code{NULL}, precision weights are set to cell counts internally.
 #'
 #' @examples
 #' library(muscat)
