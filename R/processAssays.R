@@ -215,8 +215,8 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       # use cell count weights
       weights <- n.cells[rownames(data),]
       weights <- matrix(weights, nrow = nrow(y), ncol = length(weights), byrow=TRUE)
-      colnames(weights) = rownames(n.cells)
-      rownames(weights) = rownames(y)
+      colnames(weights) <- rownames(data)
+      rownames(weights) <- rownames(y)
     }
 
     # processing counts with voom or log2 CPM
