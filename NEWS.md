@@ -1,3 +1,7 @@
+# dreamlet 1.1.6
+  - Dec 5, 2023
+  - `pbWeights()` add argument `maxRatio`
+
 # dreamlet 1.1.5
   - Nov 28, 2023
   - fix edge cases in `pbWeights()` 
