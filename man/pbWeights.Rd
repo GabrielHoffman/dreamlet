@@ -12,6 +12,7 @@ pbWeights(
   shrink = TRUE,
   prior.count = 0.5,
   quantileOffset = 0.1,
+  maxRatio = 20,
   h5adBlockSizes = 1e+09,
   verbose = TRUE
 )
@@ -30,6 +31,8 @@ pbWeights(
 \item{prior.count}{Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level}
 
 \item{quantileOffset}{Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.}
+
+\item{maxRatio}{When computing precision as the reciprocal of variance \code{1/(x+tau)} select tau to have a maximum ratio between the largest and smallest precision}
 
 \item{h5adBlockSizes}{set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.}
 
@@ -53,8 +56,8 @@ pb <- aggregateToPseudoBulk(example_sce,
 
 # Create precision weights for pseudobulk
 # By default, weights are set to cell count, 
-which is the default in processAssays() 
-even when no weights are specified
+# which is the default in processAssays() 
+# even when no weights are specified
 weightsList <- pbWeights(example_sce,
     sample_id = "sample_id",
     cluster_id = "cluster_id")

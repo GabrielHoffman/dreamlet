@@ -100,8 +100,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 
 
 
-# since precision weights are not used, use the trend in the eBayes step
-# trend = TRUE
+
 
 
 

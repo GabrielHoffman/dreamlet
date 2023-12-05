@@ -138,6 +138,17 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
     var.list
 }
 
+
+# Get offset so that (max(x) + offset) / (min(x) + offset) is target_ratio
+get_offset = function(x, target_ratio){
+
+    # min and max
+    rng  = range(x)
+
+    # tau
+    (rng[2]-target_ratio*rng[1]) / (target_ratio-1) 
+}
+
 #' Compute precision weights for pseudobulk
 #' 
 #' Compute precision weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample. By default, used number of cells; if specified use delta method.  Note that \code{processAssays()} uses number of cells as weights when no weights are specificed
@@ -149,6 +160,7 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 #' @param shrink Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample
 #' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
 #' @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
+#' @param maxRatio When computing precision as the reciprocal of variance \code{1/(x+tau)} select tau to have a maximum ratio between the largest and smallest precision
 #' @param h5adBlockSizes set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.
 #' @param verbose Show messages, defaults to TRUE
 #'
@@ -167,8 +179,8 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 #' 
 #' # Create precision weights for pseudobulk
 #' # By default, weights are set to cell count, 
-#' which is the default in processAssays() 
-#' even when no weights are specified
+#' # which is the default in processAssays() 
+#' # even when no weights are specified
 #' weightsList <- pbWeights(example_sce,
 #'     sample_id = "sample_id",
 #'     cluster_id = "cluster_id")
@@ -179,7 +191,7 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, h5adBlockSizes = 1e9, verbose=TRUE){
+pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, maxRatio = 20, h5adBlockSizes = 1e9, verbose=TRUE){
 
     method = match.arg(method)
 
@@ -205,16 +217,22 @@ pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"),
         # compute variances
         var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count, verbose = verbose)
 
-        # regularize reciprocal with quantile offset
-        W.list <- lapply(var.lst, function(x){
-            1 / ( x + quantile(x, quantileOffset))
+        # for each cell type
+        W.list <- lapply(var.lst, function(v.mat){
+            # regularize reciprocal with offset
+            # get offset tau as the max of
+            # 1) quantile
+            # 2) to give a maximum ratio of maxRatio
+            # for each cell type
+            t(apply(v.mat, 1, function(x){
+                tau = max(quantile(x, quantileOffset), get_offset(x, maxRatio))
+                1 /  (x + tau)
+                }))
         })
     }
 
     W.list
 }
-
-
 
 
 .pbWeights_ncells = function(sce, sample_id, cluster_id){
