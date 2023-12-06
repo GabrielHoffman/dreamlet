@@ -194,7 +194,7 @@ get_offset = function(x, target_ratio){
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, maxRatio = 100, h5adBlockSizes = 1e9, verbose=TRUE){
+pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, maxRatio = 20, h5adBlockSizes = 1e9, verbose=TRUE){
 
     method = match.arg(method)
 
