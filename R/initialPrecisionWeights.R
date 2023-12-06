@@ -140,13 +140,16 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
 
 
 # Get offset so that (max(x) + offset) / (min(x) + offset) is target_ratio
+# return max(0, tau), so offset isn't negative
 get_offset = function(x, target_ratio){
 
     # min and max
     rng  = range(x)
 
     # tau
-    (rng[2]-target_ratio*rng[1]) / (target_ratio-1) 
+    tau = (rng[2]-target_ratio*rng[1]) / (target_ratio-1) 
+
+    max(tau, 0)
 }
 
 #' Compute precision weights for pseudobulk
@@ -159,7 +162,7 @@ get_offset = function(x, target_ratio){
 #' @param method select method to compute precision weights. \code{'ncells'} use the number of cells, this is faster. Subsequent arguments are ignored. \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power.   
 #' @param shrink Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample
 #' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
-#' @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
+# @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
 #' @param maxRatio When computing precision as the reciprocal of variance \code{1/(x+tau)} select tau to have a maximum ratio between the largest and smallest precision
 #' @param h5adBlockSizes set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.
 #' @param verbose Show messages, defaults to TRUE
@@ -191,7 +194,7 @@ get_offset = function(x, target_ratio){
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, quantileOffset = 0.1, maxRatio = 20, h5adBlockSizes = 1e9, verbose=TRUE){
+pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, maxRatio = 100, h5adBlockSizes = 1e9, verbose=TRUE){
 
     method = match.arg(method)
 
@@ -225,7 +228,7 @@ pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"),
             # 2) to give a maximum ratio of maxRatio
             # for each cell type
             t(apply(v.mat, 1, function(x){
-                tau = max(quantile(x, quantileOffset), get_offset(x, maxRatio))
+                tau = get_offset(x, maxRatio)
                 1 /  (x + tau)
                 }))
         })
