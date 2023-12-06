@@ -11,7 +11,6 @@ pbWeights(
   method = c("ncells", "delta"),
   shrink = TRUE,
   prior.count = 0.5,
-  quantileOffset = 0.1,
   maxRatio = 20,
   h5adBlockSizes = 1e+09,
   verbose = TRUE
@@ -29,8 +28,6 @@ pbWeights(
 \item{shrink}{Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample}
 
 \item{prior.count}{Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level}
-
-\item{quantileOffset}{Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.}
 
 \item{maxRatio}{When computing precision as the reciprocal of variance \code{1/(x+tau)} select tau to have a maximum ratio between the largest and smallest precision}
 
