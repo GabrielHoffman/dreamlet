@@ -1,3 +1,9 @@
+# dreamlet 1.1.7
+  - Dec 10, 2023
+  - add `plotBeeswarm()` 
+  - add `rowWeightedVarsMatrix()`
+  - bug fixes
+
 # dreamlet 1.1.6
   - Dec 5, 2023
   - `pbWeights()` add argument `maxRatio`

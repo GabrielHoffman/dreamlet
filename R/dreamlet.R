@@ -766,7 +766,7 @@ setMethod(
       errorArray <- NULL
 
       # drop any constant terms from the formula
-      if (length(all.vars(form_mod)) >= 0) {
+      if (length(all.vars(form_mod)) > 0) {
         # get contrasts customized for the formula for this cell type
         if (!is.null(contrasts)) {
           L <- makeContrastsDream(form_mod, data2, contrasts = contrasts, nullOnError = TRUE)
