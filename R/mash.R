@@ -192,6 +192,12 @@ run_mash <- function(fit, coefList) {
   B <- tabToMatrix(tab, "logFC")
   S <- tabToMatrix(tab, "se")
 
+  # only keep columns with variance in logFC
+  cv = colVars(B, na.rm=TRUE)
+  keep = (cv > 0) & !is.na(cv)
+  B = B[,keep, drop=FALSE]
+  S = S[,keep, drop=FALSE]
+
   # run mashr on these matricies
   #-----------------------------
 
