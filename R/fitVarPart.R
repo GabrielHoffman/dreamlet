@@ -110,7 +110,7 @@ setMethod(
       form_mod <- dropRedundantTerms(form_mod, data2)
 
       # check if formula contains variables
-      if (length(all.vars(form_mod)) > 0) {
+      if (length(all.vars(form_mod)) > 0 & isFullRank(form_mod, data2)) {
         # fit linear mixed model for each gene
         # TODO add , L=L
         res <- fitExtractVarPartModel(geneExpr, form_mod, data2, BPPARAM = BPPARAM, ..., quiet = TRUE, hideErrorsInBackend=TRUE)
