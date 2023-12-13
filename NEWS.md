@@ -4,6 +4,7 @@
   - add `rowWeightedVarsMatrix()`
   - bug fixes
   - add `isFullRank()` check in `dreamlet()`
+  - handle exceptions in `run_mash()`
 
 # dreamlet 1.1.6
   - Dec 5, 2023
