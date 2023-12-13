@@ -46,6 +46,18 @@ checkFormula <- function(formula, data) {
 }
 
 
+# Check if formula is full rank 
+#' @importFrom lme4 nobars
+isFullRank = function(formula, data){
+  
+  design = model.matrix(nobars(formula), data)
+
+  qr(design)$rank >= ncol(design)
+}
+
+
+
+
 #' Check if two formulas are equal
 #'
 #' Check if two formulas are equal by evaluating the formulas and extracting terms
