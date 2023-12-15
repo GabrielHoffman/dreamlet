@@ -119,7 +119,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
-#' @param weightsList list storing matrix of precision weights for each cell type. If \code{NULL} precision weights are set to cell count
+#' @param weightsList list storing matrix of precision weights for each cell type. If \code{NULL} precision weights are set to 1
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -129,7 +129,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #'
 #' The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.  
 #' 
-#' If \code{weightsList} is \code{NULL}, precision weights are set to cell counts internally.
+#' If \code{weightsList} is \code{NULL}, precision weights are set to 1 internally.
 #'
 #' @examples
 #' library(muscat)
@@ -212,8 +212,9 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       weights <- weightsList[[k]][,rownames(data),drop=FALSE]
     }else{
       # use cell count weights
-      weights <- n.cells[rownames(data),]
-      weights <- matrix(weights, nrow = nrow(y), ncol = length(weights), byrow=TRUE)
+      # weights <- n.cells[rownames(data),]
+      # weights are 1
+      weights <- matrix(1, nrow = nrow(y), ncol = nrow(data), byrow=TRUE)
       colnames(weights) <- rownames(data)
       rownames(weights) <- rownames(y)
     }
