@@ -44,7 +44,7 @@ processAssays(
 
 \item{quiet}{show messages}
 
-\item{weightsList}{list storing matrix of precision weights for each cell type. If \code{NULL} precision weights are set to cell count}
+\item{weightsList}{list storing matrix of precision weights for each cell type. If \code{NULL} precision weights are set to 1}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 
@@ -61,7 +61,7 @@ For each cell cluster, samples with at least \code{min.cells} are retained. Only
 
 The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.  
 
-If \code{weightsList} is \code{NULL}, precision weights are set to cell counts internally.
+If \code{weightsList} is \code{NULL}, precision weights are set to 1 internally.
 }
 \examples{
 library(muscat)
