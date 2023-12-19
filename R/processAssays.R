@@ -57,7 +57,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   # n.cells <- n.cells[include]
 
   # if there are too few remaining samples
-  if (nrow(data) < min.samples) {
+  if (nrow(data) < min.samples | nrow(y) == 0) {
     return(NULL)
   }
 
@@ -89,7 +89,13 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     precWeights <- rep(1, ncol(y))
   }
 
+  # if no genes are kept
+  if( sum(keep) == 0) return(NULL)
+
   geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = precWeights, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
+
+  # if no genes are succeed
+  if( nrow(geneExpr) == 0) return(NULL)
 
   # save formula used after dropping constant terms
   if (!is.null(geneExpr)) geneExpr$formula <- formula

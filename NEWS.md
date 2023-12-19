@@ -1,3 +1,7 @@
+# dreamlet 1.1.8
+  - Dec 18, 2023
+  - fix issue when no genes pass cutoffs
+
 # dreamlet 1.1.7
   - Dec 10, 2023
   - add `plotBeeswarm()` 
