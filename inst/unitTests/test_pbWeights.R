@@ -30,8 +30,13 @@ test_pbWeights = function(){
 	# use internally comptuted cell weights
 	res.proc2 <- processAssays(pb, ~ group_id)
 
-	# These should be identical
-	checkIdentical(res.proc1, res.proc2)
+	for( i in seq(length(weightsList)) ){
+		weightsList[[i]][] = 1
+	}
+	res.proc3 <- processAssays(pb, ~ group_id, weightsList = weightsList)
+
+	# These should be identical, since weights of 1 are used
+	checkIdentical(res.proc3, res.proc2)
 
 	# delta weights
 	###############

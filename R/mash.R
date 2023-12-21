@@ -157,6 +157,7 @@ tabToMatrix <- function(tab, col, rn = "ID", cn = "assay") {
 #'
 #' @seealso \code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{mashr::mash_set_data}
 #' @importFrom mashr mash_set_data cov_canonical mash_estimate_corr_em
+#' @importFrom MatrixGenerics colVars 
 #' @export
 run_mash <- function(fit, coefList) {
   if (!is(fit, "dreamletResult")) {

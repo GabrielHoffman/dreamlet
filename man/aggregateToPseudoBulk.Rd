@@ -78,7 +78,6 @@ pb
 pb2 <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose = FALSE)
 
 pb2
-
 }
 \references{
 Crowell, HL, Soneson, C, Germain, P-L, Calini, D,
