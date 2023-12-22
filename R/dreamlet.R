@@ -853,8 +853,8 @@ setMethod(
         n_retain = resList[[id]]$n_retain,
         formula = Reduce(paste, deparse(resList[[id]]$formula)),
         formDropsTerms = !equalFormulas(resList[[id]]$formula, formula),
-        # n_genes = nrow(x[[id]]), # original genes
-        n_genes = nrow(resList[[id]]$fit),
+        n_genes = nrow(x[[id]]), # original genes
+        # n_genes = nrow(resList[[id]]$fit),
         n_errors = length(resList[[id]]$errors),
         error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE)
       )
