@@ -794,12 +794,14 @@ setMethod(
           if (!is.null(fit$rdf)) {
             # keep genes with residual degrees of freedom > 1
             # this prevents failures later
-            keep <- which(fit$rdf >= 1)
+            keep <- (fit$rdf >= 1)
 
             fit <- fit[keep, ]
+
+            if( nrow(fit) == 0 ) fit <-NULL
           }
 
-          if (use.eBayes) {
+          if (use.eBayes & !is.null(fit)) {
             # use counts directly if is an EList
             isCounts <- ifelse(is(geneExpr, "EList"), TRUE, FALSE)
 
