@@ -145,7 +145,8 @@ aggregateNonCountSignal <- function(sce, assay = NULL, sample_id = NULL, cluster
   new("dreamletProcessedData",
     resList,
     data = data_constant,
-    metadata = metadata(pb)$aggr_means,
+    # metadata = metadata(pb)$aggr_means,
+    metadata = get_metadata_aggr_means(pb),
     by = metadata(pb)$agg_pars$by
   )
 }

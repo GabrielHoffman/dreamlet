@@ -172,3 +172,19 @@ setMethod(
     res
   }
 )
+
+
+#' @importFrom dplyr bind_rows
+get_metadata_aggr_means = function(x){
+
+  # when SingleCellExperiments are cbind'ed, 
+  # the entries in metadata(x) are added as a list instead of rbind'ed
+  # here, rbind the aggr_means lists entries 
+  idx = which(names(metadata(x)) == "aggr_means")
+
+  bind_rows(metadata(x)[idx])
+}
+
+
+
+

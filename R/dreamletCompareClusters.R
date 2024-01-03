@@ -122,8 +122,8 @@ dreamletCompareClusters <- function(pb, assays, method = c("fixed", "random", "n
     stop("pb must be a SingleCellExperiment")
   }
 
-  if (!all(all.vars(formula) %in% colnames(metadata(pb)$aggr_means))) {
-    i <- which(!all.vars(formula) %in% colnames(metadata(pb)$aggr_means))
+  if (!all(all.vars(formula) %in% colnames(get_metadata_aggr_means(pb)))) {
+    i <- which(!all.vars(formula) %in% colnames(get_metadata_aggr_means(pb)))
     cmd <- paste0("Variables in formula not found: ", paste(all.vars(formula)[i], collapse = ", "))
     stop(cmd)
   }
@@ -244,7 +244,7 @@ dreamletCompareClusters <- function(pb, assays, method = c("fixed", "random", "n
       colnames(geneCounts) <- paste0(clstrSet, "_", colnames(geneCounts))
 
       # subset and combine metadata
-      aggr_means <- as.data.frame(metadata(pb)$aggr_means)
+      aggr_means <- as.data.frame(get_metadata_aggr_means(pb))
       include <- aggr_means[[metadata(pb)$agg_pars$by[1]]] %in% assay.lst[[clstrSet]]
       aggr_means <- aggr_means[include, , drop = FALSE]
 

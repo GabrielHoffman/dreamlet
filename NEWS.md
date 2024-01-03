@@ -1,3 +1,7 @@
+# dreamlet 1.1.9
+  - Jan 3, 2024
+  - use `get_metadata_aggr_means()` to extract `aggr_means` when SCE is produced by cbind'ing
+
 # dreamlet 1.1.8
   - Dec 18, 2023
   - fix issue when no genes pass cutoffs
