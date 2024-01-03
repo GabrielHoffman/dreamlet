@@ -208,7 +208,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
     # with metadata(sceObj)$aggr_means (data that varies)
     data <- merge_metadata(
       data_constant,
-      metadata(sceObj)$aggr_means,
+      get_metadata_aggr_means(sceObj),
       k,
       metadata(sceObj)$agg_pars$by
     )
@@ -304,7 +304,8 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
   new("dreamletProcessedData",
     resList,
     data = data_constant,
-    metadata = metadata(sceObj)$aggr_means,
+    # metadata = metadata(sceObj)$aggr_means,
+    metadata = get_metadata_aggr_means(sceObj),    
     by = metadata(sceObj)$agg_pars$by,
     df_details = df_details,
     errors = errors,

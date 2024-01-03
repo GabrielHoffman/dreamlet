@@ -754,7 +754,10 @@ setMethod(
 
       # merge data_constant (data constant for all cell types)
       # with metadata(sceObj)$aggr_means (data that varies)
-      data2 <- merge_metadata(data_constant[ids, , drop = FALSE], metadata(x), k, x@by)
+      data2 <- merge_metadata(data_constant[ids, , drop = FALSE], 
+        metadata(x), 
+        k, 
+        x@by)
 
       # drop any constant terms from the formula
       form_mod <- removeConstantTerms(formula, data2)

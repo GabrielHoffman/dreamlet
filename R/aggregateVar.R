@@ -122,7 +122,8 @@ aggregateVar <- function(sce, assay = NULL, cluster_id = NULL, sample_id = NULL,
   # return var as dreamletProcessedData object
   new("dreamletProcessedData", resList,
     data = data_constant,
-    metadata = metadata(pb.sem)$aggr_means,
+    # metadata = metadata(pb.sem)$aggr_means,
+    metadata = get_metadata_aggr_means(pb.sem),
     by = c(cluster_id, sample_id)
   )
 }
