@@ -1,3 +1,7 @@
+# dreamlet 1.1.10
+  - Jan 10, 2024
+  - `stackAssays()` now includeds `metadata()$aggr_means` correctly
+
 # dreamlet 1.1.9
   - Jan 3, 2024
   - use `get_metadata_aggr_means()` to extract `aggr_means` when SCE is produced by cbind'ing

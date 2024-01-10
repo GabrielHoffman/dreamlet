@@ -45,7 +45,11 @@
 #'
 #' # Interaction model using random effects
 #' form <- ~ (1|group_id) + (1|stackedAssay) + (1|group_id:stackedAssay)
+#
 #' @importFrom SummarizedExperiment assayNames<-
+#' @importFrom rlang sym
+#' @importFrom S4Vectors metadata metadata<-
+#' @importFrom dplyr rename inner_join
 #' @export
 stackAssays <- function(pb, assays = assayNames(pb)){
 
@@ -103,12 +107,19 @@ stackAssays <- function(pb, assays = assayNames(pb)){
 
 	# aggr_means
 	# create structure, but don't populate values
-	df <- grd[colnames(pb.stack),,drop=FALSE]
+	df <- grd[colnames(pb.stack),,drop=FALSE] %>%
+				as_tibble
 	key <- metadata(pb.stack)$agg_pars$by
 	df[[key[1]]] <- "stacked"
 	df[[key[2]]] <- rownames(grd)
 
-	metadata(pb.stack)$aggr_means <- tibble(df[,key,drop=FALSE])
+	# get metadata, joint with df
+	by <- metadata(pb)$agg_pars$by
+	df2 <- metadata(pb)$aggr_means %>% 
+		rename( assay = sym(by[1]),
+			id = sym(by[2])) 
+
+	metadata(pb.stack)$aggr_means <- inner_join(df, df2, by = c("assay", "id"))
 
 	pb.stack
 }		
