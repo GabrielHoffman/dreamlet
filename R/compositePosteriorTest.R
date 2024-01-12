@@ -49,6 +49,7 @@
 #' include = c("CD14+ Monocytes", "FCGR3A+ Monocytes")
 #' exclude = c('CD4 T cells', 'CD8 T cells')
 #' 
+#' # Perform composite test
 #' prob = compositePosteriorTest(res_mash, include, exclude)
 #' 
 #' # examine the lFSR for top gene
