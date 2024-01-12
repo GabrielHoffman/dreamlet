@@ -194,7 +194,7 @@ run_mash <- function(fit, coefList) {
   S <- tabToMatrix(tab, "se")
 
   # only keep columns with variance in logFC
-  cv = colVars(B, na.rm=TRUE)
+  cv = colVars(B, na.rm=TRUE, useNames = TRUE)
   keep = (cv > 0) & !is.na(cv)
   B = B[,keep, drop=FALSE]
   S = S[,keep, drop=FALSE]
