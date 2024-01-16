@@ -1,3 +1,7 @@
+# dreamlet 1.1.11
+  - Jan 16, 2024
+  - add `meta_analysis()`
+
 # dreamlet 1.1.10
   - Jan 10, 2024
   - `stackAssays()` now includeds `metadata()$aggr_means` correctly
