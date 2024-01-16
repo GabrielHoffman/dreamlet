@@ -65,8 +65,12 @@ meta_analysis = function( x, method = "FE", group = c('ID', 'assay') ){
 	f = function(beta, se, method){
 
 		if( method == "RE2C" ){
-			tab <- RE2C( beta, se ) %>%
-				select(-RE2Cp.twoStep)
+			if( length(beta) > 1){
+				tab <- RE2C( beta, se ) %>%
+					select(-RE2Cp.twoStep)
+			}else{
+				tab <- data.frame(stat1 = NA)
+			}
 		}else{
 			tab <- tidy(rma(yi = beta, sei = se, method = method)) %>%
 					select(-term, -type)
@@ -82,6 +86,7 @@ meta_analysis = function( x, method = "FE", group = c('ID', 'assay') ){
 		group_by_at(group) %>% 
 		group_modify( ~ f( .x$logFC, .x$logFC / .x$t, method))
 }
+
 
 
 
