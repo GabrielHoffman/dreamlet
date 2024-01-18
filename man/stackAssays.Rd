@@ -32,7 +32,7 @@ pb <- aggregateToPseudoBulk(example_sce,
 )
 
 # Stack assays for joint analysis
-pb.stack = stackAssays(pb)
+pb.stack <- stackAssays(pb)
 
 # voom-style normalization
 # assay (i.e. cell type) can now be included as a covariate
@@ -40,16 +40,17 @@ res.proc <- processAssays(pb.stack, ~ group_id + stackedAssay)
 
 # variance partitioning analysis
 vp <- fitVarPart(res.proc, ~ group_id + stackedAssay)
-    
+
 # Summarize variance fractions across cell types
-plotVarPart( sortCols( vp ) )
+plotVarPart(sortCols(vp))
 
 # Interaction analysis allows group_id
 # to have a different effect within each stacedAssay
-vp2 <- fitVarPart(res.proc, ~ group_id*stackedAssay)
-    
-plotVarPart( sortCols( vp2 ) )
+vp2 <- fitVarPart(res.proc, ~ group_id * stackedAssay)
+
+plotVarPart(sortCols(vp2))
 
 # Interaction model using random effects
-form <- ~ (1|group_id) + (1|stackedAssay) + (1|group_id:stackedAssay)
+form <- ~ (1 | group_id) + (1 | stackedAssay) + (1 | group_id:stackedAssay)
+#
 }

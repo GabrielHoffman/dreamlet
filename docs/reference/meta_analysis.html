@@ -64,7 +64,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">meta_analysis</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"FE"</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"assay"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">meta_analysis</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"FE"</span>,</span>
+<span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"assay"</span><span class="op">)</span>,</span>
+<span>  control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxiter <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,7 +83,11 @@
 
 
 <dt>group</dt>
-<dd><p>colums in <code>x</code> to group by.  For results from <code>dreamlet::topTable()</code>, results are aggregrated by gene and cell type (i.e. <code>'ID'</code> and <code>'assay'</code>).  If <code>x</code> is not from this function, this argument allows the function t</p></dd>
+<dd><p>colums in <code>x</code> to group by.  For results from <code>dreamlet::topTable()</code>, results are aggregrated by gene and cell type (i.e. <code>'ID'</code> and <code>'assay'</code>).  If <code>x</code> is not from this function, this argument allows the function to group results properly</p></dd>
+
+
+<dt>control</dt>
+<dd><p>passed to <code>rma(..,control)</code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -97,38 +106,39 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_sce</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create pseudobulk for each sample and cell cluster</span></span></span>
-<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span>, </span></span>
-<span class="r-in"><span>   assay <span class="op">=</span> <span class="st">"counts"</span>,    </span></span>
-<span class="r-in"><span>   cluster_id <span class="op">=</span> <span class="st">'cluster_id'</span>, </span></span>
-<span class="r-in"><span>   sample_id <span class="op">=</span> <span class="st">'sample_id'</span>,</span></span>
-<span class="r-in"><span>   verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggregateToPseudoBulk.html">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">example_sce</span>,</span></span>
+<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span></span>
+<span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>,</span></span>
+<span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="co"># just 'CD14+ Monocytes' for speed</span></span></span>
-<span class="r-in"><span><span class="va">res.proc</span> <span class="op">=</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span> <span class="va">pb</span>, <span class="op">~</span> <span class="va">group_id</span>, assays<span class="op">=</span><span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span>, assays <span class="op">=</span> <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.34 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># dreamlet</span></span></span>
-<span class="r-in"><span><span class="va">res.dl</span> <span class="op">=</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span> <span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.26 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">tab1</span> <span class="op">=</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef<span class="op">=</span><span class="st">'group_idstim'</span>, number<span class="op">=</span><span class="cn">Inf</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">tab1</span><span class="op">$</span><span class="va">Dataset</span> <span class="op">=</span> <span class="st">"1"</span></span></span>
+<span class="r-in"><span><span class="va">tab1</span> <span class="op">&lt;-</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"group_idstim"</span>, number <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tab1</span><span class="op">$</span><span class="va">Dataset</span> <span class="op">&lt;-</span> <span class="st">"1"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Results from a second cohort</span></span></span>
 <span class="r-in"><span><span class="co"># Here, just a copy of the same results for simplicity</span></span></span>
-<span class="r-in"><span><span class="va">tab2</span> <span class="op">=</span> <span class="va">tab1</span></span></span>
-<span class="r-in"><span><span class="va">tab2</span><span class="op">$</span><span class="va">Dataset</span> <span class="op">=</span> <span class="st">"2"</span> </span></span>
+<span class="r-in"><span><span class="va">tab2</span> <span class="op">&lt;-</span> <span class="va">tab1</span></span></span>
+<span class="r-in"><span><span class="va">tab2</span><span class="op">$</span><span class="va">Dataset</span> <span class="op">&lt;-</span> <span class="st">"2"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># rbind </span></span></span>
-<span class="r-in"><span><span class="va">tab_combined</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">tab1</span>, <span class="va">tab2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># rbind</span></span></span>
+<span class="r-in"><span><span class="va">tab_combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">tab1</span>, <span class="va">tab2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Perform fixed effects meta-analysis </span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">=</span> <span class="fu">meta_analysis</span><span class="op">(</span> <span class="va">tab_combined</span>, method <span class="op">=</span> <span class="st">"FE"</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Perform fixed effects meta-analysis</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">meta_analysis</span><span class="op">(</span><span class="va">tab_combined</span>, method <span class="op">=</span> <span class="st">"FE"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   ID, assay [3]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ID     assay           estimate std.error statistic  p.value n.studies method</span>
@@ -136,6 +146,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ABRACL CD14+ Monocytes    0.626     0.244      2.57 1.03<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span>         2 FE    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ACOT9  CD14+ Monocytes    2.64      0.203     13.0  1.25<span style="color: #949494;">e</span><span style="color: #BB0000;">-38</span>         2 FE    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ACP5   CD14+ Monocytes   -<span style="color: #BB0000;">0.222</span>     0.139     -<span style="color: #BB0000;">1.60</span> 1.11<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>         2 FE    </span>
+<span class="r-in"><span><span class="co">#</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

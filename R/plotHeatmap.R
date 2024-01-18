@@ -50,13 +50,12 @@ setGeneric(
 setMethod(
   "plotHeatmap", "cellSpecificityValues",
   function(x, genes = rownames(x), color = "darkblue", assays = colnames(x), useFillScale = TRUE) {
-
     fig <- dreamlet::plotHeatmap(as.matrix(x)[, -1], genes, color, assays, useFillScale = FALSE)
 
     fig <- fig +
       ggtitle("Cell type specificity scores")
 
-    if( useFillScale ){
+    if (useFillScale) {
       fig <- fig + scale_fill_gradient(name = "Fraction of\nexpression", low = "white", high = color, limits = c(0, 1))
     }
     fig
@@ -117,10 +116,10 @@ setMethod(
         axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1)
       ) +
       xlab("") +
-      ylab("") 
+      ylab("")
 
-    if( useFillScale ){
-        fig <- fig + scale_fill_gradient(name = "value", low = "white", high = color)
+    if (useFillScale) {
+      fig <- fig + scale_fill_gradient(name = "value", low = "white", high = color)
     }
     fig
   }

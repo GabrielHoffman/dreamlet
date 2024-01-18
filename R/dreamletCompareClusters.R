@@ -270,7 +270,7 @@ dreamletCompareClusters <- function(pb, assays, method = c("fixed", "random", "n
     countsMatrix <- do.call(cbind, lapply(res, function(x) x$geneCounts))
     data <- do.call(rbind, lapply(res, function(x) x$df))
 
-    ids = intersect(colnames(countsMatrix), rownames(data))
+    ids <- intersect(colnames(countsMatrix), rownames(data))
     rownames(data) <- colnames(countsMatrix)
 
     # extract cell counts for specified sets

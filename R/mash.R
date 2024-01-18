@@ -157,7 +157,7 @@ tabToMatrix <- function(tab, col, rn = "ID", cn = "assay") {
 #'
 #' @seealso \code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{mashr::mash_set_data}
 #' @importFrom mashr mash_set_data cov_canonical mash_estimate_corr_em
-#' @importFrom MatrixGenerics colVars 
+#' @importFrom MatrixGenerics colVars
 #' @export
 run_mash <- function(fit, coefList) {
   if (!is(fit, "dreamletResult")) {
@@ -194,10 +194,10 @@ run_mash <- function(fit, coefList) {
   S <- tabToMatrix(tab, "se")
 
   # only keep columns with variance in logFC
-  cv = colVars(B, na.rm=TRUE, useNames = TRUE)
-  keep = (cv > 0) & !is.na(cv)
-  B = B[,keep, drop=FALSE]
-  S = S[,keep, drop=FALSE]
+  cv <- colVars(B, na.rm = TRUE, useNames = TRUE)
+  keep <- (cv > 0) & !is.na(cv)
+  B <- B[, keep, drop = FALSE]
+  S <- S[, keep, drop = FALSE]
 
   # run mashr on these matricies
   #-----------------------------

@@ -42,7 +42,8 @@ res.proc <- processAssays(pb, ~group_id)
 # evaluated on the voom normalized data
 res.dl <- dreamlet(res.proc, ~group_id)
 
-# Beeswarm plot of effect sizes for each assay, 
+# Beeswarm plot of effect sizes for each assay,
 # colored by sign and FDR
-plotBeeswarm( res.dl, 'group_idstim')
+plotBeeswarm(res.dl, "group_idstim")
+#
 }

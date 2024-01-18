@@ -56,17 +56,17 @@ computeNormCounts <- function(sce) {
 #' @importFrom variancePartition augmentPriorCount
 #' @export
 computeLogCPM <- function(sce, lib.size = colSums2(counts(sce)), prior.count = 2) {
- 
   stopifnot(length(lib.size) == ncol(sce))
 
-  countMatrix = augmentPriorCount(counts(sce), 
-                  lib.size = lib.size, 
-                  prior.count = prior.count)
-  
+  countMatrix <- augmentPriorCount(counts(sce),
+    lib.size = lib.size,
+    prior.count = prior.count
+  )
+
   # if countMatrix is dgeMatrix or sparseMatrix
   # convert to matrix, since result is not sparse
-  if( is(countMatrix, "sparseMatrix") || is(countMatrix, "dgeMatrix") ){
-    countMatrix = as.matrix(countMatrix)
+  if (is(countMatrix, "sparseMatrix") || is(countMatrix, "dgeMatrix")) {
+    countMatrix <- as.matrix(countMatrix)
   }
 
   t(log2(t(countMatrix)) - log2(lib.size) + log2(1e6))
