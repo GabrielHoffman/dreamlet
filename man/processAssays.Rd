@@ -59,7 +59,7 @@ For raw counts, estimate precision weights using linear mixed model weighting by
 \details{
 For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 2} and \code{min.count = 2} are also reasonable to include more genes in the analysis.
 
-The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.  
+The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.
 
 If \code{weightsList} is \code{NULL}, precision weights are set to 1 internally.
 }
@@ -78,9 +78,10 @@ pb <- aggregateToPseudoBulk(example_sce,
 )
 
 # voom-style normalization
-res.proc <- processAssays(pb, ~ group_id)
+res.proc <- processAssays(pb, ~group_id)
 
 # Differential expression analysis within each assay,
 # evaluated on the voom normalized data
-res.dl <- dreamlet(res.proc, ~ group_id)
+res.dl <- dreamlet(res.proc, ~group_id)
+#
 }

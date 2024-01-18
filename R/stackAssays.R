@@ -1,13 +1,13 @@
 # Gabriel Hoffman
 # Nov 16, 2023
 
-#' Stack assays from pseudobulk 
+#' Stack assays from pseudobulk
 #'
 #' Stack assays from pseudobulk to perform analysis across cell types
-#' 
+#'
 #' @param pb pseudobulk \code{SingleCellExperiment} from \code{aggregateToPseudoBulk()}
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(pb)}
-#' 
+#'
 #' @return pseudobulk \code{SingleCellExperiment} cbind'ing expression values and rbind'ing colData.  The column \code{stackedAssay} in \code{colData()} stores the assay information of the stacked data.
 #'
 #' @examples
@@ -23,111 +23,105 @@
 #'   sample_id = "sample_id",
 #'   verbose = FALSE
 #' )
-#' 
+#'
 #' # Stack assays for joint analysis
-#' pb.stack = stackAssays(pb)
-#' 
+#' pb.stack <- stackAssays(pb)
+#'
 #' # voom-style normalization
 #' # assay (i.e. cell type) can now be included as a covariate
 #' res.proc <- processAssays(pb.stack, ~ group_id + stackedAssay)
 #'
 #' # variance partitioning analysis
 #' vp <- fitVarPart(res.proc, ~ group_id + stackedAssay)
-#'     
+#'
 #' # Summarize variance fractions across cell types
-#' plotVarPart( sortCols( vp ) )
+#' plotVarPart(sortCols(vp))
 #'
 #' # Interaction analysis allows group_id
 #' # to have a different effect within each stacedAssay
-#' vp2 <- fitVarPart(res.proc, ~ group_id*stackedAssay)
-#'     
-#' plotVarPart( sortCols( vp2 ) )
+#' vp2 <- fitVarPart(res.proc, ~ group_id * stackedAssay)
+#'
+#' plotVarPart(sortCols(vp2))
 #'
 #' # Interaction model using random effects
-#' form <- ~ (1|group_id) + (1|stackedAssay) + (1|group_id:stackedAssay)
-#
+#' form <- ~ (1 | group_id) + (1 | stackedAssay) + (1 | group_id:stackedAssay)
+#' #
 #' @importFrom SummarizedExperiment assayNames<-
 #' @importFrom rlang sym
 #' @importFrom S4Vectors metadata metadata<-
 #' @importFrom dplyr rename inner_join
 #' @export
-stackAssays <- function(pb, assays = assayNames(pb)){
+stackAssays <- function(pb, assays = assayNames(pb)) {
+  stopifnot(is(pb, "SingleCellExperiment"))
 
-	stopifnot( is(pb, "SingleCellExperiment") )
+  # cbind assays
+  counts <- lapply(assays, function(x) {
+    y <- assay(pb, x)
 
-	# cbind assays
-	counts <- lapply(assays, function(x){
-		y <- assay(pb, x)
+    colnames(y) <- paste(x, colnames(y), sep = "_")
+    y
+  })
+  counts <- do.call(cbind, counts)
 
-		colnames(y) <- paste(x, colnames(y), sep="_")
-		y 
-		})
-	counts <- do.call(cbind, counts)
+  # rbind colData
+  info <- lapply(assays, function(x) {
+    info <- colData(pb)
+    info$stackedAssay <- x
+    rownames(info) <- paste(x, rownames(info), sep = "_")
 
-	# rbind colData
-	info <- lapply(assays, function(x){
-		info <- colData(pb)
-		info$stackedAssay <- x
-		rownames(info) <- paste(x, rownames(info), sep='_') 
+    info
+  })
+  info <- do.call(rbind, info)
 
-		info
-		})
-	info <- do.call(rbind, info)
+  # add metadata?
 
-	# add metadata?
+  # cell counts
+  ids <- names(int_colData(pb)$n_cells)
+  grd <- expand.grid(assay = assays, id = ids)
+  rownames(grd) <- paste(grd$assay, grd$id, sep = "_")
 
-	# cell counts
-	ids <- names(int_colData(pb)$n_cells)
-	grd <- expand.grid( assay = assays, id = ids)
-	rownames(grd) <- paste(grd$assay, grd$id, sep='_')
+  ncell.lst <- lapply(seq(nrow(grd)), function(i) {
+    id <- as.character(grd$id[i])
+    ct <- as.character(grd$assay[i])
 
-	ncell.lst <- lapply(seq(nrow(grd)), function(i){
+    count <- int_colData(pb)$n_cells[[id]][ct]
 
-		id <- as.character(grd$id[i])
-		ct <- as.character(grd$assay[i])
+    names(count) <- "stacked"
+    count
+  })
+  names(ncell.lst) <- rownames(grd)
 
-		count <- int_colData(pb)$n_cells[[id]][ct]
+  # create SingleCellExperiment
+  pb.stack <- SingleCellExperiment(
+    assays = list(counts = counts),
+    colData = info
+  )
+  assayNames(pb.stack) <- "stacked"
 
-		names(count) <- "stacked"
-		count
-		})
-	names(ncell.lst) <- rownames(grd)
+  # include cell count data
+  int_colData(pb.stack)$n_cells <- ncell.lst[colnames(pb.stack)]
 
-	# create SingleCellExperiment
-	pb.stack <- SingleCellExperiment(assays = list(counts = counts),
-						colData = info)
-	assayNames(pb.stack) <- 'stacked'
+  # metadata
+  # agg_pars
+  metadata(pb.stack)$agg_pars <- metadata(pb)$agg_pars
 
-	# include cell count data
-	int_colData(pb.stack)$n_cells <- ncell.lst[colnames(pb.stack)]
+  # aggr_means
+  # create structure, but don't populate values
+  df <- grd[colnames(pb.stack), , drop = FALSE] %>%
+    as_tibble()
+  key <- metadata(pb.stack)$agg_pars$by
+  df[[key[1]]] <- "stacked"
+  df[[key[2]]] <- rownames(grd)
 
-	# metadata
-	# agg_pars
-	metadata(pb.stack)$agg_pars <- metadata(pb)$agg_pars
+  # get metadata, joint with df
+  by <- metadata(pb)$agg_pars$by
+  df2 <- metadata(pb)$aggr_means %>%
+    rename(
+      assay = sym(by[1]),
+      id = sym(by[2])
+    )
 
-	# aggr_means
-	# create structure, but don't populate values
-	df <- grd[colnames(pb.stack),,drop=FALSE] %>%
-				as_tibble
-	key <- metadata(pb.stack)$agg_pars$by
-	df[[key[1]]] <- "stacked"
-	df[[key[2]]] <- rownames(grd)
+  metadata(pb.stack)$aggr_means <- inner_join(df, df2, by = c("assay", "id"))
 
-	# get metadata, joint with df
-	by <- metadata(pb)$agg_pars$by
-	df2 <- metadata(pb)$aggr_means %>% 
-		rename( assay = sym(by[1]),
-			id = sym(by[2])) 
-
-	metadata(pb.stack)$aggr_means <- inner_join(df, df2, by = c("assay", "id"))
-
-	pb.stack
-}		
-
-
-
-
-
-
-
-
+  pb.stack
+}

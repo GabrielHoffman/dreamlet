@@ -108,7 +108,7 @@
 #' pb2 <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose = FALSE)
 #'
 #' pb2
-#
+#' #
 #' @author Gabriel Hoffman, Helena L Crowell & Mark D Robinson
 #' @details
 #' Adapted from \code{muscat::aggregateData} and has similar syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
@@ -127,7 +127,7 @@
 #' @importFrom S4Vectors DataFrame metadata metadata<-
 #' @importFrom SingleCellExperiment SingleCellExperiment reducedDims<- int_colData<-
 #' @importFrom SummarizedExperiment rowData colData colData<- metadata<-
-#' @importFrom dplyr as_tibble group_by summarise_at `%>%` group_by_at sym 
+#' @importFrom dplyr as_tibble group_by summarise_at `%>%` group_by_at sym
 #' @importFrom tidyr complete
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
@@ -138,7 +138,7 @@ aggregateToPseudoBulk <- function(
   fun <- match.arg(fun)
 
   # update block size for reading h5ad file from disk
-  tmp = getAutoBlockSize()
+  tmp <- getAutoBlockSize()
   suppressMessages(setAutoBlockSize(h5adBlockSizes))
   on.exit(suppressMessages(setAutoBlockSize(tmp)))
 
@@ -251,12 +251,12 @@ aggregateToPseudoBulk <- function(
     group_by_at(vars(metadata(pb)$agg_pars$by)) %>%
     summarise_at(cols, mean, na.rm = TRUE)
 
-  if( !is.na(sample_id) ){
-    # fill in missing data if sample_id is defined 
-    df <- df %>% 
-            complete(!!sym(sample_id))
+  if (!is.na(sample_id)) {
+    # fill in missing data if sample_id is defined
+    df <- df %>%
+      complete(!!sym(sample_id))
   }
-    
+
   metadata(pb)$aggr_means <- df
 
   return(pb)

@@ -1,191 +1,192 @@
-
-
 # Compared weighted variance along *rows* of X
 # where each element of X has its own positive weight
-rowWeightedVarsMatrix = function(X, W){
+rowWeightedVarsMatrix <- function(X, W) {
+  stopifnot(dim(X) == dim(W))
 
-    stopifnot(dim(X) == dim(W))
+  if (!is.matrix(X)) X <- as.matrix(X)
+  if (!is.matrix(W)) W <- as.matrix(W)
 
-    if( ! is.matrix(X) ) X <- as.matrix(X)
-    if( ! is.matrix(W) ) W <- as.matrix(W)
+  # scale weights to have a mean of 1
+  Ws <- W / rowMeans2(W, useNames = FALSE)
 
-    # scale weights to have a mean of 1
-    Ws <- W / rowMeans2(W, useNames=FALSE)
+  # weighted mean
+  mu <- rowMeans2(X * Ws, useNames = FALSE)
 
-    # weighted mean
-    mu <- rowMeans2(X * Ws, useNames=FALSE)
+  # weighted deviation
+  A <- sqrt(Ws) * (X - mu)
 
-    # weighted deviation
-    A <- sqrt(Ws)*(X - mu)
-
-    # sum of squares, divided by n-1
-    rowSums2(A ** 2, useNames=FALSE) / (ncol(X)-1)
+  # sum of squares, divided by n-1
+  rowSums2(A**2, useNames = FALSE) / (ncol(X) - 1)
 }
 
 
 #' @importFrom dplyr tibble bind_rows
-getVarFromCounts <- function(countMatrix, lib.size, prior.count = .25){
+getVarFromCounts <- function(countMatrix, lib.size, prior.count = .25) {
+  stopifnot(ncol(countMatrix) == length(lib.size))
 
-    stopifnot( ncol(countMatrix) == length(lib.size))
+  # if lib.size is NA, set it to zero
+  lib.size[is.na(lib.size)] <- 0
 
-    # if lib.size is NA, set it to zero
-    lib.size[is.na(lib.size)] = 0
+  countMatrix <- countMatrix + prior.count
 
-    countMatrix <- countMatrix + prior.count
+  # pseudobulk
+  count.gene <- rowSums2(countMatrix, useNames = FALSE)
 
-    # pseudobulk
-    count.gene <- rowSums2(countMatrix, useNames=FALSE)
+  # normalize counts by library size
+  # add pseudocount to counts here
+  normCounts <- scale(countMatrix,
+    scale = lib.size + 1,
+    center = FALSE
+  )
 
-    # normalize counts by library size
-    # add pseudocount to counts here
-    normCounts <- scale(countMatrix, 
-                    scale = lib.size + 1, 
-                    center = FALSE)
+  # compute variance for each row
+  # sigSq.hat <- rowVars(normCounts, useNames=FALSE)
 
-    # compute variance for each row
-    # sigSq.hat <- rowVars(normCounts, useNames=FALSE)
+  # weighted variance
+  sigSq.hat <- rowWeightedVarsMatrix(normCounts, countMatrix)
+  sigSq.hat[is.na(sigSq.hat)] <- 0
 
-    # weighted variance
-    sigSq.hat <- rowWeightedVarsMatrix(normCounts, countMatrix)
-    sigSq.hat[is.na(sigSq.hat)] <- 0
-
-    # return values to compute variance later
-    tibble(Gene = rownames(countMatrix), 
-            count.gene = count.gene,
-            sigSq.hat = sigSq.hat, 
-            zeta = mean(lib.size^2), 
-            ncell = ncol(countMatrix))
+  # return values to compute variance later
+  tibble(
+    Gene = rownames(countMatrix),
+    count.gene = count.gene,
+    sigSq.hat = sigSq.hat,
+    zeta = mean(lib.size^2),
+    ncell = ncol(countMatrix)
+  )
 }
 
 
-getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count, verbose=TRUE){
+getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count, verbose = TRUE) {
+  cellType <- ID <- NULL
 
-    cellType <- ID <- NULL
+  if (!"counts" %in% assayNames(sce)) {
+    stop("SCE does not contain assay: counts")
+  }
 
-    if( ! "counts" %in% assayNames(sce) ){
-        stop("SCE does not contain assay: counts")
+  if (verbose) message("  Computing library sizes...")
+
+  idx <- which(sce[[cluster_id]] == CT)
+
+  if (is(counts(sce), "DelayedArray")) {
+    lib.size <- colSums2(counts(sce), cols = idx, useNames = TRUE)
+  } else {
+    lib.size <- colSums2(counts(sce)[, idx], useNames = TRUE)
+  }
+
+  # Scale prior count so that an observed count of 0,
+  # gives zero variance across samples
+  # Add small value to each cell, so that across n_i cells
+  # it the augment sum to a mean of prior.count
+  df_pc <- data.frame(
+    ID = sce[[sample_id]][idx],
+    cellType = sce[[cluster_id]][idx],
+    prior.count = prior.count * lib.size / mean(lib.size)
+  ) %>%
+    group_by(cellType, ID) %>%
+    summarize(n = length(ID), prior.count = mean(prior.count) / n, .groups = "drop_last")
+
+  if (verbose) message("  Processing samples...")
+
+  # get variance estimates for each ID and gene
+  df <- lapply(unique(sce[[sample_id]]), function(ID) {
+    idx <- sce[[cluster_id]] == CT & sce[[sample_id]] == ID
+    countMatrix <- counts(sce)[, idx, drop = FALSE]
+
+    pc <- df_pc$prior.count[df_pc$ID == ID]
+
+    if (ncol(countMatrix) > 0) {
+      res <- getVarFromCounts(countMatrix,
+        lib.size = lib.size[colnames(countMatrix)],
+        prior.count = pc
+      )
+    } else {
+      # if no cells are observed for this cell type and sample
+      res <- tibble(
+        Gene = rownames(sce),
+        count.gene = 0,
+        sigSq.hat = 0,
+        zeta = 0,
+        ncell = 0
+      )
     }
-
-    if( verbose ) message("  Computing library sizes...")
-
-    idx <- which(sce[[cluster_id]] == CT)
-
-    if( is(counts(sce), "DelayedArray") ){
-        lib.size <- colSums2(counts(sce), cols=idx, useNames=TRUE)
-    }else{
-        lib.size <- colSums2(counts(sce)[,idx], useNames=TRUE)        
-    }
-    
-    # Scale prior count so that an observed count of 0,
-    # gives zero variance across samples
-    # Add small value to each cell, so that across n_i cells
-    # it the augment sum to a mean of prior.count
-    df_pc <- data.frame(ID = sce[[sample_id]][idx], 
-        cellType = sce[[cluster_id]][idx], 
-        prior.count = prior.count * lib.size/mean(lib.size)) %>%
-        group_by(cellType, ID) %>%
-        summarize(n=length(ID), prior.count = mean(prior.count) / n, .groups="drop_last")
-
-    if( verbose ) message("  Processing samples...")
-
-    # get variance estimates for each ID and gene
-    df <- lapply( unique(sce[[sample_id]]), function(ID){
-
-        idx <- sce[[cluster_id]] == CT & sce[[sample_id]] == ID
-        countMatrix <- counts(sce)[,idx,drop=FALSE]
-
-        pc <- df_pc$prior.count[df_pc$ID == ID]
-        
-        if( ncol(countMatrix) > 0){
-
-            res <- getVarFromCounts( countMatrix, 
-                    lib.size = lib.size[colnames(countMatrix)], 
-                    prior.count = pc)
-        }else{
-            # if no cells are observed for this cell type and sample
-            res <- tibble( Gene = rownames(sce), 
-                        count.gene = 0,
-                        sigSq.hat = 0,
-                        zeta = 0,
-                        ncell = 0)
-        }
-        res$ID <- ID
-        res
-    })
-    bind_rows(df)
+    res$ID <- ID
+    res
+  })
+  bind_rows(df)
 }
 
 #' @importFrom limma squeezeVar
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
-getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, verbose=TRUE){
+getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, verbose = TRUE) {
+  Gene <- ID <- count.gene <- ncell <- zeta <- sigSq.hat <- NULL
 
-    Gene = ID = count.gene = ncell = zeta = sigSq.hat = NULL
+  if (!sample_id %in% colnames(colData(sce))) {
+    msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
+    stop(msg)
+  }
+  if (!cluster_id %in% colnames(colData(sce))) {
+    msg <- paste0("cluster_id entry not found in colData(sce): ", cluster_id)
+    stop(msg)
+  }
 
-    if( ! sample_id %in% colnames(colData(sce)) ){
-        msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
-        stop( msg )
+  # Compute variance for each observation for each cell type
+  var.list <- lapply(unique(sce[[cluster_id]]), function(CT) {
+    if (verbose) message("Processing: ", CT)
+
+    df <- getVarForCellType(sce, sample_id, cluster_id, CT, prior.count, verbose) %>%
+      mutate(
+        Gene = factor(Gene, rownames(sce)),
+        ID = factor(ID)
+      )
+
+    if (shrink) {
+      # shrink sample variances
+      # use small offset to handle cases with zero variance
+      # use pmax to ensure df > 1
+      res <- squeezeVar(df$sigSq.hat + 1e-7, pmax(1, df$ncell - 1), robust = FALSE)
+      df$sigSq.hat <- res$var.post
     }
-    if( ! cluster_id %in% colnames(colData(sce)) ){
-        msg <- paste0("cluster_id entry not found in colData(sce): ", cluster_id)
-        stop( msg )
-    }
 
-    # Compute variance for each observation for each cell type
-    var.list <- lapply( unique(sce[[cluster_id]]), function(CT){
+    # delta approximation of variance
+    df <- df %>%
+      mutate(count.gene = count.gene + 1e-4) %>%
+      mutate(vhat = 1 / count.gene * (1 + ncell * sigSq.hat * zeta / count.gene))
 
-        if( verbose ) message("Processing: ", CT)
+    mat <- sparseMatrix(df$Gene, df$ID,
+      x = df$vhat,
+      dims = c(nlevels(df$Gene), nlevels(df$ID)),
+      dimnames = list(levels(df$Gene), levels(df$ID))
+    )
+    as.matrix(mat)
+  })
+  names(var.list) <- unique(sce[[cluster_id]])
 
-        df <- getVarForCellType( sce, sample_id, cluster_id, CT, prior.count, verbose) %>%
-                mutate(Gene = factor(Gene, rownames(sce)),
-                        ID = factor(ID))
-
-        if( shrink ){      
-            # shrink sample variances     
-            # use small offset to handle cases with zero variance
-            # use pmax to ensure df > 1
-            res <- squeezeVar( df$sigSq.hat + 1e-7, pmax(1, df$ncell-1), robust=FALSE)
-            df$sigSq.hat <- res$var.post
-        }
-
-        # delta approximation of variance
-        df <- df %>%
-            mutate(count.gene = count.gene + 1e-4) %>%
-            mutate( vhat = 1 / count.gene * (1 + ncell*sigSq.hat*zeta / count.gene)) 
-
-        mat <- sparseMatrix(df$Gene, df$ID, 
-            x = df$vhat, 
-            dims = c(nlevels(df$Gene), nlevels(df$ID)),
-            dimnames = list(levels(df$Gene), levels(df$ID)))
-        as.matrix(mat)
-    })
-    names(var.list) <- unique(sce[[cluster_id]])
-
-    var.list
+  var.list
 }
 
 
 # Get offset so that (max(x) + offset) / (min(x) + offset) is target_ratio
 # return max(0, tau), so offset isn't negative
-get_offset = function(x, target_ratio){
+get_offset <- function(x, target_ratio) {
+  # min and max
+  rng <- range(x)
 
-    # min and max
-    rng  = range(x)
+  # tau
+  tau <- (rng[2] - target_ratio * rng[1]) / (target_ratio - 1)
 
-    # tau
-    tau = (rng[2]-target_ratio*rng[1]) / (target_ratio-1) 
-
-    max(tau, 0)
+  max(tau, 0)
 }
 
 #' Compute precision weights for pseudobulk
-#' 
+#'
 #' Compute precision weights for pseudobulk using the delta method to approximate the variance of the log2 counts per million considering variation in the number of cells and gene expression variance across cells within each sample. By default, used number of cells; if specified use delta method.  Note that \code{processAssays()} uses number of cells as weights when no weights are specificed
-#' 
+#'
 #' @param sce \code{SingleCellExperiment} of where \code{counts(sce)} stores the raw count data at the single cell level
 #' @param sample_id character string specifying which variable to use as sample id
 #' @param cluster_id character string specifying which variable to use as cluster id
-#' @param method select method to compute precision weights. \code{'ncells'} use the number of cells, this is faster. Subsequent arguments are ignored. \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power.   
+#' @param method select method to compute precision weights. \code{'ncells'} use the number of cells, this is faster. Subsequent arguments are ignored. \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power.
 #' @param shrink Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample
 #' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
 # @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
@@ -205,92 +206,83 @@ get_offset = function(x, target_ratio){
 #'   cluster_id = "cluster_id",
 #'   verbose = FALSE
 #' )
-#' 
+#'
 #' # Create precision weights for pseudobulk
-#' # By default, weights are set to cell count, 
-#' # which is the default in processAssays() 
+#' # By default, weights are set to cell count,
+#' # which is the default in processAssays()
 #' # even when no weights are specified
 #' weightsList <- pbWeights(example_sce,
-#'     sample_id = "sample_id",
-#'     cluster_id = "cluster_id")
-#' 
+#'   sample_id = "sample_id",
+#'   cluster_id = "cluster_id"
+#' )
+#'
 #' # voom-style normalization using initial weights
-#' res.proc <- processAssays(pb, ~ group_id, weightsList = weightsList)
-#
+#' res.proc <- processAssays(pb, ~group_id, weightsList = weightsList)
+#' #
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, maxRatio = 20, h5adBlockSizes = 1e9, verbose=TRUE){
+pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, maxRatio = 20, h5adBlockSizes = 1e9, verbose = TRUE) {
+  method <- match.arg(method)
 
-    method = match.arg(method)
+  # check for NA values
+  if (any(is.na(sce[[sample_id]]))) {
+    stop("NA values are not allowed in sample_id column")
+  }
+  if (any(is.na(sce[[cluster_id]]))) {
+    stop("NA values are not allowed in cluster_id column")
+  }
 
-    # check for NA values
-    if( any(is.na(sce[[sample_id]])) ){
-        stop("NA values are not allowed in sample_id column")
-    }
-      if( any(is.na(sce[[cluster_id]])) ){
-        stop("NA values are not allowed in cluster_id column")
-    }
+  if (method == "ncells") {
+    W.list <- .pbWeights_ncells(sce, sample_id, cluster_id)
+  } else {
+    # delta approximation
 
-    if( method == "ncells" ){
-        W.list = .pbWeights_ncells(sce, sample_id, cluster_id)
-    }else{
+    # update block size for reading h5ad file from disk
+    tmp <- getAutoBlockSize()
+    suppressMessages(setAutoBlockSize(h5adBlockSizes))
+    on.exit(suppressMessages(setAutoBlockSize(tmp)))
 
-        # delta approximation
+    # compute variances
+    var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count, verbose = verbose)
 
-        # update block size for reading h5ad file from disk
-        tmp <- getAutoBlockSize()
-        suppressMessages(setAutoBlockSize(h5adBlockSizes))
-        on.exit(suppressMessages(setAutoBlockSize(tmp)))
-
-        # compute variances
-        var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count, verbose = verbose)
-
-        # for each cell type
-        W.list <- lapply(var.lst, function(v.mat){
-            # regularize reciprocal with offset
-            # get offset tau as the max of
-            # 1) quantile
-            # 2) to give a maximum ratio of maxRatio
-            # for each cell type
-            t(apply(v.mat, 1, function(x){
-                tau = get_offset(x, maxRatio)
-                1 /  (x + tau)
-                }))
-        })
-    }
-
-    W.list
-}
-
-
-.pbWeights_ncells = function(sce, sample_id, cluster_id){
-
-    if( ! sample_id %in% colnames(colData(sce)) ){
-        txt = paste("sample_id not found:", sample_id)
-        stop(txt)
-    }
-    if( ! cluster_id %in% colnames(colData(sce)) ){
-        txt = paste("cluster_id not found:", cluster_id)
-        stop(txt)        
-    }
-
-    # number of cells
-    df_cc <- table(sce[[sample_id]], sce[[cluster_id]])
-
-    W.list <-  lapply( unique(sce[[cluster_id]]), function(k){
-
-        W <-  matrix(df_cc[,k], ncol=nrow(df_cc), nrow=nrow(sce), byrow=TRUE)
-        colnames(W) <- rownames(df_cc)
-        rownames(W) <- rownames(sce)
-        W
+    # for each cell type
+    W.list <- lapply(var.lst, function(v.mat) {
+      # regularize reciprocal with offset
+      # get offset tau as the max of
+      # 1) quantile
+      # 2) to give a maximum ratio of maxRatio
+      # for each cell type
+      t(apply(v.mat, 1, function(x) {
+        tau <- get_offset(x, maxRatio)
+        1 / (x + tau)
+      }))
     })
-    names(W.list) <- unique(sce[[cluster_id]])
-    W.list
+  }
+
+  W.list
 }
 
 
+.pbWeights_ncells <- function(sce, sample_id, cluster_id) {
+  if (!sample_id %in% colnames(colData(sce))) {
+    txt <- paste("sample_id not found:", sample_id)
+    stop(txt)
+  }
+  if (!cluster_id %in% colnames(colData(sce))) {
+    txt <- paste("cluster_id not found:", cluster_id)
+    stop(txt)
+  }
 
+  # number of cells
+  df_cc <- table(sce[[sample_id]], sce[[cluster_id]])
 
-
-
+  W.list <- lapply(unique(sce[[cluster_id]]), function(k) {
+    W <- matrix(df_cc[, k], ncol = nrow(df_cc), nrow = nrow(sce), byrow = TRUE)
+    colnames(W) <- rownames(df_cc)
+    rownames(W) <- rownames(sce)
+    W
+  })
+  names(W.list) <- unique(sce[[cluster_id]])
+  W.list
+}

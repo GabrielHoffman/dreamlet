@@ -49,15 +49,15 @@ pb <- aggregateToPseudoBulk(example_sce,
 )
 
 # voom-style normalization
-res.proc <- processAssays(pb, ~ group_id)
+res.proc <- processAssays(pb, ~group_id)
 
 # Differential expression analysis within each assay,
 # evaluated on the voom normalized data
-res.dl <- dreamlet(res.proc, ~ group_id)
+res.dl <- dreamlet(res.proc, ~group_id)
 
 # Differential variance analysis
 # result is a dreamlet fit
-res.dvar <- diffVar( res.dl )
+res.dvar <- diffVar(res.dl)
 
 # Examine results
 res.dvar
@@ -75,16 +75,18 @@ topTable(res.dvar, coef = "group_idstim", number = 3)
 
 # Plot top hit to see differential variance
 # Note that this is a toy example with only 4 samples
-cellType <- 'CD4 T cells'     
-gene <- 'DYNLRB1'
+cellType <- "CD4 T cells"
+gene <- "DYNLRB1"
 
-y <- res.proc[[cellType]]$E[gene,]
+y <- res.proc[[cellType]]$E[gene, ]
 x <- colData(res.proc)$group_id
 
-boxplot(y ~ x, 
-	xlab = "Stimulation status", 
-	ylab = "Gene expression",
-	main = paste(cellType, gene))
+boxplot(y ~ x,
+  xlab = "Stimulation status",
+  ylab = "Gene expression",
+  main = paste(cellType, gene)
+)
+#
 }
 \references{
 {

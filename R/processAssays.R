@@ -14,7 +14,7 @@
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
-#' @param weights matrix of precision weights 
+#' @param weights matrix of precision weights
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -32,8 +32,7 @@
 #' @importFrom lme4 subbars
 #' @importFrom MatrixGenerics colMeans2
 #'
-processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights=NULL, BPPARAM = SerialParam(), ...) {
-
+processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights = NULL, BPPARAM = SerialParam(), ...) {
   checkFormula(formula, data)
 
   if (is.null(n.cells)) {
@@ -61,7 +60,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     return(NULL)
   }
 
-  if ( ! isCounts ) {
+  if (!isCounts) {
     stop("isCounts = FALSE is not currently supported")
   }
 
@@ -83,19 +82,23 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
 
   # sample-level weights based on cell counts and mean library size
-  if ( ! is.null(weights) & ! is(weights, "function") ) {
-    precWeights <- weights[rownames(y)[keep],colnames(y)]
+  if (!is.null(weights) & !is(weights, "function")) {
+    precWeights <- weights[rownames(y)[keep], colnames(y)]
   } else {
     precWeights <- rep(1, ncol(y))
   }
 
   # if no genes are kept
-  if( sum(keep) == 0) return(NULL)
+  if (sum(keep) == 0) {
+    return(NULL)
+  }
 
   geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = precWeights, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
 
   # if no genes are succeed
-  if( nrow(geneExpr) == 0) return(NULL)
+  if (nrow(geneExpr) == 0) {
+    return(NULL)
+  }
 
   # save formula used after dropping constant terms
   if (!is.null(geneExpr)) geneExpr$formula <- formula
@@ -133,8 +136,8 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #'
 #' @details  For each cell cluster, samples with at least \code{min.cells} are retained. Only clusters with at least \code{min.samples} retained samples are kept. Genes are retained if they have at least \code{min.count} reads in at least \code{min.prop} fraction of the samples.  Current values are reasonable defaults, since genes that don't pass these cutoffs are very underpowered for differential expression analysis and only increase the multiple testing burden.  But values of \code{min.cells = 2} and \code{min.count = 2} are also reasonable to include more genes in the analysis.
 #'
-#' The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.  
-#' 
+#' The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.
+#'
 #' If \code{weightsList} is \code{NULL}, precision weights are set to 1 internally.
 #'
 #' @examples
@@ -152,12 +155,12 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' )
 #'
 #' # voom-style normalization
-#' res.proc <- processAssays(pb, ~ group_id)
+#' res.proc <- processAssays(pb, ~group_id)
 #'
 #' # Differential expression analysis within each assay,
 #' # evaluated on the voom normalized data
-#' res.dl <- dreamlet(res.proc, ~ group_id)
-#
+#' res.dl <- dreamlet(res.proc, ~group_id)
+#' #
 #' @importFrom BiocParallel SerialParam
 #' @importFrom S4Vectors metadata as.data.frame
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
@@ -213,14 +216,14 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       metadata(sceObj)$agg_pars$by
     )
 
-    if( ! is.null(weightsList) ){
+    if (!is.null(weightsList)) {
       # use specified weights
-      weights <- weightsList[[k]][,rownames(data),drop=FALSE]
-    }else{
+      weights <- weightsList[[k]][, rownames(data), drop = FALSE]
+    } else {
       # use cell count weights
       # weights <- n.cells[rownames(data),]
       # weights are 1
-      weights <- matrix(1, nrow = nrow(y), ncol = nrow(data), byrow=TRUE)
+      weights <- matrix(1, nrow = nrow(y), ncol = nrow(data), byrow = TRUE)
       colnames(weights) <- rownames(data)
       rownames(weights) <- rownames(y)
     }
@@ -238,7 +241,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
       normalize.method = normalize.method,
       span = span,
       weights = weights,
-      BPPARAM = BPPARAM, 
+      BPPARAM = BPPARAM,
       ...
     )
 
@@ -292,12 +295,12 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
 
   failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
 
-  if( is.nan(failure_frac) ){
+  if (is.nan(failure_frac)) {
     stop("All models failed.  Consider changing formula")
   }
 
-  if( failure_frac > 0 ){
-    txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+  if (failure_frac > 0) {
+    txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark = ","), " models fit across all assays, ", format(failure_frac * 100, digits = 3), "% failed\n")
     message(txt)
   }
 
@@ -305,7 +308,7 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
     resList,
     data = data_constant,
     # metadata = metadata(sceObj)$aggr_means,
-    metadata = get_metadata_aggr_means(sceObj),    
+    metadata = get_metadata_aggr_means(sceObj),
     by = metadata(sceObj)$agg_pars$by,
     df_details = df_details,
     errors = errors,

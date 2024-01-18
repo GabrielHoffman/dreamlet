@@ -51,14 +51,15 @@ res_mash <- run_mash(res.dl, "group_idstim")
 # Composite test based on posterior probabilities
 # to identify effect present in *at least 1* monocyte type
 # and *NO* T-cell type.
-include = c("CD14+ Monocytes", "FCGR3A+ Monocytes")
-exclude = c('CD4 T cells', 'CD8 T cells')
+include <- c("CD14+ Monocytes", "FCGR3A+ Monocytes")
+exclude <- c("CD4 T cells", "CD8 T cells")
 
 # Perform composite test
-prob = compositePosteriorTest(res_mash, include, exclude)
+prob <- compositePosteriorTest(res_mash, include, exclude)
 
 # examine the lFSR for top gene
-get_lfsr(res_mash$model)[which.max(prob),,drop=FALSE]
+get_lfsr(res_mash$model)[which.max(prob), , drop = FALSE]
+#
 }
 \seealso{
 \code{run_mash()}

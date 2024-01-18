@@ -40,17 +40,16 @@ checkFormula <- function(formula, data) {
   found <- v %in% colnames(data)
 
   if (any(!found)) {
-    txt = paste("Variables in formula are not found in data:\n   ", paste(v[!found], collapse = ", "))
+    txt <- paste("Variables in formula are not found in data:\n   ", paste(v[!found], collapse = ", "))
     stop(txt)
   }
 }
 
 
-# Check if formula is full rank 
+# Check if formula is full rank
 #' @importFrom lme4 nobars
-isFullRank = function(formula, data){
-  
-  design = model.matrix(nobars(formula), data)
+isFullRank <- function(formula, data) {
+  design <- model.matrix(nobars(formula), data)
 
   qr(design)$rank >= ncol(design)
 }
@@ -102,7 +101,7 @@ equalFormulas <- function(formula1, formula2) {
 #' @param ... other arguments
 #' @param type compute either \code{"response"} residuals or \code{"pearson"} residuals.
 #'
-#' @details \code{"response"} residuals are the typical residuals returned from \code{lm()}. \code{"pearson"} residuals divides each residual value by its estimated standard error.  This requires specifying \code{y} 
+#' @details \code{"response"} residuals are the typical residuals returned from \code{lm()}. \code{"pearson"} residuals divides each residual value by its estimated standard error.  This requires specifying \code{y}
 #'
 #' @return residuals from model fit
 #' @examples
@@ -175,16 +174,11 @@ setMethod(
 
 
 #' @importFrom dplyr bind_rows
-get_metadata_aggr_means = function(x){
-
-  # when SingleCellExperiments are cbind'ed, 
+get_metadata_aggr_means <- function(x) {
+  # when SingleCellExperiments are cbind'ed,
   # the entries in metadata(x) are added as a list instead of rbind'ed
-  # here, rbind the aggr_means lists entries 
-  idx = which(names(metadata(x)) == "aggr_means")
+  # here, rbind the aggr_means lists entries
+  idx <- which(names(metadata(x)) == "aggr_means")
 
   bind_rows(metadata(x)[idx])
 }
-
-
-
-

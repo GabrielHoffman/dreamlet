@@ -58,10 +58,11 @@ df_merge <- extractData(res.proc, "B cells")
 df_merge[, 1:6]
 
 # Extract subset:
-df_merge <- extractData(res.proc, "B cells", cols="group_id", genes = c("SSU72", "U2AF1"))
+df_merge <- extractData(res.proc, "B cells", cols = "group_id", genes = c("SSU72", "U2AF1"))
 
 df_merge
 
 # Boxplot of expression
 boxplot(SSU72 ~ group_id, df_merge)
+#
 }

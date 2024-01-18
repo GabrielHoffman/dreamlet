@@ -48,16 +48,16 @@ setGeneric("diffVar", variancePartition::diffVar)
 #' )
 #'
 #' # voom-style normalization
-#' res.proc <- processAssays(pb, ~ group_id)
+#' res.proc <- processAssays(pb, ~group_id)
 #'
 #' # Differential expression analysis within each assay,
 #' # evaluated on the voom normalized data
-#' res.dl <- dreamlet(res.proc, ~ group_id)
+#' res.dl <- dreamlet(res.proc, ~group_id)
 #'
 #' # Differential variance analysis
 #' # result is a dreamlet fit
-#' res.dvar <- diffVar( res.dl )
-#' 
+#' res.dvar <- diffVar(res.dl)
+#'
 #' # Examine results
 #' res.dvar
 #'
@@ -74,48 +74,49 @@ setGeneric("diffVar", variancePartition::diffVar)
 #'
 #' # Plot top hit to see differential variance
 #' # Note that this is a toy example with only 4 samples
-#' cellType <- 'CD4 T cells'     
-#' gene <- 'DYNLRB1'
-#' 
-#' y <- res.proc[[cellType]]$E[gene,]
+#' cellType <- "CD4 T cells"
+#' gene <- "DYNLRB1"
+#'
+#' y <- res.proc[[cellType]]$E[gene, ]
 #' x <- colData(res.proc)$group_id
-#' 
-#' boxplot(y ~ x, 
-#' 	xlab = "Stimulation status", 
-#' 	ylab = "Gene expression",
-#' 	main = paste(cellType, gene))
-#
-#' @seealso \code{variancePartition::diffVar()}, \code{missMethyl::diffVar()} 
+#'
+#' boxplot(y ~ x,
+#'   xlab = "Stimulation status",
+#'   ylab = "Gene expression",
+#'   main = paste(cellType, gene)
+#' )
+#' #
+#' @seealso \code{variancePartition::diffVar()}, \code{missMethyl::diffVar()}
 #' @rdname diffVar-methods
 #' @aliases diffVar,dreamletResult,dreamletResult-method
-setMethod("diffVar", "dreamletResult",
-	function( fit, method = c("AD", "SQ"),
-		scale = c("leverage", "none"),
-		BPPARAM = SerialParam(), ...){
+setMethod(
+  "diffVar", "dreamletResult",
+  function(fit, method = c("AD", "SQ"),
+           scale = c("leverage", "none"),
+           BPPARAM = SerialParam(), ...) {
+    # run diffVar for each cell type
+    fitList <- lapply(fit, function(x) {
+      # test if any hatvalues are 1
+      if (any(abs(x$hatvalues - 1.0) <= .Machine$double.eps)) {
+        result <- NULL
+      } else {
+        result <- diffVar(x, method = method, scale = scale, BPPARAM = BPPARAM, ...)
+      }
+      result
+    })
 
-	# run diffVar for each cell type
-	fitList = lapply(fit, function(x){
+    # keep only results that are not NULL
+    keep <- !sapply(fitList, is.null)
+    fitList <- fitList[keep]
 
-		# test if any hatvalues are 1
-		if( any(abs(x$hatvalues - 1.0) <= .Machine$double.eps) ){
-			result = NULL
-		}else{
-			result = diffVar(x, method=method, scale = scale, BPPARAM=BPPARAM,... )
-		}
-		result
-		})
-	
-	# keep only results that are not NULL
-	keep = !sapply(fitList, is.null)
-	fitList = fitList[keep]
+    df_details <- details(fit)
+    i <- match(names(fitList), df_details$assay)
+    df_details <- df_details[i, ]
 
-	df_details = details(fit)
-	i = match(names(fitList), df_details$assay)
-	df_details = df_details[i,]
-
-	# store results as dreamletResult
-	new("dreamletResult", fitList, df_details = df_details)
-})
+    # store results as dreamletResult
+    new("dreamletResult", fitList, df_details = df_details)
+  }
+)
 
 # fit = readRDS("fit.RDS")
 # fit2 = diffVar(fit)
@@ -144,10 +145,10 @@ setMethod("diffVar", "dreamletResult",
 # res.proc = readRDS( file )
 
 
-# CT = 'Micro' 
+# CT = 'Micro'
 # gene = 'IL15'
 
-# CT = 'Oligo' 
+# CT = 'Oligo'
 # gene = 'NAALADL2'
 
 # y = assay(res.proc, CT)$E[gene,]
@@ -169,4 +170,3 @@ setMethod("diffVar", "dreamletResult",
 # ggsave(fig, file="~/www/test.pdf", width=5, height=5)
 
 # tab[tab$ID == "NAALADL2",]
-

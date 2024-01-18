@@ -66,11 +66,11 @@ setMethod(
     # failure rate
     df_details <- details(object)
 
-    if( nrow(df_details) > 0){
+    if (nrow(df_details) > 0) {
       failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
 
-      if( failure_frac > 0 ){
-        txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+      if (failure_frac > 0) {
+        txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark = ","), " models fit across all assays, ", format(failure_frac * 100, digits = 3), "% failed\n")
         cat(txt)
       }
     }
@@ -754,10 +754,12 @@ setMethod(
 
       # merge data_constant (data constant for all cell types)
       # with metadata(sceObj)$aggr_means (data that varies)
-      data2 <- merge_metadata(data_constant[ids, , drop = FALSE], 
-        metadata(x), 
-        k, 
-        x@by)
+      data2 <- merge_metadata(
+        data_constant[ids, , drop = FALSE],
+        metadata(x),
+        k,
+        x@by
+      )
 
       # drop any constant terms from the formula
       form_mod <- removeConstantTerms(formula, data2)
@@ -769,7 +771,7 @@ setMethod(
       errorArray <- NULL
 
       # drop any constant terms from the formula
-      if( length(all.vars(form_mod)) > 0  & isFullRank(form_mod, data2)){
+      if (length(all.vars(form_mod)) > 0 & isFullRank(form_mod, data2)) {
         # get contrasts customized for the formula for this cell type
         if (!is.null(contrasts)) {
           L <- makeContrastsDream(form_mod, data2, contrasts = contrasts, nullOnError = TRUE)
@@ -801,7 +803,7 @@ setMethod(
 
             fit <- fit[keep, ]
 
-            if( nrow(fit) == 0 ) fit <-NULL
+            if (nrow(fit) == 0) fit <- NULL
           }
 
           if (use.eBayes & !is.null(fit)) {
@@ -874,8 +876,8 @@ setMethod(
 
     failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
 
-    if( failure_frac > 0 ){
-      txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+    if (failure_frac > 0) {
+      txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark = ","), " models fit across all assays, ", format(failure_frac * 100, digits = 3), "% failed\n")
       message(txt)
     }
 

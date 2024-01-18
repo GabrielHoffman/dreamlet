@@ -6,7 +6,7 @@
 #' @rdname dreamletProcessedData-class
 #' @exportClass dreamletProcessedData
 #' @return none
-setClass("dreamletProcessedData", contains = "list", slots = c(data = "data.frame", metadata = "data.frame", by = "vector", df_details = "data.frame", errors = "list", error.initial = "list" ))
+setClass("dreamletProcessedData", contains = "list", slots = c(data = "data.frame", metadata = "data.frame", by = "vector", df_details = "data.frame", errors = "list", error.initial = "list"))
 
 #' Subset with brackets
 #'
@@ -360,13 +360,13 @@ setGeneric("extractData", function(x, assay, cols = colnames(colData(x)), genes 
 #' df_merge[, 1:6]
 #'
 #' # Extract subset:
-#' df_merge <- extractData(res.proc, "B cells", cols="group_id", genes = c("SSU72", "U2AF1"))
+#' df_merge <- extractData(res.proc, "B cells", cols = "group_id", genes = c("SSU72", "U2AF1"))
 #'
 #' df_merge
 #'
 #' # Boxplot of expression
 #' boxplot(SSU72 ~ group_id, df_merge)
-#
+#' #
 #' @importFrom S4Vectors merge
 #' @importFrom dplyr as_tibble
 #' @rdname extractData-methods
@@ -375,7 +375,6 @@ setGeneric("extractData", function(x, assay, cols = colnames(colData(x)), genes 
 setMethod(
   "extractData", c(x = "dreamletProcessedData", assay = "character"),
   function(x, assay, cols = colnames(colData(x)), genes = rownames(assay(x, assay))) {
-
     # Check requested assay
     if (!assay %in% assayNames(x)) {
       stop("assay not found: ", assay)
@@ -384,22 +383,24 @@ setMethod(
     # Check requested columns of colData(x)
     cols <- unique(cols)
     notFound <- cols[!cols %in% colnames(colData(x))]
-    if ( length(notFound) > 0) {
-      txt <- paste(notFound[seq(min(5, length(notFound)))], collapse=', ')
+    if (length(notFound) > 0) {
+      txt <- paste(notFound[seq(min(5, length(notFound)))], collapse = ", ")
       stop("columns not found: ", txt)
     }
 
     # Check requested genes
     genes <- unique(genes)
     notFound <- genes[!genes %in% rownames(assay(x, assay))]
-    if ( length(notFound) > 0) {
-      txt = paste(notFound[seq(min(5, length(notFound)))], collapse=', ')
+    if (length(notFound) > 0) {
+      txt <- paste(notFound[seq(min(5, length(notFound)))], collapse = ", ")
       stop("genes not found: ", txt)
     }
 
     # merge data
-    df <- merge(colData(x)[,cols,drop=FALSE], 
-      t(assay(x, assay)$E[genes,,drop=FALSE]), by = "row.names")
+    df <- merge(colData(x)[, cols, drop = FALSE],
+      t(assay(x, assay)$E[genes, , drop = FALSE]),
+      by = "row.names"
+    )
 
     as_tibble(df)
   }
@@ -438,5 +439,3 @@ setMethod(
     as_tibble(do.call(rbind, df))
   }
 )
-
-

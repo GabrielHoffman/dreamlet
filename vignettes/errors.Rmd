@@ -63,16 +63,19 @@ pb <- aggregateToPseudoBulk(example_sce,
   assay = "counts",
   cluster_id = "cluster_id",
   sample_id = "sample_id",
-  verbose = FALSE)
+  verbose = FALSE
+)
 
 # voom-style normalization for each cell cluster
-res.proc <- processAssays(pb[1:300,], 
-  ~ group_id)
+res.proc <- processAssays(
+  pb[1:300, ],
+  ~group_id
+)
 
 # Redundant formula
 # This example is an extreme example of redundancy
 # but more subtle cases often show up in real data
-form = ~ group_id + (1|group_id)
+form <- ~ group_id + (1 | group_id)
 
 # fit dreamlet model
 res.dl <- dreamlet(res.proc, form)
@@ -86,14 +89,14 @@ res.dl <- dreamlet(res.proc, form)
 
 # summary of models
 res.dl
-## class: dreamletResult 
+## class: dreamletResult
 ## assays(5): B cells CD14+ Monocytes CD4 T cells CD8 T cells FCGR3A+ Monocytes
 ## Genes:
-##  min: 3 
-##  max: 11 
+##  min: 3
+##  max: 11
 ## details(7): assay n_retain ... n_errors error_initial
 ## coefNames(2): (Intercept) group_idstim
-## 
+##
 ## Of 1,062 models fit across all assays, 96.2% failed
 
 # summary of models for each cell cluster
@@ -108,21 +111,21 @@ details(res.dl)
 # Extract errors as a tibble
 seeErrors(res.dl)
 ## # A tibble: 1,022 × 3
-##   assay   feature  errorText                                                   
-##   <chr>   <chr>    <chr> 
+##   assay   feature  errorText
+##   <chr>   <chr>    <chr>
 ##  1 B cells ISG15    "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
 ##  2 B cells AURKAIP1 "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
 
 # Extract gene-level errors for B cells
-clustID = "B cells"
+clustID <- "B cells"
 attr(res.dl[[clustID]])[1:2]
-## ISG15 
-##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) 
-## Model may not have converged with 1 eigenvalue close to zero: 3.2e-11\n" 
-## 
-## AURKAIP1 
-##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) 
-## Model may not have converged with 1 eigenvalue close to zero: -2.9e-11\n"  
+## ISG15
+##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)
+## Model may not have converged with 1 eigenvalue close to zero: 3.2e-11\n"
+##
+## AURKAIP1
+##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)
+## Model may not have converged with 1 eigenvalue close to zero: -2.9e-11\n"
 ```
 
 

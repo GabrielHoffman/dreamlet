@@ -4,14 +4,21 @@
 \alias{meta_analysis}
 \title{Meta-analysis across multiple studies}
 \usage{
-meta_analysis(x, method = "FE", group = c("ID", "assay"))
+meta_analysis(
+  x,
+  method = "FE",
+  group = c("ID", "assay"),
+  control = list(maxiter = 2000)
+)
 }
 \arguments{
 \item{x}{\code{data.frame} rbind'ing results across genes, cell types and datasets}
 
 \item{method}{meta-analysis method.  Values are fed into \code{metafor::rma()}, except for \code{'RE2C'} which calls \code{remaCor::RE2C()}.}
 
-\item{group}{colums in \code{x} to group by.  For results from \code{dreamlet::topTable()}, results are aggregrated by gene and cell type (i.e. \code{'ID'} and \code{'assay'}).  If \code{x} is not from this function, this argument allows the function t}
+\item{group}{colums in \code{x} to group by.  For results from \code{dreamlet::topTable()}, results are aggregrated by gene and cell type (i.e. \code{'ID'} and \code{'assay'}).  If \code{x} is not from this function, this argument allows the function to group results properly}
+
+\item{control}{passed to \code{rma(..,control)}}
 }
 \description{
 Meta-analysis across multiple studies
@@ -30,32 +37,34 @@ library(muscat)
 data(example_sce)
 
 # create pseudobulk for each sample and cell cluster
-pb <- aggregateToPseudoBulk(example_sce, 
-   assay = "counts",    
-   cluster_id = 'cluster_id', 
-   sample_id = 'sample_id',
-   verbose=FALSE)
+pb <- aggregateToPseudoBulk(example_sce,
+  assay = "counts",
+  cluster_id = "cluster_id",
+  sample_id = "sample_id",
+  verbose = FALSE
+)
 
 # voom-style normalization
 # just 'CD14+ Monocytes' for speed
-res.proc = processAssays( pb, ~ group_id, assays="CD14+ Monocytes")
+res.proc <- processAssays(pb, ~group_id, assays = "CD14+ Monocytes")
 
 # dreamlet
-res.dl = dreamlet( res.proc, ~ group_id)
+res.dl <- dreamlet(res.proc, ~group_id)
 
-tab1 = topTable(res.dl, coef='group_idstim', number=Inf)
-tab1$Dataset = "1"
+tab1 <- topTable(res.dl, coef = "group_idstim", number = Inf)
+tab1$Dataset <- "1"
 
 # Results from a second cohort
 # Here, just a copy of the same results for simplicity
-tab2 = tab1
-tab2$Dataset = "2" 
+tab2 <- tab1
+tab2$Dataset <- "2"
 
-# rbind 
-tab_combined = rbind(tab1, tab2)
+# rbind
+tab_combined <- rbind(tab1, tab2)
 
-# Perform fixed effects meta-analysis 
-res = meta_analysis( tab_combined, method = "FE" )
+# Perform fixed effects meta-analysis
+res <- meta_analysis(tab_combined, method = "FE")
 
-res[1:3,]
+res[1:3, ]
+#
 }

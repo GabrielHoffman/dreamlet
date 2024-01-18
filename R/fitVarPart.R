@@ -101,10 +101,12 @@ setMethod(
 
       # merge data_constant (data constant for all cell types)
       # with metadata(sceObj)$aggr_means (data that varies)
-      data2 <- merge_metadata(data_constant[ids, , drop = FALSE], 
-        metadata(x), 
-        k, 
-        x@by)
+      data2 <- merge_metadata(
+        data_constant[ids, , drop = FALSE],
+        metadata(x),
+        k,
+        x@by
+      )
 
       # drop any constant terms from the formula
       form_mod <- removeConstantTerms(formula, data2)
@@ -116,7 +118,7 @@ setMethod(
       if (length(all.vars(form_mod)) > 0 & isFullRank(form_mod, data2)) {
         # fit linear mixed model for each gene
         # TODO add , L=L
-        res <- fitExtractVarPartModel(geneExpr, form_mod, data2, BPPARAM = BPPARAM, ..., quiet = TRUE, hideErrorsInBackend=TRUE)
+        res <- fitExtractVarPartModel(geneExpr, form_mod, data2, BPPARAM = BPPARAM, ..., quiet = TRUE, hideErrorsInBackend = TRUE)
       } else {
         res <- data.frame()
       }
@@ -154,7 +156,7 @@ setMethod(
       df$assay <- factor(df$assay, names(resList))
     }
 
-      # Handle errors
+    # Handle errors
     #--------------
 
     # get error messages
@@ -189,18 +191,19 @@ setMethod(
 
     failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
 
-    if( is.nan(failure_frac) ){
+    if (is.nan(failure_frac)) {
       stop("All models failed.  Consider changing formula")
     }
 
-    if( failure_frac > 0 ){
-      txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark=','), " models fit across all assays, ", format(failure_frac*100, digits=3), "% failed\n")
+    if (failure_frac > 0) {
+      txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark = ","), " models fit across all assays, ", format(failure_frac * 100, digits = 3), "% failed\n")
       message(txt)
     }
 
-    new("vpDF", DataFrame(df), 
+    new("vpDF", DataFrame(df),
       df_details = df_details,
       errors = errors,
-      error.initial = error.initial)
+      error.initial = error.initial
+    )
   }
 )

@@ -52,13 +52,15 @@ pb <- aggregateToPseudoBulk(example_sce,
 )
 
 # Create precision weights for pseudobulk
-# By default, weights are set to cell count, 
-# which is the default in processAssays() 
+# By default, weights are set to cell count,
+# which is the default in processAssays()
 # even when no weights are specified
 weightsList <- pbWeights(example_sce,
-    sample_id = "sample_id",
-    cluster_id = "cluster_id")
+  sample_id = "sample_id",
+  cluster_id = "cluster_id"
+)
 
 # voom-style normalization using initial weights
-res.proc <- processAssays(pb, ~ group_id, weightsList = weightsList)
+res.proc <- processAssays(pb, ~group_id, weightsList = weightsList)
+#
 }
