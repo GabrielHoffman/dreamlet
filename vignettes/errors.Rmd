@@ -44,6 +44,24 @@ knitr::opts_chunk$set(
 
 `dreamlet()` evaluates precision-weighted linear (mixed) models on each gene that passes standard filters.  The linear mixed model used by `dream()` can be a little fragile for small sample sizes and correlated covariates. `dreamlet()` runs `variancePartition::dream()` in the backend for each cell cluster.  `dream()` reports model failures for each cell cluster and `dreamlet()` reports these failures to the user. `dreamlet()` returns all **successful** model fits to be used for downstream analysis.         
 
+# Errors with random effects
+Due to a recent [bug](https://github.com/lme4/lme4/issues/763) in the dependency `Matrix` package, all random effects models may fail for technical reasons.  If your random effects analysis is failing for all genes in cases with no good explanation, this bug may be responsible. This case can be detected and resolved as follows:  
+
+```{r lme4, eval=FALSE}
+library(lme4)
+
+# Fit simple mixed model
+lmer(Reaction ~ (1 | Subject), sleepstudy)
+# Error in initializePtr() : 
+#  function 'chm_factor_ldetL2' not provided by package 'Matrix'
+```
+This error indicates incompatible installs of `Matrix` and `lme4`. This can be solved with 
+ ```{r install, eval=FALSE}
+ install.packages("lme4", type = "source") 
+ ```
+ followed by __restarting R__.
+
+
 # Errors at the gene level
  The most common issue is when `dreamlet()` analysis succeeds for most genes, but a handful of genes fail in each cell cluster.  These genes can fail if the iterative process of fitting the linear mixed model does not converge, or if the estimated covariance matrix that is supposed be positive definite has an eigen-value that is negative or too close to zero due to rounding errors in floating point arithmetic.  
 
