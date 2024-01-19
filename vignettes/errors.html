@@ -351,7 +351,7 @@ display: none;
 
 <h1 class="title toc-ignore">Error handling</h1>
 <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a></h4>
-<h4 class="date">Run on 2023-08-18 20:49:11.860936</h4>
+<h4 class="date">Run on 2024-01-19 15:03:49</h4>
 
 </div>
 
@@ -377,9 +377,23 @@ cluster. <code>dream()</code> reports model failures for each cell
 cluster and <code>dreamlet()</code> reports these failures to the user.
 <code>dreamlet()</code> returns all <strong>successful</strong> model
 fits to be used for downstream analysis.</p>
-<div id="errors-at-the-cluster-level" class="section level1">
-<h1>Errors at the cluster level</h1>
-<p>Some model failures affect every gene in an assay.</p>
+<div id="errors-with-random-effects" class="section level1">
+<h1>Errors with random effects</h1>
+<p>Due to a recent <a href="https://github.com/lme4/lme4/issues/763">bug</a> in the dependency
+<code>Matrix</code> package, all random effects models may fail for
+technical reasons.</p>
+<p>This case can be detected and resolve as follows:</p>
+<pre class="r"><code>library(lme4)
+
+# Fit simple mixed model
+lmer(Reaction ~ (1 | Subject), sleepstudy)
+# Error in initializePtr() : 
+#  function &#39;chm_factor_ldetL2&#39; not provided by package &#39;Matrix&#39;</code></pre>
+<p>This error indicates incompatible installs of <code>Matrix</code> and
+<code>lme4</code>.</p>
+<p>This can be solved with</p>
+<pre class="r"><code>install.packages(&quot;lme4&quot;, type = &quot;source&quot;) </code></pre>
+<p>followed by restarting R.</p>
 </div>
 <div id="errors-at-the-gene-level" class="section level1">
 <h1>Errors at the gene level</h1>
@@ -391,9 +405,9 @@ matrix that is supposed be positive definite has an eigen-value that is
 negative or too close to zero due to rounding errors in floating point
 arithmetic.</p>
 <p>In these cases, <code>dreamlet()</code> stores a summary of these
-failures for all cell clutsers that is accessible with
+failures for all cell clusters that is accessible with
 <code>details()</code>. Specific failure messages for each cell cluster
-and gene can be extracted using `attr(., “errors”)</p>
+and gene can be extracted using <code>seeErrors()</code></p>
 <p>Here we demonstrate how <code>dreamlet()</code> handles model
 failures:</p>
 <pre class="r"><code>library(dreamlet)
@@ -407,16 +421,19 @@ pb &lt;- aggregateToPseudoBulk(example_sce,
   assay = &quot;counts&quot;,
   cluster_id = &quot;cluster_id&quot;,
   sample_id = &quot;sample_id&quot;,
-  verbose = FALSE)
+  verbose = FALSE
+)
 
 # voom-style normalization for each cell cluster
-res.proc &lt;- processAssays(pb[1:300,], 
-  ~ group_id)
+res.proc &lt;- processAssays(
+  pb[1:300, ],
+  ~group_id
+)
 
 # Redundant formula
 # This example is an extreme example of redundancy
 # but more subtle cases often show up in real data
-form = ~ group_id + (1|group_id)
+form &lt;- ~ group_id + (1 | group_id)
 
 # fit dreamlet model
 res.dl &lt;- dreamlet(res.proc, form)
@@ -428,17 +445,16 @@ res.dl &lt;- dreamlet(res.proc, form)
 ##
 ## Of 1,062 models fit across all assays, 96.2% failed
 
-
 # summary of models
 res.dl
-## class: dreamletResult 
+## class: dreamletResult
 ## assays(5): B cells CD14+ Monocytes CD4 T cells CD8 T cells FCGR3A+ Monocytes
 ## Genes:
-##  min: 3 
-##  max: 11 
+##  min: 3
+##  max: 11
 ## details(7): assay n_retain ... n_errors error_initial
 ## coefNames(2): (Intercept) group_idstim
-## 
+##
 ## Of 1,062 models fit across all assays, 96.2% failed
 
 # summary of models for each cell cluster
@@ -450,23 +466,39 @@ details(res.dl)
 ## 4       CD8 T cells        4 ~group_id + (1 | group_id)          FALSE     118      115         FALSE
 ## 5 FCGR3A+ Monocytes        4 ~group_id + (1 | group_id)          FALSE     258      247         FALSE
 
+# Extract errors as a tibble
+seeErrors(res.dl)
+## # A tibble: 1,022 × 3
+##   assay   feature  errorText
+##   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;
+##  1 B cells ISG15    &quot;Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
+##  2 B cells AURKAIP1 &quot;Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
+
 # Extract gene-level errors for B cells
-clustID = &quot;B cells&quot;
-attr(res.dl[[clustID]], &quot;errors&quot;)[1:2]
-## ISG15 
-##  &quot;Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) 
-## Model may not have converged with 1 eigenvalue close to zero: 3.2e-11\n&quot; 
-## 
-## AURKAIP1 
-##  &quot;Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) 
-## Model may not have converged with 1 eigenvalue close to zero: -2.9e-11\n&quot;  </code></pre>
+clustID &lt;- &quot;B cells&quot;
+attr(res.dl[[clustID]])[1:2]
+## ISG15
+##  &quot;Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)
+## Model may not have converged with 1 eigenvalue close to zero: 3.2e-11\n&quot;
+##
+## AURKAIP1
+##  &quot;Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)
+## Model may not have converged with 1 eigenvalue close to zero: -2.9e-11\n&quot;</code></pre>
+</div>
+<div id="errors-at-the-cluster-level" class="section level1">
+<h1>Errors at the cluster level</h1>
+<p>Some model failures affect every gene in an assay.
+<code>dreamlet()</code> tests an initial model fit before analysis of
+each gene. If the initial fit fails for a cell cluster, then
+<code>details(res.dl)$error_initial</code> will be
+<code>TRUE</code>.</p>
 </div>
 <div id="session-info" class="section level1">
 <h1>Session Info</h1>
 <details>
 <pre><code>## R version 4.3.0 (2023-04-21)
 ## Platform: x86_64-apple-darwin22.4.0 (64-bit)
-## Running under: macOS Ventura 13.5
+## Running under: macOS 14.2.1
 ## 
 ## Matrix products: default
 ## BLAS:   /Users/gabrielhoffman/prog/R-4.3.0/lib/libRblas.dylib 
@@ -481,17 +513,18 @@ attr(res.dl[[clustID]], &quot;errors&quot;)[1:2]
 ## attached base packages:
 ## [1] stats     graphics  grDevices datasets  utils     methods   base     
 ## 
-## other attached packages:
-## [1] BiocStyle_2.28.0
-## 
 ## loaded via a namespace (and not attached):
-##  [1] digest_0.6.33       R6_2.5.1            codetools_0.2-19   
-##  [4] bookdown_0.34       fastmap_1.1.1       xfun_0.39          
-##  [7] cachem_1.0.8        knitr_1.43          htmltools_0.5.5    
-## [10] rmarkdown_2.22      cli_3.6.1           sass_0.4.6         
-## [13] jquerylib_0.1.4     compiler_4.3.0      tools_4.3.0        
-## [16] evaluate_0.21       bslib_0.4.2         yaml_2.3.7         
-## [19] BiocManager_1.30.20 jsonlite_1.8.5      rlang_1.1.1</code></pre>
+##  [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43        rlang_1.1.1      
+##  [5] xfun_0.39         processx_3.8.1    purrr_1.0.2       styler_1.10.1    
+##  [9] jsonlite_1.8.5    glue_1.6.2        clipr_0.8.0       htmltools_0.5.5  
+## [13] ps_1.7.5          sass_0.4.6        fansi_1.0.4       rmarkdown_2.22   
+## [17] R.cache_0.16.0    jquerylib_0.1.4   evaluate_0.21     tibble_3.2.1     
+## [21] fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.3   compiler_4.3.0   
+## [25] fs_1.6.2          pkgconfig_2.0.3   rstudioapi_0.15.0 R.oo_1.25.0      
+## [29] R.utils_2.12.2    digest_0.6.33     R6_2.5.1          reprex_2.0.2     
+## [33] utf8_1.2.3        pillar_1.9.0      callr_3.7.3       magrittr_2.0.3   
+## [37] bslib_0.4.2       R.methodsS3_1.8.2 tools_4.3.0       withr_2.5.0      
+## [41] cachem_1.0.8</code></pre>
 </details>
 </div>
 

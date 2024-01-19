@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,8 +91,8 @@ analysis of pseudobulk data</h3>
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-11-28
-15:25:05</h4>
+            <h4 data-toc-skip class="date">Run on 2024-01-19
+15:05:57</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -182,7 +182,7 @@ workflow.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -219,7 +219,7 @@ on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.htm
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># one 'assay' per cell type</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "B cells"           "CD14+ Monocytes"   "CD4 T cells"      </span></span>
 <span><span class="co">## [4] "CD8 T cells"       "Dendritic cells"   "FCGR3A+ Monocytes"</span></span>
 <span><span class="co">## [7] "Megakaryocytes"    "NK cells"</span></span></code></pre>
@@ -437,21 +437,21 @@ gene across all cell types. The color indicates the FDR.</p>
 <p>Examine the expression of ISG20 between stimulation conditions within
 CD14+ Monocytes. Use <code><a href="../reference/extractData-methods.html">extractData()</a></code> to create a
 <code>tibble</code> with gene expression data and metadata from
-<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code> from one cell type.</p>
+<code>colData()</code> from one cell type.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get data</span></span>
-<span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="../reference/extractData-methods.html">extractData</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="st">"CD14+ Monocytes"</span>, genes<span class="op">=</span><span class="st">"ISG20"</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractData-methods.html">extractData</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="st">"CD14+ Monocytes"</span>, genes <span class="op">=</span> <span class="st">"ISG20"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set theme</span></span>
-<span><span class="va">thm</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span>, plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">thm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio <span class="op">=</span> <span class="fl">1</span>, plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># make plot</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">StimStatus</span>, <span class="va">ISG20</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">thm</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="va">Expression</span><span class="op">~</span><span class="op">(</span><span class="va">log</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">~</span><span class="va">CPM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'ISG20'</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="va">Expression</span> <span class="op">~</span> <span class="op">(</span><span class="va">log</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">~</span> <span class="va">CPM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"ISG20"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/boxplot-1.png" width="700"></p>
 </div>
 <div class="section level3">
