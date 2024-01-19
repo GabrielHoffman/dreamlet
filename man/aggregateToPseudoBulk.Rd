@@ -53,7 +53,7 @@ Aggregation of single-cell to pseudobulk data.  Adapted from \code{muscat::aggre
 \details{
 Adapted from \code{muscat::aggregateData} and has similar syntax and same results.  This is much faster for \code{SingleCellExperiment} backed by H5AD files using \code{DelayedMatrix} because this summarizes counts using \code{\link[DelayedMatrixStats]{DelayedMatrixStats}}.  But this function also includes optmizations for \code{sparseMatrix} used by \code{\link[Seurat]{Seurat}} by using \code{sparseMatrixStats}.
 
-Keeps variables from \code{colData()} that are constant within \code{sample_id}.  For example, sex will be constant for all cells from the same \code{sample_id}, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each \code{sample_id}, so it is dropped.
+Keeps variables from \code{colData()} that are constant within \code{sample_id}.  For example, sex will be constant for all cells from the same \code{sample_id}, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each \code{sample_id}, so it is dropped from \code{colData()}.  Instead the mean value per cell type is stored in \code{metadata(pb)$aggr_means}, and these can be included in regression formulas downstream.  In that case, the value of the covariates used per sample will depend on the cell type analyzed.
 }
 \examples{
 library(muscat)
@@ -75,7 +75,9 @@ pb
 
 # aggregate by cluster only,
 # collapsing all samples into the same pseudobulk
-pb2 <- aggregateToPseudoBulk(example_sce, cluster_id = "cluster_id", verbose = FALSE)
+pb2 <- aggregateToPseudoBulk(example_sce, 
+ cluster_id = "cluster_id", 
+ verbose = FALSE)
 
 pb2
 #
