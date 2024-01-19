@@ -136,7 +136,7 @@ object specifying how aggregation should be parallelized.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Adapted from <code><a href="https://rdrr.io/pkg/muscat/man/aggregateData.html" class="external-link">muscat::aggregateData</a></code> and has similar syntax and same results.  This is much faster for <code>SingleCellExperiment</code> backed by H5AD files using <code>DelayedMatrix</code> because this summarizes counts using <code><a href="https://rdrr.io/pkg/DelayedMatrixStats/man/DelayedMatrixStats.html" class="external-link">DelayedMatrixStats</a></code>.  But this function also includes optmizations for <code>sparseMatrix</code> used by <code><a href="https://satijalab.org/seurat/reference/Seurat-package.html" class="external-link">Seurat</a></code> by using <code>sparseMatrixStats</code>.</p>
-<p>Keeps variables from <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code> that are constant within <code>sample_id</code>.  For example, sex will be constant for all cells from the same <code>sample_id</code>, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each <code>sample_id</code>, so it is dropped.</p>
+<p>Keeps variables from <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code> that are constant within <code>sample_id</code>.  For example, sex will be constant for all cells from the same <code>sample_id</code>, so it is retained as a variable in the pseudobulk result.  But number of expressed genes varies across cells within each <code>sample_id</code>, so it is dropped from <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code>.  Instead the mean value per cell type is stored in <code>metadata(pb)$aggr_means</code>, and these can be included in regression formulas downstream.  In that case, the value of the covariates used per sample will depend on the cell type analyzed.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -184,7 +184,9 @@ doi: <a href="https://doi.org/10.1038/s41467-020-19894-4" class="external-link">
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># aggregate by cluster only,</span></span></span>
 <span class="r-in"><span><span class="co"># collapsing all samples into the same pseudobulk</span></span></span>
-<span class="r-in"><span><span class="va">pb2</span> <span class="op">&lt;-</span> <span class="fu">aggregateToPseudoBulk</span><span class="op">(</span><span class="va">example_sce</span>, cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pb2</span> <span class="op">&lt;-</span> <span class="fu">aggregateToPseudoBulk</span><span class="op">(</span><span class="va">example_sce</span>, </span></span>
+<span class="r-in"><span> cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>, </span></span>
+<span class="r-in"><span> verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pb2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SingleCellExperiment </span>
