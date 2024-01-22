@@ -1,3 +1,7 @@
+# dreamlet 1.1.12
+  - Jan 16, 2024
+  - `compositePosteriorTest()` allows `exclude` set to be `NULL`
+
 # dreamlet 1.1.11
   - Jan 16, 2024
   - add `meta_analysis()`
