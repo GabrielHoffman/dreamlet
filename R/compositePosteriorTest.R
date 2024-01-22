@@ -10,7 +10,7 @@
 #'
 #' @param x \code{"dreamlet_mash_result"} from \code{run_mash()}
 #' @param include array of conditions in the inclusion set
-#' @param exclude array of conditions in the exclusion set
+#' @param exclude array of conditions in the exclusion set. Defaults to \code{NULL} for no exclusion
 #' @param test evaluate the posterior probability of a non-zero effect in \code{"at least 1"} or \code{"all"} conditions
 #'
 #' @description The posterior probabilities for all genes and conditions is obtained as \code{1-lFSR}.  Let \code{prob} be an array storing results for one gene.  The probability that _no_ conditions in the exclusion set are non-zero is \code{prod(1 - prob[exclude])}. The probability that _all_ conditions in the inclusion set are non-zero is \code{prod(prob[include])}. The probability that _at least one_ condition in the inclusion set is non-zero is \code{1 - prod(1 - prob[include])}.  The composite test is the product of the probabilties computed from the inclusion and exclusion sets.
@@ -54,9 +54,12 @@
 #'
 #' # examine the lFSR for top gene
 #' get_lfsr(res_mash$model)[which.max(prob), , drop = FALSE]
-#' #
+#' 
+#' # Test if *all* cell types have non-zero effect
+#' prob <- compositePosteriorTest(res_mash, assayNames(res.dl))
+#
 #' @export
-compositePosteriorTest <- function(x, include, exclude, test = c("at least 1", "all")) {
+compositePosteriorTest <- function(x, include, exclude = NULL, test = c("at least 1", "all")) {
   test <- match.arg(test)
 
   stopifnot(is(x, "dreamlet_mash_result"))
@@ -91,3 +94,7 @@ compositePosteriorTest <- function(x, include, exclude, test = c("at least 1", "
 
   prob_incl * prob_excl
 }
+
+
+
+

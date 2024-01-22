@@ -4,14 +4,19 @@
 \alias{compositePosteriorTest}
 \title{Perform composite test on results from mashr}
 \usage{
-compositePosteriorTest(x, include, exclude, test = c("at least 1", "all"))
+compositePosteriorTest(
+  x,
+  include,
+  exclude = NULL,
+  test = c("at least 1", "all")
+)
 }
 \arguments{
 \item{x}{\code{"dreamlet_mash_result"} from \code{run_mash()}}
 
 \item{include}{array of conditions in the inclusion set}
 
-\item{exclude}{array of conditions in the exclusion set}
+\item{exclude}{array of conditions in the exclusion set. Defaults to \code{NULL} for no exclusion}
 
 \item{test}{evaluate the posterior probability of a non-zero effect in \code{"at least 1"} or \code{"all"} conditions}
 }
@@ -59,7 +64,9 @@ prob <- compositePosteriorTest(res_mash, include, exclude)
 
 # examine the lFSR for top gene
 get_lfsr(res_mash$model)[which.max(prob), , drop = FALSE]
-#
+
+# Test if *all* cell types have non-zero effect
+prob <- compositePosteriorTest(res_mash, assayNames(res.dl))
 }
 \seealso{
 \code{run_mash()}
