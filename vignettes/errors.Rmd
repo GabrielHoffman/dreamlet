@@ -148,7 +148,18 @@ attr(res.dl[[clustID]])[1:2]
 
 
 # Errors at the cluster level
- Some model failures affect every gene in an assay.  `dreamlet()` tests an initial model fit before analysis of each gene.  If the initial fit fails for a cell cluster, then `details(res.dl)$error_initial` will be `TRUE`.
+ Some model failures affect every gene in an assay.  `dreamlet()` tests an initial model fit before analysis of each gene.  If the initial fit fails for a cell cluster, then `details(res.dl)$error_initial` will be `TRUE`. Details of the errors can seen with 
+```{r err, eval=FALSE}
+seeErrors(res.dl, initial=TRUE)
+
+# the most common error is:
+"Some predictor variables are on very different scales: consider rescaling"
+```
+This indicates that the scale of the predictor variables are very different and can affect the numerical stability of the iterative algorithm.  This can be solved by running `scale()` on each variable in the formula:
+```{r formula, eval=FALSE}
+form = ~ scale(x) + scale(y) + ...
+```
+
 
 
 
