@@ -267,6 +267,7 @@ pbWeights <- function(sce, sample_id, cluster_id, method = c("delta", "ncells"),
       if( details ) attr(ret, "details") <- attr(var.lst[[id]], "details") 
       ret
     })
+    names(W.list) <- names(var.lst)
   }
 
   W.list
