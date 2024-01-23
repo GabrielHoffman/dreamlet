@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,11 +68,12 @@
 <span>  <span class="va">sce</span>,</span>
 <span>  <span class="va">sample_id</span>,</span>
 <span>  <span class="va">cluster_id</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ncells"</span>, <span class="st">"delta"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"delta"</span>, <span class="st">"ncells"</span><span class="op">)</span>,</span>
 <span>  shrink <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  prior.count <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  maxRatio <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  h5adBlockSizes <span class="op">=</span> <span class="fl">1e+09</span>,</span>
+<span>  details <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -92,7 +93,7 @@
 
 
 <dt>method</dt>
-<dd><p>select method to compute precision weights. <code>'ncells'</code> use the number of cells, this is faster. Subsequent arguments are ignored. <code>'delta'</code> use the delta method based on normal approximation to a negative binomial model, slower but can increase power.</p></dd>
+<dd><p>select method to compute precision weights.  <code>'delta'</code> use the delta method based on normal approximation to a negative binomial model, slower but can increase power. <code>'ncells'</code> use the number of cells, this is faster; Subsequent arguments are ignored. Included for testing</p></dd>
 
 
 <dt>shrink</dt>
@@ -109,6 +110,10 @@
 
 <dt>h5adBlockSizes</dt>
 <dd><p>set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.</p></dd>
+
+
+<dt>details</dt>
+<dd><p>include <code>data.frame</code> of cell-level statistics as <code>attr(., "details")</code></p></dd>
 
 
 <dt>verbose</dt>
@@ -138,20 +143,34 @@
 <span class="r-in"><span>  sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
 <span class="r-in"><span>  cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Processing: B cells</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Computing library sizes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Processing samples...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Processing: CD14+ Monocytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Computing library sizes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Processing samples...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Processing: CD4 T cells</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Computing library sizes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Processing samples...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Processing: CD8 T cells</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Computing library sizes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Processing samples...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Processing: FCGR3A+ Monocytes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Computing library sizes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Processing samples...</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># voom-style normalization using initial weights</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span>, weightsList <span class="op">=</span> <span class="va">weightsList</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.22 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.3 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.32 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.38 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.29 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.24 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.12 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.29 secs</span>
-<span class="r-in"><span><span class="co">#</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.3 secs</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
