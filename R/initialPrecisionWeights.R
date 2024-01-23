@@ -119,7 +119,7 @@ getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count, verbo
 #' @importFrom limma squeezeVar
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
-getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, verbose = TRUE) {
+getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, computeVIF = FALSE, verbose = TRUE) {
   Gene <- ID <- count.gene <- ncell <- zeta <- sigSq.hat <- NULL
 
   if (!sample_id %in% colnames(colData(sce))) {
@@ -152,10 +152,14 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
     # delta approximation of variance
     df <- df %>%
       mutate(count.gene = count.gene + 1e-4) %>%
-      mutate(vhat = 1 / count.gene * (1 + ncell * sigSq.hat * zeta / count.gene))
+      mutate(vif = (1 + ncell * sigSq.hat * zeta / count.gene)) %>%
+      mutate(vhat = 1 / count.gene * vif)
+
+    if( computeVIF ) value <- df$vif
+    else value <- df$vhat
 
     mat <- sparseMatrix(df$Gene, df$ID,
-      x = df$vhat,
+      x = value, #df$vhat,
       dims = c(nlevels(df$Gene), nlevels(df$ID)),
       dimnames = list(levels(df$Gene), levels(df$ID))
     )
@@ -249,9 +253,8 @@ pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"),
     # for each cell type
     W.list <- lapply(var.lst, function(v.mat) {
       # regularize reciprocal with offset
-      # get offset tau as the max of
-      # 1) quantile
-      # 2) to give a maximum ratio of maxRatio
+      # get offset tau as the max of x
+      #  to give a maximum ratio of maxRatio
       # for each cell type
       t(apply(v.mat, 1, function(x) {
         tau <- get_offset(x, maxRatio)
