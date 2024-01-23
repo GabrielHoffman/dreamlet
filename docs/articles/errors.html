@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,8 +89,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2024-01-19
-15:08:07</h4>
+            <h4 data-toc-skip class="date">Run on 2024-01-23
+16:26:15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/errors.Rmd" class="external-link"><code>vignettes/errors.Rmd</code></a></small>
       <div class="d-none name"><code>errors.Rmd</code></div>
@@ -238,8 +238,19 @@ failures:</p>
 <p>Some model failures affect every gene in an assay.
 <code><a href="../reference/dreamlet.html">dreamlet()</a></code> tests an initial model fit before analysis of
 each gene. If the initial fit fails for a cell cluster, then
-<code>details(res.dl)$error_initial</code> will be
-<code>TRUE</code>.</p>
+<code>details(res.dl)$error_initial</code> will be <code>TRUE</code>.
+Details of the errors can seen with</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/seeErrors-methods.html">seeErrors</a></span><span class="op">(</span><span class="va">res.dl</span>, initial<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># the most common error is:</span></span>
+<span><span class="st">"Some predictor variables are on very different scales: consider rescaling"</span></span></code></pre></div>
+<p>This indicates that the scale of the predictor variables are very
+different and can affect the numerical stability of the iterative
+algorithm. This can be solved by running <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> on each
+variable in the formula:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">form</span> <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span> <span class="va">...</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
