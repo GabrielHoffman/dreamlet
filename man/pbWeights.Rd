@@ -8,11 +8,12 @@ pbWeights(
   sce,
   sample_id,
   cluster_id,
-  method = c("ncells", "delta"),
+  method = c("delta", "ncells"),
   shrink = TRUE,
   prior.count = 0.5,
   maxRatio = 20,
   h5adBlockSizes = 1e+09,
+  details = FALSE,
   verbose = TRUE
 )
 }
@@ -23,7 +24,7 @@ pbWeights(
 
 \item{cluster_id}{character string specifying which variable to use as cluster id}
 
-\item{method}{select method to compute precision weights. \code{'ncells'} use the number of cells, this is faster. Subsequent arguments are ignored. \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power.}
+\item{method}{select method to compute precision weights.  \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power. \code{'ncells'} use the number of cells, this is faster; Subsequent arguments are ignored. Included for testing}
 
 \item{shrink}{Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample}
 
@@ -32,6 +33,8 @@ pbWeights(
 \item{maxRatio}{When computing precision as the reciprocal of variance \code{1/(x+tau)} select tau to have a maximum ratio between the largest and smallest precision}
 
 \item{h5adBlockSizes}{set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.}
+
+\item{details}{include \code{data.frame} of cell-level statistics as \code{attr(., "details")}}
 
 \item{verbose}{Show messages, defaults to TRUE}
 }
@@ -62,5 +65,4 @@ weightsList <- pbWeights(example_sce,
 
 # voom-style normalization using initial weights
 res.proc <- processAssays(pb, ~group_id, weightsList = weightsList)
-#
 }

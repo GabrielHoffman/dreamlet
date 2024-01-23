@@ -119,8 +119,8 @@ getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count, verbo
 #' @importFrom limma squeezeVar
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
-getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, computeVIF = FALSE, verbose = TRUE) {
-  Gene <- ID <- count.gene <- ncell <- zeta <- sigSq.hat <- NULL
+getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 0.5, details = FALSE, verbose = TRUE) {
+  Gene <- ID <- count.gene <- ncell <- zeta <- sigSq.hat <- vif <- NULL
 
   if (!sample_id %in% colnames(colData(sce))) {
     msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
@@ -155,15 +155,16 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
       mutate(vif = (1 + ncell * sigSq.hat * zeta / count.gene)) %>%
       mutate(vhat = 1 / count.gene * vif)
 
-    if( computeVIF ) value <- df$vif
-    else value <- df$vhat
-
-    mat <- sparseMatrix(df$Gene, df$ID,
-      x = value, #df$vhat,
+    # Vhat
+    matVhat <- sparseMatrix(df$Gene, df$ID,
+      x = df$vhat,
       dims = c(nlevels(df$Gene), nlevels(df$ID)),
       dimnames = list(levels(df$Gene), levels(df$ID))
     )
-    as.matrix(mat)
+    matVhat <- as.matrix(matVhat)
+
+    attr(matVhat, "details") <- df
+    matVhat
   })
   names(var.list) <- unique(sce[[cluster_id]])
 
@@ -190,12 +191,13 @@ get_offset <- function(x, target_ratio) {
 #' @param sce \code{SingleCellExperiment} of where \code{counts(sce)} stores the raw count data at the single cell level
 #' @param sample_id character string specifying which variable to use as sample id
 #' @param cluster_id character string specifying which variable to use as cluster id
-#' @param method select method to compute precision weights. \code{'ncells'} use the number of cells, this is faster. Subsequent arguments are ignored. \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power.
+#' @param method select method to compute precision weights.  \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power. \code{'ncells'} use the number of cells, this is faster; Subsequent arguments are ignored. Included for testing
 #' @param shrink Defaults to \code{TRUE}. Use empirical Bayes variance shrinkage from \code{limma} to shrink estimates of expression variance across cells within each sample
 #' @param prior.count Defaults to \code{0.5}. Count added to each observation at the pseudobulk level.  This is scaled but the number of cells before added to the cell level
 # @param quantileOffset Defaults to \code{0.1}. When computing the precision from the variance, regularize the reciprocal by adding a small value to the denominator. For a gene with variances stored in the array \code{x}, add \code{quantile(x, quantileOffset)} before taking the reciprocal.
 #' @param maxRatio When computing precision as the reciprocal of variance \code{1/(x+tau)} select tau to have a maximum ratio between the largest and smallest precision
 #' @param h5adBlockSizes set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.
+#' @param details include \code{data.frame} of cell-level statistics as \code{attr(., "details")}
 #' @param verbose Show messages, defaults to TRUE
 #'
 #' @examples
@@ -222,11 +224,11 @@ get_offset <- function(x, target_ratio) {
 #'
 #' # voom-style normalization using initial weights
 #' res.proc <- processAssays(pb, ~group_id, weightsList = weightsList)
-#' #
+#
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"), shrink = TRUE, prior.count = 0.5, maxRatio = 20, h5adBlockSizes = 1e9, verbose = TRUE) {
+pbWeights <- function(sce, sample_id, cluster_id, method = c("delta", "ncells"), shrink = TRUE, prior.count = 0.5, maxRatio = 20, h5adBlockSizes = 1e9, details = FALSE, verbose = TRUE) {
   method <- match.arg(method)
 
   # check for NA values
@@ -248,18 +250,22 @@ pbWeights <- function(sce, sample_id, cluster_id, method = c("ncells", "delta"),
     on.exit(suppressMessages(setAutoBlockSize(tmp)))
 
     # compute variances
-    var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count, verbose = verbose)
+    var.lst <- getVarList(sce, sample_id, cluster_id, shrink, prior.count, details = details, verbose = verbose)
 
     # for each cell type
-    W.list <- lapply(var.lst, function(v.mat) {
+    W.list <- lapply( names(var.lst), function(id) {
+      v.mat = var.lst[[id]]
       # regularize reciprocal with offset
       # get offset tau as the max of x
       #  to give a maximum ratio of maxRatio
       # for each cell type
-      t(apply(v.mat, 1, function(x) {
+      ret <- t(apply(v.mat, 1, function(x) {
         tau <- get_offset(x, maxRatio)
         1 / (x + tau)
       }))
+
+      if( details ) attr(ret, "details") <- attr(var.lst[[id]], "details") 
+      ret
     })
   }
 
