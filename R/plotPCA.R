@@ -13,6 +13,7 @@ setGeneric("plotPCA", BiocGenerics::plotPCA)
 #' @param nPC number of PCs to uses for outlier score with \code{outlier()}
 #' @param maxOutlierZ cap outlier z-scores at this value for plotting to maintain consistent color scale
 #' @param nrow number of rows in plot
+#' @param size size passed to \code{geom_point()}
 #' 
 #' @name plotPCA
 #' @rdname plotPCA
@@ -38,7 +39,7 @@ setGeneric("plotPCA", BiocGenerics::plotPCA)
 #' plotPCA( res.proc, "CD14+ Monocytes")
 #
 #' @export
-setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object, assays = assayNames(object), nPC=2, maxOutlierZ=20, nrow=2){
+setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object, assays = assayNames(object), nPC=2, maxOutlierZ=20, nrow=2, size=1){
 
   stopifnot(all(assays %in% assayNames(object)))
 
@@ -64,7 +65,7 @@ setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object,
    df %>%
     arrange(z) %>%
     ggplot(aes(PC1, PC2, color = pmin(z, maxOutlierZ))) +
-      geom_point(size=5) +
+      geom_point(size=size) +
       theme_classic() +
       # ggtitle(assays) + 
       theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) +

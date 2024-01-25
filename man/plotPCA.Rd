@@ -10,7 +10,8 @@
   assays = assayNames(object),
   nPC = 2,
   maxOutlierZ = 20,
-  nrow = 2
+  nrow = 2,
+  size = 1
 )
 }
 \arguments{
@@ -23,6 +24,8 @@
 \item{maxOutlierZ}{cap outlier z-scores at this value for plotting to maintain consistent color scale}
 
 \item{nrow}{number of rows in plot}
+
+\item{size}{size passed to \code{geom_point()}}
 }
 \description{
 Compute PCA of gene expression for an assay, and plot samples coloring by outlier score
