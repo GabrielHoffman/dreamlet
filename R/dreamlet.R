@@ -154,7 +154,6 @@ setMethod(
 #' Get error text
 #'
 #' @param obj A \code{dreamletResult} object
-#' @param initial if TRUE, report \code{error.initial}, else report \code{error}
 #'
 #' @return \code{tibble} storing error text
 #'
@@ -181,11 +180,11 @@ setMethod(
 #'
 #' # show errors
 #' # but none are reported
-#' seeErrors(res.dl)
+#' res.err = seeErrors(res.dl)
 #'
 #' @rdname seeErrors-methods
 #' @export
-setGeneric("seeErrors", function(obj, initial = FALSE) {
+setGeneric("seeErrors", function(obj) {
   standardGeneric("seeErrors")
 })
 
@@ -195,34 +194,42 @@ setGeneric("seeErrors", function(obj, initial = FALSE) {
 #' @importFrom dplyr as_tibble
 setMethod(
   "seeErrors", "dreamletResult",
-  function(obj, initial = FALSE) {
-    if (!initial) {
-      df <- lapply(names(obj@errors), function(id) {
-        if (length(obj@errors[[id]]) == 0) {
-          return(NULL)
-        }
-        data.frame(
-          assay = id,
-          feature = names(obj@errors[[id]]),
-          errorText = obj@errors[[id]]
-        )
-      })
-    } else {
-      df <- lapply(names(obj@error.initial), function(id) {
-        message(id)
-        if (length(obj@error.initial[[id]]) == 0) {
-          return(NULL)
-        }
-        data.frame(
-          assay = id,
-          errorTextInitial = obj@error.initial[[id]]
-        )
-      })
-    }
-    as_tibble(do.call(rbind, df))
+  function(obj) {
+
+    # Initial fit
+    df <- lapply(names(obj@error.initial), function(id) {
+      if (length(obj@error.initial[[id]]) == 0) {
+        return(NULL)
+      }
+      tibble(
+        assay = id,
+        errorTextInitial = obj@error.initial[[id]]
+      )
+    })
+    df <- bind_rows(df)
+
+    txt = paste("   Assay-level errors:", nrow(df))
+    message(txt)
+
+    # Gene-level
+    df2 <- lapply(names(obj@errors), function(id) {
+      if (length(obj@errors[[id]]) == 0) {
+        return(NULL)
+      }
+      tibble(
+        assay = id,
+        feature = names(obj@errors[[id]]),
+        errorText = obj@errors[[id]]
+      )
+    })
+    df2 <- bind_rows(df2)
+
+    txt = paste("   Gene-level errors:", nrow(df2))
+    message(txt)
+
+    list(assayLevel = df, geneLevel = df2)
   }
 )
-
 
 
 

@@ -44,6 +44,8 @@ knitr::opts_chunk$set(
 
 `dreamlet()` evaluates precision-weighted linear (mixed) models on each gene that passes standard filters.  The linear mixed model used by `dream()` can be a little fragile for small sample sizes and correlated covariates. `dreamlet()` runs `variancePartition::dream()` in the backend for each cell cluster.  `dream()` reports model failures for each cell cluster and `dreamlet()` reports these failures to the user. `dreamlet()` returns all **successful** model fits to be used for downstream analysis.         
 
+See details from `variancePartition` [error page](https://diseaseneurogenomics.github.io/variancePartition/articles/errors.html). 
+
 # Errors with random effects
 Due to a recent [bug](https://github.com/lme4/lme4/issues/763) in the dependency `Matrix` package, all random effects models may fail for technical reasons.  If your random effects analysis is failing for all genes in cases with no good explanation, this bug may be responsible. This case can be detected and resolved as follows:  
 
@@ -59,10 +61,10 @@ This error indicates incompatible installs of `Matrix` and `lme4`. This can be s
  ```{r install, eval=FALSE}
  install.packages("lme4", type = "source") 
  ```
- followed by __restarting R__.
+ followed by __restarting__ R.
 
 
-# Errors at the gene level
+# Errors at the assay- and gene-level
  The most common issue is when `dreamlet()` analysis succeeds for most genes, but a handful of genes fail in each cell cluster.  These genes can fail if the iterative process of fitting the linear mixed model does not converge, or if the estimated covariance matrix that is supposed be positive definite has an eigen-value that is negative or too close to zero due to rounding errors in floating point arithmetic.  
 
  In these cases, `dreamlet()` stores a summary of these failures for all cell clusters that is accessible with `details()`.  Specific failure messages for each cell cluster and gene can be extracted using `seeErrors()`
@@ -125,32 +127,29 @@ details(res.dl)
 ## 3       CD4 T cells        4 ~group_id + (1 | group_id)          FALSE     216      207         FALSE
 ## 4       CD8 T cells        4 ~group_id + (1 | group_id)          FALSE     118      115         FALSE
 ## 5 FCGR3A+ Monocytes        4 ~group_id + (1 | group_id)          FALSE     258      247         FALSE
-
-# Extract errors as a tibble
-seeErrors(res.dl)
-## # A tibble: 1,022 × 3
-##   assay   feature  errorText
-##   <chr>   <chr>    <chr>
-##  1 B cells ISG15    "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
-##  2 B cells AURKAIP1 "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…
-
-# Extract gene-level errors for B cells
-clustID <- "B cells"
-attr(res.dl[[clustID]])[1:2]
-## ISG15
-##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)
-## Model may not have converged with 1 eigenvalue close to zero: 3.2e-11\n"
-##
-## AURKAIP1
-##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)
-## Model may not have converged with 1 eigenvalue close to zero: -2.9e-11\n"
 ```
 
+- `assay`: cell type 
+- `n_retain`: number of samples retained
+- `formula`: regression formula used after variable filtering 
+- `formDropsTerms`: whether a variable was dropped from the formula for having zero variance following filtering
+- `n_genes`: number of genes analyzed
+- `n_errors`: number of genes with errors
+- `error_initial`: indicator for assay-level error
 
-# Errors at the cluster level
- Some model failures affect every gene in an assay.  `dreamlet()` tests an initial model fit before analysis of each gene.  If the initial fit fails for a cell cluster, then `details(res.dl)$error_initial` will be `TRUE`. Details of the errors can seen with 
-```{r err, eval=FALSE}
-seeErrors(res.dl, initial=TRUE)
+
+
+
+## Assay-level errors
+Before the full dataset is analyzed, `dreamlet()` runs a test for each assay to see if the model succeeds.  If the model fails, its does not continue analysis for that assay.  These assay-level errors are reported above in the `error_initial` column, and details are returned here.
+```{r err1, eval=FALSE}
+# Extract errors as a tibble
+res.err = seeErrors(res.dl)
+##   Assay-level errors: 0
+##   Gene-level errors: 1038
+
+# No errors at the assay level
+res.err$assayLevel
 
 # the most common error is:
 "Some predictor variables are on very different scales: consider rescaling"
@@ -160,6 +159,23 @@ This indicates that the scale of the predictor variables are very different and 
 form = ~ scale(x) + scale(y) + ...
 ```
 
+## Gene-level errors
+A model can fail for a single gene if covariates are too correlated, or for other numerical issues.  Failed models are reported here and are not included in downstream analysis.  
+```{r err2, eval=FALSE}
+# See gene-level errors for each assay
+res.err$geneLevel[1:2,]
+## # A tibble: 2 × 3
+##   assay   feature  errorText
+##   <chr>   <chr>    <chr>                               
+## B cells ISG15    "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol):…
+## B cells AURKAIP1 "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol):…
+
+# See full error message text
+res.err$geneLevel$errorText[1]
+"Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) 
+Model may not have converged with 1 eigenvalue close to zero: 1.4e-09\n"
+```
+This message indicates that the model was numerically unstable likely because the variables are closely correlated.
 
 
 
