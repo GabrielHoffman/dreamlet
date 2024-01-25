@@ -4,28 +4,28 @@
 \alias{outlier}
 \title{Multivariate outlier detection}
 \usage{
-outlier(data, robust = TRUE, ...)
+outlier(data, robust = FALSE, ...)
 }
 \arguments{
 \item{data}{matrix of data}
 
-\item{robust}{use robust methods}
+\item{robust}{use robust methods, defaults to \code{FALSE}}
 
 \item{...}{arguments passed to \code{MASS::cov.rob()}}
 }
 \value{
-z-score for each entry indicating deviation from the mean
+\code{data.frame} storing chisq and z-score for each entry indicating deviation from the mean.  The z-score is computed by evaluating the p-value of chisq statistic and converting it into a z-score
 }
 \description{
 Detect multivariante outliers using Mahalanobis distance using mean and covariance estimated either with standard or robust methods.
 }
 \details{
-The distance follow a chisq distrubtion under the null with standard method for mean and covariance.  It is approximate of robust method is used.  So use \code{qchisq(p = 0.999 , df = 2)} to get cutoff to keep 99.9\% of samples under the null for data with 2 columns.
+The distance follow a chisq distrubtion under the null with standard method for mean and covariance.  It is approximate if the robust method is used.  So use \code{qchisq(p = 0.999 , df = k)} to get cutoff to keep 99.9\% of samples under the null for data with \code{k=2} columns.
 }
 \examples{
 data <- matrix(rnorm(200), 100, 2)
 
 res <- outlier(data)
 
-res[1:4]
+res[1:4,]
 }

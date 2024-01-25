@@ -64,7 +64,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">outlier</span><span class="op">(</span><span class="va">data</span>, robust <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">outlier</span><span class="op">(</span><span class="va">data</span>, robust <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,7 +74,7 @@
 
 
 <dt>robust</dt>
-<dd><p>use robust methods</p></dd>
+<dd><p>use robust methods, defaults to <code>FALSE</code></p></dd>
 
 
 <dt>...</dt>
@@ -85,11 +85,11 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>z-score for each entry indicating deviation from the mean</p>
+<p><code>data.frame</code> storing chisq and z-score for each entry indicating deviation from the mean.  The z-score is computed by evaluating the p-value of chisq statistic and converting it into a z-score</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The distance follow a chisq distrubtion under the null with standard method for mean and covariance.  It is approximate of robust method is used.  So use <code>qchisq(p = 0.999 , df = 2)</code> to get cutoff to keep 99.9% of samples under the null for data with 2 columns.</p>
+    <p>The distance follow a chisq distrubtion under the null with standard method for mean and covariance.  It is approximate if the robust method is used.  So use <code>qchisq(p = 0.999 , df = k)</code> to get cutoff to keep 99.9% of samples under the null for data with <code>k=2</code> columns.</p>
     </div>
 
     <div class="section level2">
@@ -97,9 +97,14 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>, <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">outlier</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.364910 1.357410 3.513097 8.525273</span>
+<span class="r-in"><span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       chisq          z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.1386704 0.08405353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1.3970480 0.67871447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.4635215 0.26224073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 3.3609104 1.32163669</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
