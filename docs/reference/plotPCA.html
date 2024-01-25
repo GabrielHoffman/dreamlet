@@ -70,7 +70,8 @@
 <span>  assays <span class="op">=</span> <span class="fu">assayNames</span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
 <span>  nPC <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  maxOutlierZ <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>  nrow <span class="op">=</span> <span class="fl">2</span></span>
+<span>  nrow <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  size <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -95,6 +96,10 @@
 <dt>nrow</dt>
 <dd><p>number of rows in plot</p></dd>
 
+
+<dt>size</dt>
+<dd><p>size passed to <code>geom_point()</code></p></dd>
+
 </dl></div>
 
     <div class="section level2">
@@ -115,15 +120,15 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.1 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.78 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.36 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.35 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.23 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.21 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.11 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.31 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.27 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># PCA to identify outliers</span></span></span>
 <span class="r-in"><span><span class="fu">plotPCA</span><span class="op">(</span> <span class="va">res.proc</span>, <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
