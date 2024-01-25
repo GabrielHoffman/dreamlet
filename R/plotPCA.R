@@ -70,7 +70,7 @@ setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object,
       # ggtitle(assays) + 
       theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) +
       scale_color_gradient("Outlier z", limits=c(0, maxOutlierZ), low="grey40", high="red") +
-      facet_wrap(~assay, nrow=nrow)
+      facet_wrap(~assay, nrow=nrow, scales="free")
 })
 
 
