@@ -18,3 +18,24 @@ template:
 search:
   exclude: ['news/index.html']
 
+
+articles:
+- title: mashr
+  navbar: ~
+  contents: mashr
+
+- title: cell_covs
+  navbar: ~
+  contents: cell_covs
+
+- title: non_lin_eff
+  navbar: ~
+  contents: non_lin_eff
+
+- title: h5ad_on_disk
+  navbar: ~
+  contents: h5ad_on_disk
+
+- title: errors
+  navbar: ~
+  contents: errors

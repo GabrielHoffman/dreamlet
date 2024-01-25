@@ -76,6 +76,9 @@
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/colData-set-dreamletProcessedData-ANY-method.html</loc>
   </url>
   <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/compositePosteriorTest.html</loc>
+  </url>
+  <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeCellCounts.html</loc>
   </url>
   <url>
@@ -130,6 +133,9 @@
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/index.html</loc>
   </url>
   <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/meta_analysis.html</loc>
+  </url>
+  <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/metadata-dreamletProcessedData-method.html</loc>
   </url>
   <url>
@@ -137,6 +143,9 @@
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/pbWeights.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotBeeswarm.html</loc>
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotCellComposition.html</loc>
