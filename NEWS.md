@@ -1,6 +1,8 @@
 # dreamlet 1.1.13
   - Jan 25, 2024
   - improve error reporting in `seeErrors()` and documentation
+  - update `outlier()` to compute z-scores.  How returns `data.frame()`
+  - add `plotPCA()`
 
 # dreamlet 1.1.12
   - Jan 16, 2024

@@ -146,6 +146,8 @@ setMethod(
       } else {
         res <- data.frame()
       }
+      attr(res, "errors") <- attr(resList[[id]]$df, "errors")
+      attr(res, "error.initial") <- attr(resList[[id]]$df, "error.initial")
       res
     })
     names(vplst) <- names(resList)
@@ -161,11 +163,11 @@ setMethod(
 
     # get error messages
     error.initial <- lapply(vplst, function(x) {
-      x$error.initial
+     attr(x, "error.initial")
     })
     names(error.initial) <- names(vplst)
     errors <- lapply(vplst, function(x) {
-      x$errors
+      attr(x, "errors")
     })
     names(errors) <- names(vplst)
 
@@ -177,8 +179,8 @@ setMethod(
         formula = Reduce(paste, deparse(resList[[id]]$formula)),
         formDropsTerms = !equalFormulas(resList[[id]]$formula, formula),
         n_genes = nrow(resList[[id]]$df),
-        n_errors = length(resList[[id]]$errors),
-        error_initial = ifelse(is.null(resList[[id]]$error.initial), FALSE, TRUE)
+        n_errors = length(attr(resList[[id]]$df, "errors")),
+        error_initial = ifelse(is.null(attr(resList[[id]]$df, "error.initial")), FALSE, TRUE)
       )
     })
     df_details <- do.call(rbind, df_details)
@@ -191,11 +193,11 @@ setMethod(
 
     failure_frac <- sum(df_details$n_errors) / sum(df_details$n_genes)
 
-    if (is.nan(failure_frac)) {
-      stop("All models failed.  Consider changing formula")
-    }
+    # if (is.nan(failure_frac)) {
+    #   stop("All models failed.  Consider changing formula")
+    # }
 
-    if (failure_frac > 0) {
+    if (! is.nan(failure_frac) && failure_frac > 0) {
       txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark = ","), " models fit across all assays, ", format(failure_frac * 100, digits = 3), "% failed\n")
       message(txt)
     }
