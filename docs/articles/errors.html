@@ -89,8 +89,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2024-01-23
-16:26:15</h4>
+            <h4 data-toc-skip class="date">Run on 2024-01-25
+10:21:50</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/errors.Rmd" class="external-link"><code>vignettes/errors.Rmd</code></a></small>
       <div class="d-none name"><code>errors.Rmd</code></div>
@@ -119,6 +119,8 @@ cluster. <code><a href="http://DiseaseNeurogenomics.github.io/variancePartition/
 cluster and <code><a href="../reference/dreamlet.html">dreamlet()</a></code> reports these failures to the user.
 <code><a href="../reference/dreamlet.html">dreamlet()</a></code> returns all <strong>successful</strong> model
 fits to be used for downstream analysis.</p>
+<p>See details from <code>variancePartition</code> <a href="https://diseaseneurogenomics.github.io/variancePartition/articles/errors.html" class="external-link">error
+page</a>.</p>
 <div class="section level2">
 <h2 id="errors-with-random-effects">Errors with random effects<a class="anchor" aria-label="anchor" href="#errors-with-random-effects"></a>
 </h2>
@@ -138,10 +140,10 @@ This case can be detected and resolved as follows:</p>
 <code>lme4</code>. This can be solved with</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"lme4"</span>, type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span> </span></code></pre></div>
-<p>followed by <strong>restarting R</strong>.</p>
+<p>followed by <strong>restarting</strong> R.</p>
 </div>
 <div class="section level2">
-<h2 id="errors-at-the-gene-level">Errors at the gene level<a class="anchor" aria-label="anchor" href="#errors-at-the-gene-level"></a>
+<h2 id="errors-at-the-assay--and-gene-level">Errors at the assay- and gene-level<a class="anchor" aria-label="anchor" href="#errors-at-the-assay--and-gene-level"></a>
 </h2>
 <p>The most common issue is when <code><a href="../reference/dreamlet.html">dreamlet()</a></code> analysis
 succeeds for most genes, but a handful of genes fail in each cell
@@ -211,37 +213,41 @@ failures:</p>
 <span><span class="co">## 2   CD14+ Monocytes        4 ~group_id + (1 | group_id)          FALSE     269      263         FALSE</span></span>
 <span><span class="co">## 3       CD4 T cells        4 ~group_id + (1 | group_id)          FALSE     216      207         FALSE</span></span>
 <span><span class="co">## 4       CD8 T cells        4 ~group_id + (1 | group_id)          FALSE     118      115         FALSE</span></span>
-<span><span class="co">## 5 FCGR3A+ Monocytes        4 ~group_id + (1 | group_id)          FALSE     258      247         FALSE</span></span>
-<span></span>
-<span><span class="co"># Extract errors as a tibble</span></span>
-<span><span class="fu"><a href="../reference/seeErrors-methods.html">seeErrors</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span></span>
-<span><span class="co">## # A tibble: 1,022 × 3</span></span>
-<span><span class="co">##   assay   feature  errorText</span></span>
-<span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;</span></span>
-<span><span class="co">##  1 B cells ISG15    "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…</span></span>
-<span><span class="co">##  2 B cells AURKAIP1 "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol)…</span></span>
-<span></span>
-<span><span class="co"># Extract gene-level errors for B cells</span></span>
-<span><span class="va">clustID</span> <span class="op">&lt;-</span> <span class="st">"B cells"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="va">clustID</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
-<span><span class="co">## ISG15</span></span>
-<span><span class="co">##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)</span></span>
-<span><span class="co">## Model may not have converged with 1 eigenvalue close to zero: 3.2e-11\n"</span></span>
-<span><span class="co">##</span></span>
-<span><span class="co">## AURKAIP1</span></span>
-<span><span class="co">##  "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning)</span></span>
-<span><span class="co">## Model may not have converged with 1 eigenvalue close to zero: -2.9e-11\n"</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="errors-at-the-cluster-level">Errors at the cluster level<a class="anchor" aria-label="anchor" href="#errors-at-the-cluster-level"></a>
-</h2>
-<p>Some model failures affect every gene in an assay.
-<code><a href="../reference/dreamlet.html">dreamlet()</a></code> tests an initial model fit before analysis of
-each gene. If the initial fit fails for a cell cluster, then
-<code>details(res.dl)$error_initial</code> will be <code>TRUE</code>.
-Details of the errors can seen with</p>
+<span><span class="co">## 5 FCGR3A+ Monocytes        4 ~group_id + (1 | group_id)          FALSE     258      247         FALSE</span></span></code></pre></div>
+<ul>
+<li>
+<code>assay</code>: cell type</li>
+<li>
+<code>n_retain</code>: number of samples retained</li>
+<li>
+<code>formula</code>: regression formula used after variable
+filtering</li>
+<li>
+<code>formDropsTerms</code>: whether a variable was dropped from the
+formula for having zero variance following filtering</li>
+<li>
+<code>n_genes</code>: number of genes analyzed</li>
+<li>
+<code>n_errors</code>: number of genes with errors</li>
+<li>
+<code>error_initial</code>: indicator for assay-level error</li>
+</ul>
+<div class="section level3">
+<h3 id="assay-level-errors">Assay-level errors<a class="anchor" aria-label="anchor" href="#assay-level-errors"></a>
+</h3>
+<p>Before the full dataset is analyzed, <code><a href="../reference/dreamlet.html">dreamlet()</a></code> runs a
+test for each assay to see if the model succeeds. If the model fails,
+its does not continue analysis for that assay. These assay-level errors
+are reported above in the <code>error_initial</code> column, and details
+are returned here.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/seeErrors-methods.html">seeErrors</a></span><span class="op">(</span><span class="va">res.dl</span>, initial<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Extract errors as a tibble</span></span>
+<span><span class="va">res.err</span> <span class="op">=</span> <span class="fu"><a href="../reference/seeErrors-methods.html">seeErrors</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">)</span></span>
+<span><span class="co">##   Assay-level errors: 0</span></span>
+<span><span class="co">##   Gene-level errors: 1038</span></span>
+<span></span>
+<span><span class="co"># No errors at the assay level</span></span>
+<span><span class="va">res.err</span><span class="op">$</span><span class="va">assayLevel</span></span>
 <span></span>
 <span><span class="co"># the most common error is:</span></span>
 <span><span class="st">"Some predictor variables are on very different scales: consider rescaling"</span></span></code></pre></div>
@@ -251,6 +257,29 @@ algorithm. This can be solved by running <code><a href="https://rdrr.io/r/base/s
 variable in the formula:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">form</span> <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">+</span> <span class="va">...</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="gene-level-errors">Gene-level errors<a class="anchor" aria-label="anchor" href="#gene-level-errors"></a>
+</h3>
+<p>A model can fail for a single gene if covariates are too correlated,
+or for other numerical issues. Failed models are reported here and are
+not included in downstream analysis.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># See gene-level errors for each assay</span></span>
+<span><span class="va">res.err</span><span class="op">$</span><span class="va">geneLevel</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="op">]</span></span>
+<span><span class="co">## # A tibble: 2 × 3</span></span>
+<span><span class="co">##   assay   feature  errorText</span></span>
+<span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;                               </span></span>
+<span><span class="co">## B cells ISG15    "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol):…</span></span>
+<span><span class="co">## B cells AURKAIP1 "Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol):…</span></span>
+<span></span>
+<span><span class="co"># See full error message text</span></span>
+<span><span class="va">res.err</span><span class="op">$</span><span class="va">geneLevel</span><span class="op">$</span><span class="va">errorText</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="st">"Error in lmerTest:::as_lmerModLT(model, devfun, tol = tol): (converted from warning) </span></span>
+<span><span class="st">Model may not have converged with 1 eigenvalue close to zero: 1.4e-09\n"</span></span></code></pre></div>
+<p>This message indicates that the model was numerically unstable likely
+because the variables are closely correlated.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>

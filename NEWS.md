@@ -1,3 +1,7 @@
+# dreamlet 1.1.13
+  - Jan 25, 2024
+  - improve error reporting in `seeErrors()` and documentation
+
 # dreamlet 1.1.12
   - Jan 16, 2024
   - `compositePosteriorTest()` allows `exclude` set to be `NULL`

@@ -7,18 +7,16 @@
 \alias{seeErrors,vpDF-method}
 \title{Get error text}
 \usage{
-seeErrors(obj, initial = FALSE)
+seeErrors(obj)
 
-\S4method{seeErrors}{dreamletResult}(obj, initial = FALSE)
+\S4method{seeErrors}{dreamletResult}(obj)
 
-\S4method{seeErrors}{dreamletProcessedData}(obj, initial = FALSE)
+\S4method{seeErrors}{dreamletProcessedData}(obj)
 
-\S4method{seeErrors}{vpDF}(obj, initial = FALSE)
+\S4method{seeErrors}{vpDF}(obj)
 }
 \arguments{
 \item{obj}{A \code{dreamletResult} object}
-
-\item{initial}{if TRUE, report \code{error.initial}, else report \code{error}}
 }
 \value{
 \code{tibble} storing error text
@@ -49,6 +47,6 @@ res.dl <- dreamlet(res.proc, ~group_id)
 
 # show errors
 # but none are reported
-seeErrors(res.dl)
+res.err = seeErrors(res.dl)
 
 }
