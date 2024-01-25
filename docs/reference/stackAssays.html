@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,11 +27,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
-    <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
-    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
     <a class="dropdown-item" href="../articles/mashr.html">mashr analysis after dreamlet</a>
+    <a class="dropdown-item" href="../articles/cell_covs.html">Modeling continuous cell-level covariates</a>
     <a class="dropdown-item" href="../articles/non_lin_eff.html">Testing non-linear effects</a>
+    <a class="dropdown-item" href="../articles/h5ad_on_disk.html">Handling large H5AD datasets</a>
+    <a class="dropdown-item" href="../articles/errors.html">Error handling</a>
   </div>
 </li>
 <li class="nav-item">
@@ -106,26 +106,26 @@
 <span class="r-in"><span><span class="co"># assay (i.e. cell type) can now be included as a covariate</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb.stack</span>, <span class="op">~</span> <span class="va">group_id</span> <span class="op">+</span> <span class="va">stackedAssay</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   stacked...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.42 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.51 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># variance partitioning analysis</span></span></span>
 <span class="r-in"><span><span class="va">vp</span> <span class="op">&lt;-</span> <span class="fu"><a href="fitVarPart.html">fitVarPart</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span> <span class="op">+</span> <span class="va">stackedAssay</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   stacked...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 4.1 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3.9 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summarize variance fractions across cell types</span></span></span>
-<span class="r-in"><span><span class="fu">plotVarPart</span><span class="op">(</span><span class="fu">sortCols</span><span class="op">(</span><span class="va">vp</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotVarPart-method.html" class="external-link">plotVarPart</a></span><span class="op">(</span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/sortCols-method.html" class="external-link">sortCols</a></span><span class="op">(</span><span class="va">vp</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="stackAssays-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Interaction analysis allows group_id</span></span></span>
 <span class="r-in"><span><span class="co"># to have a different effect within each stacedAssay</span></span></span>
 <span class="r-in"><span><span class="va">vp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="fitVarPart.html">fitVarPart</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span> <span class="va">group_id</span> <span class="op">*</span> <span class="va">stackedAssay</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   stacked...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 3.8 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4.3 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plotVarPart</span><span class="op">(</span><span class="fu">sortCols</span><span class="op">(</span><span class="va">vp2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotVarPart-method.html" class="external-link">plotVarPart</a></span><span class="op">(</span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/sortCols-method.html" class="external-link">sortCols</a></span><span class="op">(</span><span class="va">vp2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="stackAssays-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Interaction model using random effects</span></span></span>
