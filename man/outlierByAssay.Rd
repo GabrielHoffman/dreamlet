@@ -4,7 +4,13 @@
 \alias{outlierByAssay}
 \title{Outlier analysis for each assay}
 \usage{
-outlierByAssay(object, assays, nPC = 2, robust = FALSE, ...)
+outlierByAssay(
+  object,
+  assays = assayNames(object),
+  nPC = 2,
+  robust = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{\code{dreamletProcessedData} from \code{processAssays()}}
