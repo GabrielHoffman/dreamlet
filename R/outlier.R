@@ -90,7 +90,7 @@ outlier <- function(data, robust = FALSE, ...) {
 #' @importFrom irlba prcomp_irlba
 #' @seealso \code{outlier()}
 #' @export
-outlierByAssay = function(object, assays, nPC=2, robust = FALSE, ...){
+outlierByAssay = function(object, assays = assayNames(object), nPC=2, robust = FALSE, ...){
 
   stopifnot(is(object, "dreamletProcessedData"))
 
