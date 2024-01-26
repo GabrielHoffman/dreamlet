@@ -41,7 +41,7 @@ outlier <- function(data, robust = FALSE, ...) {
   pOut <- pchisq(d, ncol(data), lower.tail=FALSE)
   z <- qnorm(pOut/2, lower.tail=FALSE)
 
-  df = data.frame(chisq = d, z = z)
+  df = data.frame(chisq = d, z = z, pValue = pOut)
   rownames(df) = rownames(data)
   df
 }
