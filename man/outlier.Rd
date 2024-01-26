@@ -9,7 +9,7 @@ outlier(data, robust = FALSE, ...)
 \arguments{
 \item{data}{matrix of data}
 
-\item{robust}{use robust methods, defaults to \code{FALSE}}
+\item{robust}{use robust covariance method, defaults to \code{FALSE}}
 
 \item{...}{arguments passed to \code{MASS::cov.rob()}}
 }

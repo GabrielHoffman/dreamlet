@@ -62,6 +62,7 @@ Imports:
     ggbeeswarm,
     S4Vectors,
     IRanges,
+    irlba,
     limma,
     metafor,
     remaCor,
