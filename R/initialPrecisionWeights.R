@@ -153,7 +153,8 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
     df <- df %>%
       mutate(count.gene = count.gene + 1e-4) %>%
       mutate(vif = (1 + ncell * sigSq.hat * zeta / count.gene)) %>%
-      mutate(vhat = 1 / count.gene * vif)
+      mutate(vhat = 1 / count.gene * vif) %>%
+      mutate( assay = CT)
 
     # Vhat
     matVhat <- sparseMatrix(df$Gene, df$ID,
