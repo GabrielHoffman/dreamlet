@@ -1,3 +1,7 @@
+# dreamlet 1.1.14
+  - Jan 29, 2024
+  - fix bug in `pbWeights()`
+
 # dreamlet 1.1.13
   - Jan 25, 2024
   - improve error reporting in `seeErrors()` and documentation
