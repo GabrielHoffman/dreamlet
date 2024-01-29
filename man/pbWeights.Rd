@@ -8,6 +8,7 @@ pbWeights(
   sce,
   sample_id,
   cluster_id,
+  geneList,
   method = c("delta", "ncells"),
   shrink = TRUE,
   prior.count = 0.5,
@@ -23,6 +24,8 @@ pbWeights(
 \item{sample_id}{character string specifying which variable to use as sample id}
 
 \item{cluster_id}{character string specifying which variable to use as cluster id}
+
+\item{geneList}{list of genes to be included for each cell type}
 
 \item{method}{select method to compute precision weights.  \code{'delta'} use the delta method based on normal approximation to a negative binomial model, slower but can increase power. \code{'ncells'} use the number of cells, this is faster; Subsequent arguments are ignored. Included for testing}
 
@@ -54,13 +57,17 @@ pb <- aggregateToPseudoBulk(example_sce,
   verbose = FALSE
 )
 
+# Gene expressed genes for each cell type
+geneList = getExprGeneNames(pb)
+
 # Create precision weights for pseudobulk
 # By default, weights are set to cell count,
 # which is the default in processAssays()
 # even when no weights are specified
 weightsList <- pbWeights(example_sce,
   sample_id = "sample_id",
-  cluster_id = "cluster_id"
+  cluster_id = "cluster_id",
+  geneList = geneList
 )
 
 # voom-style normalization using initial weights

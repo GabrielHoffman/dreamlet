@@ -1,6 +1,9 @@
 # dreamlet 1.1.14
   - Jan 29, 2024
   - fix bug in `pbWeights()`
+   - smaller pseudo variance
+   - limit to only expressed genes by adding `getExprGeneNames()`
+
 
 # dreamlet 1.1.13
   - Jan 25, 2024
