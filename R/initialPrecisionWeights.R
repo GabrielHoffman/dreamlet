@@ -69,10 +69,11 @@ getVarForCellType <- function(sce, sample_id, cluster_id, CT, prior.count, verbo
   idx <- which(sce[[cluster_id]] == CT)
 
   if (is(counts(sce), "DelayedArray")) {
-    lib.size <- colSums2(counts(sce), cols = idx, useNames = TRUE)
+    lib.size <- colSums2(counts(sce), cols = idx, useNames =FALSE)
   } else {
-    lib.size <- colSums2(counts(sce)[, idx], useNames = TRUE)
+    lib.size <- colSums2(counts(sce)[, idx], useNames = FALSE)
   }
+  names(lib.size) = colnames(sce)[idx]
 
   # Scale prior count so that an observed count of 0,
   # gives zero variance across samples
