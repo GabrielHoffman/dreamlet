@@ -83,6 +83,12 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 
   # sample-level weights based on cell counts and mean library size
   if (!is.null(weights) & !is(weights, "function")) {
+
+    if( ! all(rownames(y)[keep] %in% rownames(weights)) ){
+      msg <- "All genes retained in count matrix must be present in weights matrix.\n Make sure getExprGeneNames() and processAssays() use same parameter values."
+      stop(msg)
+    }
+
     precWeights <- weights[rownames(y)[keep], colnames(y)]
   } else {
     precWeights <- rep(1, ncol(y))
