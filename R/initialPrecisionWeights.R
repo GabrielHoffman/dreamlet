@@ -147,6 +147,7 @@ getVarList <- function(sce, sample_id, cluster_id, shrink = TRUE, prior.count = 
       # use small offset to handle cases with zero variance
       # use pmax to ensure df > 1
       res <- squeezeVar(df$sigSq.hat + 1e-7, pmax(1, df$ncell - 1), robust = FALSE)
+      df$sigSq.mle <- df$sigSq.hat
       df$sigSq.hat <- res$var.post
     }
 
