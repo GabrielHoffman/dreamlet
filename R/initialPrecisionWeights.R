@@ -108,7 +108,7 @@ getVarForCellType <- function(sce, sample_id, cluster_id, geneList, CT, prior.co
     } else {
       # if no cells are observed for this cell type and sample
       res <- tibble(
-        Gene = rownames(sce),
+        Gene = keep,
         count.gene = 0,
         sigSq.mle = 0,
         zeta = 0,
