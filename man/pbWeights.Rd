@@ -8,7 +8,7 @@ pbWeights(
   sce,
   sample_id,
   cluster_id,
-  geneList,
+  geneList = NULL,
   method = c("delta", "ncells"),
   shrink = TRUE,
   prior.count = 0.5,

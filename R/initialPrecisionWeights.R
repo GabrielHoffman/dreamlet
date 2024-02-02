@@ -124,7 +124,7 @@ getVarForCellType <- function(sce, sample_id, cluster_id, geneList, CT, prior.co
 #' @importFrom limma squeezeVar
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
-getVarList <- function(sce, sample_id, cluster_id, geneList, shrink = TRUE, prior.count = 0.5, details = FALSE, verbose = TRUE) {
+getVarList <- function(sce, sample_id, cluster_id, geneList = NULL, shrink = TRUE, prior.count = 0.5, details = FALSE, verbose = TRUE) {
   Gene <- ID <- count.gene <- ncell <- zeta <- sigSq.mle <- vif <- NULL
 
   if (!sample_id %in% colnames(colData(sce))) {
@@ -136,15 +136,30 @@ getVarList <- function(sce, sample_id, cluster_id, geneList, shrink = TRUE, prio
     stop(msg)
   }
 
-  fnd = unique(sce[[cluster_id]]) %in% names(geneList)
-  if( ! all(fnd) ){
-    msg = paste(unique(sce[[cluster_id]])[!fnd], collapse=",")
-    msg = paste("assays not found in geneList:", msg)
-    stop(msg)
+  # unique cluster ids
+  clIDs <- as.character(unique(sce[[cluster_id]]))
+
+  if( is.null(geneList) ){
+    # create geneList with all genes
+    geneList <- lapply(clIDs, function(x) rownames(sce))
+    names(geneList) = clIDs
+  }else{
+    fnd = clIDs %in% names(geneList)
+    if( ! all(fnd) ){
+      msg <- paste(unique(sce[[cluster_id]])[!fnd], collapse=",")
+      msg <- paste("assays not found in geneList:", msg)
+      stop(msg)
+    }
+
+    # only include clusters with non-null gene sets
+    exclude = names(geneList)[sapply(geneList, is.null)]
+    clIDs = setdiff(clIDs, exclude)
+
+    if( length(clIDs) == 0) stop("No data retained")
   }
 
   # Compute variance for each observation for each cell type
-  var.list <- lapply(unique(sce[[cluster_id]]), function(CT) {
+  var.list <- lapply(clIDs, function(CT) {
     if (verbose) message("Processing: ", CT)
 
     df <- getVarForCellType(sce, sample_id, cluster_id, geneList, CT, prior.count, verbose) %>%
@@ -181,7 +196,7 @@ getVarList <- function(sce, sample_id, cluster_id, geneList, shrink = TRUE, prio
     attr(matVhat, "details") <- df
     matVhat
   })
-  names(var.list) <- unique(sce[[cluster_id]])
+  names(var.list) <- clIDs
 
   var.list
 }
@@ -248,7 +263,7 @@ get_offset <- function(x, target_ratio) {
 #' @importFrom stats quantile
 #' @importFrom DelayedArray getAutoBlockSize setAutoBlockSize
 #' @export
-pbWeights <- function(sce, sample_id, cluster_id, geneList, method = c("delta", "ncells"), shrink = TRUE, prior.count = 0.5, maxRatio = 20, h5adBlockSizes = 1e9, details = FALSE, verbose = TRUE) {
+pbWeights <- function(sce, sample_id, cluster_id, geneList = NULL, method = c("delta", "ncells"), shrink = TRUE, prior.count = 0.5, maxRatio = 20, h5adBlockSizes = 1e9, details = FALSE, verbose = TRUE) {
   method <- match.arg(method)
 
   # check for NA values
