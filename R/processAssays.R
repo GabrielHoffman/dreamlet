@@ -10,6 +10,7 @@
 #' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
 #' @param min.prop minimum proportion of retained samples with non-zero counts
+#' @param min.total.count minimum total count required per gene for inclusion
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
@@ -32,7 +33,7 @@
 #' @importFrom lme4 subbars
 #' @importFrom MatrixGenerics colMeans2
 #'
-processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights = NULL, BPPARAM = SerialParam(), ...) {
+processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, min.total.count = 15, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights = NULL, BPPARAM = SerialParam(), ...) {
   checkFormula(formula, data)
 
   if (is.null(n.cells)) {
@@ -79,7 +80,12 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
   # design: model.matrix( subbars(formula), data)
   # Design often includes batch and donor, which are very small
   #   this causes too many genes to be retained
-  keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
+  keep <- suppressWarnings(
+    filterByExpr(y, 
+      min.count = min.count, 
+      min.prop = min.prop, 
+      min.total.count = min.total.count)
+    )
 
   # sample-level weights based on cell counts and mean library size
   if (!is.null(weights) & !is(weights, "function")) {
