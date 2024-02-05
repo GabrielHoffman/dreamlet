@@ -10,6 +10,7 @@
 #' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
 #' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be retained
+#' @param min.total.count minimum total count required per gene for inclusion
 #' 
 #' @examples
 #' library(muscat)
@@ -41,7 +42,7 @@
 #' res.proc <- processAssays(pb, ~group_id, weightsList = weightsList)
 #
 #' @export
-getExprGeneNames <- function(sceObj, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4,  normalize.method = "TMM"){
+getExprGeneNames <- function(sceObj, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, min.total.count = 15,  normalize.method = "TMM"){
 
   # checks
   stopifnot(is(sceObj, "SingleCellExperiment"))
@@ -74,7 +75,6 @@ getExprGeneNames <- function(sceObj, assays = assayNames(sceObj), min.cells = 5,
 
    # for each assay
   resList <- lapply(assays, function(k) {
-    # if (!quiet) message("  ", k, "...", appendLF = FALSE)
     startTime <- Sys.time()
 
     y <- as.matrix(assay(sceObj, k))
@@ -93,34 +93,39 @@ getExprGeneNames <- function(sceObj, assays = assayNames(sceObj), min.cells = 5,
 
     y = y[, rownames(data), drop = FALSE]
 
-	# samples to include of they have enough observed cells
-	include <- (n.cells >= min.cells)
+  	# samples to include of they have enough observed cells
+  	include <- (n.cells >= min.cells)
 
-	# if no samples are retained
-	if (sum(include) == 0) {
-		return(NULL)
-	}
+  	# if no samples are retained
+  	if (sum(include) == 0) {
+  		return(NULL)
+  	}
 
-	# subset expression and data
-	y <- y[, include, drop = FALSE]
-	data <- droplevels(data[include, , drop = FALSE])
+  	# subset expression and data
+  	y <- y[, include, drop = FALSE]
+  	data <- droplevels(data[include, , drop = FALSE])
 
-	# if there are too few remaining samples
-	if (nrow(data) < min.samples | nrow(y) == 0) {
-		return(NULL)
-	}
+  	# if there are too few remaining samples
+  	if (nrow(data) < min.samples | nrow(y) == 0) {
+  		return(NULL)
+  	}
 
-	# Get count data and normalize
-	y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
-	y <- calcNormFactors(y, method = normalize.method)
+  	# Get count data and normalize
+  	y <- suppressMessages(DGEList(y, remove.zeros = TRUE))
+  	y <- calcNormFactors(y, method = normalize.method)
 
-	# get samples with enough cells
-	# filter genes
-	# design: model.matrix( subbars(formula), data)
-	# Design often includes batch and donor, which are very small
-	#   this causes too many genes to be retained
-	keep <- suppressWarnings(filterByExpr(y, min.count = min.count, min.prop = min.prop))
-	names(keep)[keep]
+  	# get samples with enough cells
+  	# filter genes
+  	# design: model.matrix( subbars(formula), data)
+  	# Design often includes batch and donor, which are very small
+  	#   this causes too many genes to be retained
+  	keep <- suppressWarnings(
+    filterByExpr(y, 
+      min.count = min.count, 
+      min.prop = min.prop, 
+      min.total.count = min.total.count)
+    )
+  	names(keep)[keep]
 	})
 	names(resList) <- assays
 	resList

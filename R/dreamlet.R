@@ -818,7 +818,7 @@ setMethod(
             isCounts <- ifelse(is(geneExpr, "EList"), TRUE, FALSE)
 
             # borrow information across genes with the empirical Bayes step
-            fit <- eBayes(fit, robust = robust, trend = isCounts)
+            fit <- eBayes(fit, robust = robust, trend = !isCounts)
           }
         } else {
           fit <- NULL
