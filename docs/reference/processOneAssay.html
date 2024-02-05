@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +73,7 @@
 <span>  min.count <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  min.samples <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  min.prop <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  min.total.count <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  isCounts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  normalize.method <span class="op">=</span> <span class="st">"TMM"</span>,</span>
 <span>  span <span class="op">=</span> <span class="st">"auto"</span>,</span>
@@ -115,6 +116,10 @@
 
 <dt>min.prop</dt>
 <dd><p>minimum proportion of retained samples with non-zero counts</p></dd>
+
+
+<dt>min.total.count</dt>
+<dd><p>minimum total count required per gene for inclusion</p></dd>
 
 
 <dt>isCounts</dt>

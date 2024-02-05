@@ -321,7 +321,35 @@ voomLmFit2 = function (counts, design = NULL, block = NULL, prior.weights = NULL
 }
 
 
+test_augmentPriorCount = function(){
 
+    library(muscat)
+    library(dreamlet)
+
+    data(example_sce)
+
+    # create pseudobulk for each sample and cell cluster
+    pb <- aggregateToPseudoBulk(example_sce,
+      assay = "counts",
+      sample_id = "sample_id",
+      cluster_id = "cluster_id",
+      verbose = FALSE
+    )
+
+    res.proc1 <- processAssays(pb, ~ group_id, 
+                        assays = assayNames(pb)[1])
+    res.proc2 <- processAssays(pb, ~ group_id, 
+                        # prior.count = .5,
+                        scaledByLib = FALSE,
+                        assays = assayNames(pb)[1])
+
+    checkEquals(max(res.proc1[[1]]$E - res.proc2[[1]]$E) !=0, TRUE)
+
+
+    # d = diag(cor(t(res.proc1[[1]]$E), t(res.proc2[[1]]$E)))
+    # hist(d)
+
+}
 
 
 
