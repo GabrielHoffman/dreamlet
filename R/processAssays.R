@@ -182,16 +182,6 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
     stop("colnames(sceObj) is NULL.  Column names are needed for internal filtering")
   }
 
-  if( ! is.null(weightsList) ){
-    # check that entries in weightsList and sceObj match
-    fnd <- assayNames(sceObj) %in% names(weightsList)
-    if( any(!fnd) ){
-      txt <- paste0(assayNames(sceObj)[!fnd], collapse=", ")
-      txt <- paste("Assays not found in weightsList:", txt)
-      stop(txt)
-    }
-  }
-
   # extract metadata shared across assays
   data_constant <- droplevels(as.data.frame(colData(sceObj)))
 
@@ -200,6 +190,16 @@ processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cell
     idx <- which(!assays %in% assayNames(sceObj))
     txt <- paste("Assays are not found in dataset:", paste(head(assays[idx]), collapse = ", "))
     stop(txt)
+  }
+
+  if( ! is.null(weightsList) ){
+    # check that entries in weightsList and sceObj match
+    fnd <- assays %in% names(weightsList)
+    if( any(!fnd) ){
+      txt <- paste0(assays[!fnd], collapse=", ")
+      txt <- paste("Assays not found in weightsList:", txt)
+      stop(txt)
+    }
   }
 
   # extract cell counts
