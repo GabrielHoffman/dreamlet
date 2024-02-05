@@ -13,6 +13,7 @@ processOneAssay(
   min.count = 5,
   min.samples = 4,
   min.prop = 0.4,
+  min.total.count = 15,
   isCounts = TRUE,
   normalize.method = "TMM",
   span = "auto",
@@ -38,6 +39,8 @@ processOneAssay(
 \item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
 
 \item{min.prop}{minimum proportion of retained samples with non-zero counts}
+
+\item{min.total.count}{minimum total count required per gene for inclusion}
 
 \item{isCounts}{logical, indicating if data is raw counts}
 

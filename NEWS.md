@@ -1,9 +1,13 @@
+# dreamlet 1.1.15
+  - Feb 5, 2024
+  - Fix bug in call to `eBayes()`
+   - in `processAssays` pass argument `scaledByLib` to `voomWithDreamWeights()`
+
 # dreamlet 1.1.14
   - Jan 29, 2024
   - fix bug in `pbWeights()`
    - smaller pseudo variance
    - limit to only expressed genes by adding `getExprGeneNames()`
-
 
 # dreamlet 1.1.13
   - Jan 25, 2024

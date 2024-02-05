@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -202,12 +202,12 @@
 <span class="r-in"><span><span class="co"># B cells compared to CD14+ Monocytes</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -4.560687 14.265238 -24.98777 4.311941e-11 1.416594e-08 16.09610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -4.843660  9.865835 -24.90237 4.475812e-11 1.416594e-08 15.87635</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -4.573420  9.940151 -21.79050 1.909811e-10 4.024585e-08 14.54221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.705792 10.353350 -21.22203 2.543181e-10 4.024585e-08 14.28468</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CD63    -3.907220 10.329429 -19.98070 4.880222e-10 6.178361e-08 13.67052</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.689373 10.090468 -19.31899 7.018450e-10 7.404464e-08 13.31050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -4.559570 14.265849 -24.93241 4.100814e-11 1.394120e-08 16.14202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -4.815545  9.879829 -24.76997 4.404803e-11 1.394120e-08 15.89842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -4.551858  9.950588 -21.69418 1.871963e-10 3.822981e-08 14.56393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.687559 10.362616 -21.19151 2.415786e-10 3.822981e-08 14.33464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CD63    -3.892389 10.337664 -20.05814 4.388171e-10 5.555424e-08 13.77198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA5   -3.674191 10.097965 -19.29905 6.665193e-10 7.031778e-08 13.35939</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="dreamletCompareClusters-1.png" alt="" width="700" height="433"></span>
@@ -224,12 +224,12 @@
 <span class="r-in"><span><span class="co"># B cells compared to all others</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             logFC   AveExpr         t      P.Value    adj.P.Val        B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -3.601454 13.871856 -33.68302 6.651191e-16 5.912908e-13 26.86363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTH1    -2.466485 15.497375 -28.79394 7.268519e-15 3.230857e-12 24.27509</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA1   -5.911526  8.704712 -27.18566 1.740734e-14 5.158374e-12 23.12833</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.222291 10.167875 -21.38830 6.504775e-13 1.363366e-10 19.95533</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -3.948549  9.471019 -21.15493 7.667974e-13 1.363366e-10 19.74531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -3.788500  9.596225 -19.98224 1.799961e-12 2.666942e-10 18.93504</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL     -3.600925 13.872811 -33.28366 1.901955e-15 1.690838e-12 25.84574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTH1    -2.466503 15.497594 -28.32886 2.047580e-14 8.003456e-12 23.27441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ANXA1   -5.766836  8.777334 -27.80028 2.700829e-14 8.003456e-12 22.77952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS3  -3.906317  9.492690 -21.89782 8.854358e-13 1.820012e-10 19.63566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A11 -4.195517 10.182616 -21.68039 1.023629e-12 1.820012e-10 19.53932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A10 -3.753134  9.613494 -20.50358 2.299888e-12 3.407668e-10 18.72582</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get genes upregulated in B cells</span></span></span>
 <span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
@@ -252,19 +252,19 @@
 <span class="r-in"><span><span class="co"># monocytes compared to T cells</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            logFC   AveExpr        t      P.Value    adj.P.Val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     5.196738 13.603471 53.03954 1.172457e-12 1.016520e-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   6.221167 11.073375 40.80452 1.265011e-11 5.483821e-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 5.689099  9.648551 32.23927 1.066297e-10 3.081599e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  4.528422  9.242275 27.91441 3.910702e-10 7.095938e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    3.958485  9.337343 27.23310 4.885544e-10 7.095938e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS1                  4.557700  9.284277 27.21758 4.910684e-10 7.095938e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     5.195892 13.603905 53.09308 1.337149e-12 1.159308e-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   6.214741 11.076844 41.00811 1.371256e-11 5.944395e-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 5.674527  9.655697 32.33465 1.161417e-10 3.356496e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  4.514156  9.249845 28.04576 4.159764e-10 7.937568e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    3.948238  9.342828 27.30755 5.281552e-10 7.937568e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS1                  4.544995  9.290447 27.18795 5.493127e-10 7.937568e-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     19.73979</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   17.27835</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 15.13786</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  14.00652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    13.80553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS1                  13.76694</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FTL                     19.61451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TIMP1                   17.20190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HLA-DRA_ENSG00000204287 15.06115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> S100A4                  13.95058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PSAP                    13.73411</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LGALS1                  13.66478</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get genes upregulated in monocytes</span></span></span>
 <span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>

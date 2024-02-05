@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,7 +117,7 @@
 <span class="r-in"><span><span class="co"># just 'CD14+ Monocytes' for speed</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span>, assays <span class="op">=</span> <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.37 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.38 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># dreamlet</span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
@@ -143,9 +143,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   ID, assay [3]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ID     assay           estimate std.error statistic  p.value n.studies method</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ABRACL CD14+ Monocytes    0.626     0.244      2.57 1.03<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span>         2 FE    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ACOT9  CD14+ Monocytes    2.64      0.203     13.0  1.25<span style="color: #949494;">e</span><span style="color: #BB0000;">-38</span>         2 FE    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ACP5   CD14+ Monocytes   -<span style="color: #BB0000;">0.222</span>     0.139     -<span style="color: #BB0000;">1.60</span> 1.11<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>         2 FE    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ABRACL CD14+ Monocytes    0.631     0.236      2.68 7.35<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>         2 FE    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ACOT9  CD14+ Monocytes    2.65      0.199     13.3  2.17<span style="color: #949494;">e</span><span style="color: #BB0000;">-40</span>         2 FE    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ACP5   CD14+ Monocytes   -<span style="color: #BB0000;">0.220</span>     0.140     -<span style="color: #BB0000;">1.57</span> 1.17<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>         2 FE    </span>
 <span class="r-in"><span><span class="co">#</span></span></span>
 </code></pre></div>
     </div>

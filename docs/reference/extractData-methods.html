@@ -12,7 +12,7 @@ Extract normalized (i.e. log2 CPM) expression and colData from dreamletProcessed
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,13 +123,13 @@ Extract normalized (i.e. log2 CPM) expression and colData from dreamletProcessed
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.22 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.41 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.36 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.3 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.26 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.14 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.16 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.35 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.36 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract all:</span></span></span>
 <span class="r-in"><span><span class="co"># Extract tibble of colData merged with expression.</span></span></span>
@@ -141,10 +141,10 @@ Extract normalized (i.e. log2 CPM) expression and colData from dreamletProcessed
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Row.names group_id ISG15 AURKAIP1 MRPL20 SSU72</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;I&lt;chr&gt;&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ctrl101   ctrl      7.04     7.81   7.04  8.16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ctrl107   ctrl      7.25     8.32   7.25  8.53</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> stim101   stim     13.4      8.29   7.59  7.95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> stim107   stim     13.2      7.78   6.82  8.42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ctrl101   ctrl      7.02     7.80   7.02  8.16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ctrl107   ctrl      7.29     8.35   7.29  8.55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> stim101   stim     13.4      8.28   7.58  7.94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> stim107   stim     13.2      7.79   6.85  8.43</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract subset:</span></span></span>
 <span class="r-in"><span><span class="va">df_merge</span> <span class="op">&lt;-</span> <span class="fu">extractData</span><span class="op">(</span><span class="va">res.proc</span>, <span class="st">"B cells"</span>, cols <span class="op">=</span> <span class="st">"group_id"</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SSU72"</span>, <span class="st">"U2AF1"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -153,10 +153,10 @@ Extract normalized (i.e. log2 CPM) expression and colData from dreamletProcessed
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Row.names group_id SSU72 U2AF1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;I&lt;chr&gt;&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ctrl101   ctrl      8.16  9.20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ctrl107   ctrl      8.53  9.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> stim101   stim      7.95  9.02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> stim107   stim      8.42  9.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ctrl101   ctrl      8.16  9.19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ctrl107   ctrl      8.55  9.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> stim101   stim      7.94  9.02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> stim107   stim      8.43  9.08</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Boxplot of expression</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">SSU72</span> <span class="op">~</span> <span class="va">group_id</span>, <span class="va">df_merge</span><span class="op">)</span></span></span>
