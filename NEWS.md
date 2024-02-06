@@ -1,7 +1,7 @@
 # dreamlet 1.1.15
   - Feb 5, 2024
   - Fix bug in call to `eBayes()`
-   - in `processAssays` pass argument `scaledByLib` to `voomWithDreamWeights()`
+   - in `processAssays()` pass argument `scaledByLib` to `voomWithDreamWeights()`
 
 # dreamlet 1.1.14
   - Jan 29, 2024
