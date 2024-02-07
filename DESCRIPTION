@@ -40,7 +40,7 @@ biocViews:
     Software
 Depends:
     R (>= 4.3.0),
-    variancePartition (>= 1.33.10),
+    variancePartition (>= 1.33.11),
     SingleCellExperiment,
     ggplot2
 Imports:
