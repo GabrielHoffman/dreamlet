@@ -40,10 +40,7 @@ getVarFromCounts <- function(countMatrix, lib.size, prior.count = .25) {
   )
 
   # compute variance for each row
-  # sigSq.mle <- rowVars(normCounts, useNames=FALSE)
-
-  # weighted variance
-  sigSq.mle <- rowWeightedVarsMatrix(normCounts, countMatrix)
+  sigSq.mle <- rowVars(normCounts, useNames=FALSE)
   sigSq.mle[is.na(sigSq.mle)] <- 0
 
   # return values to compute variance later
@@ -242,7 +239,7 @@ get_offset <- function(x, target_ratio) {
 #'   sample_id = "sample_id",
 #'   cluster_id = "cluster_id",
 #'   verbose = FALSE
-#' )
+#' ) 
 #'
 #' # Gene expressed genes for each cell type
 #' geneList = getExprGeneNames(pb)

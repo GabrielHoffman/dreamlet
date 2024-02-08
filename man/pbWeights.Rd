@@ -55,7 +55,7 @@ pb <- aggregateToPseudoBulk(example_sce,
   sample_id = "sample_id",
   cluster_id = "cluster_id",
   verbose = FALSE
-)
+) 
 
 # Gene expressed genes for each cell type
 geneList = getExprGeneNames(pb)

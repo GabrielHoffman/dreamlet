@@ -1,3 +1,7 @@
+# dreamlet 1.1.16
+  - Feb 8, 2024
+  - fix bug in `pbWeights()`
+
 # dreamlet 1.1.15
   - Feb 5, 2024
   - Fix bug in call to `eBayes()`
