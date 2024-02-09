@@ -85,7 +85,7 @@ outlier <- function(data, robust = FALSE, ...) {
 #' res.proc <- processAssays(pb, ~group_id)
 #' 
 #' # Compute PCs and outlier scores
-#' outlierByAssay( res.proc, c("B cells", "CD14+ Monocytes"))
+#' outlierByAssay( res.proc, c("B cells", "CD14+ Monocytes")) 
 #
 #' @importFrom irlba prcomp_irlba
 #' @seealso \code{outlier()}
@@ -109,13 +109,15 @@ outlierByAssay = function(object, assays = assayNames(object), nPC=2, robust = F
     # outlier analysis on first 2 PCs
     # there are already scaled by the variance
     U = dcmp$x[,seq(nPC),drop=FALSE]
-    
+    # d = dcmp$sdev[seq(nPC)]
+
     # evalute outliers on scaled PCs 
     df_outlier <- outlier(U, robust = robust, ...)
    
     data.frame(ID = colnames(Y), 
-      assay = id, 
-      U %*% diag(1/d), # return scaled PCs
+      assay = id,
+      # return scaled PCs, same as U %*% diag(1/d) 
+      scale(U), 
       df_outlier) %>%
       as_tibble 
   })
