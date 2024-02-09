@@ -50,7 +50,8 @@ setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object,
 
   outlierByAssay( object, assays, robust = robust, ...) %>%
     arrange(assay, z) %>%
-    ggplot(aes(PC1, PC2, color = pmin(z, maxOutlierZ))) +
+    ggplot(aes(PC1, PC2, 
+      color = pmin(z, maxOutlierZ))) +
       geom_point(size=size) +
       theme_classic() +
       theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) +
