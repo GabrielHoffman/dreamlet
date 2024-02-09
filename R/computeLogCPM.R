@@ -38,6 +38,7 @@ computeNormCounts <- function(sce) {
 #' @param sce \code{SingleCellExperiment} with counts stored as \code{counts(sce)}
 #' @param lib.size library size for each cell
 #' @param prior.count average count to be added to each observation to avoid taking log of zero
+#' @param scaledByLib if \code{TRUE}, scale pseudocount by \code{lib.size}.  Else do standard constant pseudocount addition
 #'
 #' @details This function gives same result as \code{edgeR::cpm(counts(sce), log=TRUE)}
 #'
@@ -55,12 +56,13 @@ computeNormCounts <- function(sce) {
 #' @importFrom SingleCellExperiment counts
 #' @importFrom variancePartition augmentPriorCount
 #' @export
-computeLogCPM <- function(sce, lib.size = colSums2(counts(sce)), prior.count = 2) {
+computeLogCPM <- function(sce, lib.size = colSums2(counts(sce)), prior.count = 2, scaledByLib=FALSE) {
   stopifnot(length(lib.size) == ncol(sce))
 
   countMatrix <- augmentPriorCount(counts(sce),
     lib.size = lib.size,
-    prior.count = prior.count
+    prior.count = prior.count,
+    scaledByLib = scaledByLib
   )
 
   # if countMatrix is dgeMatrix or sparseMatrix

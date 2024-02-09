@@ -23,7 +23,7 @@ test_computeLogCPM = function(){
 	dge = calcNormFactors(dge, "none")
 
 	prior.count = 1
-	value = max(abs(cpm(dge, log=TRUE, prior.count=prior.count) - computeLogCPM(example_sce, prior.count=prior.count) ))
+	value = max(abs(cpm(dge, log=TRUE, prior.count=prior.count) - computeLogCPM(example_sce, prior.count=prior.count, scaledByLib=TRUE) ))
 
 	checkEqualsNumeric(value, 0, tol=1e-2)
 }

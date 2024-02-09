@@ -340,15 +340,13 @@ test_augmentPriorCount = function(){
                         assays = assayNames(pb)[1])
     res.proc2 <- processAssays(pb, ~ group_id, 
                         # prior.count = .5,
-                        scaledByLib = FALSE,
+                        scaledByLib = TRUE,
                         assays = assayNames(pb)[1])
 
     checkEquals(max(res.proc1[[1]]$E - res.proc2[[1]]$E) !=0, TRUE)
 
-
     # d = diag(cor(t(res.proc1[[1]]$E), t(res.proc2[[1]]$E)))
     # hist(d)
-
 }
 
 
