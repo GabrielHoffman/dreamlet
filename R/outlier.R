@@ -107,15 +107,15 @@ outlierByAssay = function(object, assays = assayNames(object), nPC=2, robust = F
     }
 
     # outlier analysis on first 2 PCs
+    # there are already scaled by the variance
     U = dcmp$x[,seq(nPC),drop=FALSE]
-    d = dcmp$sdev[seq(nPC)]
     
     # evalute outliers on scaled PCs 
-    df_outlier <- outlier(U %*% diag(d), robust = robust, ...)
+    df_outlier <- outlier(U, robust = robust, ...)
    
     data.frame(ID = colnames(Y), 
       assay = id, 
-      U, 
+      U %*% diag(1/d), # return scaled PCs
       df_outlier) %>%
       as_tibble 
   })
