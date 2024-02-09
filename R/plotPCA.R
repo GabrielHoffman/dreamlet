@@ -49,9 +49,11 @@ setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object,
   PC1 <- PC2 <- z <- NULL
 
   outlierByAssay( object, assays, robust = robust, ...) %>%
-    arrange(assay, z) %>%
+    tibble(FDR = p.adjust(pValue, "fdr")) %>%
+    arrange(FDR) %>%
     ggplot(aes(PC1, PC2, 
-      color = pmin(z, maxOutlierZ))) +
+      color = pmin(z, maxOutlierZ),
+      shape = FDR < 0.05)) +
       geom_point(size=size) +
       theme_classic() +
       theme(aspect.ratio=1, plot.title = element_text(hjust = 0.5)) +

@@ -33,7 +33,7 @@ outlierByAssay(
 }
 }
 \description{
-Compute outlier score for each sample in each assay using \code{outlier()}
+Compute outlier score for each sample in each assay using \code{outlier()} run on the top principal components.  Mahalanobis distance is used for outlier detect and multivariate normal assumption is used to compute p-values
 }
 \examples{
 library(muscat)

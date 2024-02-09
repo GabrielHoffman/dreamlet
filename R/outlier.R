@@ -50,7 +50,7 @@ outlier <- function(data, robust = FALSE, ...) {
  
 #' Outlier analysis for each assay
 #' 
-#' Compute outlier score for each sample in each assay using \code{outlier()}
+#' Compute outlier score for each sample in each assay using \code{outlier()} run on the top principal components.  Mahalanobis distance is used for outlier detect and multivariate normal assumption is used to compute p-values
 #' 
 #' @param object \code{dreamletProcessedData} from \code{processAssays()}
 #' @param assays assays / cell types to analyze
