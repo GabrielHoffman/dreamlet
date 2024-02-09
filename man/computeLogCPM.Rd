@@ -4,7 +4,12 @@
 \alias{computeLogCPM}
 \title{Compute log normalized counts}
 \usage{
-computeLogCPM(sce, lib.size = colSums2(counts(sce)), prior.count = 2)
+computeLogCPM(
+  sce,
+  lib.size = colSums2(counts(sce)),
+  prior.count = 2,
+  scaledByLib = FALSE
+)
 }
 \arguments{
 \item{sce}{\code{SingleCellExperiment} with counts stored as \code{counts(sce)}}
@@ -12,6 +17,8 @@ computeLogCPM(sce, lib.size = colSums2(counts(sce)), prior.count = 2)
 \item{lib.size}{library size for each cell}
 
 \item{prior.count}{average count to be added to each observation to avoid taking log of zero}
+
+\item{scaledByLib}{if \code{TRUE}, scale pseudocount by \code{lib.size}.  Else do standard constant pseudocount addition}
 }
 \value{
 matrix of log CPM values
