@@ -17,6 +17,13 @@ Major functionality of `dreamlet` package using the [Bioconductor](https://www.b
 + [`dreamlet()`](reference/dreamlet.html)                                           Differential expression analysis across <u>samples</u>
 + [`dreamletCompareClusters()`](reference/dreamletCompareClusters.html)  Differential expression analysis across <u>cell clusters</u>
 + [`zenith_gsa()`](reference/zenith_gsa-methods.html)                                      Gene set analysis with <u>full spectrum</u> of test statistics
++ [`compositePosteriorTest()`](reference/compositePosteriorTest.html)     Test cell type specifity of effects with Bayesian meta-analysis
++ [`meta_analysis()`](reference/meta_analysis.html)                              Frequentist meta-analysis across cohorts
++ [`outlierByAssay()`](reference/outlierByAssay.html)                           Outlier detection based on gene expression
+
+
+
+
 
 ## Resources
  + [Preprint](https://doi.org/10.1101/2023.03.17.533005) on biorxiv
@@ -40,7 +47,7 @@ Dreamlet builds on previous work on variance partitioning and differential expre
 </div>
 
 ## Install
-`dreamlet >= 0.99.12` is compatible with `BioC v3.17` for `R v4.3`.
+`dreamlet >= 1.0.0` is compatible with `BioC v3.18` for `R v4.3`.
 
 ```r
 # 1) Make sure Bioconductor is installed
