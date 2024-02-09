@@ -53,7 +53,7 @@ pb <- aggregateToPseudoBulk(example_sce,
 res.proc <- processAssays(pb, ~group_id)
 
 # Compute PCs and outlier scores
-outlierByAssay( res.proc, c("B cells", "CD14+ Monocytes"))
+outlierByAssay( res.proc, c("B cells", "CD14+ Monocytes")) 
 }
 \seealso{
 \code{outlier()}
