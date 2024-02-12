@@ -46,7 +46,7 @@ setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object,
 
   stopifnot(all(assays %in% assayNames(object)))
 
-  PC1 <- PC2 <- z <- NULL
+  PC1 <- PC2 <- z <- pValue <- FDR <- NULL
 
   outlierByAssay( object, assays, robust = robust, ...) %>%
     tibble(FDR = p.adjust(pValue, "fdr")) %>%

@@ -11,6 +11,7 @@
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
 #' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be retained
 #' @param min.total.count minimum total count required per gene for inclusion
+#' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' 
 #' @examples
 #' library(muscat)
@@ -42,7 +43,7 @@
 #' res.proc <- processAssays(pb, ~group_id, weightsList = weightsList)
 #
 #' @export
-getExprGeneNames <- function(sceObj, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, min.total.count = 15,  normalize.method = "TMM"){
+getExprGeneNames <- function(sceObj, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, min.total.count = 15, normalize.method = "TMM"){
 
   # checks
   stopifnot(is(sceObj, "SingleCellExperiment"))

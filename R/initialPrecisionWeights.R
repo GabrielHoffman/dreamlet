@@ -122,7 +122,7 @@ getVarForCellType <- function(sce, sample_id, cluster_id, geneList, CT, prior.co
 #' @importFrom Matrix sparseMatrix
 #' @importFrom dplyr mutate
 getVarList <- function(sce, sample_id, cluster_id, geneList = NULL, shrink = TRUE, prior.count = 0.5, details = FALSE, verbose = TRUE) {
-  Gene <- ID <- count.gene <- ncell <- zeta <- sigSq.mle <- vif <- NULL
+  Gene <- ID <- count.gene <- ncell <- zeta <- sigSq.mle <- sigSq.hat <- vif <- NULL
 
   if (!sample_id %in% colnames(colData(sce))) {
     msg <- paste0("sample_id entry not found in colData(sce): ", sample_id)
