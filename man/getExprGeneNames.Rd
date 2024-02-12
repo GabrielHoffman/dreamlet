@@ -29,6 +29,8 @@ getExprGeneNames(
 \item{min.prop}{minimum proportion of retained samples with non-zero counts for a gene to be retained}
 
 \item{min.total.count}{minimum total count required per gene for inclusion}
+
+\item{normalize.method}{normalization method to be used by \code{calcNormFactors}}
 }
 \description{
 Get list of expressed genes for each assay using same filters as \code{processAssays()}.
