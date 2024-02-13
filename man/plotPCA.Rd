@@ -13,7 +13,8 @@
   ...,
   maxOutlierZ = 20,
   nrow = 2,
-  size = 2
+  size = 2,
+  fdr.cutoff = 0.05
 )
 }
 \arguments{
@@ -32,6 +33,8 @@
 \item{nrow}{number of rows in plot}
 
 \item{size}{size passed to \code{geom_point()}}
+
+\item{fdr.cutoff}{FDR cutoff to determine outlier}
 }
 \description{
 Compute PCA of gene expression for an assay, and plot samples coloring by outlier score
