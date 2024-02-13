@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.17</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,13 +67,14 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for dreamletProcessedData</span></span>
 <span><span class="fu">plotPCA</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
-<span>  assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  assays <span class="op">=</span> <span class="fu">assayNames</span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
 <span>  nPC <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  robust <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  maxOutlierZ <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  nrow <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  size <span class="op">=</span> <span class="fl">2</span></span>
+<span>  size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  fdr.cutoff <span class="op">=</span> <span class="fl">0.05</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -110,6 +111,10 @@
 <dt>size</dt>
 <dd><p>size passed to <code>geom_point()</code></p></dd>
 
+
+<dt>fdr.cutoff</dt>
+<dd><p>FDR cutoff to determine outlier</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -136,13 +141,13 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.24 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.39 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.38 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.27 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.25 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.15 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.13 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.36 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.3 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># PCA to identify outliers</span></span></span>
 <span class="r-in"><span><span class="fu">plotPCA</span><span class="op">(</span> <span class="va">res.proc</span>, <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
