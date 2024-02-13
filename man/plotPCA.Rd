@@ -2,12 +2,12 @@
 % Please edit documentation in R/plotPCA.R
 \name{plotPCA}
 \alias{plotPCA}
-\alias{plotPCA,dreamletProcessedData-method}
+\alias{plotPCA,list-method}
 \title{Plot PCA of gene expression for an assay}
 \usage{
-\S4method{plotPCA}{dreamletProcessedData}(
+\S4method{plotPCA}{list}(
   object,
-  assays = assayNames(object),
+  assays = names(object),
   nPC = 2,
   robust = FALSE,
   ...,
@@ -18,7 +18,7 @@
 )
 }
 \arguments{
-\item{object}{\code{dreamletProcessedData} from \code{processAssays()}}
+\item{object}{\code{dreamletProcessedData} from \code{processAssays()} or a \code{list} from \code{residuals()}}
 
 \item{assays}{assays / cell types to analyze}
 
@@ -57,7 +57,20 @@ pb <- aggregateToPseudoBulk(example_sce,
 res.proc <- processAssays(pb, ~group_id)
 
 # PCA to identify outliers
-plotPCA( res.proc, "CD14+ Monocytes")
+# from normalized expression
+plotPCA( res.proc, c("B cells", "CD14+ Monocytes"))
+
+# Run on regression residuals
+#-----------------------------
+
+# Regression analysis
+fit = dreamlet(res.proc, ~ group_id)
+
+# Extract regression residuals
+residsObj = residuals(fit)
+
+# PCA on residuals
+plotPCA( residsObj, c("B cells", "CD14+ Monocytes"))
 }
 \seealso{
 \code{outlierByAssay()}

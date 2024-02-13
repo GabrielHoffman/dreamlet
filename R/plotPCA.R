@@ -8,7 +8,7 @@ setGeneric("plotPCA", BiocGenerics::plotPCA)
 #' 
 #' Compute PCA of gene expression for an assay, and plot samples coloring by outlier score
 #' 
-#' @param object \code{dreamletProcessedData} from \code{processAssays()}
+#' @param object \code{dreamletProcessedData} from \code{processAssays()} or a \code{list} from \code{residuals()}
 #' @param assays assays / cell types to analyze
 #' @param nPC number of PCs to uses for outlier score with \code{outlier()}
 #' @param robust use robust covariance method, defaults to \code{FALSE}
@@ -20,7 +20,7 @@ setGeneric("plotPCA", BiocGenerics::plotPCA)
 #' 
 #' @name plotPCA
 #' @rdname plotPCA
-#' @aliases plotPCA plotPCA,dreamletProcessedData-method
+#' @aliases plotPCA plotPCA,list-method
 #' @examples
 #' library(muscat)
 #' library(SingleCellExperiment)
@@ -39,13 +39,26 @@ setGeneric("plotPCA", BiocGenerics::plotPCA)
 #' res.proc <- processAssays(pb, ~group_id)
 #' 
 #' # PCA to identify outliers
-#' plotPCA( res.proc, "CD14+ Monocytes")
+#' # from normalized expression
+#' plotPCA( res.proc, c("B cells", "CD14+ Monocytes"))
+#'
+#' # Run on regression residuals
+#' #-----------------------------
+#'
+#' # Regression analysis
+#' fit = dreamlet(res.proc, ~ group_id)
+#' 
+#' # Extract regression residuals
+#' residsObj = residuals(fit)
+#' 
+#' # PCA on residuals
+#' plotPCA( residsObj, c("B cells", "CD14+ Monocytes"))
 #
 #' @seealso \code{outlierByAssay()}
 #' @export
-setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object, assays = assayNames(object), nPC=2, robust = FALSE, ..., maxOutlierZ=20, nrow=2, size=2, fdr.cutoff=0.05){
+setMethod("plotPCA", signature(object="list"), function(object, assays = names(object), nPC=2, robust = FALSE, ..., maxOutlierZ=20, nrow=2, size=2, fdr.cutoff=0.05){
 
-  stopifnot(all(assays %in% assayNames(object)))
+  stopifnot(all(assays %in% names(object)))
 
   PC1 <- PC2 <- z <- pValue <- FDR <- NULL
 
@@ -62,5 +75,12 @@ setMethod("plotPCA", signature(object="dreamletProcessedData"), function(object,
       scale_shape_discrete(bquote(FDR < .(fdr.cutoff))) +
       facet_wrap( ~ assay, nrow=nrow, scales="free")
 })
+
+
+
+
+
+
+
 
 

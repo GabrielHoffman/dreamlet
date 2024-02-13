@@ -92,11 +92,16 @@ outlier <- function(data, robust = FALSE, ...) {
 #' @export
 outlierByAssay = function(object, assays = assayNames(object), nPC=2, robust = FALSE, ...){
 
-  stopifnot(is(object, "dreamletProcessedData"))
+  stopifnot(is(object, "list"))
 
    df = lapply(assays, function(id){
     # get normalized expression
-    Y <- assay(object, id)$E
+    # Y <- assay(object, id)$E
+    if( is(object[[id]], "EList") ){
+      Y <- object[[id]]$E
+    }else{
+      Y <- object[[id]]
+    }
 
     # PCA
     # dcmp <- prcomp(scale(t(Y)))
