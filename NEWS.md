@@ -1,6 +1,8 @@
 
 # dreamlet 1.1.17
-  - bug fix in `plotPCA()`
+  - new functionality in `plotPCA()` and `outlierByAssay()` 
+   - works on any `list`, not just `dreamletProcessedData`
+   - allows outlier analysis on residuals
 
 # dreamlet 1.1.16
   - Feb 8, 2024
