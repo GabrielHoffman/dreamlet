@@ -62,16 +62,20 @@
 compositePosteriorTest <- function(x, include, exclude = NULL, test = c("at least 1", "all")) {
   test <- match.arg(test)
 
-  stopifnot(is(x, "dreamlet_mash_result"))
-
-  # get probability from lFSR
-  prob <- 1 - get_lfsr(x$model)
+  if( is(x, "dreamlet_mash_result") ){
+    # get probability from lFSR
+    prob <- 1 - get_lfsr(x$model)
+  }else if(is(x, "data.frame") | is(x, "matrix")){
+    prob = x
+  }else{
+    stop("data type of x not recognized")
+  }
 
   .compositePosteriorTest(prob, include, exclude, test)
 }
 
 # Given matrix of posterior probabilities with genes on rows and columns as conditions, compute composite probability from include vs exclude set.
-.compositePosteriorTest <- function(prob, include, exclude, test = c("at least 1", "all")) {
+.compositePosteriorTest <- function(prob, include, exclude=NULL, test = c("at least 1", "all")) {
   test <- match.arg(test)
 
   # if probability is NA, set it to zero
@@ -89,7 +93,7 @@ compositePosteriorTest <- function(x, include, exclude = NULL, test = c("at leas
   } else if (test == "all") {
     # for each gene
     # probability that *ALL* cell types have a non-zero effect
-    prob_incl <- apply(prob[, include], 1, prod, na.rm = TRUE)
+    prob_incl <- apply(prob[, include, drop = FALSE], 1, prod, na.rm = TRUE)
   }
 
   prob_incl * prob_excl

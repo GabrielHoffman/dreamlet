@@ -1,4 +1,7 @@
 
+# dreamlet 1.1.19
+  - bug fix in `compositePosteriorTest()`
+
 # dreamlet 1.1.18
   - bug fix
 
