@@ -778,7 +778,10 @@ setMethod(
       errorArray <- NULL
 
       # drop any constant terms from the formula
-      if (length(all.vars(form_mod)) > 0 & isFullRank(form_mod, data2)) {
+      # if there is at least one variable or an intercept
+      tst1 = (length(all.vars(form_mod)) > 0) | 
+                isTRUE(all.equal(form_mod, ~1))      
+      if (tst1 & isFullRank(form_mod, data2)) {
         # get contrasts customized for the formula for this cell type
         if (!is.null(contrasts)) {
           L <- makeContrastsDream(form_mod, data2, contrasts = contrasts, nullOnError = TRUE)

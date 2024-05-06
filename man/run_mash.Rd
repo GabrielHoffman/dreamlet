@@ -9,7 +9,7 @@ run_mash(fit, coefList)
 \arguments{
 \item{fit}{result from \code{dreamlet()}}
 
-\item{coefList}{coefficient to be analyzed}
+\item{coefList}{coefficient to be analyzed. Assumes 1) the null distribution of the two coefficients is simular, 2) the effects sizes are on the same scale, and 3) the effect estimates should be shrunk towards each other.  If these are not satisfied, run separately on each coefficient}
 }
 \value{
 a list storing the \code{mashr} model as \code{model} and the original coefficients as \code{logFC.original}

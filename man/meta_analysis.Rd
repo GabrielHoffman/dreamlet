@@ -66,5 +66,4 @@ tab_combined <- rbind(tab1, tab2)
 res <- meta_analysis(tab_combined, method = "FE")
 
 res[1:3, ]
-#
 }

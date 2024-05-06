@@ -85,3 +85,6 @@ res.proc <- processAssays(pb, ~group_id)
 res.dl <- dreamlet(res.proc, ~group_id)
 #
 }
+\seealso{
+\code{voomWithDreamWeights()}
+}

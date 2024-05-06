@@ -53,7 +53,6 @@
 #' res <- meta_analysis(tab_combined, method = "FE")
 #'
 #' res[1:3, ]
-#' #
 #' @importFrom broom tidy
 #' @importFrom metafor rma
 #' @importFrom remaCor RE2C
