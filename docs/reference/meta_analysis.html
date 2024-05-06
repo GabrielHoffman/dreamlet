@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.20</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,12 +117,12 @@
 <span class="r-in"><span><span class="co"># just 'CD14+ Monocytes' for speed</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span>, assays <span class="op">=</span> <span class="st">"CD14+ Monocytes"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.38 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.42 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># dreamlet</span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.24 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.26 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tab1</span> <span class="op">&lt;-</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"group_idstim"</span>, number <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tab1</span><span class="op">$</span><span class="va">Dataset</span> <span class="op">&lt;-</span> <span class="st">"1"</span></span></span>
@@ -146,7 +146,6 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ABRACL CD14+ Monocytes    0.631     0.236      2.68 7.35<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>         2 FE    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ACOT9  CD14+ Monocytes    2.65      0.199     13.3  2.17<span style="color: #949494;">e</span><span style="color: #BB0000;">-40</span>         2 FE    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ACP5   CD14+ Monocytes   -<span style="color: #BB0000;">0.220</span>     0.140     -<span style="color: #BB0000;">1.57</span> 1.17<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>         2 FE    </span>
-<span class="r-in"><span><span class="co">#</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

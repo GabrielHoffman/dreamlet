@@ -1,4 +1,11 @@
 
+# dreamlet 1.1.21
+  - fix issue in  `run_mash()` with multiple coefficients
+     - from https://github.com/GabrielHoffman/dreamlet/issues/18
+
+# dreamlet 1.1.20
+  - in `dreamlet()` allow formula to include only intercept
+
 # dreamlet 1.1.19
   - bug fix in `compositePosteriorTest()`
 

@@ -66,7 +66,7 @@ tabToMatrix <- function(tab, col, rn = "ID", cn = "assay") {
 #' Run mash analysis on dreamlet results
 #'
 #' @param fit result from \code{dreamlet()}
-#' @param coefList coefficient to be analyzed
+#' @param coefList coefficient to be analyzed. Assumes 1) the null distribution of the two coefficients is simular, 2) the effects sizes are on the same scale, and 3) the effect estimates should be shrunk towards each other.  If these are not satisfied, run separately on each coefficient
 #'
 #' @details
 #' Apply \href{https://cran.r-project.org/web/packages/mashr/index.html}{mashr} analysis \insertCite{urbut2019flexible}{dreamlet} on the joint set of coefficients for each gene and cell type.  \code{mashr} is a Bayesian statistical method that borrows strength across tests (i.e. genes and cell types) by learning the distribution of non-zero effects based the obesrved logFC and standard errors.  The method then estimates the posterior distributions of each coefficient based on the observed value and the genome-wide emprical distribution.
@@ -164,7 +164,7 @@ run_mash <- function(fit, coefList) {
     stop("fit must be of class dreamletResult")
   }
 
-  if (!coefList %in% coefNames(fit)) {
+  if (!all(coefList %in% coefNames(fit))) {
     stop("coef not found in coefNames(fit): ", coefList)
   }
 
@@ -178,7 +178,8 @@ run_mash <- function(fit, coefList) {
 
   if (length(coefList) > 1) {
     tab$assay <- paste(tab$assay, tab$coef, sep = ".")
-    lvls <- c(vapply(assayNames(fit), function(x) paste(x, coefList, sep = "."), character(0)))
+    nlvls = length(coefList)
+    lvls <- c(vapply(assayNames(fit), function(x) paste(x, coefList, sep = "."), character(nlvls)))
   } else {
     lvls <- assayNames(fit)
   }

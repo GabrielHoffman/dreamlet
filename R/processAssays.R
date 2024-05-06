@@ -176,7 +176,7 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @importFrom BiocParallel SerialParam
 #' @importFrom S4Vectors metadata as.data.frame
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assay
-#
+#' @seealso \code{voomWithDreamWeights()}
 #' @export
 processAssays <- function(sceObj, formula, assays = assayNames(sceObj), min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = FALSE, weightsList = NULL, BPPARAM = SerialParam(), ...) {
   # checks

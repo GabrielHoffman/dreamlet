@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dreamlet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.21</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">processAssays</span><span class="op">(</span></span>
 <span>  <span class="va">sceObj</span>,</span>
 <span>  <span class="va">formula</span>,</span>
-<span>  assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">sceObj</span><span class="op">)</span>,</span>
+<span>  assays <span class="op">=</span> <span class="fu">assayNames</span><span class="op">(</span><span class="va">sceObj</span><span class="op">)</span>,</span>
 <span>  min.cells <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  min.count <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  min.samples <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -152,6 +152,10 @@
 <p>The precision weights are estimated using the residuals fit from the specified formula.  These weights are robust to changes in the formula as long as the major variables explaining the highest fraction of the variance are included.</p>
 <p>If <code>weightsList</code> is <code>NULL</code>, precision weights are set to 1 internally.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code>voomWithDreamWeights()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -171,11 +175,11 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu">processAssays</span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.21 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.27 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.33 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.45 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.24 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.29 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.15 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
@@ -185,15 +189,15 @@
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data</span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.19 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.24 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.17 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.11 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.25 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.22 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.12 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.21 secs</span>
 <span class="r-in"><span><span class="co">#</span></span></span>
 </code></pre></div>
     </div>
