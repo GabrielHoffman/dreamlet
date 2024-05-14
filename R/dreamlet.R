@@ -506,8 +506,8 @@ setMethod(
 
     # check that logFC exists,
     # since with multiple coefs it does not
-    if ("logFC" %in% colnames(res)) {
-      res <- res[abs(res$logFC) >= lfc, , drop = FALSE]
+    if ("logFC" %in% colnames(res) & lfc != 0 & length(coef) == 1) {
+        res <- res[abs(res$logFC) >= lfc, , drop = FALSE]
     }
 
     if (!is.null(genelist)) {
@@ -518,6 +518,10 @@ setMethod(
     if (!sort.by %in% opt) {
       cmd <- paste("sort.by must be in: ", paste0(opt, collapse = ", "))
       stop(cmd)
+    }
+
+    if( all(c("t", "F.std") %in% colnames(res)) ){
+      warning("Mixture of univariate and multivariate results is returned")
     }
 
     # sorting
