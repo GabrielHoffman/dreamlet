@@ -1,4 +1,8 @@
 
+# dreamlet 1.1.22
+ - May 14, 2024
+ - fix issue in `topTable()` with multiple `coef` values
+
 # dreamlet 1.1.21
   - fix issue in  `run_mash()` with multiple coefficients
      - from https://github.com/GabrielHoffman/dreamlet/issues/18
