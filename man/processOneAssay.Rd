@@ -19,6 +19,7 @@ processOneAssay(
   span = "auto",
   quiet = TRUE,
   weights = NULL,
+  rescaleWeightsAfter = FALSE,
   BPPARAM = SerialParam(),
   ...
 )
@@ -51,6 +52,8 @@ processOneAssay(
 \item{quiet}{show messages}
 
 \item{weights}{matrix of precision weights}
+
+\item{rescaleWeightsAfter}{default = FALSE, should the output weights be scaled by the input weights}
 
 \item{BPPARAM}{parameters for parallel evaluation}
 

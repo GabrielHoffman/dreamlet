@@ -1,4 +1,8 @@
 
+# dreamlet 1.1.23
+ - May 16, 2024
+ - `processOneAssay`, set `rescaleWeightsAfter=FALSE` by default
+
 # dreamlet 1.1.22
  - May 14, 2024
  - fix issue in `topTable()` with multiple `coef` values
