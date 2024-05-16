@@ -16,6 +16,7 @@
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}
 #' @param quiet show messages
 #' @param weights matrix of precision weights
+#' @param rescaleWeightsAfter default = FALSE, should the output weights be scaled by the input weights
 #' @param BPPARAM parameters for parallel evaluation
 #' @param ... other arguments passed to \code{dream}
 #'
@@ -33,7 +34,7 @@
 #' @importFrom lme4 subbars
 #' @importFrom MatrixGenerics colMeans2
 #'
-processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, min.total.count = 15, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights = NULL, BPPARAM = SerialParam(), ...) {
+processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 5, min.samples = 4, min.prop = .4, min.total.count = 15, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights = NULL, rescaleWeightsAfter = FALSE, BPPARAM = SerialParam(), ...) {
   checkFormula(formula, data)
 
   if (is.null(n.cells)) {
@@ -105,7 +106,13 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
     return(NULL)
   }
 
-  geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, weights = precWeights, BPPARAM = BPPARAM, ..., save.plot = TRUE, quiet = quiet, span = span, hideErrorsInBackend = TRUE)
+  geneExpr <- voomWithDreamWeights(y[keep, ], formula, data, 
+    weights = precWeights, 
+    rescaleWeightsAfter = rescaleWeightsAfter, BPPARAM = BPPARAM, ..., 
+    save.plot = TRUE, 
+    quiet = quiet, 
+    span = span, 
+    hideErrorsInBackend = TRUE)
 
   # if no genes are succeed
   if (nrow(geneExpr) == 0) {
