@@ -831,17 +831,21 @@ setMethod(
           fit <- NULL
         }
       } else {
-        fit <- NULL
+        fit <- NA
+        attr(fit, "error.initial") = "Design matrix is singular, covariates are very correlated"
       }
 
       if (!quiet) message(format(Sys.time() - startTime, digits = 2))
+
+      err.init = attr(fit, "error.initial")
+      if( !is(fit, "MArrayLM") && is.na(fit) ) fit <- NULL
 
       list(
         fit = fit,
         formula = form_mod,
         n_retain = ncol(geneExpr),
         errors = errorArray,
-        error.initial = attr(fit, "error.initial")
+        error.initial = err.init
       )
     })
     # name each result by the assay name

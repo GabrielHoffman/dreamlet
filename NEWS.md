@@ -1,4 +1,9 @@
 
+# dreamlet 1.1.24
+ - May 28, 2024
+ - `dreamlet()` gives clearer error message for singular design matrix
+ - `plotGeneHeatmap()` handles `zmax` correctly now
+
 # dreamlet 1.1.23
  - May 16, 2024
  - `processOneAssay`, set `rescaleWeightsAfter=FALSE` by default

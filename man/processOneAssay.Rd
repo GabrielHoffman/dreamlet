@@ -10,7 +10,7 @@ processOneAssay(
   data,
   n.cells,
   min.cells = 5,
-  min.count = 5,
+  min.count = 2,
   min.samples = 4,
   min.prop = 0.4,
   min.total.count = 15,
