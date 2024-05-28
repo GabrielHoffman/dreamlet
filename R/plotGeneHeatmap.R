@@ -90,6 +90,8 @@ setMethod(
       zmax <- max(abs(tab$z.std), na.rm = TRUE)
     } else {
       if (max(abs(tab$z.std), na.rm = TRUE) > zmax) {
+        tab$z.std = pmax(tab$z.std, -zmax)
+        tab$z.std = pmin(tab$z.std, zmax)
         warning("z.std > zmax", immediate. = TRUE)
       }
     }
