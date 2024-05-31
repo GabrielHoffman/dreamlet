@@ -36,7 +36,7 @@
 #' 
 #' @export
 #' @import ggplot2
-#' @importFrom dplyr arrange
+#' @importFrom dplyr arrange mutate tibble
 #' @importFrom ggbeeswarm geom_quasirandom
 plotBeeswarm <- function(res.dl, coef, fdr.range = 4, assays = assayNames(res.dl)) {
   stopifnot(is(res.dl, "dreamletResult"))
