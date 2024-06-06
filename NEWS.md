@@ -1,4 +1,8 @@
 
+# dreamlet 1.3.1
+ - May 31, 2024
+ - bump Bioc version
+
 # dreamlet 1.1.24
  - May 28, 2024
  - `dreamlet()` gives clearer error message for singular design matrix
