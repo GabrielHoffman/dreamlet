@@ -90,6 +90,8 @@ library(scater)
 eh <- ExperimentHub()
 sce <- eh[["EH2259"]]
 
+sce$ind = as.character(sce$ind)
+
 # only keep singlet cells with sufficient reads
 sce <- sce[rowSums(counts(sce) > 0) > 0, ]
 sce <- sce[, colData(sce)$multiplets == "singlet"]
