@@ -60,20 +60,6 @@ As the scale of single cell RNA-seq datasets continues to increase, loading the 
 
 
 
-<!---
-on-disk data access to dramatically reduce memory usage.
-
-
-
-Storing 18K genes across 2M cells with double precision would require 288 Gb memory.  Even if the dataset is sparse so that 80\% of the entires are zero, loading the entire dataset requires 58 Gb of data.  Since `R` uses copy-by-value, data duplication quickly becomes a problem even for a high memory machine.   
-
-Instead of loading the entire dataset into memory, we adopt an on-disk approach that takes advantage of the [H5AD](https://anndata.readthedocs.io/en/latest/fileformat-prose.html) file format built on the [HDF5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) format in order to dramatically reduce memory usage while still retaining high performance.  The [zellkonverter](https://github.com/theislab/zellkonverter) package uses a [DelayedArray](https://bioconductor.org/packages/DelayedArray/) backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class.  SingleCellExperiment is [Bioconductor's](https://bioconductor.org) core data class for single cell data, and data from other formats (i.e. [Seurat](https://cran.r-project.org/web/packages/Seurat/index.html)) can easily be [converted](https://rdrr.io/cran/Seurat/man/as.SingleCellExperiment.html) to it.  Importantly,  `R`'s copy-by-value is no longer an issue because the data is not duplicated when it is passed to another function, since it remains on-disk.      
-
-This enables any analysis designed for the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class to take advantage of seamless on-disk access to large-scale datasets.
-
---->
-
-
 # On-disk storage: zellkonverter
  [zellkonverter](https://github.com/theislab/zellkonverter) takes advantage of the [H5AD](https://anndata.readthedocs.io/en/latest/fileformat-prose.html) file format built on the [HDF5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) format in order to dramatically reduce memory usage while still retaining performance.  The [zellkonverter](https://github.com/theislab/zellkonverter) package uses a [DelayedArray](https://bioconductor.org/packages/DelayedArray/) backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class.  
 
@@ -171,6 +157,20 @@ sessionInfo()
 
 
 
+
+
+<!---
+on-disk data access to dramatically reduce memory usage.
+
+
+
+Storing 18K genes across 2M cells with double precision would require 288 Gb memory.  Even if the dataset is sparse so that 80\% of the entires are zero, loading the entire dataset requires 58 Gb of data.  Since `R` uses copy-by-value, data duplication quickly becomes a problem even for a high memory machine.   
+
+Instead of loading the entire dataset into memory, we adopt an on-disk approach that takes advantage of the [H5AD](https://anndata.readthedocs.io/en/latest/fileformat-prose.html) file format built on the [HDF5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) format in order to dramatically reduce memory usage while still retaining high performance.  The [zellkonverter](https://github.com/theislab/zellkonverter) package uses a [DelayedArray](https://bioconductor.org/packages/DelayedArray/) backend to provide a seamless interface to an on-disk H5AD dataset through the interface of the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class.  SingleCellExperiment is [Bioconductor's](https://bioconductor.org) core data class for single cell data, and data from other formats (i.e. [Seurat](https://cran.r-project.org/web/packages/Seurat/index.html)) can easily be [converted](https://rdrr.io/cran/Seurat/man/as.SingleCellExperiment.html) to it.  Importantly,  `R`'s copy-by-value is no longer an issue because the data is not duplicated when it is passed to another function, since it remains on-disk.      
+
+This enables any analysis designed for the [SingleCellExperiment](https://bioconductor.org/packages/SingleCellExperiment/) class to take advantage of seamless on-disk access to large-scale datasets.
+
+--->
 
 
 
