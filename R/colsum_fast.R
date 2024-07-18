@@ -11,12 +11,12 @@ create_idxlist <- function(fct) {
   res
 }
 
-# copied from DelayedArray:::.read_matrix_block
 #' @importFrom methods as
-#' @importFrom DelayedArray read_block
+#' @importFrom S4Arrays read_block
+#' @importClassesFrom SparseArray SparseArray
 .read_matrix_block <- function(...) {
   block <- read_block(..., as.sparse = NA)
-  if (is(block, "SparseArraySeed")) {
+  if (is(block, "SparseArray")) {
     block <- as(block, "CsparseMatrix")
   }
   block
