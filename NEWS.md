@@ -1,4 +1,9 @@
 
+# dreamlet 1.3.3
+ - July 19, 2024
+ - fix in `.read_matrix_block()`
+  - See https://github.com/GabrielHoffman/dreamlet/pull/23/commits/c453ac98ebc0329279b4dd3ae26a674df0e9b1f2
+
 # dreamlet 1.3.1
  - May 31, 2024
  - bump Bioc version
