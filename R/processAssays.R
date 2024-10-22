@@ -7,9 +7,9 @@
 #' @param data metadata used in regression formula
 #' @param n.cells array of cell count for each sample
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
-#' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
+#' @param min.count used to compute a CPM threshold of \code{CPM.cutoff = min.count/median(lib.size)*1e6}.  Passed to \code{edgeR::filterByExpr()}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
-#' @param min.prop minimum proportion of retained samples with non-zero counts
+#' @param min.prop minimum proportion of retained samples with \code{CPM > CPM.cutoff}
 #' @param min.total.count minimum total count required per gene for inclusion
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
@@ -131,7 +131,6 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 
 
 
-
 #' Processing SingleCellExperiment to dreamletProcessedData
 #'
 #' For raw counts, estimate precision weights using linear mixed model weighting by number of cells observed for each sample.  For normalized data, only weight by number of cells.
@@ -140,9 +139,9 @@ processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count 
 #' @param formula regression formula for differential expression analysis
 #' @param assays array of assay names to include in analysis. Defaults to \code{assayNames(sceObj)}
 #' @param min.cells minimum number of observed cells for a sample to be included in the analysis
-#' @param min.count minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}
+#' @param min.count used to compute a CPM threshold of \code{CPM.cutoff = min.count/median(lib.size)*1e6}.  Passed to \code{edgeR::filterByExpr()}
 #' @param min.samples minimum number of samples passing cutoffs for cell cluster to be retained
-#' @param min.prop minimum proportion of retained samples with non-zero counts for a gene to be retained
+#' @param min.prop minimum proportion of retained samples with \code{CPM > CPM.cutoff}
 #' @param isCounts logical, indicating if data is raw counts
 #' @param normalize.method normalization method to be used by \code{calcNormFactors}
 #' @param span Lowess smoothing parameter using by \code{variancePartition::voomWithDreamWeights()}

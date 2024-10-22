@@ -93,7 +93,7 @@
 
 
 <dt id="arg-min-count">min.count<a class="anchor" aria-label="anchor" href="#arg-min-count"></a></dt>
-<dd><p>minimum number of reads for a gene to be considered expressed in a sample.  Passed to <code><a href="https://rdrr.io/pkg/edgeR/man/filterByExpr.html" class="external-link">edgeR::filterByExpr</a></code></p></dd>
+<dd><p>used to compute a CPM threshold of <code>CPM.cutoff = min.count/median(lib.size)*1e6</code>.  Passed to <code><a href="https://rdrr.io/pkg/edgeR/man/filterByExpr.html" class="external-link">edgeR::filterByExpr()</a></code></p></dd>
 
 
 <dt id="arg-min-samples">min.samples<a class="anchor" aria-label="anchor" href="#arg-min-samples"></a></dt>
@@ -101,7 +101,7 @@
 
 
 <dt id="arg-min-prop">min.prop<a class="anchor" aria-label="anchor" href="#arg-min-prop"></a></dt>
-<dd><p>minimum proportion of retained samples with non-zero counts</p></dd>
+<dd><p>minimum proportion of retained samples with <code>CPM &gt; CPM.cutoff</code></p></dd>
 
 
 <dt id="arg-min-total-count">min.total.count<a class="anchor" aria-label="anchor" href="#arg-min-total-count"></a></dt>
@@ -158,7 +158,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
