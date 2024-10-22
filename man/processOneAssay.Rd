@@ -35,11 +35,11 @@ processOneAssay(
 
 \item{min.cells}{minimum number of observed cells for a sample to be included in the analysis}
 
-\item{min.count}{minimum number of reads for a gene to be considered expressed in a sample.  Passed to \code{edgeR::filterByExpr}}
+\item{min.count}{used to compute a CPM threshold of \code{CPM.cutoff = min.count/median(lib.size)*1e6}.  Passed to \code{edgeR::filterByExpr()}}
 
 \item{min.samples}{minimum number of samples passing cutoffs for cell cluster to be retained}
 
-\item{min.prop}{minimum proportion of retained samples with non-zero counts}
+\item{min.prop}{minimum proportion of retained samples with \code{CPM > CPM.cutoff}}
 
 \item{min.total.count}{minimum total count required per gene for inclusion}
 
