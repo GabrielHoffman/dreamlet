@@ -197,6 +197,11 @@ setMethod(
     #   stop("All models failed.  Consider changing formula")
     # }
 
+    if( all(df_details$error_initial) ){
+      txt = paste0("All models failed at initial step.  Please run seeErrors(.) on result.\n  The first failed with error:\n  ", error.initial[[1]])
+      stop(txt)
+    }
+
     if (! is.nan(failure_frac) && failure_frac > 0) {
       txt <- paste0("\nOf ", format(sum(df_details$n_genes), big.mark = ","), " models fit across all assays, ", format(failure_frac * 100, digits = 3), "% failed\n")
       message(txt)

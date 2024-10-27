@@ -1,4 +1,8 @@
 
+# dreamlet 1.3.4
+ - Oct 27, 2024
+ - Better error reporting addressing https://github.com/GabrielHoffman/dreamlet/issues/25
+
 # dreamlet 1.3.3
  - July 19, 2024
  - fix in `.read_matrix_block()`
