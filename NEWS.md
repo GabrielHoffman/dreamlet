@@ -1,4 +1,8 @@
 
+# dreamlet 1.4.0
+ - Nov 5, 2024
+ - update to Bioc 3.20
+
 # dreamlet 1.3.4
  - Oct 27, 2024
  - Better error reporting addressing https://github.com/GabrielHoffman/dreamlet/issues/25
