@@ -129,6 +129,13 @@ res.dl <- dreamlet(res.proc, form)
 res.dl
 ```
 
+# Details
+ A variable in `colData(sce)` is handled according to if the variable is
+
+-  continuous: the mean per donor/cell type is stored in `metadata(pb)$aggr_means`
+- discrete
+  - [constant within each donor/cell type] it is stored in `colData(pb)`
+  - [varies within each donor/cell type] there is no good way to summarize it.  The variable is dropped. 
 
 
 
