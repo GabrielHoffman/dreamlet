@@ -11,7 +11,7 @@
 #' @param control passed to \code{rma(..,control)}
 #'
 #' @details
-#' \itemize{
+#' \describe{
 #'  \item{\code{'FE'}: }{fixed effects meta-analysis}
 #'  \item{\code{'REML'}: }{random effects meta-analysis}
 #'  \item{\code{'RE2C'}: }{joint testing of fixed and random effects}

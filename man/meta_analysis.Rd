@@ -24,7 +24,7 @@ meta_analysis(
 Meta-analysis across multiple studies
 }
 \details{
-\itemize{
+\describe{
  \item{\code{'FE'}: }{fixed effects meta-analysis}
  \item{\code{'REML'}: }{random effects meta-analysis}
  \item{\code{'RE2C'}: }{joint testing of fixed and random effects}
