@@ -75,7 +75,7 @@
 #' @param h5adBlockSizes set the automatic block size block size (in bytes) for DelayedArray to read an H5AD file.  Larger values use more memory but are faster.
 #'
 #' @return a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-# \itemize{
+# \describe{
 # \item{If \code{length(by) == 2}, each sheet (\code{assay}) contains
 #   pseudobulks for each of \code{by[1]}, e.g., for each cluster when
 #   \code{by = "cluster_id"}. Rows correspond to genes, columns to

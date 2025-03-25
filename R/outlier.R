@@ -59,7 +59,7 @@ outlier <- function(data, robust = FALSE, ...) {
 #' @param ... arguments passed to \code{MASS::cov.rob()}
 #' 
 #' @return
-#' \itemize{
+#' \describe{
 #'  \item{\code{ID}:}{sample identifier}
 #'  \item{\code{assay}:}{specify assay}
 #'  \item{\code{PCs}:}{principal components}
