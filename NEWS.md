@@ -1,4 +1,8 @@
 
+# dreamlet 1.4.1
+ - March 25, 2025
+ - improve checking for `sample_id` and `cluster_id` in `aggregateToPseudoBulk()`
+
 # dreamlet 1.4.0
  - Nov 5, 2024
  - update to Bioc 3.20

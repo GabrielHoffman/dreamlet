@@ -161,6 +161,14 @@ aggregateToPseudoBulk <- function(
     stop("colnames(x) is NULL.  Column names are needed for internal filtering")
   }
 
+  # check values of by
+  if( ! all(by %in% colnames(colData(x))) ){
+    i = by %in% colnames(colData(x))
+    txt = paste0("Entries not found in colData: ", paste(by[!i], collapse=', '))
+    stop(txt)
+  }
+
+
   if (is.null(assay)) {
     assay <- assayNames(x)[1]
   }
