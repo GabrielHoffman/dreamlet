@@ -1,4 +1,8 @@
 
+# dreamlet 1.5.2
+ - April 24, 2025
+ - fix bug in `stackAssays()`
+
 # dreamlet 1.4.1
  - March 25, 2025
  - improve checking for `sample_id` and `cluster_id` in `aggregateToPseudoBulk()`

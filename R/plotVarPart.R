@@ -68,7 +68,8 @@ setMethod(
       xlab("") +
       scale_y_continuous(limits = c(0, 100), expand = c(0, 3)) +
       theme_classic() +
-      geom_boxplot(aes(outlier.colour = factor(variable)), width = 0.07, fill = "grey") +
+      geom_boxplot(width = 0.07, fill = "grey") +
+      # aes(outlier.fill = factor(variable))
       scale_fill_manual(values = col) +
       theme(
         legend.position = "none", plot.title = element_text(hjust = 0.5),
