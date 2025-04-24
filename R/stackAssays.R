@@ -77,7 +77,7 @@ stackAssays <- function(pb, assays = assayNames(pb)) {
 
   # cell counts
   ids <- names(int_colData(pb)$n_cells)
-  grd <- expand.grid(assay = assays, id = ids)
+  grd <- expand.grid(id = ids, assay = assays)
   rownames(grd) <- paste(grd$assay, grd$id, sep = "_")
 
   ncell.lst <- lapply(seq(nrow(grd)), function(i) {
