@@ -16,6 +16,10 @@
 #'
 #' data(example_sce)
 #'
+#' # Replace space with underscore, and remove "+" to avoid issue downstream
+#' example_sce$cluster_id <- gsub(" ", "_", example_sce$cluster_id)
+#' example_sce$cluster_id <- gsub("\\+", "", example_sce$cluster_id)
+#'
 #' # create pseudobulk for each sample and cell cluster
 #' pb <- aggregateToPseudoBulk(example_sce,
 #'   assay = "counts",
@@ -28,24 +32,63 @@
 #' pb.stack <- stackAssays(pb)
 #'
 #' # voom-style normalization
-#' # assay (i.e. cell type) can now be included as a covariate
+#' # stackedAssay (i.e. cell type) can now be included as a covariate
 #' res.proc <- processAssays(pb.stack, ~ group_id + stackedAssay)
 #'
-#' # variance partitioning analysis
-#' vp <- fitVarPart(res.proc, ~ group_id + stackedAssay)
+#' # Examine coding of covariates
+#' # colData:
+#' head(colData(res.proc))
+#'
+#' # Examine coding of covariates
+#' # metadata:
+#' head(metadata(res.proc))
+#'
+#' # Variance partitioning analysis
+#' # Model contribution of Donor (id), stimulation status (group_id), and cell type (stackedAssay)
+#' form <- ~ (1|id) + (1|group_id) + (1|stackedAssay)
+#' vp <- fitVarPart(res.proc, form)
 #'
 #' # Summarize variance fractions across cell types
 #' plotVarPart(sortCols(vp))
 #'
 #' # Interaction analysis allows group_id
-#' # to have a different effect within each stacedAssay
-#' vp2 <- fitVarPart(res.proc, ~ group_id * stackedAssay)
+#' # to have a different effect within each stackedAssay
+#' form <- ~ (1|id) + (1|group_id) + (1|stackedAssay) + (1|group_id:stackedAssay)
+#' vp2 <- fitVarPart(res.proc, form)
 #'
 #' plotVarPart(sortCols(vp2))
+#' 
+#' plotVarPart(sortCols(vp2))
+#' 
+#' # Differential expression analysis
+#' # Testing differences between cell types
+#' 
+#' # In a real data you want to test the full model, 
+#' # but this dataset is too small 
+#' form <- ~ (1|id) + (1|group_id) + (1|stackedAssay) + group_id:stackedAssay + 0 
 #'
-#' # Interaction model using random effects
-#' form <- ~ (1 | group_id) + (1 | stackedAssay) + (1 | group_id:stackedAssay)
-#' #
+#' # In this small dataset, just test simulation-by-celltype interaction term
+#' # Here, test if the effect of stimulation (i.e. difference between stimulated and 
+#' # controls) is different between B cells and monocytes
+#' contrasts <- c(Diff = "(group_idstim:stackedAssayB_cells - group_idctrl:stackedAssayB_cells) - 
+#' (group_idstim:stackedAssayCD14_Monocytes - group_idstim:stackedAssayCD14_Monocytes)")
+#' form <- ~ group_id:stackedAssay + 0 
+#' fit <- dreamlet( res.proc, form, contrasts = contrasts)
+#'
+#' # Top genes
+#' topTable(fit, coef='Diff', number=3)
+#' 
+#' # Plot example
+#' df <- extractData(res.proc, assay = "stacked", genes = c("ISG20"))
+#' 
+#' df <- df[df$stackedAssay %in% c("B_cells", "CD14_Monocytes"),]
+#' 
+#' ggplot(df, aes(group_id, ISG20)) +
+#'   geom_boxplot() +
+#'   theme_bw() +
+#'   theme(aspect.ratio=1) +
+#'   facet_wrap( ~ stackedAssay) 
+#
 #' @importFrom SummarizedExperiment assayNames<-
 #' @importFrom rlang sym
 #' @importFrom S4Vectors metadata metadata<-
