@@ -9,6 +9,7 @@ authors:
 template:
   bootstrap: 5
   bootswatch: flatly
+  math-rendering: katex
   
   params:
     docsearch:
