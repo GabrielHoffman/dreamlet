@@ -47,7 +47,7 @@ checkFormula <- function(formula, data) {
 
 
 # Check if formula is full rank
-#' @importFrom lme4 nobars
+#' @importFrom reformulas nobars
 isFullRank <- function(formula, data) {
   design <- model.matrix(nobars(formula), data)
 

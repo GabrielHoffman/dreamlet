@@ -22,7 +22,7 @@
 #' @details Adapted from \code{MoEClust::drop_constants}
 #'
 #' @importFrom stats terms update.formula reformulate as.formula
-#' @importFrom lme4 findbars
+#' @importFrom reformulas findbars
 #' @export
 removeConstantTerms <- function(formula, data) {
   stopifnot(is(formula, "formula"))

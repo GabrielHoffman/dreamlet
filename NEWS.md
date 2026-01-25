@@ -1,4 +1,8 @@
 
+# dreamlet 1.7.2
+ - Jan 25, 2026
+ - add `reformulas` dependency
+
 # dreamlet 1.5.2
  - April 24, 2025
  - fix bug in `stackAssays()`

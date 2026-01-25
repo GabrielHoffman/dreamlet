@@ -14,7 +14,7 @@
 #' dropRedundantTerms(~ group + extra, sleep)
 #'
 #' @importFrom stats terms update.formula reformulate as.formula cor
-#' @importFrom lme4 nobars
+#' @importFrom reformulas nobars
 #' @importFrom Matrix summary
 #' @export
 dropRedundantTerms <- function(formula, data, tol = 1e-3) {

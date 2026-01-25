@@ -31,7 +31,7 @@
 #' @importFrom stats model.matrix var
 #' @importFrom SummarizedExperiment colData assays
 #' @importFrom S4Vectors as.data.frame
-#' @importFrom lme4 subbars
+#' @importFrom reformulas subbars
 #' @importFrom MatrixGenerics colMeans2
 #'
 processOneAssay <- function(y, formula, data, n.cells, min.cells = 5, min.count = 2, min.samples = 4, min.prop = .4, min.total.count = 15, isCounts = TRUE, normalize.method = "TMM", span = "auto", quiet = TRUE, weights = NULL, rescaleWeightsAfter = FALSE, BPPARAM = SerialParam(), ...) {
