@@ -119,28 +119,28 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.055 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.053 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.089 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.085 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.064 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.062 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.038 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.039 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.093 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.092 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># variance partitioning analysis</span></span></span>
 <span class="r-in"><span><span class="va">vp</span> <span class="op">&lt;-</span> <span class="fu"><a href="fitVarPart.html">fitVarPart</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.65 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.6 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.84 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.83 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.66 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.64 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.4 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.38 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.86 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.78 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summarize variance fractions genome-wide for each cell type</span></span></span>

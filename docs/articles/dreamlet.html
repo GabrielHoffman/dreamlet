@@ -73,7 +73,7 @@ analysis of pseudobulk data</h3>
 </h4>
             
             <h4 data-toc-skip class="date">Run on 2026-01-25
-20:03:09</h4>
+20:42:58</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/dreamlet/blob/HEAD/vignettes/dreamlet.Rmd" class="external-link"><code>vignettes/dreamlet.Rmd</code></a></small>
       <div class="d-none name"><code>dreamlet.Rmd</code></div>
@@ -165,7 +165,7 @@ workflow.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -202,7 +202,7 @@ on-disk datasets than <a href="https://rdrr.io/bioc/muscat/man/aggregateData.htm
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># one 'assay' per cell type</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assayNames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">assayNames</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "B cells"           "CD14+ Monocytes"   "CD4 T cells"      </span></span>
 <span><span class="co">## [4] "CD8 T cells"       "Dendritic cells"   "FCGR3A+ Monocytes"</span></span>
 <span><span class="co">## [7] "Megakaryocytes"    "NK cells"</span></span></code></pre>
@@ -297,11 +297,11 @@ type using a bar plot, or genome-wide using a violin plot.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Show variance fractions at the gene-level for each cell type</span></span>
 <span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
-<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">vp.lst</span><span class="op">[</span><span class="va">vp.lst</span><span class="op">$</span><span class="va">gene</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="va">genes</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.barplt-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize variance fractions genome-wide for each cell type</span></span>
-<span><span class="fu">plotVarPart</span><span class="op">(</span><span class="va">vp.lst</span>, label.angle <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotVarPart-method.html" class="external-link">plotVarPart</a></span><span class="op">(</span><span class="va">vp.lst</span>, label.angle <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/vp.violin-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
@@ -358,13 +358,13 @@ were observed to include the gene in the analysis.</p>
 <h3 id="extract-results">Extract results<a class="anchor" aria-label="anchor" href="#extract-results"></a>
 </h3>
 <p>Each entry in <code>res.dl</code> stores a model fit by <a href="https://rdrr.io/bioc/variancePartition/man/dream-method.html" class="external-link"><code>dream()</code></a>,
-and results can be extracted using <code><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable()</a></code> as in
+and results can be extracted using <code>topTable()</code> as in
 <code>limma</code> by specifying the coefficient of interest. The
 results shows the gene name, log fold change, average expression,
 t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># results from full analysis</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 10 rows and 9 columns</span></span>
 <span><span class="co">##              assay          ID     logFC   AveExpr         t     P.Value</span></span>
 <span><span class="co">##        &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
@@ -392,7 +392,7 @@ t-statistic, p-value, FDR (i.e. adj.P.Val).</p>
 <span><span class="co">## 10 4.19679e-16   34.1274   25.8759</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># only B cells</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">res.dl</span><span class="op">[[</span><span class="st">"B cells"</span><span class="op">]</span><span class="op">]</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           logFC   AveExpr        t      P.Value    adj.P.Val        B</span></span>
 <span><span class="co">## ISG15  5.530786 10.202722 26.22702 1.160249e-20 2.275249e-17 37.17046</span></span>
 <span><span class="co">## ISG20  3.331031 11.383603 24.14017 9.838971e-20 9.647111e-17 35.17704</span></span>
@@ -420,7 +420,7 @@ gene across all cell types. The color indicates the FDR.</p>
 <p>Examine the expression of ISG20 between stimulation conditions within
 CD14+ Monocytes. Use <code><a href="../reference/extractData-methods.html">extractData()</a></code> to create a
 <code>tibble</code> with gene expression data and metadata from
-<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code> from one cell type.</p>
+<code>colData()</code> from one cell type.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get data</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractData-methods.html">extractData</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="st">"CD14+ Monocytes"</span>, genes <span class="op">=</span> <span class="st">"ISG20"</span><span class="op">)</span></span>
@@ -571,7 +571,7 @@ observed for each cell cluster.</p>
 <span></span>
 <span><span class="co"># The coefficient 'compare' is the value logFC between test and baseline:</span></span>
 <span><span class="co"># compare = cellClustertest - cellClusterbaseline</span></span>
-<span><span class="va">df_Bcell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span><span class="op">)</span></span>
+<span><span class="va">df_Bcell</span> <span class="op">&lt;-</span> <span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"compare"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_Bcell</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                             logFC   AveExpr         t      P.Value    adj.P.Val</span></span>
@@ -607,7 +607,7 @@ only highly expressed genes:</p>
 type:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">df_cts</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">df_cts</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu">plotPercentBars</span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dreamlet_files/figure-html/plotPercentBars-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dreamlet</span><span class="fu">::</span><span class="fu"><a href="../reference/plotHeatmap-methods.html">plotHeatmap</a></span><span class="op">(</span><span class="va">df_cts</span>, genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></span></code></pre></div>
