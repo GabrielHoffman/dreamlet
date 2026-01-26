@@ -29,7 +29,6 @@
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeLogCPM.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeNormCounts.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/details-methods.html</loc></url>
-<url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/diffVar-method.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/diffVar-methods.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamlet.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamletCompareClusters.html</loc></url>
@@ -41,14 +40,12 @@
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/extract-methods.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/extractData-methods.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/fitVarPart.html</loc></url>
-<url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/getExprGeneNames.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/getTreat-methods.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/index.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/meta_analysis.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/metadata-dreamletProcessedData-method.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/outlier.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/outlierByAssay.html</loc></url>
-<url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/pbWeights.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotBeeswarm.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotCellComposition.html</loc></url>
 <url><loc>http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotForest-methods.html</loc></url>

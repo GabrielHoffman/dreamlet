@@ -1,0 +1,350 @@
+  
+
+![](reference/figures/logo.png)
+
+### Scalable differential expression analysis of single cell transcriptomics datasets with complex study designs
+
+The [dreamlet](http://DiseaseNeurogenomics.github.io/dreamlet/) package
+enables differential expression analysis on multi-sample single cell
+datasets using linear (mixed) models with precision weights.
+
+Major functionality of `dreamlet` package using the
+[Bioconductor](https://www.bioconductor.org)
+[`SingleCellExperiment`](https://www.bioconductor.org/packages/SingleCellExperiment/)
+interface:
+
+- [`aggregateToPseudoBulk()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/aggregateToPseudoBulk.md)
+        Fast evaluation of pseudobulk from *raw or estimated counts*
+- [`processAssays()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/processAssays.md)                             Normalize
+  aggregated counts, compute precision weights
+- [`fitVarPart()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/fitVarPart.md)                                     Variance
+  partitioning analysis
+- [`dreamlet()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamlet.md)                                           Differential
+  expression analysis across *samples*
+- [`dreamletCompareClusters()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamletCompareClusters.md)  Differential
+  expression analysis across *cell clusters*
+- [`zenith_gsa()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/zenith_gsa-methods.md)                                      Gene
+  set analysis with *full spectrum* of test statistics
+- [`compositePosteriorTest()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/compositePosteriorTest.md)     Test
+  cell type specifity of effects with Bayesian meta-analysis
+- [`meta_analysis()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/meta_analysis.md)                              Frequentist
+  meta-analysis across cohorts
+- [`outlierByAssay()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/outlierByAssay.md)                           Outlier
+  detection based on gene expression
+
+## Resources
+
+- [Preprint](https://doi.org/10.1101/2023.03.17.533005) on biorxiv
+- Full [reproducible analysis
+  code](https://github.com/GabrielHoffman/dreamlet_analysis) for 4
+  large-scale datasets
+
+## Motivation
+
+Recent advances in single cell/nucleus transcriptomic technology has
+enabled collection of population-level data sets to study cell type
+specific gene expression differences associated with disease state,
+stimulus, and genetic regulation. The scale of these data, complex study
+designs, and low read count per cell mean that characterizing cell type
+specific molecular mechanisms requires a user-friendly, purpose-built
+analytical framework. We have developed the dreamlet package that
+applies a pseudobulk approach and fits a regression model for each gene
+and cell cluster to test differential expression across individuals
+associated with a trait of interest. Use of precision-weighted linear
+mixed models enables accounting for repeated measures study designs,
+high dimensional batch effects, and varying sequencing depth or observed
+cells per biosample.
+
+## Dreamlet workflow
+
+![](reference/figures/diagram.png)
+
+## Technical intro
+
+Dreamlet further enables analysis of massive-scale of single
+cell/nucleus transcriptome datasets by addressing both CPU and memory
+usage limitations. Dreamlet performs preprocessing and statistical
+analysis in parallel on multicore machines, and can distribute work
+across multiple nodes on a compute cluster. Dreamlet also uses the [H5AD
+format](https://anndata.readthedocs.io/en/latest/index.html) for on-disk
+data storage to enable data processing in smaller chunks to dramatically
+reduce memory usage.
+
+The dreamlet workflow easily integrates into the
+[Bioconductor](https://www.bioconductor.org) ecosystem, and uses the
+[`SingleCellExperiment`](https://www.bioconductor.org/packages/SingleCellExperiment/)
+class to facilitate compatibility with other analyses. Beyond
+differential expression testing, dreamlet provides seamless integration
+of downstream analysis including quantifying sources of expression
+variation, gene set analysis using the full spectrum of gene-level
+t-statistics, testing differences in cell type composition and
+visualizing results.
+
+Dreamlet builds on previous work on variance partitioning and
+differential expression using precision-weighted linear mixed models in
+the
+[variancePartition](https://bioconductor.org/packages/variancePartition/)
+package. The dreamlet package is designed to be easily adopted by users
+of
+[variancePartition](https://bioconductor.org/packages/variancePartition/)
+and [limma](https://bioconductor.org/packages/limma/).
+
+## Install
+
+`dreamlet >= 1.0.0` is compatible with `BioC v3.18` for `R v4.3`.
+
+``` r
+
+# 1) Make sure Bioconductor is installed
+# 2) Install dreamlet and dependencies:
+devtools::install_github("DiseaseNeurogenomics/dreamlet")
+
+# 3) Install zellkonverter >= v1.10.1
+BiocManager::install("zellkonverter")
+```
+
+`dreamlet` is also compatible with earlier version of R and Bioconductor
+after installing these dependencies:
+
+### Dependencies
+
+In case these aren’t installed automatically:
+
+``` r
+
+devtools::install_github("DiseaseNeurogenomics/variancePartition")
+devtools::install_github("DiseaseNeurogenomics/zenith")
+```
+
+# Package index
+
+## All functions
+
+- [`aggregateNonCountSignal()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/aggregateNonCountSignal.md)
+  : Aggregation of single-cell signals
+
+- [`aggregateToPseudoBulk()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/aggregateToPseudoBulk.md)
+  : Aggregation of single-cell to pseudobulk data
+
+- [`aggregateVar()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/aggregateVar.md)
+  : Per-sample variance of single-cell counts
+
+- [`as.dreamletResult()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/as.dreamletResult.md)
+  :
+
+  Convert list of regression fits to `dreamletResult`
+
+- [`assay(`*`<dreamletResult>`*`,`*`<ANY>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/assay-methods.md)
+  [`assay(`*`<dreamletProcessedData>`*`,`*`<ANY>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/assay-methods.md)
+  [`assay(`*`<vpDF>`*`,`*`<ANY>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/assay-methods.md)
+  : Get assay
+
+- [`assayNames(`*`<dreamletResult>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/assayNames-methods.md)
+  [`assayNames(`*`<dreamletProcessedData>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/assayNames-methods.md)
+  [`assayNames(`*`<vpDF>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/assayNames-methods.md)
+  : Get assayNames
+
+- [`buildClusterTreeFromPB()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/buildClusterTreeFromPB.md)
+  : Hierarchical clustering on cell types from pseudobulk
+
+- [`cellCounts()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/cellCounts.md)
+  : Extract cell counts
+
+- [`cellSpecificityValues-class`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/cellSpecificityValues-class.md)
+  : Class cellSpecificityValues
+
+- [`cellTypeSpecificity()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/cellTypeSpecificity.md)
+  : Get cell type specificity of gene expression
+
+- [`checkFormula()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/checkFormula.md)
+  : Check variables in a formula
+
+- [`coefNames()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/coefNames-methods.md)
+  : Get coefficient names
+
+- [`colData(`*`<dreamletProcessedData>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/colData-dreamletProcessedData-method.md)
+  :
+
+  Extract colData from `dreamletProcessedData`
+
+- [`` `colData<-`( ``*`<dreamletProcessedData>`*`,`*`<ANY>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/colData-set-dreamletProcessedData-ANY-method.md)
+  : Set colData
+
+- [`compositePosteriorTest()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/compositePosteriorTest.md)
+  : Perform composite test on results from mashr
+
+- [`computeCellCounts()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeCellCounts.md)
+  : Get cell counts with metadata
+
+- [`computeLogCPM()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeLogCPM.md)
+  : Compute log normalized counts
+
+- [`computeNormCounts()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/computeNormCounts.md)
+  : Compute normalized counts
+
+- [`details()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/details-methods.md)
+  : Extract details from dreamletProcessedData
+
+- [`diffVar(`*`<dreamletResult>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/diffVar-methods.md)
+  : Test differential variance
+
+- [`dreamlet()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamlet.md)
+  : Differential expression for each assay
+
+- [`dreamletCompareClusters()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamletCompareClusters.md)
+  : Differential expression between pair of assays
+
+- [`dreamletProcessedData-class`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamletProcessedData-class.md)
+  : Class dreamletProcessedData
+
+- [`dreamletResult-class`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamletResult-class.md)
+  : Class dreamletResult
+
+- [`dreamlet_mash_result-class`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dreamlet_mash_result-class.md)
+  : Class dreamlet_mash_result
+
+- [`dropRedundantTerms()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/dropRedundantTerms.md)
+  : Drop redundant terms from the model
+
+- [`equalFormulas()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/equalFormulas.md)
+  : Check if two formulas are equal
+
+- [`` `[`( ``*`<dreamletResult>`*`,`*`<ANY>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/extract-methods.md)
+  [`` `[`( ``*`<dreamletProcessedData>`*`,`*`<ANY>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/extract-methods.md)
+  : Subset with brackets
+
+- [`extractData()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/extractData-methods.md)
+  :
+
+  Extract normalized expression and `colData`
+
+- [`fitVarPart()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/fitVarPart.md)
+  : Variance Partition analysis for each assay
+
+- [`getTreat(`*`<dreamletResult>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/getTreat-methods.md)
+  : Test if coefficient is different from a specified value
+
+- [`meta_analysis()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/meta_analysis.md)
+  : Meta-analysis across multiple studies
+
+- [`metadata(`*`<dreamletProcessedData>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/metadata-dreamletProcessedData-method.md)
+  :
+
+  Extract metadata from `dreamletProcessedData`
+
+- [`outlier()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/outlier.md)
+  : Multivariate outlier detection
+
+- [`outlierByAssay()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/outlierByAssay.md)
+  : Outlier analysis for each assay
+
+- [`plotBeeswarm()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotBeeswarm.md)
+  : Beeswarm plot of effect sizes for each assay
+
+- [`plotCellComposition()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotCellComposition.md)
+  : Bar plot of cell compositions
+
+- [`plotForest()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotForest-methods.md)
+  : Forest plot
+
+- [`plotGeneHeatmap()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotGeneHeatmap-methods.md)
+  : Heatmap of genes and assays
+
+- [`plotHeatmap()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotHeatmap-methods.md)
+  : Plot heatmap
+
+- [`plotPCA(`*`<list>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotPCA.md)
+  : Plot PCA of gene expression for an assay
+
+- [`plotPercentBars(`*`<vpDF>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotPercentBars-methods.md)
+  [`plotPercentBars(`*`<cellSpecificityValues>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotPercentBars-methods.md)
+  : Bar plot of variance fractions
+
+- [`plotProjection()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotProjection.md)
+  : Plot 2D projection
+
+- [`plotVarPart(`*`<DataFrame>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotVarPart-methods.md)
+  : Violin plot of variance fractions
+
+- [`plotViolin()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotViolin-methods.md)
+  : Plot Violins
+
+- [`plotVolcano()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotVolcano-methods.md)
+  : Volcano plot for each cell type
+
+- [`plotVoom()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/plotVoom-methods.md)
+  : Plot voom curves from each cell type
+
+- [`print(`*`<dreamletResult>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/print-methods.md)
+  [`print(`*`<dreamletProcessedData>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/print-methods.md)
+  : Print object
+
+- [`processAssays()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/processAssays.md)
+  : Processing SingleCellExperiment to dreamletProcessedData
+
+- [`processOneAssay()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/processOneAssay.md)
+  : Processing expression data from assay
+
+- [`removeConstantTerms()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/removeConstantTerms.md)
+  : Remove constant terms from formula
+
+- [`residuals(`*`<dreamletResult>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/residuals-methods.md)
+  :
+
+  Extract residuals from `dreamletResult`
+
+- [`run_mash()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/run_mash.md)
+  : Run mash analysis on dreamlet results
+
+- [`seeErrors()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/seeErrors-methods.md)
+  : Get error text
+
+- [`show(`*`<dreamletResult>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/show-methods.md)
+  [`show(`*`<dreamletProcessedData>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/show-methods.md)
+  : Show object
+
+- [`sortCols(`*`<vpDF>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/sortCols-method.md)
+  : Sort variance partition statistics
+
+- [`stackAssays()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/stackAssays.md)
+  : Stack assays from pseudobulk
+
+- [`tabToMatrix()`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/tabToMatrix.md)
+  : Convert results table to matrix
+
+- [`topTable(`*`<dreamletResult>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/topTable-methods.md)
+  : Table of Top Genes from dreamlet fit
+
+- [`vpDF-class`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/vpDF-class.md)
+  : Class vpDF
+
+- [`zenith_gsa(`*`<dreamletResult>`*`,`*`<GeneSetCollection>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/zenith_gsa-methods.md)
+  [`zenith_gsa(`*`<dreamlet_mash_result>`*`,`*`<GeneSetCollection>`*`)`](http://DiseaseNeurogenomics.github.io/dreamlet/reference/zenith_gsa-methods.md)
+  : Perform gene set analysis using zenith
+
+# Articles
+
+### mashr
+
+- [mashr analysis after
+  dreamlet](http://DiseaseNeurogenomics.github.io/dreamlet/articles/mashr.md):
+
+### cell_covs
+
+- [Modeling continuous cell-level
+  covariates](http://DiseaseNeurogenomics.github.io/dreamlet/articles/cell_covs.md):
+
+### non_lin_eff
+
+- [Testing non-linear
+  effects](http://DiseaseNeurogenomics.github.io/dreamlet/articles/non_lin_eff.md):
+
+### h5ad_on_disk
+
+- [Handling large H5AD
+  datasets](http://DiseaseNeurogenomics.github.io/dreamlet/articles/h5ad_on_disk.md):
+
+### errors
+
+- [Error
+  handling](http://DiseaseNeurogenomics.github.io/dreamlet/articles/errors.md):

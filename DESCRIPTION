@@ -80,6 +80,7 @@ Imports:
     ggrepel,
     scattermore,
     Rcpp,
+    lme4 (>= 1.1-33),
     MASS,
     Rdpack,
     utils,

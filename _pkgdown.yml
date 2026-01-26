@@ -10,7 +10,6 @@ template:
   bootstrap: 5
   bootswatch: flatly
   math-rendering: katex
-  
   params:
     docsearch:
       api_key: dedcc260e9d3743bc634e728855cdbaf

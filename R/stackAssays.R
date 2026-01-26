@@ -52,6 +52,7 @@
 #' plotVarPart(sortCols(vp))
 #'
 #' # Interaction analysis allows group_id
+
 #' # to have a different effect within each stackedAssay
 #' form <- ~ (1|id) + (1|group_id) + (1|stackedAssay) + (1|group_id:stackedAssay)
 #' vp2 <- fitVarPart(res.proc, form)
