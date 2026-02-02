@@ -21,10 +21,12 @@ compositePosteriorTest(
 \item{test}{evaluate the posterior probability of a non-zero effect in \code{"at least 1"} or \code{"all"} conditions}
 }
 \description{
-The posterior probabilities for all genes and conditions is obtained as \code{1-lFSR}.  Let \code{prob} be an array storing results for one gene.  The probability that _no_ conditions in the exclusion set are non-zero is \code{prod(1 - prob[exclude])}. The probability that _all_ conditions in the inclusion set are non-zero is \code{prod(prob[include])}. The probability that _at least one_ condition in the inclusion set is non-zero is \code{1 - prod(1 - prob[include])}.  The composite test is the product of the probabilties computed from the inclusion and exclusion sets.
+Perform composite test evaluating the specificity of an effect.  Evalute the posterior probability that an a non-zero effect present in _all_ or _at least one_ condition in the inclusion set, but _no conditions_ in the exclusion set.
 }
 \details{
-Perform composite test evaluating the specificity of an effect.  Evalute the posterior probability that an a non-zero effect present in _all_ or _at least one_ condition in the inclusion set, but _no conditions_ in the exclusion set.
+The posterior probabilities for all genes and conditions is obtained as \code{1-lFSR}.  Let \code{prob} be an array storing results for one gene.  The probability that _no_ conditions in the exclusion set are non-zero is \code{prod(1 - prob[exclude])}. The probability that _all_ conditions in the inclusion set are non-zero is \code{prod(prob[include])}. The probability that _at least one_ condition in the inclusion set is non-zero is \code{1 - prod(1 - prob[include])}.  The composite test is the product of the probabilties computed from the inclusion and exclusion sets.
+
+See description in section Identifying shared and cell type specific genetic regulatory effects of Zeng, et al. (https://doi.org/10.1101/2024.11.02.24316590).
 }
 \examples{
 library(muscat)

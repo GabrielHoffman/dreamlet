@@ -73,6 +73,7 @@
 <p><code>mashr</code> has been previously applied to differential expression in <a href="https://www.gtexportal.org" class="external-link">GTEx</a> data using multiple tissues from the same set of donors (Oliva et al. 2020)
 .</p>
 <p>In single cell data, a given gene is often not sufficiently expressed in all cell types.  So it is not evaluated in a subsets of cell types, and its coefficient value is <code>NA</code>. Since mashr assumes coefficients and standard errors for every gene and cell type pair, entries with these missing values are set to have <code>coef = 0</code>, and <code>se = 1e6</code>.  The output of mashr is then modified to set the corresponding values to <code>NA</code>, to avoid nonsensical results downstream.</p>
+<p>Based on empirical analysis, <code>mashr</code> is most useful for prioritizing genes based on their cell type specificity using  <code><a href="compositePosteriorTest.html">compositePosteriorTest()</a></code>. <code>mashr</code> tends to overshink and push the estimated effect size from mutliple cell types towards a common value.  This is not ideal for identifying differentially expressed genes in a given cell type, due to the overshinkage.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -86,7 +87,7 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mashr/man/mash_estimate_corr_em.html" class="external-link">mashr::mash_estimate_corr_em()</a></code>, <code><a href="https://rdrr.io/pkg/mashr/man/cov_canonical.html" class="external-link">mashr::cov_canonical</a></code>, <code><a href="https://rdrr.io/pkg/mashr/man/mash_set_data.html" class="external-link">mashr::mash_set_data</a></code></p></div>
+    <div class="dont-index"><p><code><a href="compositePosteriorTest.html">compositePosteriorTest()</a></code>, <code><a href="https://rdrr.io/pkg/mashr/man/mash_estimate_corr_em.html" class="external-link">mashr::mash_estimate_corr_em()</a></code>, <code><a href="https://rdrr.io/pkg/mashr/man/cov_canonical.html" class="external-link">mashr::cov_canonical</a></code>, <code><a href="https://rdrr.io/pkg/mashr/man/mash_set_data.html" class="external-link">mashr::mash_set_data</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -108,29 +109,29 @@
 <span class="r-in"><span><span class="co"># voom-style normalization</span></span></span>
 <span class="r-in"><span><span class="va">res.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="processAssays.html">processAssays</a></span><span class="op">(</span><span class="va">pb</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.015 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.016 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.016 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.018 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.016 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.018 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.015 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.016 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.017 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Differential expression analysis within each assay,</span></span></span>
 <span class="r-in"><span><span class="co"># evaluated on the voom normalized data</span></span></span>
 <span class="r-in"><span><span class="va">res.dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="dreamlet.html">dreamlet</a></span><span class="op">(</span><span class="va">res.proc</span>, <span class="op">~</span><span class="va">group_id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   B cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0086 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0097 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD14+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0088 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.016 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD4 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0081 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.009 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CD8 T cells...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0061 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0064 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   FCGR3A+ Monocytes...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0084 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.0087 secs</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run MASH model</span></span></span>
 <span class="r-in"><span><span class="co"># This can take 10s of minutes on real data</span></span></span>

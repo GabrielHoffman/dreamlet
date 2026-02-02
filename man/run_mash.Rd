@@ -23,6 +23,8 @@ Apply \href{https://cran.r-project.org/web/packages/mashr/index.html}{mashr} ana
 \code{mashr} has been previously applied to differential expression in \href{https://www.gtexportal.org}{GTEx} data using multiple tissues from the same set of donors \insertCite{oliva2020impact}{dreamlet}.
 
 In single cell data, a given gene is often not sufficiently expressed in all cell types.  So it is not evaluated in a subsets of cell types, and its coefficient value is \code{NA}. Since mashr assumes coefficients and standard errors for every gene and cell type pair, entries with these missing values are set to have \code{coef = 0}, and \code{se = 1e6}.  The output of mashr is then modified to set the corresponding values to \code{NA}, to avoid nonsensical results downstream.
+
+Based on empirical analysis, \code{mashr} is most useful for prioritizing genes based on their cell type specificity using  \code{compositePosteriorTest()}. \code{mashr} tends to overshink and push the estimated effect size from mutliple cell types towards a common value.  This is not ideal for identifying differentially expressed genes in a given cell type, due to the overshinkage.
 }
 \examples{
 library(muscat)
@@ -105,5 +107,5 @@ plotVolcano(res_mash)
 }
 }
 \seealso{
-\code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{mashr::mash_set_data}
+\code{compositePosteriorTest()}, \code{mashr::mash_estimate_corr_em()}, \code{mashr::cov_canonical}, \code{mashr::mash_set_data}
 }
