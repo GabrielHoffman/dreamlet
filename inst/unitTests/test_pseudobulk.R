@@ -9,9 +9,9 @@ test_pseudobulk_example = function(){
 
 	ids <- sample(LETTERS[1:5], ncol(example_sce), replace=TRUE)
 
-	out <- suppressWarnings(scuttle::summarizeAssayByGroup(example_sce, ids))
+	out <- suppressWarnings(scuttle::summarizeAssayByGroup(example_sce, ids, statistics = c("mean", "sum", "num.detected", "prop.detected", "median")))
 
-	out2 <- suppressWarnings(dreamlet:::summarizeAssayByGroup2(example_sce, ids, statistics = c("mean", "sum", "num.detected", "prop.detected", "median")))
+	out2 <- suppressWarnings(dreamlet:::summarizeAssayByGroup2(example_sce, ids, statistics = c("mean", "sum", "num.detected", "prop.detected", "median"))) 
 
 	checkEquals(out, out2)
 }

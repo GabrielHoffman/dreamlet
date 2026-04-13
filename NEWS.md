@@ -1,4 +1,8 @@
 
+# dreamlet 1.9.2
+ - Apr 13, 2026
+ - fixed failed check
+
 # dreamlet 1.7.2
  - Jan 25, 2026
  - add `reformulas` dependency
