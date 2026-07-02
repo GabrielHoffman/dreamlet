@@ -5,6 +5,7 @@
 # compared to scuttle::summarizeAssayByGroup()
 test_pseudobulk_example = function(){
                 
+
 	example_sce <- scuttle::mockSCE()
 
 	ids <- sample(LETTERS[1:5], ncol(example_sce), replace=TRUE)
@@ -63,6 +64,9 @@ test_aggregateData = function(){
 
 test_colsum_fast = function(){
 
+	library(Matrix)
+	library(DelayedArray)
+	
 	set.seed(17)# to be reproducible
 	n = 400
 	p = 500
@@ -80,6 +84,8 @@ test_colsum_fast = function(){
 
 test_aggregateToPseudoBulk_datatype = function(){
 
+	library(Matrix)
+	library(DelayedArray)
 	# compare pseudobulk by rowSums from DelayedMatrix, matrix, and sparseMatrix
 
 	# pseudobulk counts by cluster-sample

@@ -1,6 +1,11 @@
 
 test_computeNormCounts = function(){
 
+	library(dreamlet)
+	library(muscat)
+	library(edgeR)
+	library(RUnit)
+
 	data(example_sce)
 
 	# compute CPM using edgeR
@@ -15,6 +20,11 @@ test_computeNormCounts = function(){
 
 
 test_computeLogCPM = function(){
+
+	library(dreamlet)
+	library(muscat)
+	library(edgeR)
+	library(RUnit)
 
 	data(example_sce)
 

@@ -838,7 +838,8 @@ setMethod(
       if (!quiet) message(format(Sys.time() - startTime, digits = 2))
 
       err.init = attr(fit, "error.initial")
-      if( !is(fit, "MArrayLM") && is.na(fit) ) fit <- NULL
+
+      if( !is.null(fit) && !is(fit, "MArrayLM") && is.na(fit) ) fit <- NULL
 
       list(
         fit = fit,

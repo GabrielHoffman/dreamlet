@@ -1,6 +1,10 @@
 
 test_cellCounts = function(){
 
+	library(muscat)
+	library(dreamlet)
+	library(RUnit)
+
 	data(example_sce)
 
 	# create pseudobulk for each sample and cell cluster

@@ -1,4 +1,8 @@
 
+# dreamlet 1.9.3
+ - July 2, 2026
+ - additional check for model failure
+
 # dreamlet 1.9.2
  - Apr 13, 2026
  - fixed failed check
